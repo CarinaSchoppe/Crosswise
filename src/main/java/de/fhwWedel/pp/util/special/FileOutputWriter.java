@@ -10,6 +10,7 @@
 
 package de.fhwWedel.pp.util.special;
 
+import com.google.gson.Gson;
 import de.fhwWedel.pp.ai.AI;
 import de.fhwWedel.pp.game.Game;
 import de.fhwWedel.pp.player.Player;
@@ -18,8 +19,18 @@ import de.fhwWedel.pp.util.game.json.PlayerData;
 
 public class FileOutputWriter {
 
+    public static void writeJSON(Game game) {
+        var json = new Gson().toJson(generateGameData(game));
+        //write the json to a file
+        var file = new java.io.File("game.json");
+        try (var writer = new java.io.PrintWriter(file)) {
+            writer.write(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    public static GameData generateGameData(Game game) {
+    private static GameData generateGameData(Game game) {
 
         PlayerData[] players = new PlayerData[game.getPlayers().size()];
         for (int i = 0; i < game.getPlayers().size(); i++) {
