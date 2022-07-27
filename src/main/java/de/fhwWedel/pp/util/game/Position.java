@@ -16,6 +16,11 @@ public class Position {
     private final int y;
     private Token token;
 
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -23,11 +28,6 @@ public class Position {
 
         if (getX() != position.getX()) return false;
         return getY() == position.getY();
-    }
-
-    public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     public int getX() {

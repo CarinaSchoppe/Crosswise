@@ -12,5 +12,13 @@ package de.fhwWedel.pp.util.game;
 
 public enum Team {
 
-    VERTICAL, HORIZONTAL
+    VERTICAL, HORIZONTAL;
+
+    public static Team getTeam(int playerID) {
+        if (playerID % 2 == 0) {
+            return VERTICAL;
+        } else {
+            return HORIZONTAL;
+        }
+    }
 }

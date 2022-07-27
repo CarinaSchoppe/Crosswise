@@ -11,4 +11,32 @@
 package de.fhwWedel.pp.util.game.json;
 
 public class PlayerData {
+
+    private final String name;
+    private final boolean isActive;
+    private final boolean isAI;
+    private final int[] hand;
+
+    public PlayerData(String name, boolean isActive, boolean isAI, int[] hand) {
+        this.name = name;
+        this.isActive = isActive;
+        this.isAI = isAI;
+        this.hand = hand;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public boolean isAI() {
+        return isAI;
+    }
+
+    public int[] getHand() {
+        return hand;
+    }
 }

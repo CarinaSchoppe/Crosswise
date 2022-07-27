@@ -13,7 +13,6 @@ package de.fhwWedel.pp;
 import de.fhwWedel.pp.game.Game;
 import de.fhwWedel.pp.game.PlayingField;
 import de.fhwWedel.pp.player.Player;
-import de.fhwWedel.pp.util.game.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +29,11 @@ public class CrossWise {
     public static void main(String... args) {
         //TODO:     Crosswise.main(args);
 
-        var player1 = new Player(1, Team.HORIZONTAL, true, "Player 1");
-        var player2 = new Player(2, Team.VERTICAL, true, "Player 2");
+        var player1 = new Player(1, true, "Player 1");
+        var player2 = new Player(2, true, "Player 2");
         var game = new Game(new PlayingField(6), new ArrayList<>(List.of(player1, player2)));
         Game.setGame(game);
-        game.start();
+        game.setup(false);
 
     }
 

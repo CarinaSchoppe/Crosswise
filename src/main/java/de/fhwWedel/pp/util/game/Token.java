@@ -18,6 +18,7 @@ public class Token {
 
     public Token(TokenType tokenType) {
         this.tokenType = tokenType;
+        position = null;
     }
 
     public TokenType getTokenType() {

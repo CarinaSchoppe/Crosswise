@@ -11,11 +11,10 @@
 package de.fhwWedel.pp.ai;
 
 import de.fhwWedel.pp.player.Player;
-import de.fhwWedel.pp.util.game.Team;
 
 public class AI extends Player {
-    public AI(int playerID, Team team) {
-        super(playerID, team, true, "AI");
+    public AI(int playerID, boolean active, String name) {
+        super(playerID, active, name);
     }
 
 

@@ -33,6 +33,15 @@ public enum TokenType {
         this.special = special;
     }
 
+    public static TokenType getTokenType(int token) {
+        for (TokenType type : TokenType.values()) {
+            if (type.getValue() == token) {
+                return type;
+            }
+        }
+        return None;
+    }
+
     public boolean isSpecial() {
         return special;
     }

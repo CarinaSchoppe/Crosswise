@@ -22,12 +22,11 @@ import java.util.ArrayList;
 public class Game {
 
     private static Game game;
-
-    private GameLogic gameLogic;
     private final PlayingField playingField;
     private final ArrayList<Player> players;
     private final ArrayList<Token> usedSpecialTokens = new ArrayList<>();
     private final ArrayList<Token> tokenDrawPile = new ArrayList<>();
+    private GameLogic gameLogic;
     private Player currentPlayer = null;
 
     public Game(@NotNull PlayingField playingField, @NotNull ArrayList<Player> players) {
@@ -35,6 +34,13 @@ public class Game {
         this.players = players;
     }
 
+    public static Game getGame() {
+        return game;
+    }
+
+    public static void setGame(Game game) {
+        Game.game = game;
+    }
 
     private void fillPile() {
         for (var token : TokenType.values()) {
@@ -50,11 +56,6 @@ public class Game {
         }
     }
 
-    public static Game getGame() {
-        return game;
-    }
-
-
     private void playerPileSetup() {
         for (Player player : players) {
             for (int i = 0; i < 4; i++) {
@@ -67,8 +68,16 @@ public class Game {
         }
     }
 
-    public static void setGame(Game game) {
-        Game.game = game;
+    public void setup(boolean fileLoaded) {
+        gameLogic = new GameLogic(this);
+        handleOver();
+        if (players.size() < 2)
+            throw new IllegalArgumentException("There must be at least 2 players");
+        fillPile();
+        if (!fileLoaded) {
+            currentPlayer = players.get(0);
+            playerPileSetup();
+        }
     }
 
     private void nextPlayer() {
@@ -107,6 +116,11 @@ public class Game {
         return true;
     }
 
+    public void start() {
+
+        //TODO: logic that a players turn is starting
+    }
+
     public void turnDone() {
         if (handleOver()) {
             return;
@@ -122,7 +136,7 @@ public class Game {
         return players;
     }
 
-    public ArrayList<Token> getUsedSpecialTokens() {
+    public ArrayList<Token> getUsedActionTokens() {
         return usedSpecialTokens;
     }
 
@@ -134,15 +148,8 @@ public class Game {
         return currentPlayer;
     }
 
-    public void start() {
-        gameLogic = new GameLogic(this);
-        handleOver();
-        if (players.size() < 2)
-            throw new IllegalArgumentException("There must be at least 2 players");
-        currentPlayer = players.get(0);
-        fillPile();
-        playerPileSetup();
-        //TODO: logic that a players turn is starting
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
 

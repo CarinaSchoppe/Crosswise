@@ -11,6 +11,8 @@
 package de.fhwWedel.pp.game;
 
 import de.fhwWedel.pp.util.game.Position;
+import de.fhwWedel.pp.util.game.Token;
+import de.fhwWedel.pp.util.game.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -28,6 +30,8 @@ public class PlayingField {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 this.fieldMap[i][j] = new Position(i, j);
+                this.fieldMap[i][j].setToken(new Token(TokenType.None));
+                this.fieldMap[i][j].getToken().setPosition(this.fieldMap[i][j]);
             }
         }
     }
@@ -49,5 +53,16 @@ public class PlayingField {
 
     public Position[][] getFieldMap() {
         return fieldMap;
+    }
+
+    public void addDataFromJSON(int[][] field) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                fieldMap[i][j].setToken(new Token(TokenType.getTokenType(field[i][j])));
+                fieldMap[i][j].getToken().setPosition(fieldMap[i][j]);
+            }
+        }
+
+
     }
 }

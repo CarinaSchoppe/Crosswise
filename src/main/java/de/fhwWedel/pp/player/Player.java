@@ -18,22 +18,22 @@ import de.fhwWedel.pp.util.game.Token;
 import de.fhwWedel.pp.util.game.TokenType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Random;
 
 
 public class Player {
 
-    private final HashSet<Token> tokens = new HashSet<>();
+    private final ArrayList<Token> tokens = new ArrayList<>();
     private final int playerID;
     private final Team team;
     private final boolean isActive;
-    private int points = 0;
     private final String name;
+    private int points = 0;
 
-    public Player(int playerID, Team team, boolean isActive, String name) {
+    public Player(int playerID, boolean isActive, String name) {
         this.playerID = playerID;
-        this.team = team;
+        this.team = Team.getTeam(playerID);
         this.isActive = isActive;
         this.name = name;
     }
@@ -46,7 +46,7 @@ public class Player {
         if (!tokens.contains(token))
             return false;
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken() != null)
+        if (field.getToken().getTokenType() != TokenType.None)
             return false;
 
         tokens.remove(token);
@@ -65,12 +65,13 @@ public class Player {
             return false;
 
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken() == null)
+        if (field.getToken().getTokenType() == TokenType.None)
             return false;
 
         tokens.remove(token);
         tokens.add(field.getToken());
-        field.setToken(null);
+        field.setToken(new Token(TokenType.None));
+        field.getToken().setPosition(field);
         Game.getGame().turnDone();
 
         return true;
@@ -86,9 +87,9 @@ public class Player {
         var fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
         var fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
 
-        if (fieldStart.getToken() == null)
+        if (fieldStart.getToken().getTokenType() == TokenType.None)
             return false;
-        if (fieldEnd.getToken() != null)
+        if (fieldEnd.getToken().getTokenType() != TokenType.None)
             return false;
 
         tokens.remove(token);
@@ -105,9 +106,9 @@ public class Player {
             return false;
         var fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         var fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
-        if (fieldFirst.getToken() == null)
+        if (fieldFirst.getToken().getTokenType() == TokenType.None)
             return false;
-        if (fieldSecond.getToken() == null)
+        if (fieldSecond.getToken().getTokenType() == TokenType.None)
             return false;
         tokens.remove(token);
         var temp = fieldFirst.getToken();
@@ -132,7 +133,7 @@ public class Player {
         //TODO: Add token to Players GUI
     }
 
-    public HashSet<Token> getTokens() {
+    public ArrayList<Token> getTokens() {
         return tokens;
     }
 
