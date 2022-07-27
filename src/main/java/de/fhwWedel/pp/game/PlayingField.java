@@ -13,7 +13,7 @@ package de.fhwWedel.pp.game;
 import de.fhwWedel.pp.util.game.Position;
 import de.fhwWedel.pp.util.game.Token;
 import de.fhwWedel.pp.util.game.TokenType;
-import org.jetbrains.annotations.NotNull;
+
 
 
 public class PlayingField {
@@ -36,7 +36,7 @@ public class PlayingField {
         }
     }
 
-    public @NotNull Position getCorrespondingPlayingField(@NotNull final Position position) {
+    public Position getCorrespondingPlayingField(final Position position) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (fieldMap[i][j].equals(position)) {

@@ -12,7 +12,6 @@ package de.fhwWedel.pp.game;
 
 import de.fhwWedel.pp.util.game.Team;
 import de.fhwWedel.pp.util.game.TokenType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -26,7 +25,7 @@ public class GameLogic {
     }
 
 
-    public final HashMap<Boolean, Team> isGameOver(@NotNull PlayingField field) {
+    public final HashMap<Boolean, Team> isGameOver(PlayingField field) {
         var map = new HashMap<Boolean, Team>();
         if (checkRows(field)) {
             map.put(true, Team.VERTICAL);

@@ -17,7 +17,6 @@ import de.fhwWedel.pp.util.game.Team;
 import de.fhwWedel.pp.util.game.Token;
 import de.fhwWedel.pp.util.game.TokenType;
 import de.fhwWedel.pp.util.special.Constants;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,7 +45,7 @@ public class Player {
         //TODO: Implement: Popup?
     }
 
-    public boolean normalTokenTurn(@NotNull final Token token, @NotNull final Position position) {
+    public boolean normalTokenTurn(final Token token, final Position position) {
         if (!hasToken(token))
             return false;
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);

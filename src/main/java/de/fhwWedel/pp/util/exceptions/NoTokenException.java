@@ -10,11 +10,11 @@
 
 package de.fhwWedel.pp.util.exceptions;
 
-import org.jetbrains.annotations.NotNull;
+
 
 public class NoTokenException extends Exception {
 
-    public NoTokenException(@NotNull String message) {
+    public NoTokenException(String message) {
         super(message);
     }
 }

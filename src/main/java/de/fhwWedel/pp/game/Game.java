@@ -15,7 +15,6 @@ import de.fhwWedel.pp.player.Player;
 import de.fhwWedel.pp.util.exceptions.NoTokenException;
 import de.fhwWedel.pp.util.game.Token;
 import de.fhwWedel.pp.util.game.TokenType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -29,7 +28,7 @@ public class Game {
     private GameLogic gameLogic;
     private Player currentPlayer = null;
 
-    public Game(@NotNull PlayingField playingField, @NotNull ArrayList<Player> players) {
+    public Game(PlayingField playingField, ArrayList<Player> players) {
         this.playingField = playingField;
         this.players = players;
     }

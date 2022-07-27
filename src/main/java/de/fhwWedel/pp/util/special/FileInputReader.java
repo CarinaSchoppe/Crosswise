@@ -20,7 +20,6 @@ import de.fhwWedel.pp.util.game.TokenType;
 import de.fhwWedel.pp.util.game.json.GameData;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +30,7 @@ import java.util.HashMap;
 
 public class FileInputReader {
 
-    private static File selectFile(@NotNull Scene scene) {
+    private static File selectFile(Scene scene) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select a file");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
@@ -39,7 +38,7 @@ public class FileInputReader {
         return chooser.showOpenDialog(scene.getWindow());
     }
 
-    public static void readFile(@NotNull File file) throws FileNotFoundException {
+    public static void readFile(File file) throws FileNotFoundException {
         //read in the lines from file
         FileReader reader = new FileReader(file);
         Gson gson = new Gson();
