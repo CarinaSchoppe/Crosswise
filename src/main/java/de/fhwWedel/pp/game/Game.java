@@ -10,10 +10,11 @@
 
 package de.fhwWedel.pp.game;
 
+import de.fhwWedel.pp.ai.AI;
 import de.fhwWedel.pp.player.Player;
-import de.fhwWedel.pp.util.NoTokenException;
-import de.fhwWedel.pp.util.Token;
-import de.fhwWedel.pp.util.TokenType;
+import de.fhwWedel.pp.util.exceptions.NoTokenException;
+import de.fhwWedel.pp.util.game.Token;
+import de.fhwWedel.pp.util.game.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Game {
 
     private static Game game;
 
+    private GameLogic gameLogic;
     private final PlayingField playingField;
     private final ArrayList<Player> players;
     private final ArrayList<Token> usedSpecialTokens = new ArrayList<>();
@@ -48,22 +50,10 @@ public class Game {
         }
     }
 
-    public void nextPlayer() {
-        if (currentPlayer == null && players.size() > 0) {
-            currentPlayer = players.get(0);
-        } else {
-            int index = players.indexOf(currentPlayer);
-            if (index == players.size() - 1) {
-                currentPlayer = players.get(0);
-            } else {
-                currentPlayer = players.get(index + 1);
-            }
-        }
-    }
-
     public static Game getGame() {
         return game;
     }
+
 
     private void playerPileSetup() {
         for (Player player : players) {
@@ -81,14 +71,46 @@ public class Game {
         Game.game = game;
     }
 
-    public void start() {
-        if (players.size() < 2)
-            throw new IllegalArgumentException("There must be at least 2 players");
-        setCurrentPlayer(players.get(0));
-        fillPile();
-        playerPileSetup();
+    private void nextPlayer() {
+        if (currentPlayer == null && players.size() > 0) {
+            currentPlayer = players.get(0);
+        } else {
+            int index = players.indexOf(currentPlayer);
+            if (index == players.size() - 1) {
+                currentPlayer = players.get(0);
+            } else {
+                currentPlayer = players.get(index + 1);
+            }
+        }
 
-        //TODO: logic that a players turn is starting
+        if (currentPlayer instanceof AI AIPlayer) {
+            AIPlayer.makeMove();
+        }
+
+        //TODO: notify current player
+    }
+
+    private boolean handleOver() {
+        var over = gameLogic.isGameOver(playingField);
+        if (over.containsKey(true)) {
+            var team = over.get(true);
+            //TODO: Handle game over! GUI stuff
+
+            if (team == null) {
+            } else {
+
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    public void turnDone() {
+        if (handleOver()) {
+            return;
+        }
+        nextPlayer();
     }
 
     public PlayingField getPlayingField() {
@@ -111,7 +133,16 @@ public class Game {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    public void start() {
+        gameLogic = new GameLogic(this);
+        handleOver();
+        if (players.size() < 2)
+            throw new IllegalArgumentException("There must be at least 2 players");
+        currentPlayer = players.get(0);
+        fillPile();
+        playerPileSetup();
+        //TODO: logic that a players turn is starting
     }
+
+
 }

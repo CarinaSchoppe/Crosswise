@@ -11,7 +11,11 @@
 package de.fhwWedel.pp.player;
 
 import de.fhwWedel.pp.game.Game;
-import de.fhwWedel.pp.util.*;
+import de.fhwWedel.pp.util.exceptions.NoTokenException;
+import de.fhwWedel.pp.util.game.Position;
+import de.fhwWedel.pp.util.game.Team;
+import de.fhwWedel.pp.util.game.Token;
+import de.fhwWedel.pp.util.game.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -43,8 +47,10 @@ public class Player {
 
         tokens.remove(token);
         field.setToken(token);
-        return true;
+
         //TODO: Update GUI
+        Game.getGame().turnDone();
+        return true;
     }
 
     public boolean removerTokenTurn(final Token token, final Position position) {
@@ -61,6 +67,8 @@ public class Player {
         tokens.remove(token);
         tokens.add(field.getToken());
         field.setToken(null);
+        Game.getGame().turnDone();
+
         return true;
 
         //TODO: Update GUI for added Token
@@ -82,6 +90,7 @@ public class Player {
         tokens.remove(token);
         fieldEnd.setToken(fieldStart.getToken());
         fieldStart.setToken(null);
+        Game.getGame().turnDone();
         return true;
     }
 
@@ -100,6 +109,7 @@ public class Player {
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
         fieldSecond.setToken(temp);
+        Game.getGame().turnDone();
         return true;
 
         //TODO: Update GUI

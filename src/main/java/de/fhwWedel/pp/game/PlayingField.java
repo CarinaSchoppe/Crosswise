@@ -10,7 +10,7 @@
 
 package de.fhwWedel.pp.game;
 
-import de.fhwWedel.pp.util.Position;
+import de.fhwWedel.pp.util.game.Position;
 import org.jetbrains.annotations.NotNull;
 
 

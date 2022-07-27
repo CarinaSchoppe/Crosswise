@@ -13,7 +13,7 @@ package de.fhwWedel.pp;
 import de.fhwWedel.pp.game.Game;
 import de.fhwWedel.pp.game.PlayingField;
 import de.fhwWedel.pp.player.Player;
-import de.fhwWedel.pp.util.Team;
+import de.fhwWedel.pp.util.game.Team;
 
 import java.util.ArrayList;
 import java.util.List;
