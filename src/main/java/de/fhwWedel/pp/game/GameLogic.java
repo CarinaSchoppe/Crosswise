@@ -15,17 +15,10 @@ import de.fhwWedel.pp.util.game.TokenType;
 
 import java.util.HashMap;
 
-public class GameLogic {
-
-    private final Game game;
+public record GameLogic(Game game) {
 
 
-    public GameLogic(Game game) {
-        this.game = game;
-    }
-
-
-    public final HashMap<Boolean, Team> isGameOver(PlayingField field) {
+    public HashMap<Boolean, Team> isGameOver(PlayingField field) {
         var map = new HashMap<Boolean, Team>();
         if (checkRows(field)) {
             map.put(true, Team.VERTICAL);
@@ -51,6 +44,7 @@ public class GameLogic {
     }
 
 
+    @SuppressWarnings("DuplicatedCode")
     private boolean checkRows(final PlayingField field) {
         TokenType current = null;
         boolean equal = true;
@@ -76,6 +70,7 @@ public class GameLogic {
         return equal;
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private boolean checkColumns(final PlayingField field) {
         TokenType current = null;
         boolean equal = true;
@@ -99,10 +94,6 @@ public class GameLogic {
             }
         }
         return equal;
-    }
-
-    public Game getGame() {
-        return game;
     }
 
 

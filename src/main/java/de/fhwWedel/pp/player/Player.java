@@ -46,7 +46,7 @@ public class Player {
     }
 
     public boolean normalTokenTurn(final Token token, final Position position) {
-        if (!hasToken(token))
+        if (hasToken(token))
             return false;
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
         if (field.getToken().getTokenType() != TokenType.None)
@@ -60,17 +60,17 @@ public class Player {
     private boolean hasToken(Token token) {
         for (var t : tokens) {
             if (t.equals(token))
-                return true;
+                return false;
         }
-        return false;
+        return true;
     }
 
     public boolean replacerTokenTurn(final Token token, final Position position, final Position hand) {
-        if (!hasToken(token))
+        if (hasToken(token))
             return false;
         if (token.getTokenType() != TokenType.Replacer)
             return false;
-        if (!hasToken(getCorrespondingToken(hand)))
+        if (hasToken(getCorrespondingToken(hand)))
             return false;
 
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
@@ -94,7 +94,7 @@ public class Player {
         if (token.getTokenType() != TokenType.Remover)
             return false;
 
-        if (!hasToken(token))
+        if (hasToken(token))
             return false;
 
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
@@ -114,7 +114,7 @@ public class Player {
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
         if (token.getTokenType() != TokenType.Mover)
             return false;
-        if (!hasToken(token))
+        if (hasToken(token))
             return false;
         var fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
         var fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
@@ -134,7 +134,7 @@ public class Player {
     public boolean swapperTokenTurn(final Token token, final Position first, final Position second) {
         if (token.getTokenType() != TokenType.Swapper)
             return false;
-        if (!hasToken(token))
+        if (hasToken(token))
             return false;
         var fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         var fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);

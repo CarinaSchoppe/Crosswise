@@ -103,9 +103,10 @@ public class Game {
         var over = gameLogic.isGameOver(playingField);
         if (over.containsKey(true)) {
             var team = over.get(true);
-            //TODO: Handle game over! GUI stuff
 
+            //noinspection StatementWithEmptyBody
             if (team == null) {
+                //TODO: Handle game over! GUI stuff
             } else {
 
             }

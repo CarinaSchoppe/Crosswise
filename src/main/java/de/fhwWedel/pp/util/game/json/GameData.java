@@ -10,33 +10,5 @@
 
 package de.fhwWedel.pp.util.game.json;
 
-public class GameData {
-
-    private final PlayerData[] players;
-    private final int currentPlayer;
-    private final int[][] field;
-    private final int[] usedActionTiles;
-
-    public GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
-        this.players = players;
-        this.currentPlayer = currentPlayer;
-        this.field = field;
-        this.usedActionTiles = usedActionTiles;
-    }
-
-    public PlayerData[] getPlayers() {
-        return players;
-    }
-
-    public int getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public int[][] getField() {
-        return field;
-    }
-
-    public int[] getUsedActionTiles() {
-        return usedActionTiles;
-    }
+public record GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
 }

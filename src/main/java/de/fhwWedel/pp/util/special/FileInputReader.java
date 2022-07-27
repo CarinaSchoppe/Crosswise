@@ -47,12 +47,12 @@ public class FileInputReader {
         //create a new game
         var players = getPlayersFromFile(gameData);
 
-        Game game = new Game(new PlayingField(gameData.getField().length), players);
-        var currentPlayer = game.getPlayers().stream().filter(player -> player.getPlayerID() == gameData.getCurrentPlayer()).findFirst().orElse(null);
+        Game game = new Game(new PlayingField(gameData.field().length), players);
+        var currentPlayer = game.getPlayers().stream().filter(player -> player.getPlayerID() == gameData.currentPlayer()).findFirst().orElse(null);
         game.setCurrentPlayer(currentPlayer);
-        game.getPlayingField().addDataFromJSON(gameData.getField());
+        game.getPlayingField().addDataFromJSON(gameData.field());
 
-        for (int actionTileID = 0; actionTileID < gameData.getUsedActionTiles().length; actionTileID++) {
+        for (int actionTileID = 0; actionTileID < gameData.usedActionTiles().length; actionTileID++) {
             TokenType token = switch (actionTileID) {
                 case 0 -> TokenType.Remover;
                 case 1 -> TokenType.Mover;
@@ -61,7 +61,7 @@ public class FileInputReader {
                 default -> throw new IllegalArgumentException("Invalid action tile ID");
             };
 
-            for (int amount = 0; amount < gameData.getUsedActionTiles()[actionTileID]; amount++) {
+            for (int amount = 0; amount < gameData.usedActionTiles()[actionTileID]; amount++) {
                 game.getUsedActionTokens().add(new Token(token));
             }
         }
@@ -73,15 +73,15 @@ public class FileInputReader {
 
     private static ArrayList<Player> getPlayersFromFile(GameData gameData) {
         var players = new ArrayList<Player>();
-        for (int i = 0; i < gameData.getPlayers().length; i++) {
-            var playerData = gameData.getPlayers()[i];
+        for (int i = 0; i < gameData.players().length; i++) {
+            var playerData = gameData.players()[i];
             if (!playerData.isAI()) {
-                var player = new Player(i, playerData.isActive(), playerData.getName());
-                Arrays.stream(playerData.getHand()).forEach(token -> player.getTokens().add(new Token(TokenType.getTokenType(token))));
+                var player = new Player(i, playerData.isActive(), playerData.name());
+                Arrays.stream(playerData.hand()).forEach(token -> player.getTokens().add(new Token(TokenType.getTokenType(token))));
                 players.add(player);
             } else {
-                var ai = new AI(i, playerData.isActive(), playerData.getName());
-                Arrays.stream(playerData.getHand()).forEach(token -> ai.getTokens().add(new Token(TokenType.getTokenType(token))));
+                var ai = new AI(i, playerData.isActive(), playerData.name());
+                Arrays.stream(playerData.hand()).forEach(token -> ai.getTokens().add(new Token(TokenType.getTokenType(token))));
                 players.add(ai);
             }
         }

@@ -22,6 +22,7 @@ import de.fhwWedel.pp.util.special.Constants;
 
 import java.util.*;
 
+@SuppressWarnings("DuplicatedCode")
 public class AI extends Player {
     public AI(int playerID, boolean active, String name) {
         super(playerID, active, name);
@@ -429,20 +430,7 @@ public class AI extends Player {
     }
 
     private boolean isMovePreventingLoss(/*Player player, Position position, Token token*/) {
-        /*Map<Integer, Map<Token, Integer>> occurrenceMap = getOccurrencesOfTokens();
-        for (Map.Entry<Integer, Map<Token, Integer>> entry : occurrenceMap.entrySet()) {
-            if (entry.getValue().size() == 1) {
-                for (Map.Entry<Token, Integer> entry2 : entry.getValue().entrySet()) {
-                    if (entry2.getValue() == Constants.GAMEGRID_ROWS - 1) {
-                        System.out.println("FAILLLL");
-                        return true;
-                    }
-                }
-            }
-        }
-        //TODO Method change
-        System.out.println("yay");
-         */
+        //TODO: here fill up
         return false;
     }
 
@@ -537,7 +525,7 @@ public class AI extends Player {
     public HashSet<TokenMove> createPossibleReplacerTokenMoves(Player player) {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         //convert player.getTokens() to Array of Tokens
-        Token[] playerHand = player.getTokens().toArray(new Token[player.getTokens().size()]);
+        Token[] playerHand = player.getTokens().toArray(new Token[0]);
         HashSet<Integer> handSymbolTokenSet = player.getHandSymbolTokenPositions();
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position occupiedField : occupiedFields) {
