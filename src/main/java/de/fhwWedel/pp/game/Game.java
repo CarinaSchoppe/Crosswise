@@ -85,9 +85,10 @@ public class Game {
 
         if (currentPlayer instanceof AI AIPlayer) {
             AIPlayer.makeMove();
+        } else {
+            currentPlayer.notifyTurn();
         }
 
-        //TODO: notify current player
     }
 
     private boolean handleOver() {

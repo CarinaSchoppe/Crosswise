@@ -38,6 +38,10 @@ public class Player {
         this.name = name;
     }
 
+    public void notifyTurn() {
+        //TODO: Implement
+    }
+
     public boolean normalTokenTurn(@NotNull final Token token, @NotNull final Position position) {
         if (!tokens.contains(token))
             return false;

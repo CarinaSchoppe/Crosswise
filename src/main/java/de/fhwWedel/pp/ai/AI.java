@@ -18,9 +18,24 @@ public class AI extends Player {
         super(playerID, team, true, "AI");
     }
 
+
     public void makeMove() {
-        //TODO implement
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        /*
+        TODO: Best turn!
+        Restrictions:
+        - Immer zug machen wenn zug gewinn machbar
+        - Zug machen wenn gegner zug gewinn möglich
+        - Zug machen der am meisten Punkte bringt
+
+        - lieber normaler zug als special
+        - wenn 2 züge gleich dann nimm den mit mehr tokens auf hand
+            - gleich? nimm den wo weniger auf dem feld liegt
+             - wenn gleich? nimm stein mit der geringsten zahl
+               - wenn gleich? nimm feld ganz oben links dann nach rechts dann unten
+         */
+
+
     }
 
 }
