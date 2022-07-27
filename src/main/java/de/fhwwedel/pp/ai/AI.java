@@ -60,6 +60,7 @@ public class AI extends Player {
             }
 
             performAnimation();
+            Game.getGame().turnDone();
         } catch (NoTokenException e) {
             //TODO: needed?
         }
