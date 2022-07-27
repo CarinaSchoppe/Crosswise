@@ -78,7 +78,7 @@
                     <execution>
                         <!--   &lt;!&ndash; Default configuration for running with: mvn javafx:run &ndash;&gt; -->
                         <configuration>
-                            <mainClass>de.fhwWedel.pp.gui.FrontEnd</mainClass>
+                            <mainClass>de.fhwwedel.pp.gui.FrontEnd</mainClass>
                         </configuration>
                     </execution>
                 </executions>
@@ -119,7 +119,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.fhwWedel.pp.CrossWise</mainClass>
+                            <mainClass>de.fhwwedel.pp.CrossWise</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

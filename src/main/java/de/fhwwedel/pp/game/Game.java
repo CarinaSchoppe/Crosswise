@@ -8,13 +8,13 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.game;
+package de.fhwwedel.pp.game;
 
-import de.fhwWedel.pp.ai.AI;
-import de.fhwWedel.pp.player.Player;
-import de.fhwWedel.pp.util.exceptions.NoTokenException;
-import de.fhwWedel.pp.util.game.Token;
-import de.fhwWedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.ai.AI;
+import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.exceptions.NoTokenException;
+import de.fhwwedel.pp.util.game.Token;
+import de.fhwwedel.pp.util.game.TokenType;
 
 import java.util.ArrayList;
 

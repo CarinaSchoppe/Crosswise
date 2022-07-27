@@ -8,11 +8,11 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.game;
+package de.fhwwedel.pp.game;
 
-import de.fhwWedel.pp.util.game.Position;
-import de.fhwWedel.pp.util.game.Token;
-import de.fhwWedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.game.Position;
+import de.fhwwedel.pp.util.game.Token;
+import de.fhwwedel.pp.util.game.TokenType;
 
 
 

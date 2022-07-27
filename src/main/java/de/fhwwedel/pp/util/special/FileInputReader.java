@@ -8,16 +8,16 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.util.special;
+package de.fhwwedel.pp.util.special;
 
 import com.google.gson.Gson;
-import de.fhwWedel.pp.ai.AI;
-import de.fhwWedel.pp.game.Game;
-import de.fhwWedel.pp.game.PlayingField;
-import de.fhwWedel.pp.player.Player;
-import de.fhwWedel.pp.util.game.Token;
-import de.fhwWedel.pp.util.game.TokenType;
-import de.fhwWedel.pp.util.game.json.GameData;
+import de.fhwwedel.pp.ai.AI;
+import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.game.PlayingField;
+import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Token;
+import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.game.json.GameData;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 

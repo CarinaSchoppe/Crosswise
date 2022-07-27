@@ -8,7 +8,7 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.util.game.json;
+package de.fhwwedel.pp.util.game.json;
 
 public record PlayerData(String name, boolean isActive, boolean isAI, int[] hand) {
 

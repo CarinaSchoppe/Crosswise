@@ -8,10 +8,10 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.ai;
+package de.fhwwedel.pp.ai;
 
-import de.fhwWedel.pp.util.game.Position;
-import de.fhwWedel.pp.util.game.Token;
+import de.fhwwedel.pp.util.game.Position;
+import de.fhwwedel.pp.util.game.Token;
 
 public class TokenMove {
 

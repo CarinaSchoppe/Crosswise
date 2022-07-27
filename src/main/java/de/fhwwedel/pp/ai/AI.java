@@ -8,17 +8,17 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.ai;
+package de.fhwwedel.pp.ai;
 
-import de.fhwWedel.pp.game.Game;
-import de.fhwWedel.pp.player.Player;
-import de.fhwWedel.pp.util.exceptions.NoMovePossibleException;
-import de.fhwWedel.pp.util.exceptions.NoTokenException;
-import de.fhwWedel.pp.util.game.Position;
-import de.fhwWedel.pp.util.game.Team;
-import de.fhwWedel.pp.util.game.Token;
-import de.fhwWedel.pp.util.game.TokenType;
-import de.fhwWedel.pp.util.special.Constants;
+import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.exceptions.NoMovePossibleException;
+import de.fhwwedel.pp.util.exceptions.NoTokenException;
+import de.fhwwedel.pp.util.game.Position;
+import de.fhwwedel.pp.util.game.Team;
+import de.fhwwedel.pp.util.game.Token;
+import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.*;
 
@@ -61,7 +61,7 @@ public class AI extends Player {
 
             performAnimation();
         } catch (NoTokenException e) {
-            throw new RuntimeException(e);
+            //TODO: needed?
         }
     }
 

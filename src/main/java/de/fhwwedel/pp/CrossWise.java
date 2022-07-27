@@ -8,11 +8,11 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp;
+package de.fhwwedel.pp;
 
-import de.fhwWedel.pp.game.Game;
-import de.fhwWedel.pp.game.PlayingField;
-import de.fhwWedel.pp.player.Player;
+import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.game.PlayingField;
+import de.fhwwedel.pp.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;

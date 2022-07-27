@@ -8,15 +8,15 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.player;
+package de.fhwwedel.pp.player;
 
-import de.fhwWedel.pp.game.Game;
-import de.fhwWedel.pp.util.exceptions.NoTokenException;
-import de.fhwWedel.pp.util.game.Position;
-import de.fhwWedel.pp.util.game.Team;
-import de.fhwWedel.pp.util.game.Token;
-import de.fhwWedel.pp.util.game.TokenType;
-import de.fhwWedel.pp.util.special.Constants;
+import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.util.exceptions.NoTokenException;
+import de.fhwwedel.pp.util.game.Position;
+import de.fhwwedel.pp.util.game.Team;
+import de.fhwwedel.pp.util.game.Token;
+import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;

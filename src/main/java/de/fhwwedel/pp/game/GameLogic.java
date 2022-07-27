@@ -8,10 +8,10 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.game;
+package de.fhwwedel.pp.game;
 
-import de.fhwWedel.pp.util.game.Team;
-import de.fhwWedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.game.Team;
+import de.fhwwedel.pp.util.game.TokenType;
 
 import java.util.HashMap;
 

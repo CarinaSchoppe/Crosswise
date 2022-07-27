@@ -8,7 +8,7 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.ai;
+package de.fhwwedel.pp.ai;
 
 public record Calculation(Integer pointsChange, boolean isCreatingLoss, boolean gameWinning) {
 }

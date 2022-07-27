@@ -8,7 +8,7 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.util.game;
+package de.fhwwedel.pp.util.game;
 
 public enum Team {
 

@@ -8,7 +8,7 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.util.special;
+package de.fhwwedel.pp.util.special;
 
 public class Constants {
 

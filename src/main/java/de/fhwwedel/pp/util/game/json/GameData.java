@@ -8,7 +8,7 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwWedel.pp.util.game.json;
+package de.fhwwedel.pp.util.game.json;
 
 public record GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
 }
