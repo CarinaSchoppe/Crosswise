@@ -28,10 +28,14 @@ public class AI extends Player {
     }
 
 
+    private void performAnimation() {
+
+        //TODO: here fill out
+    }
+
     public void makeMove() {
 
         /*
-        TODO: Best turn!
         Restrictions:
         - Immer zug machen wenn zug gewinn machbar
         - Kein Zug machen wenn Gegner zug gewinn möglich
@@ -43,6 +47,21 @@ public class AI extends Player {
              - wenn gleich? nimm stein mit der geringsten zahl
                - wenn gleich? nimm feld ganz oben links dann nach rechts dann unten
          */
+
+        try {
+            var move = calculateAIMove(this);
+            switch (move.getToken().getTokenType().getValue()) {
+                case 1, 2, 3, 4, 5, 6 -> normalTokenTurn(move.getToken(), move.getPrimaryMovePosition());
+                case 7 -> removerTokenTurn(move.getToken(), move.getPrimaryMovePosition());
+                case 8 -> moverTokenTurn(move.getToken(), move.getSecondaryMovePosition(), move.getPrimaryMovePosition()); //TODO: check this (wie rum?)
+                case 9 -> swapperTokenTurn(move.getToken(), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
+                case 10 -> replacerTokenTurn(move.getToken(), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
+            }
+
+            performAnimation();
+        } catch (NoTokenException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -56,7 +75,7 @@ public class AI extends Player {
         }
         int counter = 0;
         for (TokenMove tokenMove : bestMovePerToken) {
-            System.out.println("HandStein: " + counter++);
+            System.out.println("Hand-Stone: " + counter++);
             System.out.println(tokenMove.getToken());
             System.out.println(tokenMove.getPrimaryMovePosition().getX() + "/" +
                     tokenMove.getPrimaryMovePosition().getY());

@@ -32,4 +32,14 @@ public class Token {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Token token)) return false;
+
+        return getTokenType() == token.getTokenType();
+    }
+
 }

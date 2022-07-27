@@ -40,41 +40,72 @@ public class Player {
         this.name = name;
     }
 
+    //TODO: after turn: call Game#nextPlayer()
+
     public void notifyTurn() {
-        //TODO: Implement
+        //TODO: Implement: Popup?
     }
 
     public boolean normalTokenTurn(@NotNull final Token token, @NotNull final Position position) {
-        if (!tokens.contains(token))
+        if (!hasToken(token))
             return false;
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
         if (field.getToken().getTokenType() != TokenType.None)
             return false;
-
-        tokens.remove(token);
+        tokens.remove(getCorrespondingToken(token));
         field.setToken(token);
-
         //TODO: Update GUI
-        Game.getGame().turnDone();
         return true;
     }
+
+    private boolean hasToken(Token token) {
+        for (var t : tokens) {
+            if (t.equals(token))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean replacerTokenTurn(final Token token, final Position position, final Position hand) {
+        if (!hasToken(token))
+            return false;
+        if (token.getTokenType() != TokenType.Replacer)
+            return false;
+        if (!hasToken(getCorrespondingToken(hand)))
+            return false;
+
+        var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
+        if (field.getToken().getTokenType() != TokenType.None)
+            return false;
+        tokens.remove(getCorrespondingToken(token));
+        tokens.remove(getCorrespondingToken(hand));
+        field.setToken(getCorrespondingToken(hand));
+        tokens.add(field.getToken());
+        return true;
+    }
+
+    private Token getCorrespondingToken(Position position) {
+        if (!position.isHand())
+            return null;
+        return tokens.get(position.getHandPosition());
+    }
+
 
     public boolean removerTokenTurn(final Token token, final Position position) {
         if (token.getTokenType() != TokenType.Remover)
             return false;
 
-        if (!tokens.contains(token))
+        if (!hasToken(token))
             return false;
 
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
         if (field.getToken().getTokenType() == TokenType.None)
             return false;
 
-        tokens.remove(token);
+        tokens.remove(getCorrespondingToken(token));
         tokens.add(field.getToken());
         field.setToken(new Token(TokenType.None));
         field.getToken().setPosition(field);
-        Game.getGame().turnDone();
 
         return true;
 
@@ -84,7 +115,7 @@ public class Player {
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
         if (token.getTokenType() != TokenType.Mover)
             return false;
-        if (!tokens.contains(token))
+        if (!hasToken(token))
             return false;
         var fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
         var fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
@@ -94,17 +125,17 @@ public class Player {
         if (fieldEnd.getToken().getTokenType() != TokenType.None)
             return false;
 
-        tokens.remove(token);
+        tokens.remove(getCorrespondingToken(token));
+
         fieldEnd.setToken(fieldStart.getToken());
         fieldStart.setToken(null);
-        Game.getGame().turnDone();
         return true;
     }
 
     public boolean swapperTokenTurn(final Token token, final Position first, final Position second) {
         if (token.getTokenType() != TokenType.Swapper)
             return false;
-        if (!tokens.contains(token))
+        if (!hasToken(token))
             return false;
         var fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         var fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
@@ -112,16 +143,22 @@ public class Player {
             return false;
         if (fieldSecond.getToken().getTokenType() == TokenType.None)
             return false;
-        tokens.remove(token);
+        tokens.remove(getCorrespondingToken(token));
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
         fieldSecond.setToken(temp);
-        Game.getGame().turnDone();
         return true;
 
         //TODO: Update GUI
     }
 
+    private Token getCorrespondingToken(Token token) {
+        for (var t : tokens) {
+            if (t.equals(token))
+                return t;
+        }
+        return null;
+    }
 
     public Token drawToken() throws NoTokenException {
         if (Game.getGame().getTokenDrawPile().isEmpty())
@@ -133,6 +170,28 @@ public class Player {
         return token;
 
         //TODO: Add token to Players GUI
+    }
+
+
+    public int tokenAmountInHand(Token token) {
+        //the amount of tokens with the same TokenType in hand
+        int amount = 0;
+        for (var t : tokens) {
+            if (t.getTokenType() == token.getTokenType())
+                amount++;
+        }
+        return amount;
+    }
+
+    public HashSet<Integer> getHandSymbolTokenPositions() {
+        Token[] handCopy = this.getTokens().toArray(new Token[0]);
+        HashSet<Integer> returnSet = new HashSet<>();
+        for (int i = 0; i < handCopy.length; i++) {
+            if (handCopy[i].getTokenType().getValue() <= Constants.UNIQUE_SYMBOL_TOKENS) {
+                returnSet.add(i);
+            }
+        }
+        return returnSet;
     }
 
     public ArrayList<Token> getTokens() {
@@ -163,24 +222,4 @@ public class Player {
         return name;
     }
 
-    public int tokenAmountInHand(Token token) {
-        //the amount of tokens with the same TokenType in hand
-        int amount = 0;
-        for (var t : tokens) {
-            if (t.getTokenType() == token.getTokenType())
-                amount++;
-        }
-        return amount;
-    }
-
-    public HashSet<Integer> getHandSymbolTokenPositions() {
-        Token[] handCopy = this.getTokens().toArray(new Token[0]);
-        HashSet<Integer> returnSet = new HashSet<>();
-        for (int i = 0; i < handCopy.length; i++) {
-            if (handCopy[i].getTokenType().getValue() <= Constants.UNIQUE_SYMBOL_TOKENS) {
-                returnSet.add(i);
-            }
-        }
-        return returnSet;
-    }
 }
