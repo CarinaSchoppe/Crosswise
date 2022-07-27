@@ -15,10 +15,22 @@ public class Position {
     private final int x;
     private final int y;
     private Token token;
+    private final boolean hand;
+    private final int handPosition;
+
 
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
+        this.hand = false;
+        this.handPosition = -1;
+    }
+
+    public Position(int handPosition) {
+        this.handPosition = handPosition;
+        hand = true;
+        x = -1;
+        y = -1;
     }
 
     @Override
@@ -44,5 +56,13 @@ public class Position {
 
     public void setToken(Token token) {
         this.token = token;
+    }
+
+    public boolean isHand() {
+        return hand;
+    }
+
+    public int getHandPosition() {
+        return handPosition;
     }
 }

@@ -16,9 +16,11 @@ import de.fhwWedel.pp.util.game.Position;
 import de.fhwWedel.pp.util.game.Team;
 import de.fhwWedel.pp.util.game.Token;
 import de.fhwWedel.pp.util.game.TokenType;
+import de.fhwWedel.pp.util.special.Constants;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 
@@ -159,5 +161,26 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public int tokenAmountInHand(Token token) {
+        //the amount of tokens with the same TokenType in hand
+        int amount = 0;
+        for (var t : tokens) {
+            if (t.getTokenType() == token.getTokenType())
+                amount++;
+        }
+        return amount;
+    }
+
+    public HashSet<Integer> getHandSymbolTokenPositions() {
+        Token[] handCopy = this.getTokens().toArray(new Token[0]);
+        HashSet<Integer> returnSet = new HashSet<>();
+        for (int i = 0; i < handCopy.length; i++) {
+            if (handCopy[i].getTokenType().getValue() <= Constants.UNIQUE_SYMBOL_TOKENS) {
+                returnSet.add(i);
+            }
+        }
+        return returnSet;
     }
 }

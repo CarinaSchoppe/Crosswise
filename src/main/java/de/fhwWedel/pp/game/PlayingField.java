@@ -65,4 +65,15 @@ public class PlayingField {
 
 
     }
+
+    public Token[][] convertToTokenArray() {
+        //convert the fieldMap to a Token[][]
+        Token[][] tokenArray = new Token[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                tokenArray[i][j] = fieldMap[i][j].getToken();
+            }
+        }
+        return tokenArray;
+    }
 }
