@@ -1,14 +1,23 @@
+/*
+ * Copyright Notice for Crosswise-PP
+ * Copyright (c) at Crosswise-Jacob 2022
+ * File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/27/22, 11:22 AM All contents of "Game" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
+ * at Crosswise-Jacob. All rights reserved
+ * Any type of duplication, distribution, rental, sale, award,
+ * Public accessibility or other use
+ * requires the express written consent of Crosswise-Jacob.
+ */
+
 package de.fhwWedel.pp.game;
 
 import de.fhwWedel.pp.player.Player;
 import de.fhwWedel.pp.util.NoTokenException;
 import de.fhwWedel.pp.util.Token;
 import de.fhwWedel.pp.util.TokenType;
-import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-@Data
 public class Game {
 
     private static Game game;
@@ -19,13 +28,11 @@ public class Game {
     private final ArrayList<Token> tokenDrawPile = new ArrayList<>();
     private Player currentPlayer = null;
 
-    public static Game getGame() {
-        return game;
+    public Game(@NotNull PlayingField playingField, @NotNull ArrayList<Player> players) {
+        this.playingField = playingField;
+        this.players = players;
     }
 
-    public static void setGame(Game game) {
-        Game.game = game;
-    }
 
     private void fillPile() {
         for (var token : TokenType.values()) {
@@ -54,12 +61,8 @@ public class Game {
         }
     }
 
-    public void start() {
-        if (players.size() < 2)
-            throw new IllegalArgumentException("There must be at least 2 players");
-        setCurrentPlayer(players.get(0));
-        fillPile();
-        playerPileSetup();
+    public static Game getGame() {
+        return game;
     }
 
     private void playerPileSetup() {
@@ -72,5 +75,43 @@ public class Game {
                 }
             }
         }
+    }
+
+    public static void setGame(Game game) {
+        Game.game = game;
+    }
+
+    public void start() {
+        if (players.size() < 2)
+            throw new IllegalArgumentException("There must be at least 2 players");
+        setCurrentPlayer(players.get(0));
+        fillPile();
+        playerPileSetup();
+
+        //TODO: logic that a players turn is starting
+    }
+
+    public PlayingField getPlayingField() {
+        return playingField;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<Token> getUsedSpecialTokens() {
+        return usedSpecialTokens;
+    }
+
+    public ArrayList<Token> getTokenDrawPile() {
+        return tokenDrawPile;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 }

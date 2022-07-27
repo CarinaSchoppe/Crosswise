@@ -1,32 +1,42 @@
+/*
+ * Copyright Notice for Crosswise-PP
+ * Copyright (c) at Crosswise-Jacob 2022
+ * File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/27/22, 11:21 AM All contents of "Player" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
+ * at Crosswise-Jacob. All rights reserved
+ * Any type of duplication, distribution, rental, sale, award,
+ * Public accessibility or other use
+ * requires the express written consent of Crosswise-Jacob.
+ */
+
 package de.fhwWedel.pp.player;
 
 import de.fhwWedel.pp.game.Game;
 import de.fhwWedel.pp.util.*;
-import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Random;
 
 
-@Data
 public class Player {
 
     private final HashSet<Token> tokens = new HashSet<>();
-
     private final int playerID;
     private final Team team;
     private final boolean isActive;
+    private int points = 0;
     private final String name;
 
-    public boolean performNormalTurn(@NotNull final Token token, @NotNull final Position position) {
+    public Player(int playerID, Team team, boolean isActive, String name) {
+        this.playerID = playerID;
+        this.team = team;
+        this.isActive = isActive;
+        this.name = name;
+    }
+
+    public boolean normalTokenTurn(@NotNull final Token token, @NotNull final Position position) {
         if (!tokens.contains(token))
             return false;
-
-        //get the position on the PlayingField corresponding to the given position
-        //check if the position on the PlayingField is empty
-        //if so, set the token on the position and return true
-        //else return false
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
         if (field.getToken() != null)
             return false;
@@ -108,4 +118,31 @@ public class Player {
         //TODO: Add token to Players GUI
     }
 
+    public HashSet<Token> getTokens() {
+        return tokens;
+    }
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

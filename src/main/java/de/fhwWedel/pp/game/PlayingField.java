@@ -1,12 +1,19 @@
+/*
+ * Copyright Notice for Crosswise-PP
+ * Copyright (c) at Crosswise-Jacob 2022
+ * File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/27/22, 11:21 AM All contents of "PlayingField" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
+ * at Crosswise-Jacob. All rights reserved
+ * Any type of duplication, distribution, rental, sale, award,
+ * Public accessibility or other use
+ * requires the express written consent of Crosswise-Jacob.
+ */
+
 package de.fhwWedel.pp.game;
 
 import de.fhwWedel.pp.util.Position;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-@Getter
-@Setter
+
 public class PlayingField {
 
     private final int size;
@@ -34,5 +41,13 @@ public class PlayingField {
             }
         }
         return null;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Position[][] getFieldMap() {
+        return fieldMap;
     }
 }
