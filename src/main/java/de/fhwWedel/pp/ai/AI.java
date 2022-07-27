@@ -382,18 +382,18 @@ public class AI extends Player {
         Map<Integer, Map<Token, Integer>> occurrenceMap = new HashMap<>();
 
         for (int i = 0; i < grid.length; i++) {
-            occurrenceMap.put(-i - 1, calculateOccurencesPerLine(grid[i]));
+            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
         }
         Token[][] reverseArray = swapMatrix(grid);
 
         for (int i = 0; i < reverseArray.length; i++) {
-            occurrenceMap.put(i + 1, calculateOccurencesPerLine(reverseArray[i]));
+            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
         }
         return occurrenceMap;
     }
 
-    private Map<Token, Integer> calculateOccurencesPerLine(Token[] tokens) {
-        Map<Token, Integer> map = new HashMap<>();
+    private HashMap<Token, Integer> calculateOccurrencesPerLine(Token[] tokens) {
+        HashMap<Token, Integer> map = new HashMap<>();
         Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
         map.remove(new Token(TokenType.None));
         return map;
@@ -434,7 +434,7 @@ public class AI extends Player {
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position position : occupiedFields) {
             Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, new Token(TokenType.None)));
-            //TODO Prevent Loss
+            //TODO: Prevent Loss
             tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), new Token(TokenType.Remover), false, isMovePreventingLoss()));
 
         }
@@ -498,7 +498,6 @@ public class AI extends Player {
     public HashSet<TokenMove> createPossibleSwapperTokenMoves(Player player) {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         HashSet<Position> occupiedFields = occupiedFields();
-        //TODO Hälfte mit Hälfte vll?
         for (Position pos1 : occupiedFields) {
             for (Position pos2 : occupiedFields) {
                 if (!pos1.equals(pos2)) {
@@ -556,12 +555,12 @@ public class AI extends Player {
         Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
 
         for (int i = 0; i < grid.length; i++) {
-            occurrenceMap.put(-i - 1, calculateOccurencesPerLine(grid[i]));
+            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
         }
         Token[][] reverseArray = swapMatrix(grid);
 
         for (int i = 0; i < reverseArray.length; i++) {
-            occurrenceMap.put(i + 1, calculateOccurencesPerLine(reverseArray[i]));
+            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
         }
         return occurrenceMap;
     }
