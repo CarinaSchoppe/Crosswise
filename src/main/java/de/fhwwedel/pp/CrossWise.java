@@ -28,7 +28,7 @@ public class CrossWise {
 
     public static void main(String... args) {
 
-       //TODO: GameWindow.start();
+        //TODO: GameWindow.start();
         var player1 = new AI(1, true, "Player 1");
         var player2 = new AI(2, true, "Player 2");
         var game = new Game(new PlayingField(6), new ArrayList<>(List.of(player1, player2)));
@@ -37,6 +37,9 @@ public class CrossWise {
         game.start();
 
     }
+
+    //TODO: Team in handleGameOver (weil jetzt ja Klasse statt instanz?)
+    // TODO: GUI bei Team game over!
 
 
 }

@@ -15,7 +15,7 @@ import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoMovePossibleException;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.Position;
-import de.fhwwedel.pp.util.game.Team;
+import de.fhwwedel.pp.util.game.TeamType;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 import de.fhwwedel.pp.util.special.Constants;
@@ -113,7 +113,7 @@ public class AI extends Player {
 
         //Vergleich auf Änderung der Punkte
         int difference = newMove.getRelativeChange() - currentBestMove.getRelativeChange();
-        if (player.getTeam() == Team.VERTICAL) {
+        if (player.getTeam() == TeamType.VERTICAL) {
             if (difference < 0) {
                 return false;
             }
@@ -325,13 +325,13 @@ public class AI extends Player {
         for (Map.Entry<Integer, Integer> entry : pointsMap.entrySet()) {
             if (entry.getValue() < -100) {
                 if (entry.getKey() > 0) {
-                    if (player.getTeam() == Team.VERTICAL) {
+                    if (player.getTeam() == TeamType.VERTICAL) {
                         isWinning = true;
                     } else {
                         isCreatingLoss = true;
                     }
                 } else {
-                    if (player.getTeam() == Team.VERTICAL) {
+                    if (player.getTeam() == TeamType.VERTICAL) {
                         isCreatingLoss = true;
                     } else {
                         isWinning = true;

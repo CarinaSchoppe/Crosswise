@@ -10,7 +10,7 @@
 
 package de.fhwwedel.pp.game;
 
-import de.fhwwedel.pp.util.game.Team;
+import de.fhwwedel.pp.util.game.TeamType;
 import de.fhwwedel.pp.util.game.TokenType;
 
 import java.util.HashMap;
@@ -18,15 +18,15 @@ import java.util.HashMap;
 public record GameLogic(Game game) {
 
 
-    public HashMap<Boolean, Team> isGameOver(PlayingField field) {
-        var map = new HashMap<Boolean, Team>();
+    public HashMap<Boolean, TeamType> isGameOver(PlayingField field) {
+        var map = new HashMap<Boolean, TeamType>();
         if (checkRows(field)) {
-            map.put(true, Team.HORIZONTAL);
+            map.put(true, TeamType.HORIZONTAL);
             return map;
         }
 
         if (checkColumns(field)) {
-            map.put(true, Team.VERTICAL);
+            map.put(true, TeamType.VERTICAL);
             return map;
         }
 

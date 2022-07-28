@@ -30,20 +30,19 @@ public class Player {
 
     private final ArrayList<Token> tokens = new ArrayList<>();
     private final int playerID;
-    private final Team team;
     private final boolean isActive;
     private final String name;
     private int points = 0;
+    private final Team team;
 
     public Player(int playerID, boolean isActive, String name) {
         this.playerID = playerID;
-        this.team = Team.getTeamName(playerID);
+        this.team = Team.addPlayerToTeam(playerID);
         this.isActive = isActive;
         this.name = name;
     }
 
     //TODO: after turn: call Game#nextPlayer()
-
 
 
     public boolean normalTokenTurn(final Token token, final Position position) {
@@ -198,9 +197,6 @@ public class Player {
         return playerID;
     }
 
-    public Team getTeam() {
-        return team;
-    }
 
     public boolean isActive() {
         return isActive;
@@ -220,7 +216,6 @@ public class Player {
 
     public String handRepresentation() {
         StringBuilder builder = new StringBuilder();
-        //create a string in the form of [token1.tokenType().getValue(), token2.tokenType().getValue(), token3.tokenType().getValue(), ...]
         builder.append("[");
         for (var t : tokens) {
             builder.append(t.getTokenType().getValue());

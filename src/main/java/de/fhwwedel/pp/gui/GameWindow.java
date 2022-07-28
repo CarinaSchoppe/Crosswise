@@ -10,8 +10,9 @@
 
 package de.fhwwedel.pp.gui;
 
+import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
-import de.fhwwedel.pp.util.game.Team;
+import de.fhwwedel.pp.util.game.TeamType;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +29,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameWindow extends Application implements Initializable {
@@ -135,7 +137,7 @@ public class GameWindow extends Application implements Initializable {
         alert.showAndWait();
     }
 
-    public static void gameWonNotification(Team won, int wonPoints, int lostPoints, boolean rowComplete) {
+    public static void gameWonNotification(TeamType won, int wonPoints, int lostPoints, boolean rowComplete) {
         String message;
         if (rowComplete) {
             message = "Team: " + won.getTeamName() + " won, because the hit a full line!";
@@ -145,11 +147,14 @@ public class GameWindow extends Application implements Initializable {
             message = "Team: " + won.getTeamName() + " won, because they have more points (" + wonPoints + ") than the other team (" + lostPoints + ")!";
         }
 
-
         var alert = new Alert(Alert.AlertType.INFORMATION, message);
         alert.setTitle("Game finished");
         alert.setHeaderText("Game finished");
         alert.showAndWait();
+        Game.setGame(new Game(null, new ArrayList<>()));
+        GameWindow.gameWindow.stage.close();
+        GameWindow.start();
+
     }
 
     @FXML
