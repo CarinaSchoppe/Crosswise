@@ -43,10 +43,10 @@ public class AI extends Player {
         - Zug machen der am meisten Punkte bringt
 
         - lieber normaler zug als special
-        - wenn 2 züge gleich dann nimm den mit mehr tokens auf hand
+          - wenn 2 züge gleich dann nimm den mit mehr tokens auf hand
             - gleich? nimm den wo weniger auf dem feld liegt
-             - wenn gleich? nimm stein mit der geringsten zahl
-               - wenn gleich? nimm feld ganz oben links dann nach rechts dann unten
+              - wenn gleich? nimm stein mit der geringsten zahl
+                - wenn gleich? nimm feld ganz oben links dann nach rechts dann unten
          */
 
         try {
@@ -54,7 +54,7 @@ public class AI extends Player {
             switch (move.getToken().getTokenType().getValue()) {
                 case 1, 2, 3, 4, 5, 6 -> normalTokenTurn(move.getToken(), move.getPrimaryMovePosition());
                 case 7 -> removerTokenTurn(move.getToken(), move.getPrimaryMovePosition());
-                case 8 -> moverTokenTurn(move.getToken(), move.getSecondaryMovePosition(), move.getPrimaryMovePosition()); //TODO: check this (wie rum?)
+                case 8 -> moverTokenTurn(move.getToken(), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
                 case 9 -> swapperTokenTurn(move.getToken(), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
                 case 10 -> replacerTokenTurn(move.getToken(), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
             }
@@ -72,32 +72,21 @@ public class AI extends Player {
         Token[] playerHand = player.getTokens().toArray(new Token[0]);
 
         for (Token token : playerHand) {
-            System.out.println("current Token: " + token);
+            System.out.println("current Token: " + token.getTokenType().getValue());
             bestMovePerToken.add(calculateBestTokenMove(token, player));
         }
         int counter = 0;
-        for (TokenMove tokenMove : bestMovePerToken) {
-            System.out.println("Hand-Stone: " + counter++);
-            System.out.println(tokenMove.getToken());
-            System.out.println(tokenMove.getPrimaryMovePosition().getX() + "/" +
-                    tokenMove.getPrimaryMovePosition().getY());
-            System.out.println(tokenMove.getRelativeChange());
-        }
 
         Integer bestToken = null;
         for (int i = 0; i < playerHand.length; i++) {
             if (bestMovePerToken.get(i) != null) {
                 if (bestToken == null) {
-                    System.out.println("First: " + i);
                     bestToken = i;
-                } else {
-                    System.out.println("Others" + i);
-                    if (isBetterMove(bestMovePerToken.get(i), bestMovePerToken.get(bestToken), player)) {
-                        bestToken = i;
-                    }
+                } else if (isBetterMove(bestMovePerToken.get(i), bestMovePerToken.get(bestToken), player)) {
+                    bestToken = i;
+                }
                 }
             }
-        }
         if (bestToken == null) {
             throw new NoTokenException("No token more on hand!");
         } else {
@@ -192,7 +181,8 @@ public class AI extends Player {
         if (differenceHorizontalPosition > 0) {
             return false;
         }
-        if (newMove.getToken().getTokenType().getValue() > Constants.UNIQUE_SYMBOL_TOKENS && newMove.getToken().getTokenType().getValue() < (Constants.UNIQUE_SYMBOL_TOKENS + Constants.UNIQUE_ACTION_TOKENS)) {
+        if (newMove.getToken().getTokenType().getValue() > Constants.UNIQUE_SYMBOL_TOKENS && newMove.getToken().
+                getTokenType().getValue() < (Constants.UNIQUE_SYMBOL_TOKENS + Constants.UNIQUE_ACTION_TOKENS)) {
             //Falls SpezialStein: Vergleich auf zweite vertikale Position des Tokens
             int differenceVerticalPosition2 = newMove.getSecondaryMovePosition().getX()
                     - currentBestMove.getSecondaryMovePosition().getX();
@@ -203,7 +193,8 @@ public class AI extends Player {
                 return false;
             }
             //Falls Replacer, wird der neue Zug als besser bewertet
-            if (newMove.getToken().getTokenType().getValue() == Constants.UNIQUE_ACTION_TOKENS + Constants.UNIQUE_SYMBOL_TOKENS) {
+            if (newMove.getToken().getTokenType().getValue() == Constants.UNIQUE_ACTION_TOKENS +
+                    Constants.UNIQUE_SYMBOL_TOKENS) {
                 return true;
                 //TODO möglicherweise bessere AI Logik hier
             }
@@ -255,7 +246,6 @@ public class AI extends Player {
     //---------------------------------------Best Move Calculation----------------------------------
 
     private TokenMove calculateBestTokenMove(Token token, Player player) {
-
         HashSet<TokenMove> tokenMovesPerToken = createPossibleMoves(token, player);
         TokenMove bestMove = null;
         if (tokenMovesPerToken == null) {
@@ -276,6 +266,7 @@ public class AI extends Player {
 
 
     private HashSet<TokenMove> createPossibleMoves(Token token, Player player) {
+        System.out.println("Possible Moves: " + this.getPlayerID() + " Token: " + token.getTokenType());
         return switch (token.getTokenType().getValue()) {
             case 1, 2, 3, 4, 5, 6 -> createPossibleSymbolTokenMoves(token, player);
             case 7 -> createPossibleRemoverTokenMoves(player);
@@ -370,9 +361,12 @@ public class AI extends Player {
         Token[][] originalGrid = Game.getGame().getPlayingField().convertToTokenArray();
 
         Token[][] grid = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        /*
         for (int i = 0; i < Constants.GAMEGRID_ROWS; i++) {
             System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_COLUMNS);
         }
+
+         */
         grid[position.getX()][position.getY()] = token;
 
         return grid;
@@ -492,9 +486,12 @@ public class AI extends Player {
     public Token[][] getGridCopyWithSwappedTokens(Position swap1pos, Token swap1, Position swap2pos, Token swap2) {
         Token[][] originalGrid = Game.getGame().getPlayingField().convertToTokenArray();
         Token[][] grid = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        /*
         for (int i = 0; i < Constants.GAMEGRID_ROWS; i++) {
             System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_COLUMNS);
         }
+
+         */
         grid[swap1pos.getX()][swap1pos.getY()] = swap1;
         grid[swap2pos.getX()][swap2pos.getY()] = swap2;
 
