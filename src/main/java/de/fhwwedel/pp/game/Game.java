@@ -16,6 +16,7 @@ import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.AnimationTime;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.special.GameLogger;
 
 import java.util.ArrayList;
 
@@ -109,9 +110,9 @@ public class Game {
         var over = gameLogic.isGameOver(playingField);
         if (players.isEmpty()) {
             System.out.println("No players left!");
+            GameLogger.saveLogToFile("Logfile.txt");
             return true;
-        }
-        if (over.containsKey(true)) {
+        } else if (over.containsKey(true)) {
             var team = over.get(true);
 
             //noinspection StatementWithEmptyBody
@@ -121,6 +122,8 @@ public class Game {
             } else {
                 System.out.println("Game is over, team " + team + " has won!");
             }
+            GameLogger.saveLogToFile("Logfile.txt");
+            return true;
         }
         return false;
     }
