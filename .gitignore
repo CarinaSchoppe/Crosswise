@@ -12,6 +12,7 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 .idea
+*.txt
 Crosswise-PP.iml
 ### Java template
 # Compiled class file

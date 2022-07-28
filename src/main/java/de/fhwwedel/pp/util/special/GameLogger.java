@@ -42,7 +42,7 @@ public class GameLogger {
         int i = 0;
         while (file.exists()) {
             i++;
-            file = new File(fileName + i);
+            file = new File(fileName + i + ".txt");
         }
         try (var writer = new FileWriter(file)) {
             for (var logMessage : loggMessages) {

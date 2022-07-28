@@ -27,8 +27,8 @@ public class CrossWise {
 
 
     public static void main(String... args) {
-        //TODO:     Crosswise.main(args);
 
+       //TODO: GameWindow.start();
         var player1 = new AI(1, true, "Player 1");
         var player2 = new AI(2, true, "Player 2");
         var game = new Game(new PlayingField(6), new ArrayList<>(List.of(player1, player2)));
