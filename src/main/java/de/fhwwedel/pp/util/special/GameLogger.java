@@ -21,17 +21,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameLogger {
-    private static final ArrayList<String> loggMessages = new ArrayList<>();
+    private static final ArrayList<String> logMessages = new ArrayList<>();
 
     public static void log(String logMessage) {
         //get the current time and date
         System.out.println(logMessage);
-        String timeStamp = new java.util.Date().toString();
-        loggMessages.add(timeStamp + ": " + logMessage);
+        logMessages.add(new java.util.Date() + ": " + logMessage);
     }
 
     public static void logMove(Player player, Token placed, Position to, Action action) {
-        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + action.getAction() + " " + placed.getTokenType().getValue() + " on " + to.toString() + " new Hand " + player.handRepresentation() +
+        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + action.getAction() + ": " + placed.getTokenType().getValue() + " on: " + to.toString() + " new Hand: " + player.handRepresentation() +
                 "\n" +
                 Game.getGame().getPlayingField().toString();
         log(builder);
@@ -45,7 +44,7 @@ public class GameLogger {
             file = new File("/logs/" + fileName + i + ".txt");
         }
         try (var writer = new FileWriter(file)) {
-            for (var logMessage : loggMessages) {
+            for (var logMessage : logMessages) {
                 writer.write(logMessage + "\n");
             }
         } catch (IOException e) {
@@ -54,8 +53,7 @@ public class GameLogger {
     }
 
     public static void logDraw(Player player, Token token) {
-        String builder = "Player " + player.getName() + " draws " + token.getTokenType().getValue() + " new Hand " + player.handRepresentation() +
-                "\n";
+        String builder = "Player \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" draws: \"" + token.getTokenType().getValue() + "\" new Hand: " + player.handRepresentation() + "\n";
         log(builder);
     }
 }
