@@ -10,6 +10,7 @@
 
 package de.fhwwedel.pp.gui;
 
+import de.fhwwedel.pp.player.Player;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +31,8 @@ import java.util.ResourceBundle;
 
 public class GameWindow extends Application implements Initializable {
 
+
+    private Stage stage;
     private static GameWindow gameWindow;
     @FXML
     private ResourceBundle resources;
@@ -124,17 +127,11 @@ public class GameWindow extends Application implements Initializable {
 
     }
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-
-        var loader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
-        loader.setController(this);
-        var root = (Parent) loader.load();
-        primaryStage.setTitle("Crosswise");
-        primaryStage.setResizable(true);
-        primaryStage.setScene(new Scene(root));
-        initialize();
-        primaryStage.show();
+    public static void notifyTurn(Player player) {
+        var alert = new Alert(Alert.AlertType.INFORMATION, "The Player: \"" + player.getName() + "\" with ID: \"" + player.getPlayerID() + " is now your turn!");
+        alert.setTitle("Next Turn");
+        alert.setHeaderText("Next Players Turn");
+        alert.showAndWait();
     }
 
     @FXML
@@ -164,5 +161,43 @@ public class GameWindow extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameWindow = this;
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+
+        var loader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
+        loader.setController(this);
+        var root = (Parent) loader.load();
+        primaryStage.setTitle("Crosswise");
+        primaryStage.setResizable(true);
+        primaryStage.setScene(new Scene(root));
+        initialize();
+        stage = primaryStage;
+        primaryStage.show();
+    }
+
+    public Label getCurrentPlayerText() {
+        return currentPlayerText;
+    }
+
+    public Label getMoverAmountText() {
+        return moverAmountText;
+    }
+
+    public Label getRemoverAmountText() {
+        return removerAmountText;
+    }
+
+    public Label getReplacerAmountText() {
+        return replacerAmountText;
+    }
+
+    public Label getSwapperAmountText() {
+        return swapperAmountText;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }

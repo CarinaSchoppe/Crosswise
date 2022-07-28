@@ -11,6 +11,7 @@
 package de.fhwwedel.pp.player;
 
 import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Team;
@@ -43,16 +44,12 @@ public class Player {
 
     //TODO: after turn: call Game#nextPlayer()
 
-    public void notifyTurn() {
-        //TODO: Implement: Popup?
-    }
+
 
     public boolean normalTokenTurn(final Token token, final Position position) {
-        if (hasToken(token))
-            return false;
+        if (hasToken(token)) return false;
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken().getTokenType() != TokenType.None)
-            return false;
+        if (field.getToken().getTokenType() != TokenType.None) return false;
         tokens.remove(getCorrespondingToken(token));
         field.setToken(token);
         GameLogger.logMove(this, token, position, Action.PLACE);
@@ -62,28 +59,25 @@ public class Player {
 
     private boolean hasToken(Token token) {
         for (var t : tokens) {
-            if (t.equals(token))
-                return false;
+            if (t.equals(token)) return false;
         }
         return true;
     }
 
     public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition, final Position handTokenPosition) {
-        if (hasToken(token))
-            return false;
-        if (token.getTokenType() != TokenType.Replacer)
-            return false;
-        if (hasToken(getCorrespondingToken(handTokenPosition)))
-            return false;
+        if (hasToken(token)) return false;
+        if (token.getTokenType() != TokenType.Replacer) return false;
+        if (hasToken(getCorrespondingToken(handTokenPosition))) return false;
 
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
-        if (field.getToken().getTokenType() == TokenType.None)
-            return false;
+        if (field.getToken().getTokenType() == TokenType.None) return false;
         var fieldToken = getCorrespondingToken(token);
         tokens.remove(fieldToken);
         var handToken = getCorrespondingToken(handTokenPosition);
         tokens.remove(handToken);
         field.setToken(handToken);
+        GameWindow.getGameWindow().getReplacerAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + "");
+
         tokens.add(field.getToken());
         GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
         GameLogger.logMove(this, handToken, field, Action.PLACE);
@@ -91,27 +85,25 @@ public class Player {
     }
 
     private Token getCorrespondingToken(Position position) {
-        if (!position.isHand())
-            return null;
+        if (!position.isHand()) return null;
         return tokens.get(position.getHandPosition());
     }
 
 
     public boolean removerTokenTurn(final Token token, final Position position) {
-        if (token.getTokenType() != TokenType.Remover)
-            return false;
+        if (token.getTokenType() != TokenType.Remover) return false;
 
-        if (hasToken(token))
-            return false;
+        if (hasToken(token)) return false;
 
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken().getTokenType() == TokenType.None)
-            return false;
+        if (field.getToken().getTokenType() == TokenType.None) return false;
 
         tokens.remove(getCorrespondingToken(token));
         tokens.add(field.getToken());
         field.setToken(new Token(TokenType.None));
         field.getToken().setPosition(field);
+        GameWindow.getGameWindow().getRemoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + "");
+
         GameLogger.logMove(this, token, field, Action.REMOVE);
 
         return true;
@@ -120,22 +112,20 @@ public class Player {
     }
 
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
-        if (token.getTokenType() != TokenType.Mover)
-            return false;
-        if (hasToken(token))
-            return false;
+        if (token.getTokenType() != TokenType.Mover) return false;
+        if (hasToken(token)) return false;
         var fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
         var fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
 
-        if (fieldStart.getToken().getTokenType() == TokenType.None)
-            return false;
-        if (fieldEnd.getToken().getTokenType() != TokenType.None)
-            return false;
+        if (fieldStart.getToken().getTokenType() == TokenType.None) return false;
+        if (fieldEnd.getToken().getTokenType() != TokenType.None) return false;
 
         tokens.remove(getCorrespondingToken(token));
 
         fieldEnd.setToken(fieldStart.getToken());
         fieldStart.setToken(null);
+        GameWindow.getGameWindow().getMoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "");
+
         GameLogger.logMove(this, token, start, Action.REMOVE);
         GameLogger.logMove(this, token, end, Action.PLACE);
 
@@ -143,20 +133,17 @@ public class Player {
     }
 
     public boolean swapperTokenTurn(final Token token, final Position first, final Position second) {
-        if (token.getTokenType() != TokenType.Swapper)
-            return false;
-        if (hasToken(token))
-            return false;
+        if (token.getTokenType() != TokenType.Swapper) return false;
+        if (hasToken(token)) return false;
         var fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         var fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
-        if (fieldFirst.getToken().getTokenType() == TokenType.None)
-            return false;
-        if (fieldSecond.getToken().getTokenType() == TokenType.None)
-            return false;
+        if (fieldFirst.getToken().getTokenType() == TokenType.None) return false;
+        if (fieldSecond.getToken().getTokenType() == TokenType.None) return false;
         tokens.remove(getCorrespondingToken(token));
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
         fieldSecond.setToken(temp);
+        GameWindow.getGameWindow().getSwapperAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + "");
         GameLogger.logMove(this, fieldSecond.getToken(), fieldFirst, Action.PLACE);
         GameLogger.logMove(this, fieldFirst.getToken(), fieldSecond, Action.PLACE);
         //TODO: Update GUI
@@ -165,15 +152,13 @@ public class Player {
 
     private Token getCorrespondingToken(Token token) {
         for (var t : tokens) {
-            if (t.equals(token))
-                return t;
+            if (t.equals(token)) return t;
         }
         return null;
     }
 
     public Token drawToken() throws NoTokenException {
-        if (Game.getGame().getTokenDrawPile().isEmpty())
-            throw new NoTokenException("No more tokens left in the Pile!");
+        if (Game.getGame().getTokenDrawPile().isEmpty()) throw new NoTokenException("No more tokens left in the Pile!");
 
         var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
@@ -189,8 +174,7 @@ public class Player {
         //the amount of tokens with the same TokenType in hand
         int amount = 0;
         for (var t : tokens) {
-            if (t.getTokenType() == token.getTokenType())
-                amount++;
+            if (t.getTokenType() == token.getTokenType()) amount++;
         }
         return amount;
     }

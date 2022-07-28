@@ -11,6 +11,7 @@
 package de.fhwwedel.pp.game;
 
 import de.fhwwedel.pp.ai.AI;
+import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.AnimationTime;
@@ -71,6 +72,7 @@ public class Game {
         }
     }
 
+
     public void setup(boolean fileLoaded) {
         gameLogic = new GameLogic(this);
         handleOver();
@@ -99,11 +101,12 @@ public class Game {
             return;
         }
 
+        GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName());
         System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
-            currentPlayer.notifyTurn();
+            GameWindow.notifyTurn(currentPlayer);
         }
     }
 
@@ -133,7 +136,7 @@ public class Game {
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
-            currentPlayer.notifyTurn();
+            GameWindow.notifyTurn(currentPlayer);
         }
     }
 
