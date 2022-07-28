@@ -96,17 +96,21 @@ public class AI extends Player {
 
     public boolean isBetterMove(TokenMove newMove, TokenMove currentBestMove, Player player) {
         //Vergleich auf Siegchance
+
         if (newMove.isGameWinning()) {
             return true;
         } else if (currentBestMove.isGameWinning()) {
             return false;
         }
+
+
         //Vergleich auf Verhinderung einer Niederlage
         if (newMove.isPreventingLoss()) {
             return true;
         } else if (currentBestMove.isPreventingLoss()) {
             return false;
         }
+
         //Vergleich auf Änderung der Punkte
         int difference = newMove.getRelativeChange() - currentBestMove.getRelativeChange();
         if (player.getTeam() == Team.VERTICAL) {
@@ -166,12 +170,14 @@ public class AI extends Player {
         //Vergleich auf vertikale Position des Tokens
         int differenceVerticalPosition = newMove.getPrimaryMovePosition().getX() -
                 currentBestMove.getPrimaryMovePosition().getX();
+
         if (differenceVerticalPosition < 0) {
             return true;
         }
         if (differenceVerticalPosition > 0) {
             return false;
         }
+
         //Vergleich auf horizontale Position des Tokens
         int differenceHorizontalPosition = newMove.getPrimaryMovePosition().getY() -
                 currentBestMove.getPrimaryMovePosition().getY();
@@ -286,6 +292,7 @@ public class AI extends Player {
         for (Position position : emptyFields) {
             Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, token));
             //TODO Prevent Loss
+
             tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), token, currentCalculation.gameWinning(), isMovePreventingLoss()));
         }
         return tokenMoves;
@@ -316,7 +323,7 @@ public class AI extends Player {
         boolean isWinning = false;
         boolean isCreatingLoss = false;
         for (Map.Entry<Integer, Integer> entry : pointsMap.entrySet()) {
-            if (entry.getValue() == -1) {
+            if (entry.getValue() < -100) {
                 if (entry.getKey() > 0) {
                     if (player.getTeam() == Team.VERTICAL) {
                         isWinning = true;
@@ -384,8 +391,9 @@ public class AI extends Player {
             return 6;
         }
         for (Map.Entry<Token, Integer> entry : map.entrySet()) {
-            if (entry.getValue() == Constants.GAMEGRID_ROWS) {
-                return -1;
+
+            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey().getTokenType() != TokenType.None) {
+                return -1000;
             } else if (entry.getValue() > 1) {
                 current = current + entry.getValue() * 2 - 3;
             }
@@ -410,7 +418,9 @@ public class AI extends Player {
     private HashMap<Token, Integer> calculateOccurrencesPerLine(Token[] tokens) {
         HashMap<Token, Integer> map = new HashMap<>();
         Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
-        map.remove(new Token(TokenType.None));
+
+        map.remove(null);
+
         return map;
     }
 
