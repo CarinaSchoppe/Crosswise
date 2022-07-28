@@ -111,7 +111,7 @@ public class Game {
         var over = gameLogic.isGameOver(playingField);
         if (players.isEmpty()) {
             System.out.println("No players left!");
-            GameLogger.saveLogToFile("Logfile.txt");
+            GameLogger.saveLogToFile("Logfile");
             return true;
         } else if (over.containsKey(true)) {
             var team = over.get(true);
@@ -123,7 +123,7 @@ public class Game {
             } else {
                 System.out.println("Game is over, team " + team + " has won!");
             }
-            GameLogger.saveLogToFile("Logfile.txt");
+            GameLogger.saveLogToFile("Logfile");
             return true;
         }
         return false;

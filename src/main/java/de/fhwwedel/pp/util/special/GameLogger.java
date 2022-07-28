@@ -27,18 +27,23 @@ public class GameLogger {
         //get the current time and date
         System.out.println(logMessage);
         String timeStamp = new java.util.Date().toString();
-        loggMessages.add(timeStamp + logMessage);
+        loggMessages.add(timeStamp + ": " + logMessage);
     }
 
     public static void logMove(Player player, Token placed, Position to, Action action) {
-        String builder = "Player " + player.getName() + " " + action.getAction() + " " + placed.getTokenType().getValue() + " on " + to.toString() + " new Hand " + player.handRepresentation() +
+        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + action.getAction() + " " + placed.getTokenType().getValue() + " on " + to.toString() + " new Hand " + player.handRepresentation() +
                 "\n" +
                 Game.getGame().getPlayingField().toString();
         log(builder);
     }
 
     public static void saveLogToFile(String fileName) {
-        var file = new File(fileName);
+        var file = new File(fileName + ".txt");
+        int i = 0;
+        while (file.exists()) {
+            i++;
+            file = new File(fileName + i);
+        }
         try (var writer = new FileWriter(file)) {
             for (var logMessage : loggMessages) {
                 writer.write(logMessage + "\n");
