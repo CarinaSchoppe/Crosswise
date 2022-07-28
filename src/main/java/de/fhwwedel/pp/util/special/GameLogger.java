@@ -38,11 +38,11 @@ public class GameLogger {
     }
 
     public static void saveLogToFile(String fileName) {
-        var file = new File(fileName + ".txt");
+        var file = new File("/logs/" + fileName + ".txt");
         int i = 0;
         while (file.exists()) {
             i++;
-            file = new File(fileName + i + ".txt");
+            file = new File("/logs/" + fileName + i + ".txt");
         }
         try (var writer = new FileWriter(file)) {
             for (var logMessage : loggMessages) {
