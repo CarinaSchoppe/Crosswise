@@ -12,13 +12,24 @@ package de.fhwwedel.pp.util.game;
 
 public enum Team {
 
-    VERTICAL, HORIZONTAL;
+    VERTICAL("Vertical"), HORIZONTAL("Horizontal");
 
-    public static Team getTeam(int playerID) {
+
+    private final String team;
+
+    Team(String team) {
+        this.team = team;
+    }
+
+    public static Team getTeamName(int playerID) {
         if (playerID % 2 == 0) {
             return VERTICAL;
         } else {
             return HORIZONTAL;
         }
+    }
+
+    public String getTeamName() {
+        return team;
     }
 }

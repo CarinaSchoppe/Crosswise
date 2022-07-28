@@ -11,6 +11,7 @@
 package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Team;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -131,6 +132,23 @@ public class GameWindow extends Application implements Initializable {
         var alert = new Alert(Alert.AlertType.INFORMATION, "The Player: \"" + player.getName() + "\" with ID: \"" + player.getPlayerID() + " is now your turn!");
         alert.setTitle("Next Turn");
         alert.setHeaderText("Next Players Turn");
+        alert.showAndWait();
+    }
+
+    public static void gameWonNotification(Team won, int wonPoints, int lostPoints, boolean rowComplete) {
+        String message;
+        if (rowComplete) {
+            message = "Team: " + won.getTeamName() + " won, because the hit a full line!";
+        } else if (wonPoints == lostPoints) {
+            message = "Draw! Both teams got the same amount of points (" + wonPoints + ")!";
+        } else {
+            message = "Team: " + won.getTeamName() + " won, because they have more points (" + wonPoints + ") than the other team (" + lostPoints + ")!";
+        }
+
+
+        var alert = new Alert(Alert.AlertType.INFORMATION, message);
+        alert.setTitle("Game finished");
+        alert.setHeaderText("Game finished");
         alert.showAndWait();
     }
 

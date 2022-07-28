@@ -37,7 +37,7 @@ public class Player {
 
     public Player(int playerID, boolean isActive, String name) {
         this.playerID = playerID;
-        this.team = Team.getTeam(playerID);
+        this.team = Team.getTeamName(playerID);
         this.isActive = isActive;
         this.name = name;
     }
