@@ -69,8 +69,8 @@ public class Position {
     @Override
     public String toString() {
         return "Position{" +
-                "x=" + x +
-                ", y=" + y +
+                "y=" + x +
+                ", x=" + y +
                 '}';
     }
 }

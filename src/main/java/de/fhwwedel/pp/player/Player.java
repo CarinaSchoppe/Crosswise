@@ -178,6 +178,7 @@ public class Player {
         var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
         tokens.add(token);
+        GameLogger.logDraw(this, token);
         return token;
 
         //TODO: Add token to Players GUI

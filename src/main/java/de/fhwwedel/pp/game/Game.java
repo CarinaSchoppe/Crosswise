@@ -137,8 +137,14 @@ public class Game {
     }
 
     public void turnDone() {
+
         if (handleOver()) {
             return;
+        }
+        try {
+            currentPlayer.drawToken();
+        } catch (NoTokenException e) {
+            System.out.println("No more tokens left in the Pile!");
         }
         nextPlayer();
     }

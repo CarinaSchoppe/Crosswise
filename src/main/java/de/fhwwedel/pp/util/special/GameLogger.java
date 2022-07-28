@@ -25,6 +25,7 @@ public class GameLogger {
 
     public static void log(String logMessage) {
         //get the current time and date
+        System.out.println(logMessage);
         String timeStamp = new java.util.Date().toString();
         loggMessages.add(timeStamp + logMessage);
     }
@@ -38,13 +39,18 @@ public class GameLogger {
 
     public static void saveLogToFile(String fileName) {
         var file = new File(fileName);
-        try {
-            var writer = new FileWriter(file);
+        try (var writer = new FileWriter(file)) {
             for (var logMessage : loggMessages) {
                 writer.write(logMessage + "\n");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void logDraw(Player player, Token token) {
+        String builder = "Player " + player.getName() + " draws " + token.getTokenType().getValue() + " new Hand " + player.handRepresentation() +
+                "\n";
+        log(builder);
     }
 }
