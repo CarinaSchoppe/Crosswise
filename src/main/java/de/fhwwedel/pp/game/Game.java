@@ -46,6 +46,7 @@ public class Game {
 
     private void fillPile() {
         for (var token : TokenType.values()) {
+            if (token == TokenType.None) continue;
             if (token.isSpecial()) {
                 for (int i = 0; i < 3; i++) {
                     tokenDrawPile.add(new Token(token));
