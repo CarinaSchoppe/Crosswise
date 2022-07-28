@@ -10,9 +10,9 @@
 
 package de.fhwwedel.pp;
 
+import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
-import de.fhwwedel.pp.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +29,12 @@ public class CrossWise {
     public static void main(String... args) {
         //TODO:     Crosswise.main(args);
 
-        var player1 = new Player(1, true, "Player 1");
-        var player2 = new Player(2, true, "Player 2");
+        var player1 = new AI(1, true, "Player 1");
+        var player2 = new AI(2, true, "Player 2");
         var game = new Game(new PlayingField(6), new ArrayList<>(List.of(player1, player2)));
         Game.setGame(game);
         game.setup(false);
+        game.start();
 
     }
 

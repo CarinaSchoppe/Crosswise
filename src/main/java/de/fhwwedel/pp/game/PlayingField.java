@@ -15,7 +15,6 @@ import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 
 
-
 public class PlayingField {
 
     private final int size;
@@ -75,5 +74,20 @@ public class PlayingField {
             }
         }
         return tokenArray;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("FieldMap:\n");
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                stringBuilder.append(fieldMap[i][j].getToken().getTokenType().getValue());
+                stringBuilder.append(" ");
+            }
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
     }
 }

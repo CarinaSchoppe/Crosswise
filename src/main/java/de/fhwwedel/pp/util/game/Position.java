@@ -65,4 +65,12 @@ public class Position {
     public int getHandPosition() {
         return handPosition;
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

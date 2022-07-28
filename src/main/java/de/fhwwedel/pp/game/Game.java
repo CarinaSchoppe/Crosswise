@@ -13,6 +13,7 @@ package de.fhwwedel.pp.game;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
+import de.fhwwedel.pp.util.game.AnimationTime;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 
@@ -22,6 +23,7 @@ public class Game {
 
     private static Game game;
     private final PlayingField playingField;
+    private final AnimationTime animationTime = AnimationTime.MIDDLE;
     private final ArrayList<Player> players;
     private final ArrayList<Token> usedSpecialTokens = new ArrayList<>();
     private final ArrayList<Token> tokenDrawPile = new ArrayList<>();
@@ -80,45 +82,55 @@ public class Game {
     }
 
     private void nextPlayer() {
-        if (currentPlayer == null && players.size() > 0) {
+        if (currentPlayer == null && !players.isEmpty()) {
             currentPlayer = players.get(0);
-        } else {
+        } else if (currentPlayer != null && !players.isEmpty()) {
             int index = players.indexOf(currentPlayer);
             if (index == players.size() - 1) {
                 currentPlayer = players.get(0);
             } else {
                 currentPlayer = players.get(index + 1);
             }
+        } else {
+            currentPlayer = null;
+            handleOver();
+            return;
         }
 
-        if (currentPlayer instanceof AI AIPlayer) {
-            AIPlayer.makeMove();
+        System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
+        if (currentPlayer instanceof AI ai) {
+            ai.makeMove();
         } else {
             currentPlayer.notifyTurn();
         }
-
     }
 
     private boolean handleOver() {
         var over = gameLogic.isGameOver(playingField);
+        if (players.isEmpty()) {
+            System.out.println("No players left!");
+            return true;
+        }
         if (over.containsKey(true)) {
             var team = over.get(true);
 
             //noinspection StatementWithEmptyBody
             if (team == null) {
+                System.out.println("Game is over, but no team has won!");
                 //TODO: Handle game over! GUI stuff
             } else {
-
+                System.out.println("Game is over, team " + team + " has won!");
             }
-        } else {
-            return false;
         }
-        return true;
+        return false;
     }
 
     public void start() {
-
-        //TODO: logic that a players turn is starting
+        if (currentPlayer instanceof AI ai) {
+            ai.makeMove();
+        } else {
+            currentPlayer.notifyTurn();
+        }
     }
 
     public void turnDone() {
@@ -152,5 +164,7 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-
+    public AnimationTime getAnimationTime() {
+        return animationTime;
+    }
 }

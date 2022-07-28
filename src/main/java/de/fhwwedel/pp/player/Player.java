@@ -16,7 +16,9 @@ import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.special.Action;
 import de.fhwwedel.pp.util.special.Constants;
+import de.fhwwedel.pp.util.special.GameLogger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,6 +55,7 @@ public class Player {
             return false;
         tokens.remove(getCorrespondingToken(token));
         field.setToken(token);
+        GameLogger.logMove(this, token, position, Action.PLACE);
         //TODO: Update GUI
         return true;
     }
@@ -65,21 +68,25 @@ public class Player {
         return true;
     }
 
-    public boolean replacerTokenTurn(final Token token, final Position position, final Position hand) {
+    public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition, final Position handTokenPosition) {
         if (hasToken(token))
             return false;
         if (token.getTokenType() != TokenType.Replacer)
             return false;
-        if (hasToken(getCorrespondingToken(hand)))
+        if (hasToken(getCorrespondingToken(handTokenPosition)))
             return false;
 
-        var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken().getTokenType() != TokenType.None)
+        var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
+        if (field.getToken().getTokenType() == TokenType.None)
             return false;
-        tokens.remove(getCorrespondingToken(token));
-        tokens.remove(getCorrespondingToken(hand));
-        field.setToken(getCorrespondingToken(hand));
+        var fieldToken = getCorrespondingToken(token);
+        tokens.remove(fieldToken);
+        var handToken = getCorrespondingToken(handTokenPosition);
+        tokens.remove(handToken);
+        field.setToken(handToken);
         tokens.add(field.getToken());
+        GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
+        GameLogger.logMove(this, handToken, field, Action.PLACE);
         return true;
     }
 
@@ -105,6 +112,7 @@ public class Player {
         tokens.add(field.getToken());
         field.setToken(new Token(TokenType.None));
         field.getToken().setPosition(field);
+        GameLogger.logMove(this, token, field, Action.REMOVE);
 
         return true;
 
@@ -128,6 +136,9 @@ public class Player {
 
         fieldEnd.setToken(fieldStart.getToken());
         fieldStart.setToken(null);
+        GameLogger.logMove(this, token, start, Action.REMOVE);
+        GameLogger.logMove(this, token, end, Action.PLACE);
+
         return true;
     }
 
@@ -146,9 +157,10 @@ public class Player {
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
         fieldSecond.setToken(temp);
-        return true;
-
+        GameLogger.logMove(this, fieldSecond.getToken(), fieldFirst, Action.PLACE);
+        GameLogger.logMove(this, fieldFirst.getToken(), fieldSecond, Action.PLACE);
         //TODO: Update GUI
+        return true;
     }
 
     private Token getCorrespondingToken(Token token) {
@@ -221,4 +233,17 @@ public class Player {
         return name;
     }
 
+    public String handRepresentation() {
+        StringBuilder builder = new StringBuilder();
+        //create a string in the form of [token1.tokenType().getValue(), token2.tokenType().getValue(), token3.tokenType().getValue(), ...]
+        builder.append("[");
+        for (var t : tokens) {
+            builder.append(t.getTokenType().getValue());
+            builder.append(", ");
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        builder.deleteCharAt(builder.length() - 1);
+        builder.append("]");
+        return builder.toString();
+    }
 }

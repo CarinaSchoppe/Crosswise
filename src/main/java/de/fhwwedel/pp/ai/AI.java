@@ -57,6 +57,7 @@ public class AI extends Player {
                 case 8 -> moverTokenTurn(move.getToken(), move.getSecondaryMovePosition(), move.getPrimaryMovePosition()); //TODO: check this (wie rum?)
                 case 9 -> swapperTokenTurn(move.getToken(), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
                 case 10 -> replacerTokenTurn(move.getToken(), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
+                default -> throw new IllegalStateException("Unexpected value: " + move.getToken().getTokenType().getValue());
             }
 
             performAnimation();
