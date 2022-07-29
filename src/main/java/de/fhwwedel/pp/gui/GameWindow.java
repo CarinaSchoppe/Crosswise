@@ -127,6 +127,11 @@ public class GameWindow extends Application implements Initializable {
     @FXML
     void clickNewGameButton(ActionEvent event) {
 
+        try {
+            new CreateGame().start(stage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
