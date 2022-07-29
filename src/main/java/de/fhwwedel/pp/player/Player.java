@@ -78,7 +78,8 @@ public class Player {
         var handToken = getCorrespondingToken(handTokenPosition);
         tokens.remove(handToken);
         field.setToken(handToken);
-        GameWindow.getGameWindow().getReplacerAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + "");
+        if (GameWindow.getGameWindow() != null)
+            GameWindow.getGameWindow().getReplacerAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + "");
 
         tokens.add(field.getToken());
         assert fieldToken != null;
@@ -106,7 +107,8 @@ public class Player {
         tokens.add(field.getToken());
         field.setToken(new Token(TokenType.None));
         field.getToken().setPosition(field);
-        GameWindow.getGameWindow().getRemoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + "");
+        if (GameWindow.getGameWindow() != null)
+            GameWindow.getGameWindow().getRemoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + "");
 
         GameLogger.logMove(this, token, field, Action.REMOVE);
 
@@ -128,7 +130,8 @@ public class Player {
 
         fieldEnd.setToken(fieldStart.getToken());
         fieldStart.setToken(null);
-        GameWindow.getGameWindow().getMoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "");
+        if (GameWindow.getGameWindow() != null)
+            GameWindow.getGameWindow().getMoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "");
 
         GameLogger.logMove(this, token, start, Action.REMOVE);
         GameLogger.logMove(this, token, end, Action.PLACE);
@@ -147,7 +150,8 @@ public class Player {
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
         fieldSecond.setToken(temp);
-        GameWindow.getGameWindow().getSwapperAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + "");
+        if (GameWindow.getGameWindow() != null)
+            GameWindow.getGameWindow().getSwapperAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + "");
         GameLogger.logMove(this, fieldSecond.getToken(), fieldFirst, Action.PLACE);
         GameLogger.logMove(this, fieldFirst.getToken(), fieldSecond, Action.PLACE);
         //TODO: Update GUI
@@ -230,5 +234,9 @@ public class Player {
         builder.deleteCharAt(builder.length() - 1);
         builder.append("]");
         return builder.toString();
+    }
+
+    public Team getTeam() {
+        return this.team;
     }
 }

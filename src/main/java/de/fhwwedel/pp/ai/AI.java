@@ -113,7 +113,7 @@ public class AI extends Player {
 
         //Vergleich auf Änderung der Punkte
         int difference = newMove.getRelativeChange() - currentBestMove.getRelativeChange();
-        if (player.getTeam() == TeamType.VERTICAL) {
+        if (player.getTeam().getTeamType() == TeamType.VERTICAL) {
             if (difference < 0) {
                 return false;
             }
@@ -291,8 +291,8 @@ public class AI extends Player {
         HashSet<Position> emptyFields = emptyFields();
         for (Position position : emptyFields) {
             Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, token));
-            //TODO Prevent Loss
 
+            System.out.println(currentCalculation.gameWinning());
             tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), token, currentCalculation.gameWinning(), isMovePreventingLoss()));
         }
         return tokenMoves;
@@ -325,13 +325,13 @@ public class AI extends Player {
         for (Map.Entry<Integer, Integer> entry : pointsMap.entrySet()) {
             if (entry.getValue() < -100) {
                 if (entry.getKey() > 0) {
-                    if (player.getTeam() == TeamType.VERTICAL) {
+                    if (player.getTeam().getTeamType() == TeamType.VERTICAL) {
                         isWinning = true;
                     } else {
                         isCreatingLoss = true;
                     }
                 } else {
-                    if (player.getTeam() == TeamType.VERTICAL) {
+                    if (player.getTeam().getTeamType() == TeamType.VERTICAL) {
                         isCreatingLoss = true;
                     } else {
                         isWinning = true;
@@ -368,12 +368,10 @@ public class AI extends Player {
         Token[][] originalGrid = Game.getGame().getPlayingField().convertToTokenArray();
 
         Token[][] grid = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
-        /*
+
         for (int i = 0; i < Constants.GAMEGRID_ROWS; i++) {
             System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_COLUMNS);
         }
-
-         */
         grid[position.getX()][position.getY()] = token;
 
         return grid;
@@ -496,12 +494,12 @@ public class AI extends Player {
     public Token[][] getGridCopyWithSwappedTokens(Position swap1pos, Token swap1, Position swap2pos, Token swap2) {
         Token[][] originalGrid = Game.getGame().getPlayingField().convertToTokenArray();
         Token[][] grid = new Token[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
-        /*
+
         for (int i = 0; i < Constants.GAMEGRID_ROWS; i++) {
             System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_COLUMNS);
         }
 
-         */
+
         grid[swap1pos.getX()][swap1pos.getY()] = swap1;
         grid[swap2pos.getX()][swap2pos.getY()] = swap2;
 
