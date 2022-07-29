@@ -21,13 +21,6 @@ public enum TeamType {
         this.team = team;
     }
 
-    public static TeamType getTeamName(int playerID) {
-        if (playerID % 2 == 0) {
-            return VERTICAL;
-        } else {
-            return HORIZONTAL;
-        }
-    }
 
     public String getTeamName() {
         return team;

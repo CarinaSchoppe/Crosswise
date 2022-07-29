@@ -17,7 +17,7 @@ public class Team {
     private static final Team horizontalTeam = new Team(TeamType.HORIZONTAL);
     private static final Team verticalTeam = new Team(TeamType.VERTICAL);
     private final TeamType teamType;
-    private final ArrayList<Integer> playerIDs = new ArrayList();
+    private final ArrayList<Integer> playerIDs = new ArrayList<>();
     private int points;
 
     public Team(TeamType teamType) {

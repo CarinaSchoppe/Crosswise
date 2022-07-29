@@ -12,6 +12,7 @@ package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.TeamType;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -137,14 +138,15 @@ public class GameWindow extends Application implements Initializable {
         alert.showAndWait();
     }
 
-    public static void gameWonNotification(TeamType won, int wonPoints, int lostPoints, boolean rowComplete) {
+    public static void gameWonNotification(Team won, boolean rowComplete) {
         String message;
+        Team lost = won.getTeamType() == TeamType.VERTICAL ? Team.getHorizontalTeam() : Team.getVerticalTeam();
         if (rowComplete) {
-            message = "Team: " + won.getTeamName() + " won, because the hit a full line!";
-        } else if (wonPoints == lostPoints) {
-            message = "Draw! Both teams got the same amount of points (" + wonPoints + ")!";
+            message = "Team: " + won.getTeamType().getTeamName() + " won, because the hit a full line!";
+        } else if (won.getPoints() == lost.getPoints()) {
+            message = "Draw! Both teams got the same amount of points (" + won.getPoints() + ")!";
         } else {
-            message = "Team: " + won.getTeamName() + " won, because they have more points (" + wonPoints + ") than the other team (" + lostPoints + ")!";
+            message = "Team: " + won.getTeamType().getTeamName() + " won, because they have more points (" + won.getPoints() + ") than the other team (" + lost.getPoints() + ")!";
         }
 
         var alert = new Alert(Alert.AlertType.INFORMATION, message);
