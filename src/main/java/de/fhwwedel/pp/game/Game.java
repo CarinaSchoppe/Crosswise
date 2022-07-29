@@ -1,7 +1,7 @@
 /*
  * Copyright Notice for Crosswise-PP
  * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/27/22, 11:22 AM All contents of "Game" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
+ * File created on 7/27/22, 11:22 AM by Carina The latest changes made by Carina on 7/27/22, 11:22 AM All contents of "Game" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
  * at Crosswise-Jacob. All rights reserved
  * Any type of duplication, distribution, rental, sale, award,
  * Public accessibility or other use
@@ -15,9 +15,12 @@ import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.AnimationTime;
+import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
+import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
 
@@ -25,7 +28,7 @@ public class Game {
 
     private static Game game;
     private final PlayingField playingField;
-    private final AnimationTime animationTime = AnimationTime.MIDDLE;
+    private AnimationTime animationTime = AnimationTime.MIDDLE;
     private final ArrayList<Player> players;
     private final ArrayList<Token> usedSpecialTokens = new ArrayList<>();
     private final ArrayList<Token> tokenDrawPile = new ArrayList<>();
@@ -45,15 +48,31 @@ public class Game {
         Game.game = game;
     }
 
+
+    public boolean teamSizeEqual() {
+        if (Team.getHorizontalTeam().getPlayers().size() == Team.getVerticalTeam().getPlayers().size()) {
+            return true;
+        }
+        if (GameWindow.getGameWindow() == null) {
+            throw new RuntimeException("Window is null");
+        }
+
+        var alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
+        alert.setTitle("Wrong configuration");
+        alert.setHeaderText("Wrong configuration!");
+        alert.showAndWait();
+        return false;
+    }
+
     private void fillPile() {
         for (var token : TokenType.values()) {
             if (token == TokenType.None) continue;
             if (token.isSpecial()) {
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) {
                     tokenDrawPile.add(new Token(token));
                 }
             } else {
-                for (int i = 0; i < 7; i++) {
+                for (int i = 0; i < Constants.AMOUNT_NORMAL_TOKENS; i++) {
                     tokenDrawPile.add(new Token(token));
                 }
             }
@@ -62,7 +81,7 @@ public class Game {
 
     private void playerPileSetup() {
         for (Player player : players) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < Constants.HAND_SIZE; i++) {
                 try {
                     player.drawToken();
                 } catch (NoTokenException e) {
@@ -76,7 +95,7 @@ public class Game {
     public void setup(boolean fileLoaded) {
         gameLogic = new GameLogic(this);
         handleOver();
-        if (players.size() < 2)
+        if (players.size() < Constants.MIN_PLAYER_SIZE)
             throw new IllegalArgumentException("There must be at least 2 players");
         fillPile();
         if (!fileLoaded) {
@@ -86,6 +105,7 @@ public class Game {
     }
 
     private void nextPlayer() {
+        var players = this.players.stream().filter(Player::isActive).toList();
         if (currentPlayer == null && !players.isEmpty()) {
             currentPlayer = players.get(0);
         } else if (currentPlayer != null && !players.isEmpty()) {
@@ -101,7 +121,9 @@ public class Game {
             return;
         }
 
-        GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName());
+
+        if (GameWindow.getGameWindow() != null)
+            GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName());
         System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
@@ -133,6 +155,9 @@ public class Game {
     }
 
     public void start() {
+        if (!teamSizeEqual()) {
+            return;
+        }
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
@@ -179,5 +204,9 @@ public class Game {
 
     public AnimationTime getAnimationTime() {
         return animationTime;
+    }
+
+    public void setAnimationTime(AnimationTime animationTime) {
+        this.animationTime = animationTime;
     }
 }

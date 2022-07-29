@@ -12,7 +12,7 @@ package de.fhwwedel.pp.util.game;
 
 public enum TeamType {
 
-    VERTICAL("Vertical"), HORIZONTAL("Horizontal");
+    VERTICAL("Vertical"), HORIZONTAL("Horizontal"), DEACTIVE("Deactive");
 
 
     private final String team;

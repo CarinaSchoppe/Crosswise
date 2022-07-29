@@ -33,13 +33,16 @@ public class Player {
     private final boolean isActive;
     private final String name;
     private int points = 0;
-    private final Team team;
+    private Team team;
 
     public Player(int playerID, boolean isActive, String name) {
         this.playerID = playerID;
-        this.team = Team.addPlayerToTeam(playerID);
         this.isActive = isActive;
         this.name = name;
+    }
+
+    public void create() {
+        this.team = Team.addPlayerToTeam(this);
     }
 
     //TODO: after turn: call Game#nextPlayer()
@@ -78,7 +81,9 @@ public class Player {
         GameWindow.getGameWindow().getReplacerAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + "");
 
         tokens.add(field.getToken());
+        assert fieldToken != null;
         GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
+        assert handToken != null;
         GameLogger.logMove(this, handToken, field, Action.PLACE);
         return true;
     }

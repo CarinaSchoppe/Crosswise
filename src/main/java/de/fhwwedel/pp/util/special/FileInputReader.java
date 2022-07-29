@@ -30,7 +30,7 @@ import java.util.HashMap;
 
 public class FileInputReader {
 
-    private static File selectFile(Scene scene) {
+    public static File selectFile(Scene scene) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Select a file");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
@@ -38,9 +38,14 @@ public class FileInputReader {
         return chooser.showOpenDialog(scene.getWindow());
     }
 
-    public static void readFile(File file) throws FileNotFoundException {
+    public static void readFile(File file) {
         //read in the lines from file
-        FileReader reader = new FileReader(file);
+        FileReader reader;
+        try {
+            reader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         Gson gson = new Gson();
         var gameData = gson.fromJson(reader, GameData.class);
 
@@ -66,7 +71,7 @@ public class FileInputReader {
             }
         }
         removeUsedTokensFromPile(game);
-
+        game.setup(true);
         Game.setGame(game);
 
     }
@@ -77,6 +82,7 @@ public class FileInputReader {
             var playerData = gameData.players()[i];
             if (!playerData.isAI()) {
                 var player = new Player(i, playerData.isActive(), playerData.name());
+                player.create();
                 Arrays.stream(playerData.hand()).forEach(token -> player.getTokens().add(new Token(TokenType.getTokenType(token))));
                 players.add(player);
             } else {

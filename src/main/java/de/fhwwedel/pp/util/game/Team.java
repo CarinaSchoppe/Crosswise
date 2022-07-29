@@ -10,28 +10,39 @@
 
 package de.fhwwedel.pp.util.game;
 
+import de.fhwwedel.pp.player.Player;
+
 import java.util.ArrayList;
 
 public class Team {
 
     private static final Team horizontalTeam = new Team(TeamType.HORIZONTAL);
     private static final Team verticalTeam = new Team(TeamType.VERTICAL);
+    private static final Team deactiveTeam = new Team(TeamType.DEACTIVE);
     private final TeamType teamType;
-    private final ArrayList<Integer> playerIDs = new ArrayList<>();
+    private final ArrayList<Player> players = new ArrayList<>();
     private int points;
 
     public Team(TeamType teamType) {
         this.teamType = teamType;
     }
 
-    public static Team addPlayerToTeam(int player) {
-        if (player % 2 == 0) {
-            verticalTeam.playerIDs.add(player);
+    public static Team addPlayerToTeam(Player player) {
+        if (!player.isActive()) {
+            deactiveTeam.players.add(player);
+            return deactiveTeam;
+        }
+
+
+        if (player.getPlayerID() % 2 == 0) {
+            verticalTeam.players.add(player);
             return verticalTeam;
         } else {
-            horizontalTeam.playerIDs.add(player);
+            horizontalTeam.players.add(player);
             return horizontalTeam;
         }
+
+
     }
 
     public static Team getHorizontalTeam() {
@@ -46,8 +57,8 @@ public class Team {
         return teamType;
     }
 
-    public ArrayList<Integer> getPlayerIDs() {
-        return playerIDs;
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
     public int getPoints() {

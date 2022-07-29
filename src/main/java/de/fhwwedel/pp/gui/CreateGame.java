@@ -1,0 +1,128 @@
+/*
+ * Copyright Notice for Crosswise-PP
+ * Copyright (c) at Crosswise-Jacob 2022
+ * File created on 7/29/22, 12:03 PM by Carina The Latest changes made by Carina on 7/29/22, 12:03 PM All contents of "CreateGame" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
+ * at Crosswise-Jacob. All rights reserved
+ * Any type of duplication, distribution, rental, sale, award,
+ * Public accessibility or other use
+ * requires the express written consent of Crosswise-Jacob.
+ */
+
+package de.fhwwedel.pp.gui;
+
+import de.fhwwedel.pp.ai.AI;
+import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.game.PlayingField;
+import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.special.Constants;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class CreateGame {
+
+    @FXML
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
+
+    @FXML
+    private Button createGameButton;
+
+    @FXML
+    private CheckBox playerFourAI;
+
+    @FXML
+    private CheckBox playerFourActive;
+
+    @FXML
+    private TextField playerFourField;
+
+    @FXML
+    private CheckBox playerOneAI;
+
+    @FXML
+    private CheckBox playerOneActive;
+
+    @FXML
+    private TextField playerOneField;
+
+    @FXML
+    private CheckBox playerThreeAI;
+
+    @FXML
+    private CheckBox playerThreeActive;
+
+    @FXML
+    private TextField playerThreeField;
+
+    @FXML
+    private CheckBox playerTwoAI;
+
+    @FXML
+    private CheckBox playerTwoActive;
+
+    @FXML
+    private TextField playerTwoField;
+
+    @FXML
+    void createGame(ActionEvent event) {
+        var field = new PlayingField(Constants.GAMEGRID_ROWS);
+        Player playerOne;
+        if (playerOneAI.isSelected())
+            playerOne = new AI(1, playerOneActive.isSelected(), playerOneField.getText());
+        else
+            playerOne = new Player(1, playerOneActive.isSelected(), playerOneField.getText());
+
+        Player playerTwo;
+        if (playerTwoAI.isSelected())
+            playerTwo = new AI(2, playerTwoActive.isSelected(), playerTwoField.getText());
+        else
+            playerTwo = new Player(2, playerTwoActive.isSelected(), playerTwoField.getText());
+
+        Player playerThree;
+        if (playerThreeAI.isSelected())
+            playerThree = new AI(3, playerThreeActive.isSelected(), playerThreeField.getText());
+        else
+            playerThree = new Player(3, playerThreeActive.isSelected(), playerThreeField.getText());
+
+        Player playerFour;
+        if (playerFourAI.isSelected())
+            playerFour = new AI(4, playerFourActive.isSelected(), playerFourField.getText());
+        else
+            playerFour = new Player(4, playerFourActive.isSelected(), playerFourField.getText());
+
+        Game game = new Game(field, new ArrayList<>(List.of(playerOne, playerTwo, playerThree, playerFour)));
+        game.setup(false);
+        Game.setGame(game);
+
+
+    }
+
+    @FXML
+    void initialize() {
+        assert createGameButton != null : "fx:id=\"createGameButton\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerFourAI != null : "fx:id=\"playerFourAI\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerFourActive != null : "fx:id=\"playerFourActive\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerFourField != null : "fx:id=\"playerFourField\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerOneAI != null : "fx:id=\"playerOneAI\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerOneActive != null : "fx:id=\"playerOneActive\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerOneField != null : "fx:id=\"playerOneField\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerThreeAI != null : "fx:id=\"playerThreeAI\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerThreeActive != null : "fx:id=\"playerThreeActive\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerThreeField != null : "fx:id=\"playerThreeField\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerTwoAI != null : "fx:id=\"playerTwoAI\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerTwoActive != null : "fx:id=\"playerTwoActive\" was not injected: check your FXML file 'CreateGame.fxml'.";
+        assert playerTwoField != null : "fx:id=\"playerTwoField\" was not injected: check your FXML file 'CreateGame.fxml'.";
+
+    }
+
+}

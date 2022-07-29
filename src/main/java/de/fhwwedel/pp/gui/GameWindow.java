@@ -12,8 +12,11 @@ package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.AnimationTime;
 import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.TeamType;
+import de.fhwwedel.pp.util.special.FileInputReader;
+import de.fhwwedel.pp.util.special.FileOutputWriter;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -93,17 +96,19 @@ public class GameWindow extends Application implements Initializable {
 
     @FXML
     void changeAnimationSpeedFast(ActionEvent event) {
+        Game.getGame().setAnimationTime(AnimationTime.FAST);
 
     }
 
     @FXML
     void changeAnimationSpeedLow(ActionEvent event) {
+        Game.getGame().setAnimationTime(AnimationTime.SLOW);
 
     }
 
     @FXML
     void changeAnimationSpeedMedium(ActionEvent event) {
-
+        Game.getGame().setAnimationTime(AnimationTime.MIDDLE);
     }
 
     @FXML
@@ -113,6 +118,9 @@ public class GameWindow extends Application implements Initializable {
 
     @FXML
     void clickLoadGameButton(ActionEvent event) {
+        FileInputReader.readFile(FileInputReader.selectFile(stage.getScene()));
+        //TODO: update UI
+
 
     }
 
@@ -123,6 +131,7 @@ public class GameWindow extends Application implements Initializable {
 
     @FXML
     void clickSaveGameButton(ActionEvent event) {
+        FileOutputWriter.writeJSON(stage.getScene());
 
     }
 

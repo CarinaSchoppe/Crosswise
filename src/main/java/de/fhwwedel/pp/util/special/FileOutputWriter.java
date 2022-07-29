@@ -16,13 +16,14 @@ import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.game.json.GameData;
 import de.fhwwedel.pp.util.game.json.PlayerData;
+import javafx.scene.Scene;
 
 public class FileOutputWriter {
 
-    public static void writeJSON(Game game) {
-        var json = new Gson().toJson(generateGameData(game));
+    public static void writeJSON(Scene scene) {
+        var file = FileInputReader.selectFile(scene);
+        var json = new Gson().toJson(generateGameData(Game.getGame()));
         //write the json to a file
-        var file = new java.io.File("game.json");
         try (var writer = new java.io.PrintWriter(file)) {
             writer.write(json);
         } catch (Exception e) {
@@ -45,9 +46,7 @@ public class FileOutputWriter {
         for (int i = 0; i < player.getTokens().size(); i++) {
             hand[i] = player.getTokens().get(i).getTokenType().getValue();
         }
-
-        return new PlayerData(player.getName(), player.isActive(), (player instanceof AI), hand);
-
+        return new PlayerData(player.getName(), true, (player instanceof AI), hand);
     }
 
     private static int[][] generateCorrespondingPlayingField(Game game) {
