@@ -69,7 +69,7 @@ public class Game {
         for (var token : TokenType.values()) {
             if (token == TokenType.None) continue;
             if (token.isSpecial()) {
-                for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) {
+                for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) { //12 tokens
                     tokenDrawPile.add(new Token(token));
                 }
             } else {
@@ -147,7 +147,7 @@ public class Game {
                 System.out.println("Game is over, but no team has won!");
                 //TODO: Handle game over! GUI stuff
             } else {
-                System.out.println("Game is over, team " + team + " has won!");
+                System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
             }
             GameLogger.saveLogToFile("Logfile");
             return true;

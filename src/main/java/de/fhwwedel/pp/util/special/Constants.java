@@ -24,7 +24,7 @@ public class Constants {
 
     public static final int AMOUNT_ACTION_TOKENS = 3;
 
-    public static final int AMOUNT_NORMAL_TOKENS = 7;
+    public static final int AMOUNT_NORMAL_TOKENS = 8;
 
     public static final int ANIMATION_DURATION = 1000;
 
