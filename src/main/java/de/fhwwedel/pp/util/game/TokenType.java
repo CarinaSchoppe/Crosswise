@@ -42,6 +42,11 @@ public enum TokenType {
         return None;
     }
 
+    @Override
+    public String toString(){
+        return ""+value;
+    }
+
     public boolean isSpecial() {
         return special;
     }

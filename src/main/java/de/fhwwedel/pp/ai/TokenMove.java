@@ -12,6 +12,7 @@ package de.fhwwedel.pp.ai;
 
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Token;
+import de.fhwwedel.pp.util.game.TokenType;
 
 public class TokenMove {
 
@@ -31,7 +32,7 @@ public class TokenMove {
     /**
      * Das zu benutzende Token
      */
-    private final Token token;
+    private final TokenType token;
     /**
      * boolean, ob der Zug einen Gewinn erzeugt
      */
@@ -50,7 +51,7 @@ public class TokenMove {
 
 
     public TokenMove(Position primaryMovePosition, Integer relativeChange,
-                     Token token, boolean gameWinning, boolean isPreventingLoss) {
+                     TokenType token, boolean gameWinning, boolean isPreventingLoss) {
         this.primaryMovePosition = primaryMovePosition;
         this.relativeChange = relativeChange;
         this.token = token;
@@ -59,7 +60,7 @@ public class TokenMove {
     }
 
     public TokenMove(Position primaryMovePosition, Position secondaryMovePosition, Integer relativeChange,
-                     Token token, boolean gameWinning, boolean isPreventingLoss) {
+                     TokenType token, boolean gameWinning, boolean isPreventingLoss) {
         this(primaryMovePosition, relativeChange, token, gameWinning, isPreventingLoss);
         this.secondaryMovePosition = secondaryMovePosition;
 
@@ -77,7 +78,7 @@ public class TokenMove {
         return relativeChange;
     }
 
-    public Token getToken() {
+    public TokenType getToken() {
         return token;
     }
 

@@ -181,11 +181,11 @@ public class Player {
     }
 
 
-    public int tokenAmountInHand(Token token) {
+    public int tokenAmountInHand(TokenType token) {
         //the amount of tokens with the same TokenType in hand
         int amount = 0;
         for (var t : tokens) {
-            if (t.getTokenType() == token.getTokenType()) amount++;
+            if (t.getTokenType() == token) amount++;
         }
         return amount;
     }
@@ -199,6 +199,16 @@ public class Player {
             }
         }
         return returnSet;
+    }
+
+    public TokenType[] convertHandToTokenTypeArray(){
+        TokenType[] array = new TokenType[Constants.HAND_SIZE];
+        for (var index = 0; index < tokens.size();index++){
+            array[index] = tokens.get(index).getTokenType();
+
+
+        }
+  return array;
     }
 
     public ArrayList<Token> getTokens() {
