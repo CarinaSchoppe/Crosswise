@@ -13,6 +13,7 @@ package de.fhwwedel.pp;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
+import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ public class CrossWise {
 
     public static void main(String... args) {
 
-        //TODO: GameWindow.start();
+        GameWindow.start();
+        GameWindow.getGameWindow().initImages(GameWindow.getGameWindow().grdPn);
         var player1 = new AI(1, true, "Player 1");
         player1.create();
         var player2 = new AI(2, true, "Player 2");
@@ -41,7 +43,7 @@ public class CrossWise {
         var game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)));
         Game.setGame(game);
         game.setup(false);
-        game.start();
+        //game.start();
 
     }
 

@@ -15,6 +15,7 @@ import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.game.AnimationTime;
 import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.TeamType;
+import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.FileInputReader;
 import de.fhwwedel.pp.util.special.FileOutputWriter;
 import javafx.application.Application;
@@ -25,6 +26,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -52,7 +55,7 @@ public class GameWindow extends Application implements Initializable {
     @FXML
     private RadioMenuItem fastAnimationSpeedButton;
     @FXML
-    private GridPane grdPn;
+    public GridPane grdPn;
     @FXML
     private HBox hBoxWrappingVBox;
     @FXML
@@ -202,6 +205,8 @@ public class GameWindow extends Application implements Initializable {
         gameWindow = this;
     }
 
+    private ImageView[][] gridImages;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
 
@@ -210,10 +215,68 @@ public class GameWindow extends Application implements Initializable {
         var root = (Parent) loader.load();
         primaryStage.setTitle("Crosswise");
         primaryStage.setResizable(true);
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, 1000, 800));
         initialize();
         stage = primaryStage;
         primaryStage.show();
+
+    }
+
+    public ImageView[][] initImages(final GridPane grdPn) {
+        int colcount = Constants.GAMEGRID_COLUMNS;
+        int rowcount = Constants.GAMEGRID_ROWS;
+        ImageView[][] imageViews = new ImageView[colcount][rowcount];
+        int cellWidth = (int) grdPn.getWidth() / colcount;
+        int cellHeight = (int) grdPn.getHeight() / rowcount;
+        // bind each Imageview to a cell of the gridpane
+        for (int x = 0; x < colcount; x++) {
+            for (int y = 0; y < rowcount; y++) {
+                //creates an empty imageview
+                imageViews[x][y] = new ImageView();
+                imageViews[x][y].setImage(new Image("/pictures/1 - sun.png"));
+
+                //image has to fit a cell and mustn't preserve ratio
+                imageViews[x][y].setFitWidth(cellWidth);
+                imageViews[x][y].setFitHeight(cellHeight);
+                imageViews[x][y].setPreserveRatio(false);
+                imageViews[x][y].setSmooth(true);
+                //add the imageview to the cell
+                grdPn.add(imageViews[x][y], x, y);
+
+                //the image shall resize when the cell resizes
+                imageViews[x][y].fitWidthProperty().bind(grdPn.widthProperty().
+                        divide(colcount).subtract(grdPn.getHgap()));
+                imageViews[x][y].fitHeightProperty().bind(grdPn.heightProperty().
+                        divide(rowcount).subtract(grdPn.getVgap()));
+            }
+        }
+        return imageViews;
+    }
+
+    public void generateGrid() {
+        gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        this.grdPn.getChildren().clear();
+        for (int r = 0; r < Constants.GAMEGRID_ROWS; r++) {
+            for (int c = 0; c < Constants.GAMEGRID_COLUMNS; c++) {
+                ImageView imgNew = new ImageView();
+
+                imgNew.fitHeightProperty().bind(this.grdPn.widthProperty().divide(Constants.GAMEGRID_COLUMNS).subtract(grdPn.getVgap()));
+                imgNew.fitWidthProperty().bind(this.grdPn.widthProperty().divide(Constants.GAMEGRID_ROWS).subtract(grdPn.getHgap()));
+
+                Label label = new Label();
+                label.setText("test");
+                String id = "gridToken" + c + r;
+                imgNew.setId(id);
+
+                System.out.println(imgNew.getId());
+
+                Image img = new Image("/pictures/1 - sun.png");
+                imgNew.setImage(img);
+
+                this.gridImages[r][c] = imgNew;
+                this.grdPn.add(label, c, r);
+            }
+        }
     }
 
     public Label getCurrentPlayerText() {

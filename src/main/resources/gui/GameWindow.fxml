@@ -69,7 +69,7 @@
                             <children>
                                 <VBox fx:id="vBoxWrappingGrdPn">
                                     <children>
-                                        <GridPane fx:id="grdPn" gridLinesVisible="true" onMouseClicked="#onGrdPnMouseClicked" prefHeight="700.0" prefWidth="700.0">
+                                        <GridPane fx:id="grdPn" gridLinesVisible="true" onMouseClicked="#onGrdPnMouseClicked" prefHeight="700.0" prefWidth="700.0" style="-fx-border-color: black;">
                                             <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="500.0"/>
                                             </columnConstraints>

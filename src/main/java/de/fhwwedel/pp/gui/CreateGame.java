@@ -140,5 +140,4 @@ public class CreateGame {
         assert playerTwoField != null : "fx:id=\"playerTwoField\" was not injected: check your FXML file 'CreateGame.fxml'.";
 
     }
-
 }
