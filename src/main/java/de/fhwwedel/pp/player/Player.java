@@ -165,14 +165,12 @@ public class Player {
         return null;
     }
 
-    public Token drawToken() throws NoTokenException {
+    public void drawToken() throws NoTokenException {
         if (Game.getGame().getTokenDrawPile().isEmpty()) throw new NoTokenException("No more tokens left in the Pile!");
-
         var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
         tokens.add(token);
         GameLogger.logDraw(this, token);
-        return token;
 
         //TODO: Add token to Players GUI
     }

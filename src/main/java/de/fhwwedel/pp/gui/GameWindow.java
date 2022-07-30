@@ -30,8 +30,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -41,64 +39,106 @@ import java.util.ResourceBundle;
 
 public class GameWindow extends Application implements Initializable {
 
-    @FXML
-    private Button bangerButton;
 
-    @FXML
-    void bangButtonPush(ActionEvent event) {
-        //initImages(grdPn);
-    }
-
-    private Stage stage;
-    private static GameWindow gameWindow;
     @FXML
     private ResourceBundle resources;
+
     @FXML
     private URL location;
+
     @FXML
     private Label currentPlayerText;
+
+    private static GameWindow gameWindow;
     @FXML
-    private MenuItem endGameButton;
+    private GridPane dividerGrid;
+
     @FXML
     private RadioMenuItem fastAnimationSpeedButton;
     @FXML
-    public GridPane grdPn;
+    private MenuItem endGameButton;
     @FXML
-    private HBox hBoxWrappingVBox;
+    private GridPane gameGrid;
+    @FXML
+    private ImageView imageMover;
+    @FXML
+    private ImageView imageRemover;
+    @FXML
+    private ImageView imageReplacer;
+    @FXML
+    private ImageView imageSwapper;
+
     @FXML
     private MenuItem loadGameButton;
+
     @FXML
     private RadioMenuItem lowAnimationSpeedButton;
     @FXML
+    private GridPane innerGrid;
+
+    @FXML
     private RadioMenuItem mediumAnimationSpeedButton;
     @FXML
+    private GridPane masterGrid;
+
+    @FXML
     private Menu menuComputer;
+
     @FXML
     private Menu menuPunkte;
+
     @FXML
     private Label moverAmountText;
+
     @FXML
     private MenuItem newGameButton;
     @FXML
+    private MenuBar menuBar;
+    @FXML
+    private GridPane playersStuffGrid;
+
+    @FXML
     private CheckMenuItem pointsPerRowColumnButton;
+
     @FXML
     private CheckMenuItem pointsPerTeamButton;
     @FXML
+    private Label playersTurnLabel;
+    @FXML
+    private GridPane pointsTableGridPane;
+    @FXML
+    private ImageView pointsTableImageView;
+
+    @FXML
     private Label removerAmountText;
+
     @FXML
     private Label replacerAmountText;
+
     @FXML
     private MenuItem saveGameButton;
+
     @FXML
     private CheckMenuItem showComputerHandButton;
     @FXML
+    private Label pointsTableLabel;
+    @FXML
+    private GridPane specialImagesGrid;
+    @FXML
+    private GridPane specialStuffGrid;
+
+    @FXML
     private Label swapperAmountText;
     @FXML
-    private VBox vBoxWrappingGrdPn;
+    private GridPane specialUsedGrid;
 
     public static void start() {
         launch();
     }
+
+    @FXML
+    private Label usedSpacialLabel;
+    private Stage stage;
 
     public static GameWindow getGameWindow() {
         return gameWindow;
@@ -177,33 +217,48 @@ public class GameWindow extends Application implements Initializable {
         alert.setHeaderText("Game finished");
         alert.showAndWait();
         Game.setGame(new Game(null, new ArrayList<>()));
-        GameWindow.gameWindow.stage.close();
+        gameWindow.stage.close();
         GameWindow.start();
 
     }
 
     @FXML
     void initialize() {
-        assert currentPlayerText != null : "fx:id=\"currentPlayerText\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert endGameButton != null : "fx:id=\"endGameButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert fastAnimationSpeedButton != null : "fx:id=\"fastAnimationSpeedButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert grdPn != null : "fx:id=\"grdPn\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert hBoxWrappingVBox != null : "fx:id=\"hBoxWrappingVBox\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert loadGameButton != null : "fx:id=\"loadGameButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert lowAnimationSpeedButton != null : "fx:id=\"lowAnimationSpeedButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert mediumAnimationSpeedButton != null : "fx:id=\"mediumAnimationSpeedButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert menuComputer != null : "fx:id=\"menuComputer\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert menuPunkte != null : "fx:id=\"menuPunkte\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert moverAmountText != null : "fx:id=\"moverAmountText\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert newGameButton != null : "fx:id=\"newGameButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert pointsPerRowColumnButton != null : "fx:id=\"pointsPerRowColumnButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert pointsPerTeamButton != null : "fx:id=\"pointsPerTeamButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert removerAmountText != null : "fx:id=\"removerAmountText\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert replacerAmountText != null : "fx:id=\"replacerAmountText\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert saveGameButton != null : "fx:id=\"saveGameButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert showComputerHandButton != null : "fx:id=\"showComputerHandButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert swapperAmountText != null : "fx:id=\"swapperAmountText\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert vBoxWrappingGrdPn != null : "fx:id=\"vBoxWrappingGrdPn\" was not injected: check your FXML file 'GameWindow.fxml'.";
+        assert currentPlayerText != null : "fx:id=\"currentPlayerText\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert dividerGrid != null : "fx:id=\"dividerGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert endGameButton != null : "fx:id=\"endGameButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert fastAnimationSpeedButton != null : "fx:id=\"fastAnimationSpeedButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert gameGrid != null : "fx:id=\"gameGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert imageMover != null : "fx:id=\"imageMover\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert imageRemover != null : "fx:id=\"imageRemover\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert imageReplacer != null : "fx:id=\"imageReplacer\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert imageSwapper != null : "fx:id=\"imageSwapper\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert innerGrid != null : "fx:id=\"innerGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert loadGameButton != null : "fx:id=\"loadGameButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert lowAnimationSpeedButton != null : "fx:id=\"lowAnimationSpeedButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert masterGrid != null : "fx:id=\"masterGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert mediumAnimationSpeedButton != null : "fx:id=\"mediumAnimationSpeedButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert menuBar != null : "fx:id=\"menuBar\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert menuComputer != null : "fx:id=\"menuComputer\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert menuPunkte != null : "fx:id=\"menuPunkte\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert moverAmountText != null : "fx:id=\"moverAmountText\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert newGameButton != null : "fx:id=\"newGameButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert playersStuffGrid != null : "fx:id=\"playersStuffGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert playersTurnLabel != null : "fx:id=\"playersTurnLabel\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert pointsPerRowColumnButton != null : "fx:id=\"pointsPerRowColumnButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert pointsPerTeamButton != null : "fx:id=\"pointsPerTeamButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert pointsTableGridPane != null : "fx:id=\"pointsTableGridPane\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert pointsTableImageView != null : "fx:id=\"pointsTableImageView\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert pointsTableLabel != null : "fx:id=\"pointsTableLabel\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert removerAmountText != null : "fx:id=\"removerAmountText\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert replacerAmountText != null : "fx:id=\"replacerAmountText\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert saveGameButton != null : "fx:id=\"saveGameButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert showComputerHandButton != null : "fx:id=\"showComputerHandButton\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert specialImagesGrid != null : "fx:id=\"specialImagesGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert specialStuffGrid != null : "fx:id=\"specialStuffGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert specialUsedGrid != null : "fx:id=\"specialUsedGrid\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert swapperAmountText != null : "fx:id=\"swapperAmountText\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
+        assert usedSpacialLabel != null : "fx:id=\"usedSpacialLabel\" was not injected: check your FXML file 'GameWindowNew.fxml'.";
     }
 
     @Override
@@ -216,7 +271,7 @@ public class GameWindow extends Application implements Initializable {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        var loader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
+        var loader = new FXMLLoader(getClass().getResource("/gui/GameWindowNew.fxml"));
         loader.setController(this);
         var root = (Parent) loader.load();
         primaryStage.setTitle("Crosswise");
@@ -227,19 +282,20 @@ public class GameWindow extends Application implements Initializable {
         primaryStage.show();
         generateGrid();
     }
+
     public void generateGrid() {
         gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
         int colcount = Constants.GAMEGRID_COLUMNS;
-        grdPn.getChildren().clear();
+        gameGrid.getChildren().clear();
         int rowcount = Constants.GAMEGRID_ROWS;
         for (int r = 0; r < Constants.GAMEGRID_ROWS; r++) {
             for (int c = 0; c < Constants.GAMEGRID_COLUMNS; c++) {
                 ImageView imgNew = new ImageView();
-                int cellWidth = (int) grdPn.getWidth() / colcount;
-                int cellHeight = (int) grdPn.getHeight() / rowcount;
+                int cellWidth = (int) gameGrid.getWidth() / colcount;
+                int cellHeight = (int) gameGrid.getHeight() / rowcount;
 
-                System.out.println("grdPn.getHeight() = " + grdPn.getHeight());
-                System.out.println("grdPn.getWidth() = " + grdPn.getWidth());
+                System.out.println("grdPn.getHeight() = " + gameGrid.getHeight());
+                System.out.println("grdPn.getWidth() = " + gameGrid.getWidth());
                 System.out.println("cellHeight = " + cellHeight);
                 System.out.println("cellWidth = " + cellWidth);
                 imgNew.setFitWidth(cellWidth);
@@ -255,12 +311,12 @@ public class GameWindow extends Application implements Initializable {
                 imgNew.setImage(img);
 
                 this.gridImages[r][c] = imgNew;
-                this.grdPn.add(imgNew, c, r);
+                this.gameGrid.add(imgNew, c, r);
 
                 //the image shall resize when the cell resizes
-                imgNew.fitWidthProperty().bind(grdPn.widthProperty().
+                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().
                         divide(colcount));
-                imgNew.fitHeightProperty().bind(grdPn.heightProperty().
+                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().
                         divide(rowcount));
 
             }
