@@ -31,7 +31,6 @@ public class CrossWise {
     public static void main(String... args) {
 
         GameWindow.start();
-        GameWindow.getGameWindow().initImages(GameWindow.getGameWindow().grdPn);
         var player1 = new AI(1, true, "Player 1");
         player1.create();
         var player2 = new AI(2, true, "Player 2");

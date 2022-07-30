@@ -41,6 +41,13 @@ import java.util.ResourceBundle;
 
 public class GameWindow extends Application implements Initializable {
 
+    @FXML
+    private Button bangerButton;
+
+    @FXML
+    void bangButtonPush(ActionEvent event) {
+        //initImages(grdPn);
+    }
 
     private Stage stage;
     private static GameWindow gameWindow;
@@ -123,7 +130,6 @@ public class GameWindow extends Application implements Initializable {
     void clickLoadGameButton(ActionEvent event) {
         FileInputReader.readFile(FileInputReader.selectFile(stage.getScene()));
         //TODO: update UI
-
 
     }
 
@@ -215,56 +221,31 @@ public class GameWindow extends Application implements Initializable {
         var root = (Parent) loader.load();
         primaryStage.setTitle("Crosswise");
         primaryStage.setResizable(true);
-        primaryStage.setScene(new Scene(root, 1000, 800));
+        primaryStage.setScene(new Scene(root, 800, 600));
         initialize();
         stage = primaryStage;
         primaryStage.show();
-
+        generateGrid();
     }
-
-    public ImageView[][] initImages(final GridPane grdPn) {
-        int colcount = Constants.GAMEGRID_COLUMNS;
-        int rowcount = Constants.GAMEGRID_ROWS;
-        ImageView[][] imageViews = new ImageView[colcount][rowcount];
-        int cellWidth = (int) grdPn.getWidth() / colcount;
-        int cellHeight = (int) grdPn.getHeight() / rowcount;
-        // bind each Imageview to a cell of the gridpane
-        for (int x = 0; x < colcount; x++) {
-            for (int y = 0; y < rowcount; y++) {
-                //creates an empty imageview
-                imageViews[x][y] = new ImageView();
-                imageViews[x][y].setImage(new Image("/pictures/1 - sun.png"));
-
-                //image has to fit a cell and mustn't preserve ratio
-                imageViews[x][y].setFitWidth(cellWidth);
-                imageViews[x][y].setFitHeight(cellHeight);
-                imageViews[x][y].setPreserveRatio(false);
-                imageViews[x][y].setSmooth(true);
-                //add the imageview to the cell
-                grdPn.add(imageViews[x][y], x, y);
-
-                //the image shall resize when the cell resizes
-                imageViews[x][y].fitWidthProperty().bind(grdPn.widthProperty().
-                        divide(colcount).subtract(grdPn.getHgap()));
-                imageViews[x][y].fitHeightProperty().bind(grdPn.heightProperty().
-                        divide(rowcount).subtract(grdPn.getVgap()));
-            }
-        }
-        return imageViews;
-    }
-
     public void generateGrid() {
         gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
-        this.grdPn.getChildren().clear();
+        int colcount = Constants.GAMEGRID_COLUMNS;
+        grdPn.getChildren().clear();
+        int rowcount = Constants.GAMEGRID_ROWS;
         for (int r = 0; r < Constants.GAMEGRID_ROWS; r++) {
             for (int c = 0; c < Constants.GAMEGRID_COLUMNS; c++) {
                 ImageView imgNew = new ImageView();
+                int cellWidth = (int) grdPn.getWidth() / colcount;
+                int cellHeight = (int) grdPn.getHeight() / rowcount;
 
-                imgNew.fitHeightProperty().bind(this.grdPn.widthProperty().divide(Constants.GAMEGRID_COLUMNS).subtract(grdPn.getVgap()));
-                imgNew.fitWidthProperty().bind(this.grdPn.widthProperty().divide(Constants.GAMEGRID_ROWS).subtract(grdPn.getHgap()));
-
-                Label label = new Label();
-                label.setText("test");
+                System.out.println("grdPn.getHeight() = " + grdPn.getHeight());
+                System.out.println("grdPn.getWidth() = " + grdPn.getWidth());
+                System.out.println("cellHeight = " + cellHeight);
+                System.out.println("cellWidth = " + cellWidth);
+                imgNew.setFitWidth(cellWidth);
+                imgNew.setFitHeight(cellHeight);
+                imgNew.setPreserveRatio(false);
+                imgNew.setSmooth(true);
                 String id = "gridToken" + c + r;
                 imgNew.setId(id);
 
@@ -274,7 +255,14 @@ public class GameWindow extends Application implements Initializable {
                 imgNew.setImage(img);
 
                 this.gridImages[r][c] = imgNew;
-                this.grdPn.add(label, c, r);
+                this.grdPn.add(imgNew, c, r);
+
+                //the image shall resize when the cell resizes
+                imgNew.fitWidthProperty().bind(grdPn.widthProperty().
+                        divide(colcount));
+                imgNew.fitHeightProperty().bind(grdPn.heightProperty().
+                        divide(rowcount));
+
             }
         }
     }
