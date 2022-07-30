@@ -68,14 +68,12 @@ public class Game {
         this.tokenDrawPile = new ArrayList<>();
         for (var token : TokenType.values()) {
             if (token == TokenType.None) continue;
-            /*
             if (token.isSpecial()) {
                 for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) {
                     tokenDrawPile.add(new Token(token));
                 }
-             */
-            if (!token.isSpecial()) {
-                for (int i = 0; i < Constants.AMOUNT_NORMAL_TOKENS; i++) {
+            } else {
+                for (int i = 0; i < Constants.AMOUNT_NORMAL_TOKENS; i++) { //42     54-36-8-12
                     tokenDrawPile.add(new Token(token));
                 }
             }

@@ -77,8 +77,8 @@ public class Player {
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
         if (field.getToken().getTokenType() == TokenType.None) return false;
         var fieldToken = getCorrespondingToken(token);
-        tokens.remove(fieldToken);
         var handToken = getCorrespondingToken(handTokenPosition);
+        tokens.remove(fieldToken);
         tokens.remove(handToken);
         field.setToken(handToken);
         if (GameWindow.getGameWindow() != null)
@@ -131,13 +131,17 @@ public class Player {
 
         tokens.remove(getCorrespondingToken(token));
 
+
+
         fieldEnd.setToken(fieldStart.getToken());
-        fieldStart.setToken(null);
+        fieldStart.setToken(new Token(TokenType.None));
         if (GameWindow.getGameWindow() != null)
             GameWindow.getGameWindow().getMoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "");
 
-        GameLogger.logMove(this, token, start, Action.REMOVE);
-        GameLogger.logMove(this, token, end, Action.PLACE);
+
+        GameLogger.logMove(this, token, fieldStart, Action.REMOVE);
+        GameLogger.logMove(this, token, fieldEnd, Action.PLACE);
+
 
         return true;
     }
@@ -168,14 +172,13 @@ public class Player {
         return null;
     }
 
-    public Token drawToken() throws NoTokenException {
+    public void drawToken() throws NoTokenException {
         if (Game.getGame().getTokenDrawPile().isEmpty()) throw new NoTokenException("No more tokens left in the Pile!");
-
+        if (tokens.size() >= Constants.HAND_SIZE) return;
         var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
         tokens.add(token);
         GameLogger.logDraw(this, token);
-        return token;
 
         //TODO: Add token to Players GUI
     }
@@ -243,8 +246,10 @@ public class Player {
             builder.append(t.getTokenType().getValue());
             builder.append(", ");
         }
-        builder.deleteCharAt(builder.length() - 1);
-        builder.deleteCharAt(builder.length() - 1);
+        if (builder.length() > 2) {
+            builder.deleteCharAt(builder.length() - 1);
+            builder.deleteCharAt(builder.length() - 1);
+        }
         builder.append("]");
         return builder.toString();
     }

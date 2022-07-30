@@ -54,7 +54,7 @@ public class AI extends Player {
             switch (move.getToken().getValue()) {
                 case 1, 2, 3, 4, 5, 6 -> normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition());
                 case 7 -> removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition());
-                case 8 -> moverTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
+                case 8 -> moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition());
                 case 9 -> swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
                 case 10 -> replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
             }
@@ -72,8 +72,10 @@ public class AI extends Player {
         TokenType[] playerHand = player.convertHandToTokenTypeArray();
 
         for (TokenType token : playerHand) {
-            System.out.println("current Token: " + token.getValue());
-            bestMovePerToken.add(calculateBestTokenMove(token, player));
+            if (token != null) {
+                System.out.println("current Token: " + token.getValue());
+                bestMovePerToken.add(calculateBestTokenMove(token, player));
+            }
         }
 
         for (var bla : bestMovePerToken) {
@@ -82,7 +84,8 @@ public class AI extends Player {
         }
 
         Integer bestToken = null;
-        for (int i = 0; i < playerHand.length; i++) {
+        //TODO getTokens .size?!
+        for (int i = 0; i < getTokens().size(); i++) {
             if (bestMovePerToken.get(i) != null) {
                 if (bestToken == null) {
                     bestToken = i;
@@ -196,6 +199,11 @@ public class AI extends Player {
         if (newMove.getToken().getValue() > Constants.UNIQUE_SYMBOL_TOKENS && newMove.getToken()
                 .getValue() < (Constants.UNIQUE_SYMBOL_TOKENS + Constants.UNIQUE_ACTION_TOKENS)) {
             //Falls SpezialStein: Vergleich auf zweite vertikale Position des Tokens
+            if (newMove.getToken().getValue() == Constants.UNIQUE_ACTION_TOKENS +
+                    Constants.UNIQUE_SYMBOL_TOKENS) {
+                return true;
+                //TODO möglicherweise bessere AI Logik hier
+            }
             int differenceVerticalPosition2 = newMove.getSecondaryMovePosition().getX()
                     - currentBestMove.getSecondaryMovePosition().getX();
             if (differenceVerticalPosition2 < 0) {
@@ -205,11 +213,7 @@ public class AI extends Player {
                 return false;
             }
             //Falls Replacer, wird der neue Zug als besser bewertet
-            if (newMove.getToken().getValue() == Constants.UNIQUE_ACTION_TOKENS +
-                    Constants.UNIQUE_SYMBOL_TOKENS) {
-                return true;
-                //TODO möglicherweise bessere AI Logik hier
-            }
+
             //Falls SpezialStein: Vergleich auf zweite horizontale Position des Tokens
             int differenceHorizontalPosition2 = newMove.getSecondaryMovePosition().getY()
                     - currentBestMove.getSecondaryMovePosition().getY();
@@ -479,9 +483,12 @@ public class AI extends Player {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position position : occupiedFields) {
+
+            System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.Remover + ", " + position.getX() + "/" + position.getY());
             Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, TokenType.None));
+            System.out.println("PointsChange for previous calc: " + currentCalculation.pointsChange());
             //TODO: Prevent Loss
-            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.None, false, isMovePreventingLoss()));
+            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.Remover, false, isMovePreventingLoss()));
 
         }
         return tokenMoves;
@@ -510,9 +517,12 @@ public class AI extends Player {
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position occupiedPosition : occupiedFields) {
             for (Position emptyPosition : emptyFields) {
+                System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.Mover + ", " +
+                        occupiedPosition.getX() + "/" + occupiedPosition.getY() + " to " + emptyPosition.getX() + "/" + emptyPosition.getY());
                 Calculation currentCalculation = calculateChangeWithMove(player,
                         getGridCopyWithSwappedTokens(emptyPosition, getTokenAtPosition(occupiedPosition),
                                 occupiedPosition, TokenType.None));
+                System.out.println("PointsChange for previous calc: " + currentCalculation.pointsChange());
                 //TODO Prevent Loss
                 tokenMoves.add(
                         new TokenMove(emptyPosition, occupiedPosition, currentCalculation.pointsChange(), TokenType.Mover,
