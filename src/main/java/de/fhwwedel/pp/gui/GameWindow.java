@@ -35,6 +35,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class GameWindow extends Application implements Initializable {
@@ -285,6 +286,8 @@ public class GameWindow extends Application implements Initializable {
         generateGrid();
     }
 
+    private final HashMap<String, ImageView> fieldImages = new HashMap<>();
+
     public void generateGrid() {
         gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
         int colcount = Constants.GAMEGRID_COLUMNS;
@@ -305,6 +308,7 @@ public class GameWindow extends Application implements Initializable {
                 imgNew.setPreserveRatio(false);
                 imgNew.setSmooth(true);
                 String id = "gridToken" + c + r;
+                fieldImages.put("" + c + "r", imgNew);
                 imgNew.setId(id);
 
                 System.out.println(imgNew.getId());
