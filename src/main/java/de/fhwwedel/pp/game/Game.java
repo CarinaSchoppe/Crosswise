@@ -31,7 +31,7 @@ public class Game {
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private final ArrayList<Player> players;
     private final ArrayList<Token> usedSpecialTokens = new ArrayList<>();
-    private final ArrayList<Token> tokenDrawPile = new ArrayList<>();
+    private ArrayList<Token> tokenDrawPile = new ArrayList<>();
     private GameLogic gameLogic;
     private Player currentPlayer = null;
 
@@ -65,13 +65,16 @@ public class Game {
     }
 
     private void fillPile() {
+        this.tokenDrawPile = new ArrayList<>();
         for (var token : TokenType.values()) {
             if (token == TokenType.None) continue;
+            /*
             if (token.isSpecial()) {
                 for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) {
                     tokenDrawPile.add(new Token(token));
                 }
-            } else {
+             */
+            if (!token.isSpecial()) {
                 for (int i = 0; i < Constants.AMOUNT_NORMAL_TOKENS; i++) {
                     tokenDrawPile.add(new Token(token));
                 }
@@ -166,7 +169,6 @@ public class Game {
     }
 
     public void turnDone() {
-
         if (handleOver()) {
             return;
         }

@@ -23,12 +23,13 @@ import de.fhwwedel.pp.util.special.GameLogger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 
 public class Player {
 
-    private final ArrayList<Token> tokens = new ArrayList<>();
+    private ArrayList<Token> tokens = new ArrayList<>();
     private final int playerID;
     private final boolean isActive;
     private final String name;
@@ -40,6 +41,8 @@ public class Player {
         this.isActive = isActive;
         this.name = name;
     }
+
+
 
     public void create() {
         this.team = Team.addPlayerToTeam(this);
