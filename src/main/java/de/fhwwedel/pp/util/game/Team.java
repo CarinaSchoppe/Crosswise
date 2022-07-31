@@ -77,7 +77,4 @@ public class Team {
         return points;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
 }

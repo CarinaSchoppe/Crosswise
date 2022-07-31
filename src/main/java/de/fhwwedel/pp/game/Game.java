@@ -40,14 +40,6 @@ public class Game {
         this.players = players;
     }
 
-    public static Game getGame() {
-        return game;
-    }
-
-    public static void setGame(Game game) {
-        Game.game = game;
-    }
-
 
     public boolean teamSizeEqual() {
         if (Team.getHorizontalTeam().getPlayers().size() == Team.getVerticalTeam().getPlayers().size()) {
@@ -207,6 +199,15 @@ public class Game {
     public AnimationTime getAnimationTime() {
         return animationTime;
     }
+
+    public static Game getGame() {
+        return game;
+    }
+
+    public static void setGame(Game game) {
+        Game.game = game;
+    }
+
 
     public void setAnimationTime(AnimationTime animationTime) {
         this.animationTime = animationTime;

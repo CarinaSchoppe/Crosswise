@@ -275,6 +275,7 @@ public class GameWindow extends Application implements Initializable {
         gameWindow = this;
     }
 
+
     private ImageView[][] gridImages;
 
     @Override public void start(Stage primaryStage) throws IOException {
