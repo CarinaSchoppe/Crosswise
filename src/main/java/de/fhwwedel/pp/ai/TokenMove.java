@@ -87,6 +87,6 @@ public class TokenMove {
     }
 
     public boolean isPreventingLoss() {
-        return false;
+        return isPreventingLoss;
     }
 }

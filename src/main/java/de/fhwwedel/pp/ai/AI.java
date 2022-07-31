@@ -30,12 +30,17 @@ public class AI extends Player {
 
 
     private void performAnimation() {
-
         //TODO: here fill out
     }
 
-    public void makeMove() {
+    //##############################################################################################
+    //#################################### AI Move Calculation #####################################
+    //##############################################################################################
 
+    /**
+     * Call Player Turn method for corresponding Token
+     */
+    public void makeMove() {
         /*
         Restrictions:
         - Immer zug machen wenn zug gewinn machbar
@@ -50,7 +55,7 @@ public class AI extends Player {
          */
 
         try {
-            var move = calculateAIMove(this);
+            TokenMove move = calculateAIMove(this);
             switch (move.getToken().getValue()) {
                 case 1, 2, 3, 4, 5, 6 -> normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition());
                 case 7 -> removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition());
@@ -65,14 +70,19 @@ public class AI extends Player {
         }
     }
 
-
+    /**
+     * Caluclates best Move for AI Player.
+     *
+     * @param player 
+     * @return
+     * @throws NoTokenException No tokens left
+     */
     public TokenMove calculateAIMove(Player player) throws NoTokenException {
         ArrayList<TokenMove> bestMovePerToken = new ArrayList<>();
         TokenType[] playerHand = player.convertHandToTokenTypeArray();
 
         for (TokenType token : playerHand) {
             if (token != null) {
-                System.out.println("current Token: " + token.getValue());
                 bestMovePerToken.add(calculateBestTokenMove(token, player));
             }
         }
@@ -100,6 +110,10 @@ public class AI extends Player {
         }
     }
 
+    //##############################################################################################
+    //#################################### Move Comparison #########################################
+    //##############################################################################################
+
     public boolean isBetterMove(TokenMove newMove, TokenMove currentBestMove, Player player) {
         //Vergleich auf Siegchance
 
@@ -108,7 +122,6 @@ public class AI extends Player {
         } else if (currentBestMove.isGameWinning()) {
             return false;
         }
-
 
         //Vergleich auf Verhinderung einer Niederlage
         if (newMove.isPreventingLoss()) {
@@ -185,7 +198,6 @@ public class AI extends Player {
         if (differenceVerticalPosition > 0) {
             return false;
         }
-
         //Vergleich auf horizontale Position des Tokens
         int differenceHorizontalPosition = newMove.getPrimaryMovePosition().getY() -
                 currentBestMove.getPrimaryMovePosition().getY();
@@ -195,12 +207,13 @@ public class AI extends Player {
         if (differenceHorizontalPosition > 0) {
             return false;
         }
-        if (newMove.getToken().getValue() > Constants.UNIQUE_SYMBOL_TOKENS && newMove.getToken()
+        //Falls SpezialStein: Vergleich auf zweite vertikale Position des Tokens
+        if (newMove.getToken().getValue() > Constants.UNIQUE_SYMBOL_TOKENS + 1 && newMove.getToken()
                 .getValue() < (Constants.UNIQUE_SYMBOL_TOKENS + Constants.UNIQUE_ACTION_TOKENS)) {
-            //Falls SpezialStein: Vergleich auf zweite vertikale Position des Tokens
+
             //Falls Replacer, wird der neue Zug als besser bewertet
-            if (newMove.getToken().getValue() >= Constants.UNIQUE_ACTION_TOKENS +
-                    Constants.UNIQUE_SYMBOL_TOKENS - 1) {
+            if (newMove.getToken().getValue() == Constants.UNIQUE_ACTION_TOKENS +
+                    Constants.UNIQUE_SYMBOL_TOKENS) {
                 return true;
                 //TODO möglicherweise bessere AI Logik hier
             }
@@ -212,8 +225,6 @@ public class AI extends Player {
             if (differenceVerticalPosition2 > 0) {
                 return false;
             }
-
-
             //Falls SpezialStein: Vergleich auf zweite horizontale Position des Tokens
             int differenceHorizontalPosition2 = newMove.getSecondaryMovePosition().getY()
                     - currentBestMove.getSecondaryMovePosition().getY();
@@ -259,7 +270,9 @@ public class AI extends Player {
         }
     }
 
-    //---------------------------------------Best Move Calculation----------------------------------
+    //##############################################################################################
+    //################################### Best Move Calculation ####################################
+    //##############################################################################################
 
     private TokenMove calculateBestTokenMove(TokenType token, Player player) {
         HashSet<TokenMove> tokenMovesPerToken = createPossibleMoves(token, player);
@@ -282,7 +295,6 @@ public class AI extends Player {
 
 
     private HashSet<TokenMove> createPossibleMoves(TokenType token, Player player) {
-        System.out.println("Possible Moves: " + this.getPlayerID() + " Token: " + token);
         return switch (token.getValue()) {
             case 1, 2, 3, 4, 5, 6 -> createPossibleSymbolTokenMoves(token, player);
             case 7 -> createPossibleRemoverTokenMoves(player);
@@ -294,19 +306,259 @@ public class AI extends Player {
     }
 
 
-    //----------------------------------Calculation Symbol Token Moves------------------------------
+    //##############################################################################################
+    //################################## Symbol Move Calculation ###################################
+    //##############################################################################################
 
     public HashSet<TokenMove> createPossibleSymbolTokenMoves(TokenType token, Player player) {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         HashSet<Position> emptyFields = emptyFields();
         for (Position position : emptyFields) {
-            System.out.println("Move: Player " + player.getPlayerID() + " " + token + ", " + position.getX() + "/" + position.getY());
-            Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, token));
-            //System.out.println("PointsChange for previous calc: " + currentCalculation.pointsChange());
+            TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(position, token);
+            Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
 
-            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), token, currentCalculation.gameWinning(), isMovePreventingLoss()));
+            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), token, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
         }
         return tokenMoves;
+    }
+
+
+
+    /**
+     * Berrechnet Punkte für einzelne Linie
+     *
+     * @param map Map(Token, Anzahl Vorkommnisse)
+     * @return Points per Line
+     */
+    public static Integer calculate(Map<TokenType, Integer> map) {
+        int current = 0;
+        if (map.size() == Constants.GAMEGRID_ROWS) {
+            return 6;
+        }
+        for (Map.Entry<TokenType, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey() != TokenType.None) {
+                return -1000;
+            } else if (entry.getValue() > 1) {
+                current = current + entry.getValue() * 2 - 3;
+            }
+        }
+        return current;
+    }
+
+    public Map<Integer, Map<TokenType, Integer>> getOccurrencesOfTokensWithChangedToken(TokenType[][] grid) {
+        Map<Integer, Map<TokenType, Integer>> occurrenceMap = new HashMap<>();
+
+        for (int i = 0; i < grid.length; i++) {
+            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
+        }
+        TokenType[][] reverseArray = swapMatrix(grid);
+
+        for (int i = 0; i < reverseArray.length; i++) {
+            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
+        }
+
+        return occurrenceMap;
+    }
+
+    private static HashMap<TokenType, Integer> calculateOccurrencesPerLine(TokenType[] tokens) {
+        HashMap<TokenType, Integer> map = new HashMap<>();
+        Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
+
+        map.remove(null);
+        map.remove(TokenType.None);
+        return map;
+    }
+
+    public static TokenType[][] swapMatrix(TokenType[][] input) {
+        TokenType[][] swap = new TokenType[input.length][input.length];
+        for (int i = 0; i < input.length; i++) {
+            for (int j = 0; j < input[0].length; j++) {
+                swap[j][i] = input[i][j];
+            }
+        }
+        return swap;
+    }
+
+    private boolean isMovePreventingLoss(TokenType[][] changedMap/*Position position, Token token*/) {
+
+        HashMap<Integer, HashMap<TokenType, Integer>> map = getOccurrencesOfTokens();
+        Map<Integer, Map<TokenType, Integer>> changedOccurrenceMap =
+                getOccurrencesOfTokensWithChangedToken(changedMap);
+
+        for (Map.Entry<Integer, HashMap<TokenType, Integer>> entry : map.entrySet()) {
+            if (entry.getKey() < 0) {
+                if (this.getTeam().getTeamType() == TeamType.VERTICAL) {
+                    if (entry.getValue().size() == 1) {
+                        for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
+                            if (count.getValue() == Constants.GAMEGRID_ROWS -1) {
+                                Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
+                                if (line.size() != 1) {
+                                    return true;
+                                }
+                                for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
+                                    if (lineMap.getValue() != Constants.GAMEGRID_ROWS - 1) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (this.getTeam().getTeamType() == TeamType.HORIZONTAL) {
+                    if (entry.getValue().size() == 1) {
+                        for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
+                            if (count.getValue() == Constants.GAMEGRID_COLUMNS -1) {
+                                Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
+                                if (line.size() != 1) {
+                                    return true;
+                                }
+                                for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
+                                    if (lineMap.getValue() != Constants.GAMEGRID_COLUMNS - 1) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    //##############################################################################################
+    //################################### Remover Token Moves ######################################
+    //##############################################################################################
+
+    public HashSet<TokenMove> createPossibleRemoverTokenMoves(Player player) {
+        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        HashSet<Position> occupiedFields = occupiedFields();
+        for (Position position : occupiedFields) {
+
+            TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(position, TokenType.None);
+            Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
+
+            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.Remover, false, isMovePreventingLoss(changedTokenGrid)));
+
+        }
+        return tokenMoves;
+    }
+
+
+    public HashSet<Position> occupiedFields() {
+        HashSet<Position> positions = new HashSet<>();
+        Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j].getTokenType().getValue() != 0) {
+                    positions.add(new Position(i, j));
+                }
+            }
+        }
+        return positions;
+    }
+
+    //##############################################################################################
+    //################################### Mover Token Moves ########################################
+    //##############################################################################################
+
+    public HashSet<TokenMove> createPossibleMoverTokenMoves(Player player) {
+        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        HashSet<Position> emptyFields = emptyFields();
+        HashSet<Position> occupiedFields = occupiedFields();
+        for (Position occupiedPosition : occupiedFields) {
+            for (Position emptyPosition : emptyFields) {
+
+                TokenType[][] changedTokenGrid = getGridCopyWithSwappedTokens(emptyPosition,
+                        getTokenAtPosition(occupiedPosition), occupiedPosition, TokenType.None);
+                Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
+                tokenMoves.add(new TokenMove(emptyPosition, occupiedPosition,
+                        currentCalculation.pointsChange(), TokenType.Mover,
+                        currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+            }
+        }
+        return tokenMoves;
+    }
+
+    //##############################################################################################
+    //################################### Swapper Token Moves ######################################
+    //##############################################################################################
+
+    public HashSet<TokenMove> createPossibleSwapperTokenMoves(Player player) {
+        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        HashSet<Position> occupiedFields = occupiedFields();
+        for (Position pos1 : occupiedFields) {
+            for (Position pos2 : occupiedFields) {
+                if (!pos1.equals(pos2)) {
+                    TokenType[][] changedTokenGrid = getGridCopyWithSwappedTokens(pos1, getTokenAtPosition(pos2), pos2,
+                            getTokenAtPosition(pos1));
+                    Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
+                    tokenMoves.add(new TokenMove(pos1, pos2, currentCalculation.pointsChange(),
+                            TokenType.Swapper, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+                }
+            }
+        }
+        return tokenMoves;
+    }
+
+    //##############################################################################################
+    //################################## Replacer Token Moves ######################################
+    //##############################################################################################
+
+    public HashSet<TokenMove> createPossibleReplacerTokenMoves(Player player) {
+        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        //convert player.getTokens() to Array of Tokens
+        Token[] playerHand = player.getTokens().toArray(new Token[0]);
+        HashSet<Integer> handSymbolTokenSet = player.getHandSymbolTokenPositions();
+        HashSet<Position> occupiedFields = occupiedFields();
+        for (Position occupiedField : occupiedFields) {
+            for (Integer handPosition : handSymbolTokenSet) {
+                TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType());
+                Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
+                //TODO Prevent Loss
+                tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(),
+                        TokenType.Replacer, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+            }
+        }
+        return tokenMoves;
+    }
+
+    //##############################################################################################
+    //###################################### Helper Methods ########################################
+    //##############################################################################################
+
+    /**
+     * Berechnet Punkte für jede Linie
+     *
+     * @return Map (Linie, Punkte)
+     */
+
+    public static HashMap<Integer, Integer> calculateCurrentOverallPoints() {
+        HashMap<Integer, HashMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokens();
+        HashMap<Integer, Integer> PointMap = new HashMap<>();
+
+        for (var entry : occurrenceMap.entrySet()) {
+            PointMap.put(entry.getKey(), calculate(entry.getValue()));
+        }
+        return PointMap;
+    }
+
+    public static HashMap<Integer, HashMap<TokenType, Integer>> getOccurrencesOfTokens() {
+        HashMap<Integer, HashMap<TokenType, Integer>> occurrenceMap = new HashMap<>();
+        TokenType[][] grid = Game.getGame().getPlayingField().convertToTokenTypeArray();
+
+        for (int i = 0; i < grid.length; i++) {
+            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
+        }
+        TokenType[][] reverseArray = swapMatrix(grid);
+
+        for (int i = 0; i < reverseArray.length; i++) {
+            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
+        }
+        return occurrenceMap;
     }
 
     private HashSet<Position> emptyFields() {
@@ -367,19 +619,6 @@ public class AI extends Player {
     public Map<Integer, Integer> calculateCurrentOverallPointsWithChangedToken(TokenType[][] newGrid) {
         Map<Integer, Map<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokensWithChangedToken(newGrid);
 
-        /*
-        for (var entry : occurrenceMap.entrySet()) {
-            System.out.print(entry.getKey() + ":: ");
-            for (var entry2 : entry.getValue().entrySet()) {
-                System.out.print(entry2.getKey()  + "=" + entry2.getValue());
-            }
-            System.out.println(" ");
-        }
-        System.out.println("------");
-
-         */
-
-
         Map<Integer, Integer> PointMap = new HashMap<>();
 
         for (Map.Entry<Integer, Map<TokenType, Integer>> entry : occurrenceMap.entrySet()) {
@@ -400,145 +639,8 @@ public class AI extends Player {
             System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_COLUMNS);
         }
         grid[position.getX()][position.getY()] = token;
-        /*
-        System.out.println("AAA");
-        System.out.println(token.getTokenType());
-        System.out.println(position.getX() + "/" + position.getY());
-        for (int i = 0; i < originalGrid.length; i++) {
-            for (int j = 0; j < originalGrid.length; j++) {
-                System.out.print(grid[i][j].getTokenType().getValue() + " ");
-            }
-            System.out.println("");
-        }
-
-         */
-
 
         return grid;
-    }
-
-    /**
-     * Berrechnet Punkte für einzelne Linie
-     *
-     * @param map Map(Token, Anzahl Vorkommnisse)
-     * @return Points per Line
-     */
-    public static Integer calculate(Map<TokenType, Integer> map) {
-        int current = 0;
-        if (map.size() == Constants.GAMEGRID_ROWS) {
-            return 6;
-        }
-        for (Map.Entry<TokenType, Integer> entry : map.entrySet()) {
-            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey() != TokenType.None) {
-                return -1000;
-            } else if (entry.getValue() > 1) {
-                current = current + entry.getValue() * 2 - 3;
-            }
-        }
-        return current;
-    }
-
-    public Map<Integer, Map<TokenType, Integer>> getOccurrencesOfTokensWithChangedToken(TokenType[][] grid) {
-        Map<Integer, Map<TokenType, Integer>> occurrenceMap = new HashMap<>();
-
-        for (int i = 0; i < grid.length; i++) {
-            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
-        }
-        TokenType[][] reverseArray = swapMatrix(grid);
-
-        for (int i = 0; i < reverseArray.length; i++) {
-            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
-        }
-
-        return occurrenceMap;
-    }
-
-    private static HashMap<TokenType, Integer> calculateOccurrencesPerLine(TokenType[] tokens) {
-        HashMap<TokenType, Integer> map = new HashMap<>();
-        Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
-
-        map.remove(null);
-        map.remove(TokenType.None);
-        return map;
-    }
-
-    public static TokenType[][] swapMatrix(TokenType[][] input) {
-        TokenType[][] swap = new TokenType[input.length][input.length];
-        for (int i = 0; i < input.length; i++) {
-            for (int j = 0; j < input[0].length; j++) {
-                swap[j][i] = input[i][j];
-            }
-        }
-        return swap;
-    }
-
-    private boolean isMovePreventingLoss(/*Player player, Position position, Token token*/) {
-
-        HashMap<Integer, HashMap<TokenType, Integer>> map = getOccurrencesOfTokens();
-
-
-
-
-
-
-
-        //TODO: here fill up
-        return false;
-    }
-
-    //-------------------------------Calculation Removes Token Moves--------------------------------
-
-    public HashSet<TokenMove> createPossibleRemoverTokenMoves(Player player) {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
-        HashSet<Position> occupiedFields = occupiedFields();
-        for (Position position : occupiedFields) {
-
-            System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.Remover + ", " + position.getX() + "/" + position.getY());
-            Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, TokenType.None));
-            //System.out.println("PointsChange for previous calc: " + currentCalculation.pointsChange());
-            //TODO: Prevent Loss
-            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.Remover, false, isMovePreventingLoss()));
-
-        }
-        return tokenMoves;
-    }
-
-
-    public HashSet<Position> occupiedFields() {
-        HashSet<Position> positions = new HashSet<>();
-        Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
-
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j].getTokenType().getValue() != 0) {
-                    positions.add(new Position(i, j));
-                }
-            }
-        }
-        return positions;
-    }
-
-    //-----------------------------------Calculation Mover Token Moves------------------------------
-
-    public HashSet<TokenMove> createPossibleMoverTokenMoves(Player player) {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
-        HashSet<Position> emptyFields = emptyFields();
-        HashSet<Position> occupiedFields = occupiedFields();
-        for (Position occupiedPosition : occupiedFields) {
-            for (Position emptyPosition : emptyFields) {
-                System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.Mover + ", " +
-                        occupiedPosition.getX() + "/" + occupiedPosition.getY() + " to " + emptyPosition.getX() + "/" + emptyPosition.getY());
-                Calculation currentCalculation = calculateChangeWithMove(player,
-                        getGridCopyWithSwappedTokens(emptyPosition, getTokenAtPosition(occupiedPosition),
-                                occupiedPosition, TokenType.None));
-                //System.out.println("PointsChange for previous calc: " + currentCalculation.pointsChange());
-                //TODO Prevent Loss
-                tokenMoves.add(
-                        new TokenMove(emptyPosition, occupiedPosition, currentCalculation.pointsChange(), TokenType.Mover,
-                                currentCalculation.gameWinning(), isMovePreventingLoss()));
-            }
-        }
-        return tokenMoves;
     }
 
     public TokenType getTokenAtPosition(Position position) {
@@ -559,79 +661,6 @@ public class AI extends Player {
         grid[swap2pos.getX()][swap2pos.getY()] = swap2;
 
         return grid;
-    }
-
-    //-------------------------------Calculation Swapper Token Moves--------------------------------
-
-    public HashSet<TokenMove> createPossibleSwapperTokenMoves(Player player) {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
-        HashSet<Position> occupiedFields = occupiedFields();
-        for (Position pos1 : occupiedFields) {
-            for (Position pos2 : occupiedFields) {
-                if (!pos1.equals(pos2)) {
-                    Calculation currentCalculation = calculateChangeWithMove(player,
-                            getGridCopyWithSwappedTokens(pos1, getTokenAtPosition(pos2), pos2,
-                                    getTokenAtPosition(pos1)));
-                    //TODO Prevent Loss
-                    tokenMoves.add(new TokenMove(pos1, pos2, currentCalculation.pointsChange(),
-                            TokenType.Swapper, currentCalculation.gameWinning(), isMovePreventingLoss()));
-                }
-            }
-        }
-        return tokenMoves;
-    }
-
-    //------------------------------Calculation Replacer Token Moves--------------------------------
-
-    public HashSet<TokenMove> createPossibleReplacerTokenMoves(Player player) {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
-        //convert player.getTokens() to Array of Tokens
-        Token[] playerHand = player.getTokens().toArray(new Token[0]);
-        HashSet<Integer> handSymbolTokenSet = player.getHandSymbolTokenPositions();
-        HashSet<Position> occupiedFields = occupiedFields();
-        for (Position occupiedField : occupiedFields) {
-            for (Integer handPosition : handSymbolTokenSet) {
-                Calculation currentCalculation = calculateChangeWithMove(player,
-                        getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType()));
-                //TODO Prevent Loss
-                tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(),
-                        TokenType.Replacer, currentCalculation.gameWinning(), isMovePreventingLoss()));
-            }
-        }
-        return tokenMoves;
-    }
-
-    //----------------------------------------------------------------------------------------------
-
-    /**
-     * Berechnet Punkte für jede Linie
-     *
-     * @return Map (Linie, Punkte)
-     */
-
-    public static HashMap<Integer, Integer> calculateCurrentOverallPoints() {
-        HashMap<Integer, HashMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokens();
-        HashMap<Integer, Integer> PointMap = new HashMap<>();
-
-        for (var entry : occurrenceMap.entrySet()) {
-            PointMap.put(entry.getKey(), calculate(entry.getValue()));
-        }
-        return PointMap;
-    }
-
-    public static HashMap<Integer, HashMap<TokenType, Integer>> getOccurrencesOfTokens() {
-        HashMap<Integer, HashMap<TokenType, Integer>> occurrenceMap = new HashMap<>();
-        TokenType[][] grid = Game.getGame().getPlayingField().convertToTokenTypeArray();
-
-        for (int i = 0; i < grid.length; i++) {
-            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
-        }
-        TokenType[][] reverseArray = swapMatrix(grid);
-
-        for (int i = 0; i < reverseArray.length; i++) {
-            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
-        }
-        return occurrenceMap;
     }
 
 }
