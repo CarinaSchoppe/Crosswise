@@ -30,13 +30,13 @@ public class CrossWise {
     public static void main(String... args) {
 
       //  GameWindow.start();
-        var player1 = new AI(1, true, "Player 1");
+        var player1 = new AI(0, true, "Player 1");
         player1.create();
-        var player2 = new AI(2, true, "Player 2");
+        var player2 = new AI(1, true, "Player 2");
         player2.create();
-        var player3 = new AI(3, false, "Player 3");
+        var player3 = new AI(2, false, "Player 3");
         player3.create();
-        var player4 = new AI(4, false, "Player 4");
+        var player4 = new AI(3, false, "Player 4");
         player4.create();
         var game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)));
         Game.setGame(game);
