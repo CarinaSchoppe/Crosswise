@@ -10,6 +10,7 @@
 
 package de.fhwwedel.pp.player;
 
+import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.gui.GameWindowHandler;
@@ -187,7 +188,8 @@ public class Player {
     public void drawToken() throws NoTokenException {
 
         try {
-            Thread.sleep(5000);
+            if (CrossWise.slow)
+                Thread.sleep(5000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

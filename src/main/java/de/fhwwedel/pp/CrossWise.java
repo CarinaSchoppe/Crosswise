@@ -28,9 +28,11 @@ import java.util.List;
 public class CrossWise {
 
 
+    public static boolean slow = true;
+
     private static Thread gameThread = new Thread(() -> {
         try {
-            Thread.sleep(5000);
+            if (CrossWise.slow) Thread.sleep(5000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +53,8 @@ public class CrossWise {
     public static void main(String... args) {
 
         gameThread.start();
-        GameWindow.start();
+        if (CrossWise.slow)
+            GameWindow.start();
 
 
     }

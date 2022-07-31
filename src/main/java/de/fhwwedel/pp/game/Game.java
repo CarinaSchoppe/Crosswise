@@ -10,6 +10,7 @@
 
 package de.fhwwedel.pp.game;
 
+import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.player.Player;
@@ -177,7 +178,9 @@ public class Game {
             System.out.println("No more tokens left in the Pile!");
         }
         try {
-            Thread.sleep(5000);
+            if (CrossWise.slow)
+
+                Thread.sleep(5000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
