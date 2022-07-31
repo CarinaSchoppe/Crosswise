@@ -429,7 +429,7 @@ public class AI extends Player {
             return 6;
         }
         for (Map.Entry<TokenType, Integer> entry : map.entrySet()) {
-            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey() != TokenType.None) {
+            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey() != TokenType.NONE) {
                 return -1000;
             } else if (entry.getValue() > 1) {
                 current = current + entry.getValue() * 2 - 3;
@@ -458,7 +458,7 @@ public class AI extends Player {
         Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
 
         map.remove(null);
-        map.remove(TokenType.None);
+        map.remove(TokenType.NONE);
         return map;
     }
 
@@ -493,11 +493,11 @@ public class AI extends Player {
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position position : occupiedFields) {
 
-            System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.Remover + ", " + position.getX() + "/" + position.getY());
-            Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, TokenType.None));
+            System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.REMOVER + ", " + position.getX() + "/" + position.getY());
+            Calculation currentCalculation = calculateChangeWithMove(player, getGridCopyWithAddedToken(position, TokenType.NONE));
             //System.out.println("PointsChange for previous calc: " + currentCalculation.pointsChange());
             //TODO: Prevent Loss
-            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.Remover, false, isMovePreventingLoss()));
+            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.REMOVER, false, isMovePreventingLoss()));
 
         }
         return tokenMoves;
@@ -526,15 +526,15 @@ public class AI extends Player {
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position occupiedPosition : occupiedFields) {
             for (Position emptyPosition : emptyFields) {
-                System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.Mover + ", " +
+                System.out.println("Move: Player " + player.getPlayerID() + " " + TokenType.MOVER + ", " +
                         occupiedPosition.getX() + "/" + occupiedPosition.getY() + " to " + emptyPosition.getX() + "/" + emptyPosition.getY());
                 Calculation currentCalculation = calculateChangeWithMove(player,
                         getGridCopyWithSwappedTokens(emptyPosition, getTokenAtPosition(occupiedPosition),
-                                occupiedPosition, TokenType.None));
+                                occupiedPosition, TokenType.NONE));
                 //System.out.println("PointsChange for previous calc: " + currentCalculation.pointsChange());
                 //TODO Prevent Loss
                 tokenMoves.add(
-                        new TokenMove(emptyPosition, occupiedPosition, currentCalculation.pointsChange(), TokenType.Mover,
+                        new TokenMove(emptyPosition, occupiedPosition, currentCalculation.pointsChange(), TokenType.MOVER,
                                 currentCalculation.gameWinning(), isMovePreventingLoss()));
             }
         }
@@ -574,7 +574,7 @@ public class AI extends Player {
                                     getTokenAtPosition(pos1)));
                     //TODO Prevent Loss
                     tokenMoves.add(new TokenMove(pos1, pos2, currentCalculation.pointsChange(),
-                            TokenType.Swapper, currentCalculation.gameWinning(), isMovePreventingLoss()));
+                            TokenType.SWAPPER, currentCalculation.gameWinning(), isMovePreventingLoss()));
                 }
             }
         }
@@ -595,7 +595,7 @@ public class AI extends Player {
                         getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType()));
                 //TODO Prevent Loss
                 tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(),
-                        TokenType.Replacer, currentCalculation.gameWinning(), isMovePreventingLoss()));
+                        TokenType.REPLACER, currentCalculation.gameWinning(), isMovePreventingLoss()));
             }
         }
         return tokenMoves;

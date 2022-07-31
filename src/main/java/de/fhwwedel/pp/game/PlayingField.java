@@ -29,7 +29,7 @@ public class PlayingField {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 this.fieldMap[i][j] = new Position(i, j);
-                this.fieldMap[i][j].setToken(new Token(TokenType.None));
+                this.fieldMap[i][j].setToken(new Token(TokenType.NONE));
                 this.fieldMap[i][j].getToken().setPosition(this.fieldMap[i][j]);
             }
         }

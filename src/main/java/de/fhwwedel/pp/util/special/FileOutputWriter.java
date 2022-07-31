@@ -66,10 +66,10 @@ public class FileOutputWriter {
         }
         for (var token : game.getUsedActionTokens()) {
             switch (token.getTokenType()) {
-                case Remover -> usedActionTiles[0] += 1;
-                case Mover -> usedActionTiles[1] += 1;
-                case Swapper -> usedActionTiles[2] += 1;
-                case Replacer -> usedActionTiles[3] += 1;
+                case REMOVER -> usedActionTiles[0] += 1;
+                case MOVER -> usedActionTiles[1] += 1;
+                case SWAPPER -> usedActionTiles[2] += 1;
+                case REPLACER -> usedActionTiles[3] += 1;
             }
         }
         return usedActionTiles;

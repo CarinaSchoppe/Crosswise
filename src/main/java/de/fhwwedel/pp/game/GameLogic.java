@@ -33,7 +33,7 @@ public record GameLogic(Game game) {
         //all filled
         for (int i = 0; i < field.getSize(); i++) {
             for (int j = 0; j < field.getSize(); j++) {
-                if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.None) {
+                if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE) {
                     map.put(false, null);
                     return map;
                 }
@@ -59,14 +59,14 @@ public record GameLogic(Game game) {
             boolean equal = true;
             for (int j = 0; j < field.getSize(); j++) { // get field on row
                 if (current == null) {
-                    if (field.getFieldMap()[i][j].getToken().getTokenType() != TokenType.None) {
+                    if (field.getFieldMap()[i][j].getToken().getTokenType() != TokenType.NONE) {
                         current = field.getFieldMap()[i][j].getToken().getTokenType();
                     } else {
                         equal = false;
                         break;
                     }
                 } else {
-                    if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.None || field.getFieldMap()[i][j].getToken().getTokenType() != current) {
+                    if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().getTokenType() != current) {
                         equal = false;
                         current = null;
                         break;
@@ -88,14 +88,14 @@ public record GameLogic(Game game) {
             boolean equal = true;
             for (int j = 0; j < field.getSize(); j++) {
                 if (current == null) {
-                    if (field.getFieldMap()[j][i].getToken().getTokenType() != TokenType.None) {
+                    if (field.getFieldMap()[j][i].getToken().getTokenType() != TokenType.NONE) {
                         current = field.getFieldMap()[j][i].getToken().getTokenType();
                     } else {
                         equal = false;
                         break;
                     }
                 } else {
-                    if (field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.None || field.getFieldMap()[j][i].getToken().getTokenType() != current) {
+                    if (field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().getTokenType() != current) {
                         equal = false;
                         current = null;
                         break;

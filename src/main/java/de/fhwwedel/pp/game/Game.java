@@ -59,7 +59,7 @@ public class Game {
     private void fillPile() {
         this.tokenDrawPile = new ArrayList<>();
         for (var token : TokenType.values()) {
-            if (token == TokenType.None) continue;
+            if (token == TokenType.NONE) continue;
             if (token.isSpecial()) {
                 for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) { //12 tokens
                     tokenDrawPile.add(new Token(token));
