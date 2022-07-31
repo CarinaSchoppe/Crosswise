@@ -12,6 +12,7 @@ package de.fhwwedel.pp.player;
 
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.gui.GameWindow;
+import de.fhwwedel.pp.gui.GameWindowHandler;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Team;
@@ -68,7 +69,7 @@ public class Player {
     }
 
     public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition,
-            final Position handTokenPosition) {
+                                     final Position handTokenPosition) {
         if (hasToken(token))
             return false;
         if (token.getTokenType() != TokenType.REPLACER)
@@ -152,7 +153,7 @@ public class Player {
     }
 
     public boolean swapperTokenTurn(final Token token, final Position first,
-            final Position second) {
+                                    final Position second) {
         if (token.getTokenType() != TokenType.SWAPPER)
             return false;
         if (hasToken(token))
@@ -184,6 +185,7 @@ public class Player {
     }
 
     public void drawToken() throws NoTokenException {
+
         if (Game.getGame().getTokenDrawPile().isEmpty())
             throw new NoTokenException("No more tokens left in the Pile!");
         if (tokens.size() >= Constants.HAND_SIZE)
@@ -191,10 +193,25 @@ public class Player {
         var token = Game.getGame().getTokenDrawPile()
                 .get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
+
+
+        //remove all tokens from tokens if the tokentype is None
+        for (var t : tokens) {
+            if (t.getTokenType() == TokenType.NONE)
+                tokens.remove(t);
+        }
+
         tokens.add(token);
         GameLogger.logDraw(this, token);
 
-        //TODO: Add token to Players GUI
+        for (var i = 0; i < Constants.HAND_SIZE - tokens.size(); i++) {
+            tokens.add(new Token(TokenType.NONE));
+        }
+
+        if (GameWindowHandler.getGameWindowHandler() != null) {
+            GameWindowHandler.getGameWindowHandler().updatePlayerHandIcons(this);
+        }
+
     }
 
     public int tokenAmountInHand(TokenType token) {

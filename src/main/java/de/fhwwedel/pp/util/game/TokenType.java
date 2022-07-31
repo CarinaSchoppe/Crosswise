@@ -11,7 +11,7 @@
 package de.fhwwedel.pp.util.game;
 
 public enum TokenType {
-    NONE(0, false, ""),
+    NONE(0, false, "/gui/0 - none.png"),
     SUN(1, false, "/gui/1 - sun.png"),
     CROSS(2, false, "/gui/2 - cross.png"),
     TRIANGLE(3, false, "/gui/3 - triangle.png"),

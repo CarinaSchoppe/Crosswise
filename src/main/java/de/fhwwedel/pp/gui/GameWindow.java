@@ -169,8 +169,15 @@ public class GameWindow extends Application implements Initializable {
     @FXML
     private ImageView playerHand4IconTwo;
 
+
+    @FXML
+    private GridPane playerHandFour;
+
     @FXML
     private GridPane playerHandOne;
+
+    @FXML
+    private GridPane playerHandThree;
 
     @FXML
     private GridPane playerHandTwo;
@@ -359,7 +366,9 @@ public class GameWindow extends Application implements Initializable {
         assert playerHand4IconOne != null : "fx:id=\"playerHand4IconOne\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playerHand4IconThree != null : "fx:id=\"playerHand4IconThree\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playerHand4IconTwo != null : "fx:id=\"playerHand4IconTwo\" was not injected: check your FXML file 'GameWindow.fxml'.";
+        assert playerHandFour != null : "fx:id=\"playerHandFour\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playerHandOne != null : "fx:id=\"playerHandOne\" was not injected: check your FXML file 'GameWindow.fxml'.";
+        assert playerHandThree != null : "fx:id=\"playerHandThree\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playerHandTwo != null : "fx:id=\"playerHandTwo\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playersStuffGrid != null : "fx:id=\"playersStuffGrid\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playersTurnLabel != null : "fx:id=\"playersTurnLabel\" was not injected: check your FXML file 'GameWindow.fxml'.";
@@ -384,6 +393,7 @@ public class GameWindow extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameWindow = this;
+        GameWindowHandler.setHandler(new GameWindowHandler(this));
     }
 
 
@@ -479,5 +489,86 @@ public class GameWindow extends Application implements Initializable {
         if (GameWindow.getGameWindow() != null)
             swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + "");
 
+    }
+
+
+    public GridPane getPlayerHandOne() {
+        return playerHandOne;
+    }
+
+    public GridPane getPlayerHandTwo() {
+        return playerHandTwo;
+    }
+
+    public ImageView getPlayerHand1IconFour() {
+        return playerHand1IconFour;
+    }
+
+    public ImageView getPlayerHand1IconOne() {
+        return playerHand1IconOne;
+    }
+
+    public ImageView getPlayerHand1IconThree() {
+        return playerHand1IconThree;
+    }
+
+    public ImageView getPlayerHand1IconTwo() {
+        return playerHand1IconTwo;
+    }
+
+    public ImageView getPlayerHand2IconFour() {
+        return playerHand2IconFour;
+    }
+
+    public ImageView getPlayerHand2IconOne() {
+        return playerHand2IconOne;
+    }
+
+    public ImageView getPlayerHand2IconThree() {
+        return playerHand2IconThree;
+    }
+
+    public ImageView getPlayerHand2IconTwo() {
+        return playerHand2IconTwo;
+    }
+
+    public ImageView getPlayerHand3IconFour() {
+        return playerHand3IconFour;
+    }
+
+    public ImageView getPlayerHand3IconOne() {
+        return playerHand3IconOne;
+    }
+
+    public ImageView getPlayerHand3IconThree() {
+        return playerHand3IconThree;
+    }
+
+    public ImageView getPlayerHand3IconTwo() {
+        return playerHand3IconTwo;
+    }
+
+    public ImageView getPlayerHand4IconFour() {
+        return playerHand4IconFour;
+    }
+
+    public ImageView getPlayerHand4IconOne() {
+        return playerHand4IconOne;
+    }
+
+    public ImageView getPlayerHand4IconThree() {
+        return playerHand4IconThree;
+    }
+
+    public ImageView getPlayerHand4IconTwo() {
+        return playerHand4IconTwo;
+    }
+
+    public GridPane getPlayerHandFour() {
+        return playerHandFour;
+    }
+
+    public GridPane getPlayerHandThree() {
+        return playerHandThree;
     }
 }
