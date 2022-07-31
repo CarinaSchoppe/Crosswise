@@ -13,6 +13,7 @@ package de.fhwwedel.pp;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
+import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.ArrayList;
@@ -27,9 +28,7 @@ import java.util.List;
 public class CrossWise {
 
 
-    public static void main(String... args) {
-
-      //  GameWindow.start();
+    private static final Thread gameThread = new Thread(() -> {
         var player1 = new AI(0, true, "Player 1");
         player1.create();
         var player2 = new AI(1, true, "Player 2");
@@ -42,11 +41,17 @@ public class CrossWise {
         Game.setGame(game);
         game.setup(false);
         game.start();
+    });
+
+    public static void main(String... args) {
+
+        gameThread.start();
+        GameWindow.start();
+
 
     }
 
-    //TODO: Team in handleGameOver (weil jetzt ja Klasse statt instanz?)
-    // TODO: GUI bei Team game over!
-
-
+    public static Thread getGameThread() {
+        return gameThread;
+    }
 }
