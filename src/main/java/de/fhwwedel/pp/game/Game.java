@@ -180,7 +180,7 @@ public class Game {
         try {
             if (CrossWise.slow)
 
-                Thread.sleep(5000);
+                Thread.sleep(CrossWise.delay);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

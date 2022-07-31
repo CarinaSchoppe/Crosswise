@@ -29,10 +29,12 @@ public class CrossWise {
 
 
     public static boolean slow = true;
+    public static int delay = 5000;
 
     private static Thread gameThread = new Thread(() -> {
         try {
-            if (CrossWise.slow) Thread.sleep(5000);
+            if (CrossWise.slow) Thread.sleep(CrossWise.delay);
+
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
