@@ -13,8 +13,7 @@ package de.fhwwedel.pp;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
-import de.fhwwedel.pp.util.game.Token;
-import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.ArrayList;
@@ -31,24 +30,19 @@ public class CrossWise {
 
     public static void main(String... args) {
 
-        //TODO: GameWindow.start();
-        var player1 = new AI(0, true, "Player 1");
+        GameWindow.start();
+        var player1 = new AI(1, true, "Player 1");
         player1.create();
-        var player2 = new AI(1, true, "Player 2");
+        var player2 = new AI(2, true, "Player 2");
         player2.create();
-        var player3 = new AI(2, false, "Player 3");
+        var player3 = new AI(3, false, "Player 3");
         player3.create();
-        var player4 = new AI(3, false, "Player 4");
+        var player4 = new AI(4, false, "Player 4");
         player4.create();
         var game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)));
         Game.setGame(game);
         game.setup(false);
-        game.start();
-
-
-
-
-
+        //game.start();
 
     }
 

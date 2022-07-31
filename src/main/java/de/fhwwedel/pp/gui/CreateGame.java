@@ -17,10 +17,15 @@ import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.special.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +109,18 @@ public class CreateGame {
         game.setup(false);
         Game.setGame(game);
 
+    }
 
+    public void start(Stage primaryStage) throws IOException {
+
+        var loader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
+        loader.setController(this);
+        var root = (Parent) loader.load();
+        primaryStage.setTitle("Create Game CrossWise");
+        primaryStage.setResizable(false);
+        primaryStage.setScene(new Scene(root));
+        initialize();
+        primaryStage.show();
     }
 
     @FXML
@@ -124,5 +140,4 @@ public class CreateGame {
         assert playerTwoField != null : "fx:id=\"playerTwoField\" was not injected: check your FXML file 'CreateGame.fxml'.";
 
     }
-
 }
