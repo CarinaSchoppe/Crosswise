@@ -39,8 +39,16 @@ public record GameLogic(Game game) {
                 }
             }
         }
-        map.put(true, null);
+
+        if (Team.getHorizontalTeam().getPoints() == Team.getVerticalTeam().getPoints()) {
+            map.put(true, null);
+        } else if (Team.getHorizontalTeam().getPoints() > Team.getVerticalTeam().getPoints()) {
+            map.put(true, Team.getHorizontalTeam());
+        } else {
+            map.put(true, Team.getVerticalTeam());
+        }
         return map;
+
     }
 
 
