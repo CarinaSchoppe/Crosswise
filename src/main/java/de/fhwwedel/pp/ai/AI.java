@@ -336,7 +336,7 @@ public class AI extends Player {
             return 6;
         }
         for (Map.Entry<TokenType, Integer> entry : map.entrySet()) {
-            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey() != TokenType.None) {
+            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey() != TokenType.NONE) {
                 return -1000;
             } else if (entry.getValue() > 1) {
                 current = current + entry.getValue() * 2 - 3;
@@ -365,7 +365,7 @@ public class AI extends Player {
         Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
 
         map.remove(null);
-        map.remove(TokenType.None);
+        map.remove(TokenType.NONE);
         return map;
     }
 
@@ -437,10 +437,10 @@ public class AI extends Player {
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position position : occupiedFields) {
 
-            TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(position, TokenType.None);
+            TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(position, TokenType.NONE);
             Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
 
-            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.Remover, false, isMovePreventingLoss(changedTokenGrid)));
+            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.REMOVER, false, isMovePreventingLoss(changedTokenGrid)));
 
         }
         return tokenMoves;
@@ -473,10 +473,10 @@ public class AI extends Player {
             for (Position emptyPosition : emptyFields) {
 
                 TokenType[][] changedTokenGrid = getGridCopyWithSwappedTokens(emptyPosition,
-                        getTokenAtPosition(occupiedPosition), occupiedPosition, TokenType.None);
+                        getTokenAtPosition(occupiedPosition), occupiedPosition, TokenType.NONE);
                 Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
                 tokenMoves.add(new TokenMove(emptyPosition, occupiedPosition,
-                        currentCalculation.pointsChange(), TokenType.Mover,
+                        currentCalculation.pointsChange(), TokenType.MOVER,
                         currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
             }
         }
@@ -497,7 +497,7 @@ public class AI extends Player {
                             getTokenAtPosition(pos1));
                     Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
                     tokenMoves.add(new TokenMove(pos1, pos2, currentCalculation.pointsChange(),
-                            TokenType.Swapper, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+                            TokenType.SWAPPER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
                 }
             }
         }
@@ -520,7 +520,7 @@ public class AI extends Player {
                 Calculation currentCalculation = calculateChangeWithMove(player, changedTokenGrid);
                 //TODO Prevent Loss
                 tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(),
-                        TokenType.Replacer, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+                        TokenType.REPLACER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
             }
         }
         return tokenMoves;
