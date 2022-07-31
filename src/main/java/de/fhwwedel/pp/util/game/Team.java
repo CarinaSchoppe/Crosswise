@@ -10,6 +10,7 @@
 
 package de.fhwwedel.pp.util.game;
 
+import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.player.Player;
 
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ public class Team {
             return deactiveTeam;
         }
 
-
         if (player.getPlayerID() % 2 == 0) {
             verticalTeam.players.add(player);
             return verticalTeam;
@@ -42,7 +42,19 @@ public class Team {
             return horizontalTeam;
         }
 
+    }
 
+    public static void givePoints() {
+        var pointsMap = AI.calculateCurrentOverallPoints();
+        horizontalTeam.points = 0;
+        verticalTeam.points = 0;
+        for (var key : pointsMap.keySet()) {
+            if (key > 0) {
+                verticalTeam.points += pointsMap.get(key);
+            } else {
+                horizontalTeam.points += pointsMap.get(key);
+            }
+        }
     }
 
     public static Team getHorizontalTeam() {

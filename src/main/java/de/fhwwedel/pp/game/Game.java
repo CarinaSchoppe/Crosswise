@@ -168,6 +168,7 @@ public class Game {
     }
 
     public void turnDone() {
+        Team.givePoints();
         if (handleOver()) {
             return;
         }

@@ -28,7 +28,7 @@ import java.util.List;
 public class CrossWise {
 
 
-    private static final Thread gameThread = new Thread(() -> {
+    private static  Thread gameThread = new Thread(() -> {
         var player1 = new AI(0, true, "Player 1");
         player1.create();
         var player2 = new AI(1, true, "Player 2");
@@ -49,6 +49,11 @@ public class CrossWise {
       //TODO:  GameWindow.start();
 
 
+    }
+
+
+    public static void setGameThread(Thread thread){
+        gameThread = thread;
     }
 
     public static Thread getGameThread() {

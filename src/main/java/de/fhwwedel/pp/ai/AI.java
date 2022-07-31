@@ -423,7 +423,7 @@ public class AI extends Player {
      * @param map Map(Token, Anzahl Vorkommnisse)
      * @return Points per Line
      */
-    public Integer calculate(Map<TokenType, Integer> map) {
+    public static Integer calculate(Map<TokenType, Integer> map) {
         int current = 0;
         if (map.size() == Constants.GAMEGRID_ROWS) {
             return 6;
@@ -453,7 +453,7 @@ public class AI extends Player {
         return occurrenceMap;
     }
 
-    private HashMap<TokenType, Integer> calculateOccurrencesPerLine(TokenType[] tokens) {
+    private static HashMap<TokenType, Integer> calculateOccurrencesPerLine(TokenType[] tokens) {
         HashMap<TokenType, Integer> map = new HashMap<>();
         Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
 
@@ -462,7 +462,7 @@ public class AI extends Player {
         return map;
     }
 
-    public TokenType[][] swapMatrix(TokenType[][] input) {
+    public static TokenType[][] swapMatrix(TokenType[][] input) {
         TokenType[][] swap = new TokenType[input.length][input.length];
         for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input[0].length; j++) {
@@ -626,7 +626,7 @@ public class AI extends Player {
         for (int i = 0; i < grid.length; i++) {
             occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
         }
-        Token[][] reverseArray = swapMatrix(grid);
+        TokenType[][] reverseArray = swapMatrix(grid);
 
         for (int i = 0; i < reverseArray.length; i++) {
             occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
