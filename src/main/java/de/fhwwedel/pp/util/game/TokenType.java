@@ -11,17 +11,17 @@
 package de.fhwwedel.pp.util.game;
 
 public enum TokenType {
-    NONE(0, false, "/gui/0 - none.png"),
-    SUN(1, false, "/gui/1 - sun.png"),
-    CROSS(2, false, "/gui/2 - cross.png"),
-    TRIANGLE(3, false, "/gui/3 - triangle.png"),
-    SQUARE(4, false, "/gui/4 - square.png"),
-    PENTAGON(5, false, "/gui/5 - pentagon.png"),
-    STAR(6, false, "/gui/6 - star.png"),
-    REMOVER(7, true, "/gui/7 - remover.png"),
-    MOVER(8, true, "/gui/8 - mover.png"),
-    SWAPPER(9, true, "/gui/9 - swapper.png"),
-    REPLACER(10, true, "/gui/10 - replacer.png");
+    NONE(0, false, "pictures/0none.png"),
+    SUN(1, false, "pictures/1sun.png"),
+    CROSS(2, false, "pictures/2cross.png"),
+    TRIANGLE(3, false, "pictures/3triangle.png"),
+    SQUARE(4, false, "pictures/4square.png"),
+    PENTAGON(5, false, "pictures/5pentagon.png"),
+    STAR(6, false, "pictures/6star.png"),
+    REMOVER(7, true, "pictures/7remove.png"),
+    MOVER(8, true, "pictures/8move.png"),
+    SWAPPER(9, true, "pictures/9swaponboard.png"),
+    REPLACER(10, true, "pictures/10swapwithhand.png");
 
 
     private final int value;

@@ -20,6 +20,7 @@ import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
@@ -116,7 +117,7 @@ public class Game {
 
 
         if (GameWindow.getGameWindow() != null)
-            GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName());
+            Platform.runLater(() -> GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName()));
         System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
@@ -168,6 +169,11 @@ public class Game {
             currentPlayer.drawToken();
         } catch (NoTokenException e) {
             System.out.println("No more tokens left in the Pile!");
+        }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         nextPlayer();
     }

@@ -186,27 +186,38 @@ public class Player {
 
     public void drawToken() throws NoTokenException {
 
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         if (Game.getGame().getTokenDrawPile().isEmpty())
             throw new NoTokenException("No more tokens left in the Pile!");
-        if (tokens.size() >= Constants.HAND_SIZE)
+
+        //return if there is no None token in tokens
+
+        if (tokens.size() >= Constants.HAND_SIZE && tokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE)
             return;
+
+
         var token = Game.getGame().getTokenDrawPile()
                 .get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
 
 
         //remove all tokens from tokens if the tokentype is None
-        for (var t : tokens) {
+        for (var t : new ArrayList<>(tokens)) {
             if (t.getTokenType() == TokenType.NONE)
                 tokens.remove(t);
         }
 
         tokens.add(token);
-        GameLogger.logDraw(this, token);
 
-        for (var i = 0; i < Constants.HAND_SIZE - tokens.size(); i++) {
+        while (tokens.size() < Constants.HAND_SIZE) {
             tokens.add(new Token(TokenType.NONE));
         }
+
+        GameLogger.logDraw(this, token);
 
         if (GameWindowHandler.getGameWindowHandler() != null) {
             GameWindowHandler.getGameWindowHandler().updatePlayerHandIcons(this);

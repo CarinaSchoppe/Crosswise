@@ -16,10 +16,10 @@ import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.game.AnimationTime;
 import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.TeamType;
-import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.FileInputReader;
 import de.fhwwedel.pp.util.special.FileOutputWriter;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +27,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -42,15 +41,20 @@ import java.util.ResourceBundle;
 public class GameWindow extends Application implements Initializable {
     private static GameWindow gameWindow;
 
-    public void replacerAmountText() {
-        if (GameWindow.getGameWindow() != null)
-            replacerAmountText.setText(Integer.parseInt(replacerAmountText.getText()) + 1 + "");
-
+    public static void notifyTurn(Player player) {
+        Platform.runLater(() -> {
+            var alert = new Alert(Alert.AlertType.INFORMATION,
+                    "The Player: \"" + player.getName() + "\" with ID: \"" + player.getPlayerID()
+                            + " is now your turn!");
+            alert.setTitle("Next Turn");
+            alert.setHeaderText("Next Players Turn");
+            alert.showAndWait();
+        });
     }
 
-    public void removerAmountText() {
+    public void replacerAmountText() {
         if (GameWindow.getGameWindow() != null)
-            removerAmountText.setText(Integer.parseInt(removerAmountText.getText()) + 1 + "");
+            Platform.runLater(() -> replacerAmountText.setText(Integer.parseInt(replacerAmountText.getText()) + 1 + ""));
 
     }
 
@@ -292,13 +296,11 @@ public class GameWindow extends Application implements Initializable {
 
     }
 
-    public static void notifyTurn(Player player) {
-        var alert = new Alert(Alert.AlertType.INFORMATION,
-                "The Player: \"" + player.getName() + "\" with ID: \"" + player.getPlayerID()
-                        + " is now your turn!");
-        alert.setTitle("Next Turn");
-        alert.setHeaderText("Next Players Turn");
-        alert.showAndWait();
+    public void removerAmountText() {
+        if (GameWindow.getGameWindow() != null)
+            Platform.runLater(() -> removerAmountText.setText(Integer.parseInt(removerAmountText.getText()) + 1 + "")
+            );
+
     }
 
     public static void gameWonNotification(Team won, boolean rowComplete) {
@@ -411,48 +413,21 @@ public class GameWindow extends Application implements Initializable {
         initialize();
         stage = primaryStage;
         primaryStage.show();
-        generateGrid();
+        GameWindowHandler.getGameWindowHandler().generateGrid();
+    }
+
+    public HashMap<String, ImageView> getFieldImages() {
+        return fieldImages;
     }
 
     private final HashMap<String, ImageView> fieldImages = new HashMap<>();
 
-    public void generateGrid() {
-        gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
-        int colcount = Constants.GAMEGRID_COLUMNS;
-        gameGrid.getChildren().clear();
-        int rowcount = Constants.GAMEGRID_ROWS;
-        for (int r = 0; r < Constants.GAMEGRID_ROWS; r++) {
-            for (int c = 0; c < Constants.GAMEGRID_COLUMNS; c++) {
-                ImageView imgNew = new ImageView();
-                int cellWidth = (int) gameGrid.getWidth() / colcount;
-                int cellHeight = (int) gameGrid.getHeight() / rowcount;
+    public void moverAmountText() {
+        if (GameWindow.getGameWindow() != null)
+            Platform.runLater(() -> moverAmountText.setText(Integer.parseInt(moverAmountText.getText()) + 1 + "")
+            );
 
-                System.out.println("grdPn.getHeight() = " + gameGrid.getHeight());
-                System.out.println("grdPn.getWidth() = " + gameGrid.getWidth());
-                System.out.println("cellHeight = " + cellHeight);
-                System.out.println("cellWidth = " + cellWidth);
-                imgNew.setFitWidth(cellWidth);
-                imgNew.setFitHeight(cellHeight);
-                imgNew.setPreserveRatio(false);
-                imgNew.setSmooth(true);
-                String id = "gridToken" + c + r;
-                fieldImages.put("" + c + "r", imgNew);
-                imgNew.setId(id);
 
-                System.out.println(imgNew.getId());
-
-                Image img = new Image("/pictures/1 - sun.png");
-                imgNew.setImage(img);
-
-                this.gridImages[r][c] = imgNew;
-                this.gameGrid.add(imgNew, c, r);
-
-                //the image shall resize when the cell resizes
-                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(colcount));
-                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(rowcount));
-
-            }
-        }
     }
 
     public Label getCurrentPlayerText() {
@@ -479,16 +454,15 @@ public class GameWindow extends Application implements Initializable {
         return stage;
     }
 
-    public void moverAmountText() {
-        if (GameWindow.getGameWindow() != null)
-            moverAmountText.setText(Integer.parseInt(moverAmountText.getText()) + 1 + "");
+    public void swapperAmountText() {
+        if (GameWindow.getGameWindow() != null) {
+            Platform.runLater(() -> swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + ""));
 
+        }
     }
 
-    public void swapperAmountText() {
-        if (GameWindow.getGameWindow() != null)
-            swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + "");
-
+    public GridPane getGameGrid() {
+        return gameGrid;
     }
 
 
@@ -570,5 +544,13 @@ public class GameWindow extends Application implements Initializable {
 
     public GridPane getPlayerHandThree() {
         return playerHandThree;
+    }
+
+    public ImageView[][] getGridImages() {
+        return gridImages;
+    }
+
+    public void setGridImages(ImageView[][] gridImages) {
+        this.gridImages = gridImages;
     }
 }
