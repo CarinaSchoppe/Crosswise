@@ -59,10 +59,10 @@ public class FileInputReader {
 
         for (int actionTileID = 0; actionTileID < gameData.usedActionTiles().length; actionTileID++) {
             TokenType token = switch (actionTileID) {
-                case 0 -> TokenType.Remover;
-                case 1 -> TokenType.Mover;
-                case 2 -> TokenType.Swapper;
-                case 3 -> TokenType.Replacer;
+                case 0 -> TokenType.REMOVER;
+                case 1 -> TokenType.MOVER;
+                case 2 -> TokenType.SWAPPER;
+                case 3 -> TokenType.REPLACER;
                 default -> throw new IllegalArgumentException("Invalid action tile ID");
             };
 
@@ -99,7 +99,7 @@ public class FileInputReader {
         for (int row = 0; row < game.getPlayingField().getFieldMap().length; row++) {
             for (int col = 0; col < game.getPlayingField().getFieldMap()[row].length; col++) {
                 var token = game.getPlayingField().getFieldMap()[row][col].getToken();
-                if (token.getTokenType() != TokenType.None) {
+                if (token.getTokenType() != TokenType.NONE) {
                     if (map.containsKey(token.getTokenType())) {
                         map.put(token.getTokenType(), map.get(token.getTokenType()) + 1);
                     } else {

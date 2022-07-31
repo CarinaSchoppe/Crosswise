@@ -11,26 +11,28 @@
 package de.fhwwedel.pp.util.game;
 
 public enum TokenType {
-    None(0, false),
-    Sun(1, false),
-    Cross(2, false),
-    Triangle(3, false),
-    Square(4, false),
-    Pentagon(5, false),
-    Star(6, false),
-    Remover(7, true),
-    Mover(8, true),
-    Swapper(9, true),
-    Replacer(10, true);
+    NONE(0, false, "pictures/0none.png"),
+    SUN(1, false, "pictures/1sun.png"),
+    CROSS(2, false, "pictures/2cross.png"),
+    TRIANGLE(3, false, "pictures/3triangle.png"),
+    SQUARE(4, false, "pictures/4square.png"),
+    PENTAGON(5, false, "pictures/5pentagon.png"),
+    STAR(6, false, "pictures/6star.png"),
+    REMOVER(7, true, "pictures/7remove.png"),
+    MOVER(8, true, "pictures/8move.png"),
+    SWAPPER(9, true, "pictures/9swaponboard.png"),
+    REPLACER(10, true, "pictures/10swapwithhand.png");
 
 
     private final int value;
 
     private final boolean special;
+    private final String imagePath;
 
-    TokenType(int value, boolean special) {
+    TokenType(int value, boolean special, String imagePath) {
         this.value = value;
         this.special = special;
+        this.imagePath = imagePath;
     }
 
     public static TokenType getTokenType(int token) {
@@ -39,12 +41,16 @@ public enum TokenType {
                 return type;
             }
         }
-        return None;
+        return NONE;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 
     @Override
-    public String toString(){
-        return ""+value;
+    public String toString() {
+        return "" + value;
     }
 
     public boolean isSpecial() {
