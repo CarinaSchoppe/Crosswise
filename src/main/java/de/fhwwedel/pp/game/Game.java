@@ -147,6 +147,7 @@ public class Game {
                 System.out.println("Game is over, but no team has won!");
                 //TODO: Handle game over! GUI stuff
             } else {
+                System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
                 System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
             }
             GameLogger.saveLogToFile("Logfile");

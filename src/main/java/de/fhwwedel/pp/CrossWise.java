@@ -46,7 +46,7 @@ public class CrossWise {
     public static void main(String... args) {
 
         gameThread.start();
-        GameWindow.start();
+      //TODO:  GameWindow.start();
 
 
     }

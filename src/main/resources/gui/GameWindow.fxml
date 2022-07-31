@@ -1,43 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="masterGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18">
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane fx:id="masterGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="191.33331298828125" minHeight="10.0" prefHeight="23.333322525024414" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="383.3333492279053" minHeight="10.0" prefHeight="376.6666774749756" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="191.33331298828125" minHeight="10.0" prefHeight="23.333322525024414" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="383.3333492279053" minHeight="10.0" prefHeight="376.6666774749756" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <MenuBar fx:id="menuBar" prefHeight="12.0" prefWidth="1079.0">
+        <MenuBar fx:id="menuBar" prefHeight="12.0" prefWidth="1079.0" GridPane.valignment="TOP">
             <menus>
                 <Menu mnemonicParsing="false" text="Crosswise">
                     <items>
-                        <MenuItem fx:id="newGameButton" mnemonicParsing="false" onAction="#clickNewGameButton" text="Neues Spiel"/>
-                        <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#clickSaveGameButton" text="Spiel Speichern"/>
-                        <MenuItem fx:id="loadGameButton" mnemonicParsing="false" onAction="#clickLoadGameButton" text="Spiel Laden"/>
-                        <MenuItem fx:id="endGameButton" mnemonicParsing="false" onAction="#clickEndGameButton" text="Beenden"/>
+                        <MenuItem fx:id="newGameButton" mnemonicParsing="false" onAction="#clickNewGameButton" text="Neues Spiel" />
+                        <MenuItem fx:id="saveGameButton" mnemonicParsing="false" onAction="#clickSaveGameButton" text="Spiel Speichern" />
+                        <MenuItem fx:id="loadGameButton" mnemonicParsing="false" onAction="#clickLoadGameButton" text="Spiel Laden" />
+                        <MenuItem fx:id="endGameButton" mnemonicParsing="false" onAction="#clickEndGameButton" text="Beenden" />
                     </items>
                 </Menu>
                 <Menu fx:id="menuPunkte" mnemonicParsing="false" text="Punkte">
                     <items>
-                        <CheckMenuItem fx:id="pointsPerTeamButton" mnemonicParsing="false" text="Punkte pro Team anzeigen"/>
-                        <CheckMenuItem fx:id="pointsPerRowColumnButton" mnemonicParsing="false" text="Punkte pro Zeile/Spalte anzeigen"/>
+                        <CheckMenuItem fx:id="pointsPerTeamButton" mnemonicParsing="false" text="Punkte pro Team anzeigen" />
+                        <CheckMenuItem fx:id="pointsPerRowColumnButton" mnemonicParsing="false" text="Punkte pro Zeile/Spalte anzeigen" />
                     </items>
                 </Menu>
                 <Menu fx:id="menuComputer" mnemonicParsing="false" text="Computer">
                     <items>
-                        <CheckMenuItem fx:id="showComputerHandButton" mnemonicParsing="false" text="Computer Hand anzeigen"/>
+                        <CheckMenuItem fx:id="showComputerHandButton" mnemonicParsing="false" text="Computer Hand anzeigen" />
                         <Menu mnemonicParsing="false" text="Animations Geschwindigkeit">
                             <items>
-                                <RadioMenuItem fx:id="lowAnimationSpeedButton" mnemonicParsing="false" onAction="#changeAnimationSpeedLow" text="Langsam"/>
-                                <RadioMenuItem fx:id="mediumAnimationSpeedButton" mnemonicParsing="false" onAction="#changeAnimationSpeedMedium" text="Mittel"/>
-                                <RadioMenuItem fx:id="fastAnimationSpeedButton" mnemonicParsing="false" onAction="#changeAnimationSpeedFast" text="Schnell"/>
+                                <RadioMenuItem fx:id="lowAnimationSpeedButton" mnemonicParsing="false" onAction="#changeAnimationSpeedLow" text="Langsam" />
+                                <RadioMenuItem fx:id="mediumAnimationSpeedButton" mnemonicParsing="false" onAction="#changeAnimationSpeedMedium" text="Mittel" />
+                                <RadioMenuItem fx:id="fastAnimationSpeedButton" mnemonicParsing="false" onAction="#changeAnimationSpeedFast" text="Schnell" />
                             </items>
                         </Menu>
                     </items>
@@ -46,164 +55,240 @@
         </MenuBar>
         <GridPane fx:id="innerGrid" GridPane.rowIndex="1">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.33331298828125" minWidth="10.0" prefWidth="157.33336385091147"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="447.9999898274739" minWidth="10.0" prefWidth="443.33330281575513"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.33331298828125" minWidth="10.0" prefWidth="157.33336385091147" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="447.9999898274739" minWidth="10.0" prefWidth="443.33330281575513" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <GridPane fx:id="dividerGrid">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="110.0" minHeight="0.0" prefHeight="68.99999761581421" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="272.0" minHeight="10.0" prefHeight="182.66666666666669" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="123.33333333333331" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="110.0" minHeight="0.0" prefHeight="68.99999761581421" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="272.0" minHeight="10.0" prefHeight="182.66666666666669" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="123.33333333333331" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
                         <GridPane fx:id="specialStuffGrid" GridPane.rowIndex="2">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints maxHeight="36.33331298828125" minHeight="10.0" prefHeight="30.66667683919271" vgrow="SOMETIMES"/>
-                                <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="21.99998982747396" vgrow="SOMETIMES"/>
-                                <RowConstraints maxHeight="71.33332316080728" minHeight="10.0" prefHeight="71.33332316080728" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="36.33331298828125" minHeight="10.0" prefHeight="30.66667683919271" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="21.99998982747396" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="71.33332316080728" minHeight="10.0" prefHeight="71.33332316080728" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <GridPane fx:id="specialUsedGrid" GridPane.rowIndex="1">
                                     <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                                         <Label fx:id="replacerAmountText" alignment="CENTER" prefHeight="100.0" prefWidth="95.0" text="0" GridPane.columnIndex="3">
                                             <font>
-                                                <Font size="25.0"/>
+                                                <Font size="25.0" />
                                             </font>
                                         </Label>
                                         <Label fx:id="removerAmountText" alignment="CENTER" prefHeight="100.0" prefWidth="95.0" text="0">
                                             <font>
-                                                <Font size="25.0"/>
+                                                <Font size="25.0" />
                                             </font>
                                         </Label>
                                         <Label fx:id="swapperAmountText" alignment="CENTER" prefHeight="100.0" prefWidth="95.0" text="0" GridPane.columnIndex="2">
                                             <font>
-                                                <Font size="25.0"/>
+                                                <Font size="25.0" />
                                             </font>
                                         </Label>
                                         <Label fx:id="moverAmountText" alignment="CENTER" prefHeight="100.0" prefWidth="95.0" text="0" GridPane.columnIndex="1">
                                             <font>
-                                                <Font size="25.0"/>
+                                                <Font size="25.0" />
                                             </font>
                                         </Label>
                                     </children>
                                 </GridPane>
                                 <GridPane fx:id="specialImagesGrid" GridPane.rowIndex="2">
                                     <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                                         <ImageView fx:id="imageRemover" fitHeight="70.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@../pictures/7%20-%20remove.png"/>
+                                                <Image url="@../pictures/7%20-%20remove.png" />
                                             </image>
                                         </ImageView>
                                         <ImageView fx:id="imageMover" fitHeight="66.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                                             <image>
-                                                <Image url="@../pictures/8%20-%20move.png"/>
+                                                <Image url="@../pictures/8%20-%20move.png" />
                                             </image>
                                         </ImageView>
                                         <ImageView fx:id="imageReplacer" fitHeight="57.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                             <image>
-                                                <Image url="@../pictures/9%20-%20swap%20on%20board.png"/>
+                                                <Image url="@../pictures/9%20-%20swap%20on%20board.png" />
                                             </image>
                                         </ImageView>
                                         <ImageView fx:id="imageSwapper" fitHeight="82.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                                             <image>
-                                                <Image url="@../pictures/10%20-%20swap%20with%20hand.png"/>
+                                                <Image url="@../pictures/10%20-%20swap%20with%20hand.png" />
                                             </image>
                                         </ImageView>
                                     </children>
                                 </GridPane>
                                 <Label fx:id="usedSpacialLabel" alignment="CENTER" prefHeight="27.0" prefWidth="157.0" text="Benutzte Spezial Steine:" wrapText="true">
                                     <font>
-                                        <Font size="14.0"/>
+                                        <Font size="14.0" />
                                     </font>
                                 </Label>
                             </children>
                         </GridPane>
                         <GridPane fx:id="pointsTableGridPane" prefHeight="243.0" prefWidth="185.0" GridPane.rowIndex="1">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints maxHeight="71.33334732055664" minHeight="0.0" prefHeight="26.0000057220459" vgrow="SOMETIMES"/>
-                                <RowConstraints maxHeight="192.66666094462076" minHeight="10.0" prefHeight="186.66666094462076" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="71.33334732055664" minHeight="0.0" prefHeight="26.0000057220459" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="192.66666094462076" minHeight="10.0" prefHeight="186.66666094462076" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <ImageView fx:id="pointsTableImageView" fitHeight="140.0" fitWidth="186.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                                     <image>
-                                        <Image url="@../pictures/Punktetabelle.png"/>
+                                        <Image url="@../pictures/Punktetabelle.png" />
                                     </image>
                                 </ImageView>
                                 <Label fx:id="pointsTableLabel" alignment="CENTER" prefHeight="51.0" prefWidth="194.0" text="Punktetabelle:">
                                     <font>
-                                        <Font size="18.0"/>
+                                        <Font size="18.0" />
                                     </font>
                                 </Label>
                             </children>
                         </GridPane>
                         <GridPane fx:id="playersStuffGrid">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Label fx:id="playersTurnLabel" prefHeight="71.0" prefWidth="107.0" text="Spieler am Zug:  " wrapText="true">
                                     <font>
-                                        <Font size="13.0"/>
+                                        <Font size="13.0" />
                                     </font>
                                     <padding>
-                                        <Insets left="20.0"/>
+                                        <Insets left="20.0" />
                                     </padding>
                                 </Label>
                                 <Label fx:id="currentPlayerText" prefHeight="195.0" prefWidth="339.0" text="PlayerName" wrapText="true" GridPane.columnIndex="1">
                                     <font>
-                                        <Font size="13.0"/>
+                                        <Font size="13.0" />
                                     </font>
                                     <opaqueInsets>
-                                        <Insets left="20.0"/>
+                                        <Insets left="20.0" />
                                     </opaqueInsets>
                                 </Label>
                             </children>
                         </GridPane>
                     </children>
                 </GridPane>
-                <GridPane fx:id="gameGrid" prefHeight="377.0" prefWidth="445.0" GridPane.columnIndex="1">
+            <GridPane GridPane.columnIndex="1">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="102.0" minWidth="10.0" prefWidth="33.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="327.0" minWidth="10.0" prefWidth="327.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="39.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.0" minWidth="10.0" prefWidth="40.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="279.0" minHeight="10.0" prefHeight="279.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="216.0" minHeight="0.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="148.0" minHeight="0.0" prefHeight="28.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                      <GridPane fx:id="gameGrid" prefHeight="377.0" prefWidth="445.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                      </GridPane>
+                  <GridPane GridPane.rowIndex="1">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                </GridPane>
+                  </GridPane>
+                  <GridPane GridPane.columnIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane GridPane.columnIndex="3" GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+               </children>
+            </GridPane>
             </children>
         </GridPane>
     </children>
