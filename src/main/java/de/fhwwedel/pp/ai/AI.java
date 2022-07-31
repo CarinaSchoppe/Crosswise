@@ -23,6 +23,11 @@ import de.fhwwedel.pp.util.special.Constants;
 import java.util.*;
 
 @SuppressWarnings("DuplicatedCode")
+/**
+ * Class of an AI player
+ *
+ * @author Jacob Klövekorn
+ */
 public class AI extends Player {
     public AI(int playerID, boolean active, String name) {
         super(playerID, active, name);

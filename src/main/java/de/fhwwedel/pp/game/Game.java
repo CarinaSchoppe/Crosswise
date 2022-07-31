@@ -26,27 +26,62 @@ import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
 
+/**
+ * Class for a game instance of the game Crosswise
+ *
+ * @author Jacob Klövekorn
+ */
 public class Game {
-
+    /**
+     * Static attribut for the current running game
+     */
     private static Game game;
+    /**
+     * Playing field of the game
+     */
     private final PlayingField playingField;
+    /**
+     * Time for an animation of an AI turn
+     */
     private AnimationTime animationTime = AnimationTime.MIDDLE;
+    /**
+     * Players, that are playing this game round
+     */
     private final ArrayList<Player> players;
+    /**
+     * Array of amount of used special tokens
+     */
     private final ArrayList<Token> usedSpecialTokens = new ArrayList<>();
+    /**
+     * Draw pile of Tokens the players can draw from
+     */
     private ArrayList<Token> tokenDrawPile = new ArrayList<>();
+    /**
+     * Instance of the GameLogic running for this game
+     */
     private GameLogic gameLogic;
+    /**
+     * Current player
+     */
     private Player currentPlayer = null;
+
+    //----------------------------------------------------------------------------------------------
 
     public Game(PlayingField playingField, ArrayList<Player> players) {
         this.playingField = playingField;
         this.players = players;
     }
 
-
+    /**
+     * Tests if the Teams have the same amount of active players
+     *
+     * @return true, if they have the same amount, otherwise false
+     */
     public boolean teamSizeEqual() {
         if (Team.getHorizontalTeam().getPlayers().size() == Team.getVerticalTeam().getPlayers().size()) {
             return true;
         }
+        //Exception, if the game got created with no corresponding GameWindow
         if (GameWindow.getGameWindow() == null) {
             throw new RuntimeException("Window is null");
         }
@@ -58,6 +93,9 @@ public class Game {
         return false;
     }
 
+    /**
+     * Creates a new DrawPile and fills it with tokens
+     */
     private void fillPile() {
         this.tokenDrawPile = new ArrayList<>();
         for (var token : TokenType.values()) {
@@ -67,7 +105,7 @@ public class Game {
                     tokenDrawPile.add(new Token(token));
                 }
             } else {
-                for (int i = 0; i < Constants.AMOUNT_NORMAL_TOKENS; i++) { //42     54-36-8-12
+                for (int i = 0; i < Constants.AMOUNT_NORMAL_TOKENS; i++) { //42 tokens
                     tokenDrawPile.add(new Token(token));
                 }
             }
@@ -80,19 +118,28 @@ public class Game {
         }
     }
 
+    /**
+     * Makes every Player draw Tokens, until their hands are full
+     */
     private void playerPileSetup() {
         for (Player player : players) {
             for (int i = 0; i < Constants.HAND_SIZE; i++) {
                 try {
                     player.drawToken();
                 } catch (NoTokenException e) {
-                    throw new RuntimeException("No more tokens left in the Pile while startup! Configuration error!");
+                    throw new RuntimeException("No more tokens left in the Pile while startup! "
+                            + "Configuration error!");
                 }
             }
         }
     }
 
-
+    /**
+     * Creates new gameLogic, creates a drawPile and makes all players draw tokens, until their
+     * hands are full. If the game is loaded from a file, skip the creating and drawing
+     *
+     * @param fileLoaded was the game loaded from a file
+     */
     public void setup(boolean fileLoaded) {
         gameLogic = new GameLogic(this);
         handleOver();
@@ -105,8 +152,13 @@ public class Game {
         }
     }
 
+    /**
+     * Computes logic for having the next players turn
+     */
     private void nextPlayer() {
+        //gets all active players
         var players = this.players.stream().filter(Player::isActive).toList();
+        //puts the first ever to play player to the one with the ID: 0
         if (currentPlayer == null && !players.isEmpty()) {
             currentPlayer = players.get(0);
         } else if (currentPlayer != null && !players.isEmpty()) {
@@ -117,15 +169,16 @@ public class Game {
                 currentPlayer = players.get(index + 1);
             }
         } else {
+            //handler for the fact that the game is over
             currentPlayer = null;
             handleOver();
             return;
         }
 
-
         if (GameWindow.getGameWindow() != null)
             Platform.runLater(() -> GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName()));
         System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
+        //if the player is an AI player, let the AI make their move
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
@@ -133,6 +186,11 @@ public class Game {
         }
     }
 
+    /**
+     * Computes logic for the ending of a game
+     *
+     * @return true, if the game is over
+     */
     private boolean handleOver() {
         var over = gameLogic.isGameOver(playingField);
         if (players.isEmpty()) {
@@ -141,7 +199,6 @@ public class Game {
             return true;
         } else if (over.containsKey(true)) {
             var team = over.get(true);
-
             //noinspection StatementWithEmptyBody
             if (team == null) {
                 System.out.println("Game is over, but no team has won!");
@@ -153,9 +210,13 @@ public class Game {
             GameLogger.saveLogToFile("Logfile");
             return true;
         }
+        //TODO ??
         return false;
     }
 
+    /**
+     * Starts the Game
+     */
     public void start() {
         if (!teamSizeEqual()) {
             return;
@@ -167,11 +228,16 @@ public class Game {
         }
     }
 
+    /**
+     * Computes logic for turns, that are over
+     */
     public void turnDone() {
         Team.givePoints();
+        //if the turn is over, do nothing
         if (handleOver()) {
             return;
         }
+        //otherwise try to draw a token
         try {
             currentPlayer.drawToken();
         } catch (NoTokenException e) {
@@ -179,11 +245,11 @@ public class Game {
         }
         try {
             if (CrossWise.slow)
-
                 Thread.sleep(CrossWise.delay);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        //Let the next player do their turn
         nextPlayer();
     }
 
@@ -222,7 +288,6 @@ public class Game {
     public static void setGame(Game game) {
         Game.game = game;
     }
-
 
     public void setAnimationTime(AnimationTime animationTime) {
         this.animationTime = animationTime;

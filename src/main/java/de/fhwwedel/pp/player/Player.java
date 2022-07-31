@@ -27,13 +27,31 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
+/**
+ * Class for a player of the game Crosswise
+ *
+ * @author Jacob Klövekorn
+ */
 public class Player {
-
+    /**
+     * Tokens on the hand of the player
+     */
     private final ArrayList<Token> tokens = new ArrayList<>();
+    /**
+     * ID of the player
+     */
     private final int playerID;
+    /**
+     * Boolean, if the player is active or inactive
+     */
     private final boolean isActive;
+    /**
+     * Name of the player
+     */
     private final String name;
-    private int points = 0;
+    /**
+     * The corresponding team of the player
+     */
     private Team team;
 
     /**
@@ -335,14 +353,6 @@ public class Player {
 
     public boolean isActive() {
         return isActive;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public String getName() {

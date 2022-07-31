@@ -15,25 +15,61 @@ import de.fhwwedel.pp.player.Player;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the Team of the game Crosswise
+ *
+ * @author Jacob Klövekorn
+ */
 public class Team {
-
+    /**
+     * Static instance of a horizontal team
+     */
     private static final Team horizontalTeam = new Team(TeamType.HORIZONTAL);
+    /**
+     * Static instance of a vertical team
+     */
     private static final Team verticalTeam = new Team(TeamType.VERTICAL);
+    /**
+     * Static instance of an inactive team
+     */
     private static final Team deactiveTeam = new Team(TeamType.DEACTIVE);
+    /**
+     * TeamType
+     */
     private final TeamType teamType;
+    /**
+     * List of players in the team
+     */
     private final ArrayList<Player> players = new ArrayList<>();
+    /**
+     * Current Points of the team
+     */
     private int points;
 
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * Constructor
+     *
+     * @param teamType TeamType for the team
+     */
     public Team(TeamType teamType) {
         this.teamType = teamType;
     }
 
+    /**
+     * Adds player into the corresponding team, based on their ID and activity
+     *
+     * @param player Player to add into the team
+     * @return returns the updated team
+     */
     public static Team addPlayerToTeam(Player player) {
+        //if the player is inactive
         if (!player.isActive()) {
             deactiveTeam.players.add(player);
             return deactiveTeam;
         }
-
+        //if the player is active
         if (player.getPlayerID() % 2 == 0) {
             verticalTeam.players.add(player);
             return verticalTeam;
@@ -41,9 +77,11 @@ public class Team {
             horizontalTeam.players.add(player);
             return horizontalTeam;
         }
-
     }
 
+    /**
+     * Calculate points for the teams
+     */
     public static void givePoints() {
         var pointsMap = AI.calculateCurrentOverallPoints();
         horizontalTeam.points = 0;

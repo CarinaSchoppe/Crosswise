@@ -14,6 +14,11 @@ import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 
+/**
+ * Class for a specific move of a token in the game Crosswise
+ *
+ * @author Jacob Klövekorn
+ */
 public class TokenMove {
 
     /**
@@ -49,7 +54,17 @@ public class TokenMove {
      */
     private Position secondaryMovePosition = null;
 
+    //----------------------------------------------------------------------------------------------
 
+    /**
+     * Constructor
+     *
+     * @param primaryMovePosition first move position (for clarification look at class variable)
+     * @param relativeChange change of points with this move
+     * @param token Token, that got used for this move
+     * @param gameWinning Is the move game winning
+     * @param isPreventingLoss Is the move preventing a loss
+     */
     public TokenMove(Position primaryMovePosition, Integer relativeChange,
                      TokenType token, boolean gameWinning, boolean isPreventingLoss) {
         this.primaryMovePosition = primaryMovePosition;
@@ -59,6 +74,16 @@ public class TokenMove {
         this.isPreventingLoss = isPreventingLoss;
     }
 
+    /**
+     * Constructor for specific special TokenTypes
+     *
+     * @param primaryMovePosition first move position (for clarification look at class variable)
+     * @param secondaryMovePosition second move position (for clarification look at class variable)
+     * @param relativeChange change of points with this move
+     * @param token Token, that got used for this move
+     * @param gameWinning Is the move game winning
+     * @param isPreventingLoss Is the move preventing a loss
+     */
     public TokenMove(Position primaryMovePosition, Position secondaryMovePosition, Integer relativeChange,
                      TokenType token, boolean gameWinning, boolean isPreventingLoss) {
         this(primaryMovePosition, relativeChange, token, gameWinning, isPreventingLoss);

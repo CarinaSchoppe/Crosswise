@@ -10,12 +10,28 @@
 
 package de.fhwwedel.pp.util.game;
 
-
+/**
+ * Class for a token for the Game Crosswise
+ *
+ * @author Jacob Klövekorn
+ */
 public class Token {
-
+    /**
+     * Type of the Token
+     */
     private final TokenType tokenType;
+    /**
+     * Position of the Token, if this is set its a Token on the field of the game
+     */
     private Position position;
 
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * Constructor
+     *
+     * @param tokenType Type of the new Token
+     */
     public Token(TokenType tokenType) {
         this.tokenType = tokenType;
         position = null;

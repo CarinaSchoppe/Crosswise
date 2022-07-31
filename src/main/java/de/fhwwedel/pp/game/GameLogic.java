@@ -15,22 +15,33 @@ import de.fhwwedel.pp.util.game.TokenType;
 
 import java.util.HashMap;
 
+/**
+ * Record for the game logic for the game Crosswise
+ *
+ * @param game Current Game
+ * @author Jacob Klövekorn
+ */
 public record GameLogic(Game game) {
 
-
+    /**
+     * Checks, if the game is over and which team won if it is
+     *
+     * @param field current playing field
+     * @return Map, with the boolean if the game is over and a team, that won
+     */
     public HashMap<Boolean, Team> isGameOver(PlayingField field) {
         var map = new HashMap<Boolean, Team>();
+        //if horizontal Team won via a full row
         if (checkRows(field)) {
             map.put(true, Team.getHorizontalTeam());
             return map;
         }
-
+        //if the vertical team won via a full collumn
         if (checkColumns(field)) {
             map.put(true, Team.getVerticalTeam());
             return map;
         }
-
-        //all filled
+        //check if there are still tokens missing on the playing field
         for (int i = 0; i < field.getSize(); i++) {
             for (int j = 0; j < field.getSize(); j++) {
                 if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE) {
@@ -39,7 +50,7 @@ public record GameLogic(Game game) {
                 }
             }
         }
-
+        //if both teams have the same amount of points
         if (Team.getHorizontalTeam().getPoints() == Team.getVerticalTeam().getPoints()) {
             map.put(true, null);
         } else if (Team.getHorizontalTeam().getPoints() > Team.getVerticalTeam().getPoints()) {
