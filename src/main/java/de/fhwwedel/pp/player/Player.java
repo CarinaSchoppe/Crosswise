@@ -36,24 +36,45 @@ public class Player {
     private int points = 0;
     private Team team;
 
+    /**
+     * Constructor
+     *
+     * @param playerID Player ID of that player
+     * @param isActive Status, if the player is active
+     * @param name Name of the player
+     */
     public Player(int playerID, boolean isActive, String name) {
         this.playerID = playerID;
         this.isActive = isActive;
         this.name = name;
     }
 
+    /**
+     * add the player to a team
+     */
     public void create() {
         this.team = Team.addPlayerToTeam(this);
     }
 
     //TODO: after turn: call Game#nextPlayer()
 
+    /**
+     * Perform a turn for a Symbol-Token
+     *
+     * @param token Token to perform the move with
+     * @param position Position, where the token should be placed
+     * @return true, if everything went correctly, otherwise false
+     */
     public boolean normalTokenTurn(final Token token, final Position position) {
-        if (hasToken(token))
+        //return false, if the token isn't in the hand of the player
+        if (hasToken(token)) {
             return false;
-        var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken().getTokenType() != TokenType.NONE)
+        }
+        Position field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
+        //return false, if the field is already occupied with a token
+        if (field.getToken().getTokenType() != TokenType.NONE) {
             return false;
+        }
         tokens.remove(getCorrespondingToken(token));
         field.setToken(token);
         GameLogger.logMove(this, token, position, Action.PLACE);
@@ -61,6 +82,12 @@ public class Player {
         return true;
     }
 
+    /**
+     * Checks if the token is in the hand of the player
+     *
+     * @param token Token to be checked
+     * @return true, if it isn't, otherwise false
+     */
     private boolean hasToken(Token token) {
         for (var t : tokens) {
             if (t.equals(token))
@@ -69,39 +96,7 @@ public class Player {
         return true;
     }
 
-    public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition,
-                                     final Position handTokenPosition) {
-        if (hasToken(token))
-            return false;
-        if (token.getTokenType() != TokenType.REPLACER)
-            return false;
-        if (hasToken(getCorrespondingToken(handTokenPosition)))
-            return false;
 
-        var field =
-                Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
-        if (field.getToken().getTokenType() == TokenType.NONE)
-            return false;
-        var fieldToken = getCorrespondingToken(token);
-        var handToken = getCorrespondingToken(handTokenPosition);
-        tokens.remove(fieldToken);
-        tokens.remove(handToken);
-        field.setToken(handToken);
-        if (GameWindow.getGameWindow() != null)
-            GameWindow.getGameWindow().replacerAmountText();
-        tokens.add(field.getToken());
-        assert fieldToken != null;
-        GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
-        assert handToken != null;
-        GameLogger.logMove(this, handToken, field, Action.PLACE);
-        return true;
-    }
-
-    private Token getCorrespondingToken(Position position) {
-        if (!position.isHand())
-            return null;
-        return tokens.get(position.getHandPosition());
-    }
 
     public boolean removerTokenTurn(final Token token, final Position position) {
         if (token.getTokenType() != TokenType.REMOVER)
@@ -177,6 +172,48 @@ public class Player {
         return true;
     }
 
+    /**
+     * Perform a move for a Replacer-Token
+     *
+     * @param token Token to be replaced
+     * @param fieldTokenPosition position on field, that will be swapped with hand
+     * @param handTokenPosition position on hand, that will be swapped with field
+     * @return true, if everything went correctly, otherwise false
+     */
+    public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition,
+            final Position handTokenPosition) {
+        if (hasToken(token))
+            return false;
+        if (token.getTokenType() != TokenType.REPLACER)
+            return false;
+        if (hasToken(getCorrespondingToken(handTokenPosition)))
+            return false;
+
+        var field =
+                Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
+        if (field.getToken().getTokenType() == TokenType.NONE)
+            return false;
+        var fieldToken = getCorrespondingToken(token);
+        var handToken = getCorrespondingToken(handTokenPosition);
+        tokens.remove(fieldToken);
+        tokens.remove(handToken);
+        field.setToken(handToken);
+        if (GameWindow.getGameWindow() != null)
+            GameWindow.getGameWindow().replacerAmountText();
+        tokens.add(field.getToken());
+        assert fieldToken != null;
+        GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
+        assert handToken != null;
+        GameLogger.logMove(this, handToken, field, Action.PLACE);
+        return true;
+    }
+
+    /**
+     * Get Token on the hand which is similar to the given Token (TokenType)
+     *
+     * @param token Token, which will be compared
+     * @return corresponding Token, null if it didn't exist
+     */
     private Token getCorrespondingToken(Token token) {
         for (var t : tokens) {
             if (t.equals(token))
@@ -185,36 +222,52 @@ public class Player {
         return null;
     }
 
-    public void drawToken() throws NoTokenException {
+    /**
+     * Get Token on the hand which is similar to the token on the given handPosition (TokenType)
+     *
+     * @param position Position on the hand of the player
+     * @return corresponding Token, null it wasn't a hand position
+     */
+    private Token getCorrespondingToken(Position position) {
+        if (!position.isHand())
+            return null;
+        return tokens.get(position.getHandPosition());
+    }
 
+    /**
+     * Draw a token out of the drawPile of the game
+     *
+     * @throws NoTokenException If no more tokens are left
+     */
+    public void drawToken() throws NoTokenException {
+        //Test method to slow down the drawing of Tokens
         try {
             if (CrossWise.slow)
                 Thread.sleep(CrossWise.delay);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        //If no tokens are left in the pile, throw NoTokensException
         if (Game.getGame().getTokenDrawPile().isEmpty())
             throw new NoTokenException("No more tokens left in the Pile!");
 
         //return if there is no None token in tokens
-
         if (tokens.size() >= Constants.HAND_SIZE && tokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE)
             return;
-
 
         var token = Game.getGame().getTokenDrawPile()
                 .get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
 
 
-        //remove all tokens from tokens if the tokentype is None
+        //remove all tokens from tokens if the TokenType is None
         for (var t : new ArrayList<>(tokens)) {
             if (t.getTokenType() == TokenType.NONE)
                 tokens.remove(t);
         }
-
+        //Add the token to the hand
         tokens.add(token);
-
+        //Fill up hand with empty Tokens (at start of the game)
         while (tokens.size() < Constants.HAND_SIZE) {
             tokens.add(new Token(TokenType.NONE));
         }
@@ -227,6 +280,12 @@ public class Player {
 
     }
 
+    /**
+     * Calculates the amount of a specific token in the player hand
+     *
+     * @param token Token to search occurrences for
+     * @return Amount of occurrences
+     */
     public int tokenAmountInHand(TokenType token) {
         //the amount of tokens with the same TokenType in hand
         int amount = 0;
@@ -237,6 +296,11 @@ public class Player {
         return amount;
     }
 
+    /**
+     * Get a Set of Indexes of only Symbol-Tokens, that are on the hand
+     *
+     * @return HashSet of Indexes of only Symbol-Tokens on hand
+     */
     public HashSet<Integer> getHandSymbolTokenPositions() {
         Token[] handCopy = this.getTokens().toArray(new Token[0]);
         HashSet<Integer> returnSet = new HashSet<>();
@@ -248,11 +312,15 @@ public class Player {
         return returnSet;
     }
 
+    /**
+     * converts the Hand of the player to an Array
+     *
+     * @return returns the hand of the player as an TokenType Array
+     */
     public TokenType[] convertHandToTokenTypeArray() {
         TokenType[] array = new TokenType[Constants.HAND_SIZE];
         for (var index = 0; index < tokens.size(); index++) {
             array[index] = tokens.get(index).getTokenType();
-
         }
         return array;
     }
@@ -281,6 +349,11 @@ public class Player {
         return name;
     }
 
+    /**
+     * Creates String representation of the players Hand
+     *
+     * @return String representation of the players Hand
+     */
     public String handRepresentation() {
         StringBuilder builder = new StringBuilder();
         builder.append("[");

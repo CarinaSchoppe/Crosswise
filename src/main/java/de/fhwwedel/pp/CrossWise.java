@@ -28,7 +28,7 @@ import java.util.List;
 public class CrossWise {
 
 
-    public static boolean slow = true;
+    public static boolean slow = false;
     public static int delay = 5000;
 
     private static Thread gameThread = new Thread(() -> {
