@@ -49,7 +49,8 @@ public record GameWindowHandler(GameWindow gameWindow) {
             var imageView = new ImageView(player.getTokens().get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            gameWindow.getPlayerHandFour().getChildren().add(imageView);
+            gameWindow.getPlayerHandFour().add(imageView, 0, i);
+
         }
     }
 
@@ -61,7 +62,7 @@ public record GameWindowHandler(GameWindow gameWindow) {
             var imageView = new ImageView(player.getTokens().get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            gameWindow.getPlayerHandThree().getChildren().add(imageView);
+            gameWindow.getPlayerHandThree().add(imageView, i, 0);
         }
     }
 
@@ -73,7 +74,7 @@ public record GameWindowHandler(GameWindow gameWindow) {
             var imageView = new ImageView(player.getTokens().get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            gameWindow.getPlayerHandTwo().getChildren().add(imageView);
+            gameWindow.getPlayerHandTwo().add(imageView, 0, i);
         }
     }
 

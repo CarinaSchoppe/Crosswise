@@ -71,6 +71,12 @@ public class Game {
                 }
             }
         }
+        for (int i = 0; i < tokenDrawPile.size(); i++) {
+            int randomIndex = (int) (Math.random() * tokenDrawPile.size());
+            var temp = tokenDrawPile.get(i);
+            tokenDrawPile.set(i, tokenDrawPile.get(randomIndex));
+            tokenDrawPile.set(randomIndex, temp);
+        }
     }
 
     private void playerPileSetup() {
