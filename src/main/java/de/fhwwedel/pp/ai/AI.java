@@ -41,65 +41,34 @@ import java.util.*;
     //##############################################################################################
 
     /**
-     * Call Player Turn method for corresponding TokenMove
+     * Calculates the occurrences of each token (except for the empty one) for a given line
+     *
+     * @param tokens Line of tokens
+     * @return Map with TokenTypes and their occurrences in the line
      */
-    public void makeMove() {
-        TokenMove move = calculateAIMove();
-        switch (move.getToken().getValue()) {
-            case 1, 2, 3, 4, 5, 6 -> {
-                if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+    private static EnumMap<TokenType, Integer> calculateOccurrencesPerLine(TokenType[] tokens) {
+        EnumMap<TokenType, Integer> map = new EnumMap<>(TokenType.class);
+        Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
 
-            }
-            case 7 -> {
-                if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-            }
-            case 8 -> {
-                if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-            }
-            case 9 -> {
-                if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-            }
-            case 10 -> {
-                if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-            }
-        }
-        performAnimation();
-        Game.getGame().turnDone();
-
+        map.remove(null);
+        map.remove(TokenType.NONE);
+        return map;
     }
 
     /**
-     * Calculates best Move for AI Player. First it calculates the best Move per Token in hand and
-     * then compares those two with each other
+     * Swaps a matrix diagonally
      *
-     * @return Best Move the AI can do with his Hand-Tokens
+     * @param input matrix that will be swapped
+     * @return swapped matrix
      */
-    public TokenMove calculateAIMove() {
-        ArrayList<TokenMove> bestMovePerToken = new ArrayList<>();
-        TokenType[] playerHand = this.convertHandToTokenTypeArray();
-
-        for (TokenType token : playerHand) {
-            if (token != null) {
-                bestMovePerToken.add(calculateBestTokenMove(token));
+    public static TokenType[][] swapMatrix(TokenType[][] input) {
+        TokenType[][] swap = new TokenType[input.length][input.length];
+        for (int i = 0; i < input.length; i++) {
+            for (int j = 0; j < input[i].length; j++) {
+                swap[j][i] = input[i][j];
             }
         }
-
-        for (var bla : bestMovePerToken) {
-            if (bla != null) System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());
-        }
-
-        Integer bestToken = null;
-        for (int i = 0; i < getTokens().size(); i++) {
-            if (bestMovePerToken.get(i) != null) {
-                if (bestToken == null) {
-                    bestToken = i;
-                } else if (isBetterMove(bestMovePerToken.get(i), bestMovePerToken.get(bestToken))) {
-                    bestToken = i;
-                }
-            }
-        }
-        return bestMovePerToken.get(bestToken);
-
+        return swap;
     }
 
     //##############################################################################################
@@ -239,22 +208,18 @@ import java.util.*;
     }
 
     /**
-     * Counts the number of a given TokenType on the grid
+     * Calculates Points for every Line
      *
-     * @param token TokenType that will be counted
-     * @return Number of given TokenType on the grid
+     * @return Map (line, points)
      */
-    private Integer countNumberOfTokenOnGrid(TokenType token) {
-        Integer counter = 0;
-        Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; i < grid[0].length; i++) {
-                if (grid[i][j].getTokenType() == token) {
-                    counter++;
-                }
-            }
+    public static Map<Integer, Integer> calculateCurrentOverallPoints() {
+        Map<Integer, EnumMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokens();
+        HashMap<Integer, Integer> pointMap = new HashMap<>();
+
+        for (var entry : occurrenceMap.entrySet()) {
+            pointMap.put(entry.getKey(), calculate(entry.getValue()));
         }
-        return counter;
+        return pointMap;
     }
 
 
@@ -372,14 +337,14 @@ import java.util.*;
     }
 
     /**
-     * Calculates all occurrences of Tokens on a new grid per line
+     * Calculates Occurrences of Tokens for the current Grid
      *
-     * @param grid grid how it will look, after the move is done
      * @return returns a Map of Line indexes and their corresponding occurrenceMap. The row-indexes
      * are named -1, -2, ... and the column-indexes are named 1, 2, ...
      */
-    public Map<Integer, Map<TokenType, Integer>> getOccurrencesOfTokensWithChangedToken(TokenType[][] grid) {
-        Map<Integer, Map<TokenType, Integer>> occurrenceMap = new HashMap<>();
+    public static Map<Integer, EnumMap<TokenType, Integer>> getOccurrencesOfTokens() {
+        HashMap<Integer, EnumMap<TokenType, Integer>> occurrenceMap = new HashMap<>();
+        TokenType[][] grid = Game.getGame().getPlayingField().convertToTokenTypeArray();
 
         for (int i = 0; i < grid.length; i++) {
             occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
@@ -389,99 +354,85 @@ import java.util.*;
         for (int i = 0; i < reverseArray.length; i++) {
             occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
         }
-
         return occurrenceMap;
     }
 
     /**
-     * Calculates the occurrences of each token (except for the empty one) for a given line
-     *
-     * @param tokens Line of tokens
-     * @return Map with TokenTypes and their occurrences in the line
+     * Call Player Turn method for corresponding TokenMove
      */
-    private static HashMap<TokenType, Integer> calculateOccurrencesPerLine(TokenType[] tokens) {
-        HashMap<TokenType, Integer> map = new HashMap<>();
-        Arrays.stream(tokens).forEach(x -> map.put(x, map.computeIfAbsent(x, s -> 0) + 1));
+    public void makeMove() {
+        TokenMove move = calculateAIMove();
+        switch (move.getToken().getValue()) {
+            case 1, 2, 3, 4, 5, 6 -> {
+                if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
 
-        map.remove(null);
-        map.remove(TokenType.NONE);
-        return map;
+            }
+            case 7 -> {
+                if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
+            case 8 -> {
+                if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
+            case 9 -> {
+                if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
+            case 10 -> {
+                if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
+            default -> throw new NoMovePossibleException("No move possible");
+        }
+        performAnimation();
+        Game.getGame().turnDone();
+
     }
 
     /**
-     * Swaps a matrix diagonally
+     * Calculates best Move for AI Player. First it calculates the best Move per Token in hand and
+     * then compares those two with each other
      *
-     * @param input matrix that will be swapped
-     * @return swapped matrix
+     * @return Best Move the AI can do with his Hand-Tokens
      */
-    public static TokenType[][] swapMatrix(TokenType[][] input) {
-        TokenType[][] swap = new TokenType[input.length][input.length];
-        for (int i = 0; i < input.length; i++) {
-            for (int j = 0; j < input[0].length; j++) {
-                swap[j][i] = input[i][j];
+    public TokenMove calculateAIMove() {
+        ArrayList<TokenMove> bestMovePerToken = new ArrayList<>();
+        TokenType[] playerHand = this.convertHandToTokenTypeArray();
+
+        for (TokenType token : playerHand) {
+            if (token != null) {
+                bestMovePerToken.add(calculateBestTokenMove(token));
             }
         }
-        return swap;
+
+        for (var bla : bestMovePerToken) {
+            if (bla != null) System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());
+        }
+
+        Integer bestToken = null;
+        for (int i = 0; i < getTokens().size(); i++) {
+            if (bestMovePerToken.get(i) != null && (bestToken == null || isBetterMove(bestMovePerToken.get(i), bestMovePerToken.get(bestToken)))) {
+                bestToken = i;
+            }
+        }
+        return bestMovePerToken.get(Objects.requireNonNull(bestToken));
+
     }
 
     /**
-     * Calculates whether the move will prevent a loss (blocks an almost finished line of the same
-     * Token or uses a special Token to disrupt it
+     * Counts the number of a given TokenType on the grid
      *
-     * @param changedMap new grid, which already has the TokenMove implemented
-     * @return returns true if it will prevent a loss, otherwise returns false
+     * @param token TokenType that will be counted
+     * @return Number of given TokenType on the grid
      */
-    private boolean isMovePreventingLoss(TokenType[][] changedMap) {
-
-        HashMap<Integer, HashMap<TokenType, Integer>> map = getOccurrencesOfTokens();
-        Map<Integer, Map<TokenType, Integer>> changedOccurrenceMap = getOccurrencesOfTokensWithChangedToken(changedMap);
-
-        for (Map.Entry<Integer, HashMap<TokenType, Integer>> entry : map.entrySet()) {
-            if (entry.getKey() < 0) {
-                if (this.getTeam().getTeamType() == TeamType.VERTICAL) {
-                    if (entry.getValue().size() == 1) {
-                        for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
-                            if (count.getValue() == Constants.GAMEGRID_ROWS - 1) {
-                                Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
-                                //Check, if there are other tokens in the same line after the move
-                                if (line.size() != 1) {
-                                    return true;
-                                }
-                                //Check, if there isnt just one missing Token anymore to win in the
-                                //line
-                                for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
-                                    if (lineMap.getValue() != Constants.GAMEGRID_ROWS - 1) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (this.getTeam().getTeamType() == TeamType.HORIZONTAL) {
-                    if (entry.getValue().size() == 1) {
-                        for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
-                            if (count.getValue() == Constants.GAMEGRID_COLUMNS - 1) {
-                                Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
-                                //Check, if there are other tokens in the same line after the move
-                                if (line.size() != 1) {
-                                    return true;
-                                }
-                                //Check, if there isnt just one missing Token anymore to win in the
-                                //line
-                                for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
-                                    if (lineMap.getValue() != Constants.GAMEGRID_COLUMNS - 1) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
+    private Integer countNumberOfTokenOnGrid(TokenType token) {
+        Integer counter = 0;
+        Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
+        for (Token[] tokens : grid) {
+            for (Token value : tokens) {
+                if (value.getTokenType() == token) {
+                    counter++;
                 }
             }
         }
-        return false;
+        return counter;
     }
 
     //##############################################################################################
@@ -562,26 +513,25 @@ import java.util.*;
     //##############################################################################################
 
     /**
-     * Create all possible moves for a Replacer Token
+     * Calculates all occurrences of Tokens on a new grid per line
      *
-     * @return HashSet of possible TokenMoves
+     * @param grid grid how it will look, after the move is done
+     * @return returns a Map of Line indexes and their corresponding occurrenceMap. The row-indexes
+     * are named -1, -2, ... and the column-indexes are named 1, 2, ...
      */
-    public HashSet<TokenMove> createPossibleReplacerTokenMoves() {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
-        //convert player.getTokens() to Array of Tokens
-        Token[] playerHand = this.getTokens().toArray(new Token[0]);
-        HashSet<Integer> handSymbolTokenSet = this.getHandSymbolTokenPositions();
-        HashSet<Position> occupiedFields = occupiedFields();
-        for (Position occupiedField : occupiedFields) {
-            for (Integer handPosition : handSymbolTokenSet) {
-                TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType());
-                Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
-                //TODO Prevent Loss
-                //Create Token Move for every possible move and add it to the existing moves
-                tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(), TokenType.REPLACER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
-            }
+    public Map<Integer, EnumMap<TokenType, Integer>> getOccurrencesOfTokensWithChangedToken(TokenType[][] grid) {
+        Map<Integer, EnumMap<TokenType, Integer>> occurrenceMap = new HashMap<>();
+
+        for (int i = 0; i < grid.length; i++) {
+            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
         }
-        return tokenMoves;
+        TokenType[][] reverseArray = swapMatrix(grid);
+
+        for (int i = 0; i < reverseArray.length; i++) {
+            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
+        }
+
+        return occurrenceMap;
     }
 
     //##############################################################################################
@@ -626,39 +576,84 @@ import java.util.*;
     }
 
     /**
-     * Calculates Points for every Line
+     * Calculates whether the move will prevent a loss (blocks an almost finished line of the same
+     * Token or uses a special Token to disrupt it
      *
-     * @return Map (line, points)
+     * @param changedMap new grid, which already has the TokenMove implemented
+     * @return returns true if it will prevent a loss, otherwise returns false
      */
-    public static HashMap<Integer, Integer> calculateCurrentOverallPoints() {
-        HashMap<Integer, HashMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokens();
-        HashMap<Integer, Integer> PointMap = new HashMap<>();
+    private boolean isMovePreventingLoss(TokenType[][] changedMap) {
 
-        for (var entry : occurrenceMap.entrySet()) {
-            PointMap.put(entry.getKey(), calculate(entry.getValue()));
+        Map<Integer, EnumMap<TokenType, Integer>> map = getOccurrencesOfTokens();
+        Map<Integer, EnumMap<TokenType, Integer>> changedOccurrenceMap = getOccurrencesOfTokensWithChangedToken(changedMap);
+
+        for (Map.Entry<Integer, EnumMap<TokenType, Integer>> entry : map.entrySet()) {
+            if (entry.getKey() < 0) {
+                if (this.getTeam().getTeamType() == TeamType.VERTICAL) {
+                    if (entry.getValue().size() == 1) {
+                        for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
+                            if (count.getValue() == Constants.GAMEGRID_ROWS - 1) {
+                                EnumMap<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
+                                //Check, if there are other tokens in the same line after the move
+                                if (line.size() != 1) {
+                                    return true;
+                                }
+                                //Check, if there isnt just one missing Token anymore to win in the
+                                //line
+                                for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
+                                    if (lineMap.getValue() != Constants.GAMEGRID_ROWS - 1) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (this.getTeam().getTeamType() == TeamType.HORIZONTAL && entry.getValue().size() == 1) {
+                    for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
+                        if (count.getValue() == Constants.GAMEGRID_COLUMNS - 1) {
+                            Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
+                            //Check, if there are other tokens in the same line after the move
+                            if (line.size() != 1) {
+                                return true;
+                            }
+                            //Check, if there isnt just one missing Token anymore to win in the
+                            //line
+                            for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
+                                if (lineMap.getValue() != Constants.GAMEGRID_COLUMNS - 1) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-        return PointMap;
+        return false;
     }
 
     /**
-     * Calculates Occurrences of Tokens for the current Grid
+     * Create all possible moves for a Replacer Token
      *
-     * @return returns a Map of Line indexes and their corresponding occurrenceMap. The row-indexes
-     * are named -1, -2, ... and the column-indexes are named 1, 2, ...
+     * @return HashSet of possible TokenMoves
      */
-    public static HashMap<Integer, HashMap<TokenType, Integer>> getOccurrencesOfTokens() {
-        HashMap<Integer, HashMap<TokenType, Integer>> occurrenceMap = new HashMap<>();
-        TokenType[][] grid = Game.getGame().getPlayingField().convertToTokenTypeArray();
-
-        for (int i = 0; i < grid.length; i++) {
-            occurrenceMap.put(-i - 1, calculateOccurrencesPerLine(grid[i]));
+    public HashSet<TokenMove> createPossibleReplacerTokenMoves() {
+        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        //convert player.getTokens() to Array of Tokens
+        Token[] playerHand = this.getTokens().toArray(new Token[0]);
+        Set<Integer> handSymbolTokenSet = this.getHandSymbolTokenPositions();
+        HashSet<Position> occupiedFields = occupiedFields();
+        for (Position occupiedField : occupiedFields) {
+            for (Integer handPosition : handSymbolTokenSet) {
+                TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType());
+                Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
+                //TODO Prevent Loss
+                //Create Token Move for every possible move and add it to the existing moves
+                tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(), TokenType.REPLACER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+            }
         }
-        TokenType[][] reverseArray = swapMatrix(grid);
-
-        for (int i = 0; i < reverseArray.length; i++) {
-            occurrenceMap.put(i + 1, calculateOccurrencesPerLine(reverseArray[i]));
-        }
-        return occurrenceMap;
+        return tokenMoves;
     }
 
     /**
@@ -698,18 +693,17 @@ import java.util.*;
         return new Calculation(curr, isCreatingLoss, isWinning);
     }
 
-
     /**
      * Calculates Points for every Line with the new grid if the move would occur
      *
      * @return Map (line, points)
      */
     public Map<Integer, Integer> calculateCurrentOverallPointsWithChangedToken(TokenType[][] newGrid) {
-        Map<Integer, Map<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokensWithChangedToken(newGrid);
+        Map<Integer, EnumMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokensWithChangedToken(newGrid);
 
         Map<Integer, Integer> PointMap = new HashMap<>();
 
-        for (Map.Entry<Integer, Map<TokenType, Integer>> entry : occurrenceMap.entrySet()) {
+        for (Map.Entry<Integer, EnumMap<TokenType, Integer>> entry : occurrenceMap.entrySet()) {
             PointMap.put(entry.getKey(), calculate(entry.getValue()));
         }
 

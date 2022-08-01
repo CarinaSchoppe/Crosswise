@@ -20,7 +20,7 @@ import de.fhwwedel.pp.util.game.json.GameData;
 import de.fhwwedel.pp.util.game.json.PlayerData;
 import javafx.scene.Scene;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class FileOutputWriter {
 
@@ -36,7 +36,7 @@ public class FileOutputWriter {
         }
     }
 
-    private static GameData generateGameData(ArrayList<Player> gamePlayers, int currentPlayerID, int playingFieldSize, Position[][] playingFieldMap, ArrayList<Token> usedActionTokens) {
+    private static GameData generateGameData(List<Player> gamePlayers, int currentPlayerID, int playingFieldSize, Position[][] playingFieldMap, List<Token> usedActionTokens) {
 
         PlayerData[] players = new PlayerData[gamePlayers.size()];
         for (int i = 0; i < gamePlayers.size(); i++) {
@@ -46,7 +46,7 @@ public class FileOutputWriter {
 
     }
 
-    private static PlayerData generatePlayerData(ArrayList<Token> tokens, String playerName, boolean isAI) {
+    private static PlayerData generatePlayerData(List<Token> tokens, String playerName, boolean isAI) {
         var hand = new int[tokens.size()];
         for (int i = 0; i < tokens.size(); i++) {
             hand[i] = tokens.get(i).getTokenType().getValue();
@@ -64,7 +64,7 @@ public class FileOutputWriter {
         return field;
     }
 
-    private static int[] generateUsedActionTilesArray(ArrayList<Token> usedActionTokens) {
+    private static int[] generateUsedActionTilesArray(List<Token> usedActionTokens) {
         int[] usedActionTiles = new int[Constants.UNIQUE_ACTION_TOKENS];
         for (int i = 0; i < Constants.UNIQUE_ACTION_TOKENS; i++) {
             usedActionTiles[i] = 0;
