@@ -219,9 +219,7 @@ public class Player {
         GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
         assert handToken != null;
         GameLogger.logMove(this, handToken, field, Action.PLACE);
-        if (GameWindowHandler.getGameWindowHandler() != null) {
-            GameWindowHandler.getGameWindowHandler().updatePlayerHandIcons(this);
-        }
+
         return true;
     }
 

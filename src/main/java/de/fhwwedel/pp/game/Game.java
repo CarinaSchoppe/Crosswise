@@ -13,6 +13,7 @@ package de.fhwwedel.pp.game;
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.gui.GameWindow;
+import de.fhwwedel.pp.gui.GameWindowHandler;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.AnimationTime;
@@ -176,8 +177,12 @@ public class Game {
             return;
         }
 
-        if (GameWindow.getGameWindow() != null)
+        if (GameWindowHandler.getGameWindowHandler() != null) {
+            GameWindowHandler.getGameWindowHandler().showHand(this);
+        }
+        if (GameWindow.getGameWindow() != null) {
             Platform.runLater(() -> GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName()));
+        }
         System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
         //if the player is an AI player, let the AI make their move
         if (currentPlayer instanceof AI ai) {
@@ -232,7 +237,8 @@ public class Game {
      */
     public void turnDone() {
         Team.givePoints();
-        //TODO: Update UI gameWindow
+        if (GameWindowHandler.getGameWindowHandler() != null)
+            GameWindowHandler.getGameWindowHandler().performMoveUIUpdate(players, playingField);
         //if the turn is over, do nothing
         if (handleOver()) {
             return;

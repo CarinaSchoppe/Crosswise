@@ -550,6 +550,10 @@ public class GameWindow extends Application implements Initializable {
         return gridImages;
     }
 
+    public CheckMenuItem getShowComputerHandButton() {
+        return showComputerHandButton;
+    }
+
     public void setGridImages(ImageView[][] gridImages) {
         this.gridImages = gridImages;
     }
