@@ -13,13 +13,13 @@ package de.fhwwedel.pp.util.special;
 public enum Action {
     PLACE("placed"), REMOVE("removed");
 
-    private final String action;
+    private final String text;
 
-    Action(String action) {
-        this.action = action;
+    Action(String text) {
+        this.text = text;
     }
 
-    public String getAction() {
-        return action;
+    public String getText() {
+        return text;
     }
 }

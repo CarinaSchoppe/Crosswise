@@ -12,20 +12,19 @@ package de.fhwwedel.pp.game;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
-import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.gui.GameWindowHandler;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
-import de.fhwwedel.pp.util.game.AnimationTime;
 import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class for a game instance of the game Crosswise
@@ -41,14 +40,11 @@ public class Game {
      * Playing field of the game
      */
     private final PlayingField playingField;
-    /**
-     * Time for an animation of an AI turn
-     */
-    private AnimationTime animationTime = AnimationTime.MIDDLE;
+
     /**
      * Players, that are playing this game round
      */
-    private final ArrayList<Player> players;
+    private final List<Player> players;
     /**
      * Array of amount of used special tokens
      */
@@ -66,11 +62,16 @@ public class Game {
      */
     private Player currentPlayer = null;
 
+    private final GameWindowHandler gameWindowHandler;
+
     //----------------------------------------------------------------------------------------------
 
-    public Game(PlayingField playingField, ArrayList<Player> players) {
+    public Game(PlayingField playingField, List<Player> players, GameWindowHandler gameWindowHandler) {
         this.playingField = playingField;
         this.players = players;
+        if (gameWindowHandler == null)
+            throw new IllegalArgumentException("gameWindowHandler must not be null");
+        this.gameWindowHandler = gameWindowHandler;
     }
 
     /**
@@ -81,10 +82,6 @@ public class Game {
     public boolean teamSizeEqual() {
         if (Team.getHorizontalTeam().getPlayers().size() == Team.getVerticalTeam().getPlayers().size()) {
             return true;
-        }
-        //Exception, if the game got created with no corresponding GameWindow
-        if (GameWindow.getGameWindow() == null) {
-            throw new RuntimeException("Window is null");
         }
 
         var alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
@@ -112,7 +109,7 @@ public class Game {
             }
         }
         for (int i = 0; i < tokenDrawPile.size(); i++) {
-            int randomIndex = (int) (Math.random() * tokenDrawPile.size());
+            int randomIndex = new Random().nextInt(tokenDrawPile.size());
             var temp = tokenDrawPile.get(i);
             tokenDrawPile.set(i, tokenDrawPile.get(randomIndex));
             tokenDrawPile.set(randomIndex, temp);
@@ -129,7 +126,7 @@ public class Game {
                 try {
                     player.drawToken();
                 } catch (NoTokenException e) {
-                    throw new RuntimeException("No more tokens left in the Pile while startup! "
+                    throw new NoTokenException("No more tokens left in the Pile while startup! "
                             + "Configuration error!");
                 }
             }
@@ -177,19 +174,14 @@ public class Game {
             return;
         }
 
-        if (GameWindowHandler.getGameWindowHandler() != null) {
-            GameWindowHandler.getGameWindowHandler().showHand(currentPlayer);
-        }
-        if (GameWindow.getGameWindow() != null) {
-            Platform.runLater(() -> GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName()));
-        }
+        gameWindowHandler.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
+        gameWindowHandler.setCurrentPlayerText(currentPlayer.getName());
         System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
         //if the player is an AI player, let the AI make their move
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
-            if (GameWindowHandler.getGameWindowHandler() != null)
-                GameWindowHandler.getGameWindowHandler().notifyTurn(currentPlayer);
+            gameWindowHandler.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());
         }
     }
 
@@ -203,13 +195,16 @@ public class Game {
         if (players.isEmpty()) {
             System.out.println("No players left!");
             GameLogger.saveLogToFile("Logfile");
+            gameWindowHandler.gameWonNotifier(null, 0, false);
             return true;
         } else if (over.containsKey(true)) {
             var team = over.get(true);
             if (team == null) {
                 System.out.println("Game is over, but no team has won!");
+                gameWindowHandler.gameWonNotifier(null, 0, false);
                 //TODO: Handle game over! GUI stuff
             } else {
+                gameWindowHandler.gameWonNotifier(team.getTeamType(), team.getPoints(), team.isRowWin());
                 System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
                 System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
             }
@@ -229,8 +224,7 @@ public class Game {
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
-            if (GameWindowHandler.getGameWindowHandler() != null)
-                GameWindowHandler.getGameWindowHandler().notifyTurn(currentPlayer);
+            gameWindowHandler.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());
         }
     }
 
@@ -239,8 +233,7 @@ public class Game {
      */
     public void turnDone() {
         Team.givePoints();
-        if (GameWindowHandler.getGameWindowHandler() != null)
-            GameWindowHandler.getGameWindowHandler().performMoveUIUpdate(players, playingField);
+        gameWindowHandler.performMoveUIUpdate(players, playingField.convertToTokenTypeArray());
         //if the turn is over, do nothing
         if (handleOver()) {
             return;
@@ -255,7 +248,7 @@ public class Game {
             if (CrossWise.slow)
                 Thread.sleep(CrossWise.delay);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
         //Let the next player do their turn
         nextPlayer();
@@ -265,15 +258,15 @@ public class Game {
         return playingField;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
-    public ArrayList<Token> getUsedActionTokens() {
+    public List<Token> getUsedActionTokens() {
         return usedSpecialTokens;
     }
 
-    public ArrayList<Token> getTokenDrawPile() {
+    public List<Token> getTokenDrawPile() {
         return tokenDrawPile;
     }
 
@@ -285,9 +278,6 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-    public AnimationTime getAnimationTime() {
-        return animationTime;
-    }
 
     public static Game getGame() {
         return game;
@@ -297,7 +287,7 @@ public class Game {
         Game.game = game;
     }
 
-    public void setAnimationTime(AnimationTime animationTime) {
-        this.animationTime = animationTime;
+    public GameWindowHandler getGameWindowHandler() {
+        return gameWindowHandler;
     }
 }

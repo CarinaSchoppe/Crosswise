@@ -30,7 +30,7 @@ public class GameLogger {
     }
 
     public static void logMove(Player player, Token placed, Position to, Action action) {
-        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + action.getAction() + ": " + placed.getTokenType().getValue() + " on: " + to.toString() + " new Hand: " + player.handRepresentation() +
+        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + action.getText() + ": " + placed.getTokenType().getValue() + " on: " + to.toString() + " new Hand: " + player.handRepresentation() +
                 "\n" +
                 Game.getGame().getPlayingField().toString();
         log(builder);

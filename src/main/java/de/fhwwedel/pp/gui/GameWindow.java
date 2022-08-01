@@ -10,11 +10,10 @@
 
 package de.fhwwedel.pp.gui;
 
-import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.util.game.AnimationTime;
-import de.fhwwedel.pp.util.game.Team;
-import de.fhwwedel.pp.util.game.TeamType;
+import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.*;
+import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.FileInputReader;
 import de.fhwwedel.pp.util.special.FileOutputWriter;
 import javafx.application.Application;
@@ -26,6 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -35,16 +35,209 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class GameWindow extends Application implements Initializable {
+public class GameWindow extends Application implements Initializable, GameWindowHandler {
+
+    /**
+     * Time for an animation of an AI turn
+     */
+    private AnimationTime animationTime = AnimationTime.MIDDLE;
+
+    public static final GameWindow getGameWindow() {
+
+        return gameWindow;
+    }
+
+    @Override
+    public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
+        Platform.runLater(() -> {
+            switch (playerID) {
+                case 0 -> addTokenImagesForPlayer1(tokens);
+                case 1 -> addTokenImagesForPlayer2(tokens);
+                case 2 -> addTokenImagesForPlayer3(tokens);
+                case 3 -> addTokenImagesForPlayer4(tokens);
+            }
+        });
+    }
+
+    @Override
+    public void notifyTurn(String playerName, int playerID) {
+        Platform.runLater(() -> {
+            var alert = new Alert(Alert.AlertType.INFORMATION,
+                    "The Player: \"" + playerName + "\" with ID: \"" + playerID
+                            + " is now your turn!");
+            alert.setTitle("Next Turn");
+            alert.setHeaderText("Next Players Turn");
+            alert.showAndWait();
+        });
+    }
+
+    @Override
+    public void handVisibleSwitch(int playerID) {
+        switch (playerID) {
+            case 0 -> GameWindow.getGameWindow().getPlayerHandOne().setVisible(true);
+            case 1 -> GameWindow.getGameWindow().getPlayerHandTwo().setVisible(true);
+            case 2 -> GameWindow.getGameWindow().getPlayerHandThree().setVisible(true);
+            case 3 -> GameWindow.getGameWindow().getPlayerHandFour().setVisible(true);
+            default -> throw new IllegalArgumentException("Player ID not found");
+        }
+    }
+
+    @Override
+    public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField) {
+
+        for (var player : players)
+            updatePlayerHandIcons(player.getPlayerID(), player.getTokens());
+        Platform.runLater(() -> {
+            //TODO: here update gameField based on grid
+            /*
+             *
+             * hol dir die steine der map
+             * geh alle map felder durch
+             * erstelle ein neues grid und füge in das grid die für das feld passenden steinbilder ein
+             * */
+            for (int row = 0; row < Constants.GAMEGRID_ROWS; row++) {
+                for (int column = 0; column < Constants.GAMEGRID_COLUMNS; column++) {
+                    var token = gameField[row][column];
+                    var image = new Image(token.getImagePath());
+                    String id = "gridToken" + column + row;
+
+                    var imageView = GameWindow.getGameWindow().getFieldImages().get(id);
+                    imageView.setImage(image);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void setCurrentPlayerText(String playerName) {
+        Platform.runLater(() -> GameWindow.getGameWindow().getCurrentPlayerText().setText(playerName));
+
+    }
+
+    @Override
+    public void generateGrid() {
+        GameWindow.getGameWindow().setGridImages(new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS]);
+        int colcount = Constants.GAMEGRID_COLUMNS;
+        GameWindow.getGameWindow().getGameGrid().getChildren().clear();
+        int rowcount = Constants.GAMEGRID_ROWS;
+        for (int r = 0; r < Constants.GAMEGRID_ROWS; r++) {
+            for (int c = 0; c < Constants.GAMEGRID_COLUMNS; c++) {
+                ImageView imgNew = new ImageView();
+                int cellWidth = (int) GameWindow.getGameWindow().getGameGrid().getWidth() / colcount;
+                int cellHeight = (int) GameWindow.getGameWindow().getGameGrid().getHeight() / rowcount;
+
+               /* System.out.println("grdPn.getHeight() = " + gameWindow.getGameGrid().getHeight());
+                System.out.println("grdPn.getWidth() = " + gameWindow.getGameGrid().getWidth());
+                System.out.println("cellHeight = " + cellHeight);
+                System.out.println("cellWidth = " + cellWidth);*/
+                imgNew.setFitWidth(cellWidth);
+                imgNew.setFitHeight(cellHeight);
+                imgNew.setPreserveRatio(false);
+                imgNew.setSmooth(true);
+                String id = "gridToken" + c + r;
+                GameWindow.getGameWindow().getFieldImages().put(id, imgNew);
+                imgNew.setId(id);
+/*
+                System.out.println(imgNew.getId());*/
+
+                Image img = new Image("/pictures/0none.png");
+                imgNew.setImage(img);
+
+                GameWindow.getGameWindow().getGridImages()[r][c] = imgNew;
+                GameWindow.getGameWindow().getGameGrid().add(imgNew, c, r);
+
+                //the image shall resize when the cell resizes
+                imgNew.fitWidthProperty().bind(GameWindow.getGameWindow().getGameGrid().widthProperty().divide(colcount));
+                imgNew.fitHeightProperty().bind(GameWindow.getGameWindow().getGameGrid().heightProperty().divide(rowcount));
+
+            }
+        }
+    }
+
+    @Override
+    public void moverAmountText() {
+        Platform.runLater(() -> GameWindow.getGameWindow().getMoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "")
+        );
+    }
+
+    @Override
+    public void swapperAmountText() {
+        Platform.runLater(() -> GameWindow.getGameWindow().getSwapperAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + ""));
+
+    }
+
+    @Override
+    public void replacerAmountText() {
+        Platform.runLater(() -> GameWindow.getGameWindow().getReplacerAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + ""));
+    }
+
+    @Override
+    public void removerAmountText() {
+        Platform.runLater(() -> GameWindow.getGameWindow().getRemoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + "")
+        );
+    }
+
+    @Override
+    public void addTokenImagesForPlayer1(List<Token> tokens) {
+        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandOne().getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandOne().getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().getPlayerHandOne().getChildren().clear();
+        for (int i = 0; i < tokens.size(); i++) {
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            imageView.setFitHeight(cellHeight);
+            imageView.setFitWidth(cellWidth);
+            GameWindow.getGameWindow().getPlayerHandOne().add(imageView, i, 0);
+        }
+    }
+
+    @Override
+    public void addTokenImagesForPlayer2(List<Token> tokens) {
+        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandTwo().getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandTwo().getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().getPlayerHandTwo().getChildren().clear();
+        for (int i = 0; i < tokens.size(); i++) {
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            imageView.setFitHeight(cellHeight);
+            imageView.setFitWidth(cellWidth);
+            GameWindow.getGameWindow().getPlayerHandTwo().add(imageView, 0, i);
+        }
+    }
+
+    @Override
+    public void addTokenImagesForPlayer3(List<Token> tokens) {
+        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandThree().getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandThree().getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().getPlayerHandThree().getChildren().clear();
+        for (int i = 0; i < tokens.size(); i++) {
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            imageView.setFitHeight(cellHeight);
+            imageView.setFitWidth(cellWidth);
+            GameWindow.getGameWindow().getPlayerHandThree().add(imageView, i, 0);
+        }
+    }
+
+    @Override
+    public void addTokenImagesForPlayer4(List<Token> tokens) {
+        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandFour().getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandFour().getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().getPlayerHandFour().getChildren().clear();
+        for (int i = 0; i < tokens.size(); i++) {
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            imageView.setFitHeight(cellHeight);
+            imageView.setFitWidth(cellWidth);
+            GameWindow.getGameWindow().getPlayerHandFour().add(imageView, 0, i);
+
+        }
+    }
+
     private static GameWindow gameWindow;
 
-
-    public void replacerAmountText() {
-        if (GameWindow.getGameWindow() != null)
-            Platform.runLater(() -> replacerAmountText.setText(Integer.parseInt(replacerAmountText.getText()) + 1 + ""));
-
+    @Override
+    public void gameWonNotifier(TeamType wonType, int points, boolean rowComplete) {
+        Platform.runLater(() -> GameWindow.getGameWindow().gameWonNotification(wonType, points, rowComplete));
     }
 
 
@@ -226,30 +419,45 @@ public class GameWindow extends Application implements Initializable {
     @FXML
     private GridPane verticalPointsGrid;
 
-    public static void start() {
-        launch();
+    @Override
+    public void showHand(boolean isAI, int playerID) {
+        Platform.runLater(() -> {
+            GameWindow.getGameWindow().getPlayerHandOne().setVisible(false);
+            GameWindow.getGameWindow().getPlayerHandTwo().setVisible(false);
+            GameWindow.getGameWindow().getPlayerHandThree().setVisible(false);
+            GameWindow.getGameWindow().getPlayerHandFour().setVisible(false);
+            if (isAI) {
+                if (GameWindow.getGameWindow().getShowComputerHandButton().isSelected())
+                    handVisibleSwitch(playerID);
+            } else {
+                handVisibleSwitch(playerID);
+            }
+
+        });
+
+
     }
 
     private Stage stage;
 
-    public static GameWindow getGameWindow() {
-        return gameWindow;
+    public void start() {
+        launch();
     }
 
     @FXML
     void changeAnimationSpeedFast(ActionEvent event) {
-        Game.getGame().setAnimationTime(AnimationTime.FAST);
-
+        animationTime = AnimationTime.FAST;
     }
 
     @FXML
     void changeAnimationSpeedLow(ActionEvent event) {
-        Game.getGame().setAnimationTime(AnimationTime.SLOW);
+        animationTime = AnimationTime.SLOW;
+
     }
 
     @FXML
     void changeAnimationSpeedMedium(ActionEvent event) {
-        Game.getGame().setAnimationTime(AnimationTime.MIDDLE);
+        animationTime = AnimationTime.MIDDLE;
     }
 
     @FXML
@@ -285,38 +493,39 @@ public class GameWindow extends Application implements Initializable {
 
     }
 
-    public void removerAmountText() {
-        if (GameWindow.getGameWindow() != null)
-            Platform.runLater(() -> removerAmountText.setText(Integer.parseInt(removerAmountText.getText()) + 1 + "")
-            );
 
-    }
-
-    public static void gameWonNotification(Team won, boolean rowComplete) {
+    public void gameWonNotification(TeamType wonType, int points, boolean rowComplete) {
         String message;
-        Team lost = won.getTeamType() == TeamType.VERTICAL ?
-                Team.getHorizontalTeam() :
-                Team.getVerticalTeam();
-        if (rowComplete) {
-            message = "Team: " + won.getTeamType().getTeamName()
+        Team lost = null;
+
+        if (wonType != null) {
+            lost = wonType == TeamType.VERTICAL ?
+                    Team.getHorizontalTeam() :
+                    Team.getVerticalTeam();
+
+        }
+        if (rowComplete && wonType != null) {
+            message = "Team: " + wonType.getTeamName()
                     + " won, because the hit a full line!";
-        } else if (won.getPoints() == lost.getPoints()) {
-            message = "Draw! Both teams got the same amount of points (" + won.getPoints() + ")!";
-        } else {
-            message = "Team: " + won.getTeamType().getTeamName()
-                    + " won, because they have more points (" + won.getPoints()
+        } else if (points == lost.getPoints() && wonType != null) {
+            message = "Draw! Both teams got the same amount of points (" + points + ")!";
+        } else if (wonType != null) {
+            message = "Team: " + wonType.getTeamName()
+                    + " won, because they have more points (" + points
                     + ") than the other team (" + lost.getPoints() + ")!";
+        } else {
+            message = "No players in the game";
         }
 
         var alert = new Alert(Alert.AlertType.INFORMATION, message);
         alert.setTitle("Game finished");
         alert.setHeaderText("Game finished");
         alert.showAndWait();
-        Game.setGame(new Game(null, new ArrayList<>()));
+        var window = new GameWindow();
+        Game.setGame(new Game(null, new ArrayList<>(), window));
         gameWindow.stage.close();
-        CrossWise.setGameThread(new Thread(() -> Game.getGame().start()));
-
-        GameWindow.start();
+        new Thread(() -> Game.getGame().start()).start();
+        window.start();
     }
 
     @FXML
@@ -384,7 +593,6 @@ public class GameWindow extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameWindow = this;
-        GameWindowHandler.setHandler(new GameWindowHandler(this));
     }
 
 
@@ -402,7 +610,7 @@ public class GameWindow extends Application implements Initializable {
         initialize();
         stage = primaryStage;
         primaryStage.show();
-        GameWindowHandler.getGameWindowHandler().generateGrid();
+        generateGrid();
     }
 
     public HashMap<String, ImageView> getFieldImages() {
@@ -411,13 +619,6 @@ public class GameWindow extends Application implements Initializable {
 
     private final HashMap<String, ImageView> fieldImages = new HashMap<>();
 
-    public void moverAmountText() {
-        if (GameWindow.getGameWindow() != null)
-            Platform.runLater(() -> moverAmountText.setText(Integer.parseInt(moverAmountText.getText()) + 1 + "")
-            );
-
-
-    }
 
     public Label getCurrentPlayerText() {
         return currentPlayerText;
@@ -443,12 +644,6 @@ public class GameWindow extends Application implements Initializable {
         return stage;
     }
 
-    public void swapperAmountText() {
-        if (GameWindow.getGameWindow() != null) {
-            Platform.runLater(() -> swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + ""));
-
-        }
-    }
 
     public GridPane getGameGrid() {
         return gameGrid;

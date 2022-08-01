@@ -46,7 +46,7 @@ public class FileOutputWriter {
 
     }
 
-    public static PlayerData generatePlayerData(ArrayList<Token> tokens, String playerName, boolean isAI) {
+    private static PlayerData generatePlayerData(ArrayList<Token> tokens, String playerName, boolean isAI) {
         var hand = new int[tokens.size()];
         for (int i = 0; i < tokens.size(); i++) {
             hand[i] = tokens.get(i).getTokenType().getValue();

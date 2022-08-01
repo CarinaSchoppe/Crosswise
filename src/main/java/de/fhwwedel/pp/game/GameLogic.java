@@ -14,6 +14,7 @@ import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.TokenType;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Record for the game logic for the game Crosswise
@@ -29,15 +30,17 @@ public record GameLogic(Game game) {
      * @param field current playing field
      * @return Map, with the boolean if the game is over and a team, that won
      */
-    public HashMap<Boolean, Team> isGameOver(PlayingField field) {
+    public Map<Boolean, Team> isGameOver(PlayingField field) {
         var map = new HashMap<Boolean, Team>();
         //if horizontal Team won via a full row
         if (checkRows(field)) {
+            Team.getHorizontalTeam().setRowWin(true);
             map.put(true, Team.getHorizontalTeam());
             return map;
         }
         //if the vertical team won via a full collumn
         if (checkColumns(field)) {
+            Team.getVerticalTeam().setRowWin(true);
             map.put(true, Team.getVerticalTeam());
             return map;
         }
@@ -77,11 +80,11 @@ public record GameLogic(Game game) {
                         break;
                     }
                 } else {
-                    if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().getTokenType() != current) {
-                        equal = false;
-                        current = null;
-                        break;
-                    }
+                    if (!(field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().getTokenType() != current)) continue;
+                    equal = false;
+                    current = null;
+                    break;
+
                 }
 
             }
@@ -106,11 +109,11 @@ public record GameLogic(Game game) {
                         break;
                     }
                 } else {
-                    if (field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().getTokenType() != current) {
-                        equal = false;
-                        current = null;
-                        break;
-                    }
+                    if (!(field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().getTokenType() != current)) continue;
+                    equal = false;
+                    current = null;
+                    break;
+
                 }
             }
             if (equal)

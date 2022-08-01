@@ -26,9 +26,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 
-public class FileInputReader {
+public abstract class FileInputReader {
 
     public static File selectFile(Scene scene) {
         FileChooser chooser = new FileChooser();
@@ -54,7 +54,7 @@ public class FileInputReader {
         //create a new game
         var players = getPlayersFromFile(gameData);
 
-        Game game = new Game(new PlayingField(gameData.field().length), players);
+        Game game = new Game(new PlayingField(gameData.field().length), players, Game.getGame().getGameWindowHandler());
         var currentPlayer = game.getPlayers().stream().filter(player -> player.getPlayerID() == gameData.currentPlayer()).findFirst().orElse(null);
         game.setCurrentPlayer(currentPlayer);
         game.getPlayingField().addDataFromJSON(gameData.field());
@@ -97,17 +97,19 @@ public class FileInputReader {
     }
 
     private static void removeUsedTokensFromPile(Game game) {
-        var map = new HashMap<TokenType, Integer>();
+        EnumMap<TokenType, Integer> map = new EnumMap<>(TokenType.class);
         for (int row = 0; row < game.getPlayingField().getFieldMap().length; row++) {
             for (int col = 0; col < game.getPlayingField().getFieldMap()[row].length; col++) {
                 var token = game.getPlayingField().getFieldMap()[row][col].getToken();
-                if (token.getTokenType() != TokenType.NONE) {
-                    if (map.containsKey(token.getTokenType())) {
-                        map.put(token.getTokenType(), map.get(token.getTokenType()) + 1);
-                    } else {
-                        map.put(token.getTokenType(), 1);
-                    }
+                if (token.getTokenType() == TokenType.NONE) {
+                    continue;
                 }
+                if (map.containsKey(token.getTokenType())) {
+                    map.put(token.getTokenType(), map.get(token.getTokenType()) + 1);
+                } else {
+                    map.put(token.getTokenType(), 1);
+                }
+
             }
         }
 
@@ -129,13 +131,16 @@ public class FileInputReader {
             }
         }
 
-        for (var token : map.keySet()) {
+        for (var entry : map.entrySet()) {
+            var token = entry.getKey();
             for (int i = 0; i < map.get(token); i++) {
                 for (var tokenPileToken : game.getTokenDrawPile()) {
-                    if (tokenPileToken.getTokenType() == token) {
-                        game.getTokenDrawPile().remove(tokenPileToken);
-                        break;
+                    if (tokenPileToken.getTokenType() != token) {
+                        continue;
                     }
+                    game.getTokenDrawPile().remove(tokenPileToken);
+                    break;
+
                 }
             }
         }

@@ -32,42 +32,34 @@ public class CrossWise {
     public static boolean slow = false;
     public static int delay = 5000;
 
-    private static Thread gameThread = new Thread(() -> {
-        try {
-            if (CrossWise.slow) Thread.sleep(CrossWise.delay);
-
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        var player1 = new Player(0, true, "Player 1");
-        player1.create();
-        var player2 = new AI(1, true, "Player 2");
-        player2.create();
-        var player3 = new AI(2, false, "Player 3");
-        player3.create();
-        var player4 = new AI(3, false, "Player 4");
-        player4.create();
-        var game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)));
-        Game.setGame(game);
-        game.setup(false);
-        game.start();
-    });
 
     public static void main(String... args) {
+        var window = new GameWindow();
+        new Thread(() -> {
+            try {
+                if (CrossWise.slow) Thread.sleep(CrossWise.delay);
 
-        gameThread.start();
-        if (CrossWise.slow)
-            GameWindow.start();
-
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            var player1 = new Player(0, true, "Player 1");
+            player1.create();
+            var player2 = new AI(1, true, "Player 2");
+            player2.create();
+            var player3 = new AI(2, false, "Player 3");
+            player3.create();
+            var player4 = new AI(3, false, "Player 4");
+            player4.create();
+            var game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), window);
+            Game.setGame(game);
+            game.setup(false);
+            game.start();
+        }).start();
+        if (CrossWise.slow) {
+            window.start();
+        }
 
     }
 
 
-    public static void setGameThread(Thread thread) {
-        gameThread = thread;
-    }
-
-    public static Thread getGameThread() {
-        return gameThread;
-    }
 }

@@ -105,7 +105,7 @@ public class CreateGame {
         else
             playerFour = new Player(4, playerFourActive.isSelected(), playerFourField.getText());
 
-        Game game = new Game(field, new ArrayList<>(List.of(playerOne, playerTwo, playerThree, playerFour)));
+        Game game = new Game(field, new ArrayList<>(List.of(playerOne, playerTwo, playerThree, playerFour)), Game.getGame().getGameWindowHandler());
         game.setup(false);
         Game.setGame(game);
 

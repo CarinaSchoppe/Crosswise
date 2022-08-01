@@ -14,6 +14,7 @@ import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.player.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for the Team of the game Crosswise
@@ -37,6 +38,7 @@ public class Team {
      * TeamType
      */
     private final TeamType teamType;
+
     /**
      * List of players in the team
      */
@@ -46,6 +48,10 @@ public class Team {
      */
     private int points;
 
+    /**
+     * Team won with a full row
+     */
+    private boolean rowWin = false;
     //----------------------------------------------------------------------------------------------
 
     /**
@@ -107,7 +113,7 @@ public class Team {
         return teamType;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -115,4 +121,11 @@ public class Team {
         return points;
     }
 
+    public boolean isRowWin() {
+        return rowWin;
+    }
+
+    public void setRowWin(boolean rowWin) {
+        this.rowWin = rowWin;
+    }
 }

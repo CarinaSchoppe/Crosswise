@@ -12,8 +12,6 @@ package de.fhwwedel.pp.player;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.gui.GameWindow;
-import de.fhwwedel.pp.gui.GameWindowHandler;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Team;
@@ -23,9 +21,7 @@ import de.fhwwedel.pp.util.special.Action;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Class for a player of the game Crosswise
@@ -59,7 +55,7 @@ public class Player {
      *
      * @param playerID Player ID of that player
      * @param isActive Status, if the player is active
-     * @param name Name of the player
+     * @param name     Name of the player
      */
     public Player(int playerID, boolean isActive, String name) {
         this.playerID = playerID;
@@ -78,7 +74,7 @@ public class Player {
     /**
      * Perform a turn for a Symbol-Token
      *
-     * @param token Token to perform the move with
+     * @param token    Token to perform the move with
      * @param position Position, where the token should be placed
      * @return true, if everything went correctly, otherwise false
      */
@@ -113,7 +109,6 @@ public class Player {
     }
 
 
-
     public boolean removerTokenTurn(final Token token, final Position position) {
         if (token.getTokenType() != TokenType.REMOVER)
             return false;
@@ -129,8 +124,7 @@ public class Player {
         tokens.add(field.getToken());
         field.setToken(new Token(TokenType.NONE));
         field.getToken().setPosition(field);
-        if (GameWindow.getGameWindow() != null)
-            GameWindow.getGameWindow().removerAmountText();
+        Game.getGame().getGameWindowHandler().removerAmountText();
         GameLogger.logMove(this, token, field, Action.REMOVE);
 
         return true;
@@ -155,8 +149,7 @@ public class Player {
         fieldEnd.setToken(fieldStart.getToken());
         fieldStart.setToken(new Token(TokenType.NONE));
 
-        if (GameWindow.getGameWindow() != null)
-            GameWindow.getGameWindow().moverAmountText();
+        Game.getGame().getGameWindowHandler().moverAmountText();
         GameLogger.logMove(this, token, fieldStart, Action.REMOVE);
         GameLogger.logMove(this, token, fieldEnd, Action.PLACE);
 
@@ -179,8 +172,7 @@ public class Player {
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
         fieldSecond.setToken(temp);
-        if (GameWindow.getGameWindow() != null)
-            GameWindow.getGameWindow().swapperAmountText();
+        Game.getGame().getGameWindowHandler().swapperAmountText();
         GameLogger.logMove(this, fieldSecond.getToken(), fieldFirst, Action.PLACE);
         GameLogger.logMove(this, fieldFirst.getToken(), fieldSecond, Action.PLACE);
         return true;
@@ -189,13 +181,13 @@ public class Player {
     /**
      * Perform a move for a Replacer-Token
      *
-     * @param token Token to be replaced
+     * @param token              Token to be replaced
      * @param fieldTokenPosition position on field, that will be swapped with hand
-     * @param handTokenPosition position on hand, that will be swapped with field
+     * @param handTokenPosition  position on hand, that will be swapped with field
      * @return true, if everything went correctly, otherwise false
      */
     public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition,
-            final Position handTokenPosition) {
+                                     final Position handTokenPosition) {
         if (hasToken(token))
             return false;
         if (token.getTokenType() != TokenType.REPLACER)
@@ -212,8 +204,7 @@ public class Player {
         tokens.remove(fieldToken);
         tokens.remove(handToken);
         field.setToken(handToken);
-        if (GameWindow.getGameWindow() != null)
-            GameWindow.getGameWindow().replacerAmountText();
+        Game.getGame().getGameWindowHandler().replacerAmountText();
         tokens.add(field.getToken());
         assert fieldToken != null;
         GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
@@ -260,7 +251,7 @@ public class Player {
             if (CrossWise.slow)
                 Thread.sleep(CrossWise.delay);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
         //If no tokens are left in the pile, throw NoTokensException
         if (Game.getGame().getTokenDrawPile().isEmpty())
@@ -276,10 +267,8 @@ public class Player {
 
 
         //remove all tokens from tokens if the TokenType is None
-        for (var t : new ArrayList<>(tokens)) {
-            if (t.getTokenType() == TokenType.NONE)
-                tokens.remove(t);
-        }
+        tokens.removeIf(t -> t.getTokenType() == TokenType.NONE);
+
         //Add the token to the hand
         tokens.add(token);
         //Fill up hand with empty Tokens (at start of the game)
@@ -289,9 +278,8 @@ public class Player {
 
         GameLogger.logDraw(this, token);
 
-        if (GameWindowHandler.getGameWindowHandler() != null) {
-            GameWindowHandler.getGameWindowHandler().updatePlayerHandIcons(this);
-        }
+        Game.getGame().getGameWindowHandler().updatePlayerHandIcons(playerID, tokens);
+
 
     }
 
@@ -316,7 +304,7 @@ public class Player {
      *
      * @return HashSet of Indexes of only Symbol-Tokens on hand
      */
-    public HashSet<Integer> getHandSymbolTokenPositions() {
+    public Set<Integer> getHandSymbolTokenPositions() {
         Token[] handCopy = this.getTokens().toArray(new Token[0]);
         HashSet<Integer> returnSet = new HashSet<>();
         for (int i = 0; i < handCopy.length; i++) {
@@ -340,7 +328,7 @@ public class Player {
         return array;
     }
 
-    public ArrayList<Token> getTokens() {
+    public List<Token> getTokens() {
         return tokens;
     }
 

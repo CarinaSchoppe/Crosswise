@@ -58,4 +58,10 @@ public class Token {
         return getTokenType() == token.getTokenType();
     }
 
+    @Override
+    public int hashCode() {
+        int result = getTokenType() != null ? getTokenType().hashCode() : 0;
+        result = 31 * result + (getPosition() != null ? getPosition().hashCode() : 0);
+        return result;
+    }
 }
