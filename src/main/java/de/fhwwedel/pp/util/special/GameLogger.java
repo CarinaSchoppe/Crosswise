@@ -10,6 +10,7 @@
 
 package de.fhwwedel.pp.util.special;
 
+import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.game.Position;
@@ -29,7 +30,8 @@ public class GameLogger {
 
     public static void log(String logMessage) {
         //get the current time and date
-        System.out.println(logMessage);
+        if (CrossWise.DEBUG)
+            System.out.println(logMessage);
         logMessages.add(new java.util.Date() + ": " + logMessage);
     }
 
@@ -41,7 +43,7 @@ public class GameLogger {
     }
 
     public static void saveLogToFile(String fileName) {
-        File file = new File(fileName+".txt");
+        File file = new File(fileName + ".txt");
         try (var writer = new FileWriter(file)) {
             for (var logMessage : logMessages) {
                 writer.write(logMessage + "\n");

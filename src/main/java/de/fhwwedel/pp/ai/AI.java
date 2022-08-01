@@ -10,6 +10,7 @@
 
 package de.fhwwedel.pp.ai;
 
+import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.MoveNotPerformedException;
@@ -372,13 +373,13 @@ import java.util.*;
                 if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
             }
             case 8 -> {
-                if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+                if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
             }
             case 9 -> {
-                if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+                if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new MoveNotPerformedException();
             }
             case 10 -> {
-                if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+                if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new MoveNotPerformedException();
             }
             default -> throw new NoMovePossibleException("No move possible");
         }
@@ -403,9 +404,10 @@ import java.util.*;
             }
         }
 
-        for (var bla : bestMovePerToken) {
-            if (bla != null) System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());
-        }
+        if (CrossWise.DEBUG)
+            for (var bla : bestMovePerToken) {
+                if (bla != null) System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());
+            }
 
         Integer bestToken = null;
         for (int i = 0; i < getTokens().size(); i++) {
@@ -601,12 +603,12 @@ import java.util.*;
                             //Check, if there isnt just one missing Token anymore to win in the
                             //line
                             for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
-                                    if (lineMap.getValue() != Constants.GAMEGRID_ROWS - 1) {
-                                        return true;
-                                    }
+                                if (lineMap.getValue() != Constants.GAMEGRID_ROWS - 1) {
+                                    return true;
                                 }
                             }
                         }
+                    }
 
                 }
             } else {

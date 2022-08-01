@@ -206,10 +206,12 @@ public class Game {
                 //TODO: Handle game over! GUI stuff
             } else {
                 gameWindowHandler.gameWonNotifier(team.getTeamType(), team.getPoints(), team.isRowWin());
-                System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
+                if (CrossWise.DEBUG)
+                    System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
                 System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
             }
             GameLogger.saveLogToFile("Logfile");
+            System.out.println(System.currentTimeMillis() - CrossWise.time);
             return true;
         }
         return false;

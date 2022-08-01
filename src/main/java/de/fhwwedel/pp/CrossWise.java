@@ -29,9 +29,10 @@ import java.util.List;
 public class CrossWise {
 
 
+    public static final boolean DEBUG = false;
+    public static long time;
     public static final boolean SLOW = false;
     public static final int DELAY = 5000;
-
 
     public static void main(String... args) {
         var window = new GameWindow();
@@ -42,6 +43,7 @@ public class CrossWise {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+            time = System.currentTimeMillis();
             var player1 = new AI(0, true, "Player 1");
             player1.create();
             var player2 = new AI(1, true, "Player 2");
