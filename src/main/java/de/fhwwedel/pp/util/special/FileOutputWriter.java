@@ -24,6 +24,9 @@ import java.util.List;
 
 public class FileOutputWriter {
 
+    private FileOutputWriter() {
+    }
+
     public static void writeJSON(Scene scene) {
         var file = FileInputReader.selectFile(scene);
 

@@ -12,6 +12,7 @@ package de.fhwwedel.pp.ai;
 
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.exceptions.MoveNotPerformedException;
 import de.fhwwedel.pp.util.exceptions.NoMovePossibleException;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.TeamType;
@@ -301,7 +302,7 @@ import java.util.*;
      * @param token Symbol TokenType
      * @return returns HashSet with all possible Moves for the given Symbol Token
      */
-    public HashSet<TokenMove> createPossibleSymbolTokenMoves(TokenType token) {
+    public Set<TokenMove> createPossibleSymbolTokenMoves(TokenType token) {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         HashSet<Position> emptyFields = emptyFields();
         for (Position position : emptyFields) {
@@ -364,11 +365,11 @@ import java.util.*;
         TokenMove move = calculateAIMove();
         switch (move.getToken().getValue()) {
             case 1, 2, 3, 4, 5, 6 -> {
-                if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+                if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
 
             }
             case 7 -> {
-                if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+                if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
             }
             case 8 -> {
                 if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
@@ -444,9 +445,9 @@ import java.util.*;
      *
      * @return HashSet of all possible Moves
      */
-    public HashSet<TokenMove> createPossibleRemoverTokenMoves() {
+    public Set<TokenMove> createPossibleRemoverTokenMoves() {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
-        HashSet<Position> occupiedFields = occupiedFields();
+        Set<Position> occupiedFields = occupiedFields();
         for (Position position : occupiedFields) {
 
             TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(position, TokenType.NONE);
@@ -468,10 +469,10 @@ import java.util.*;
      *
      * @return HashSet of all possible Moves
      */
-    public HashSet<TokenMove> createPossibleMoverTokenMoves() {
+    public Set<TokenMove> createPossibleMoverTokenMoves() {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         HashSet<Position> emptyFields = emptyFields();
-        HashSet<Position> occupiedFields = occupiedFields();
+        Set<Position> occupiedFields = occupiedFields();
         for (Position occupiedPosition : occupiedFields) {
             for (Position emptyPosition : emptyFields) {
 
@@ -493,7 +494,7 @@ import java.util.*;
      *
      * @return HashSet of possible Moves
      */
-    public HashSet<TokenMove> createPossibleSwapperTokenMoves() {
+    public Set<TokenMove> createPossibleSwapperTokenMoves() {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position pos1 : occupiedFields) {
@@ -561,7 +562,7 @@ import java.util.*;
      *
      * @return HashSet of positions of occupied fields
      */
-    public HashSet<Position> occupiedFields() {
+    public Set<Position> occupiedFields() {
         HashSet<Position> positions = new HashSet<>();
         Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
 
@@ -589,25 +590,24 @@ import java.util.*;
 
         for (Map.Entry<Integer, EnumMap<TokenType, Integer>> entry : map.entrySet()) {
             if (entry.getKey() < 0) {
-                if (this.getTeam().getTeamType() == TeamType.VERTICAL) {
-                    if (entry.getValue().size() == 1) {
-                        for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
-                            if (count.getValue() == Constants.GAMEGRID_ROWS - 1) {
-                                EnumMap<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
-                                //Check, if there are other tokens in the same line after the move
-                                if (line.size() != 1) {
-                                    return true;
-                                }
-                                //Check, if there isnt just one missing Token anymore to win in the
-                                //line
-                                for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
+                if (this.getTeam().getTeamType() == TeamType.VERTICAL && entry.getValue().size() == 1) {
+                    for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
+                        if (count.getValue() == Constants.GAMEGRID_ROWS - 1) {
+                            EnumMap<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
+                            //Check, if there are other tokens in the same line after the move
+                            if (line.size() != 1) {
+                                return true;
+                            }
+                            //Check, if there isnt just one missing Token anymore to win in the
+                            //line
+                            for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
                                     if (lineMap.getValue() != Constants.GAMEGRID_ROWS - 1) {
                                         return true;
                                     }
                                 }
                             }
                         }
-                    }
+
                 }
             } else {
                 if (this.getTeam().getTeamType() == TeamType.HORIZONTAL && entry.getValue().size() == 1) {
@@ -638,7 +638,7 @@ import java.util.*;
      *
      * @return HashSet of possible TokenMoves
      */
-    public HashSet<TokenMove> createPossibleReplacerTokenMoves() {
+    public Set<TokenMove> createPossibleReplacerTokenMoves() {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         //convert player.getTokens() to Array of Tokens
         Token[] playerHand = this.getTokens().toArray(new Token[0]);
@@ -701,13 +701,13 @@ import java.util.*;
     public Map<Integer, Integer> calculateCurrentOverallPointsWithChangedToken(TokenType[][] newGrid) {
         Map<Integer, EnumMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokensWithChangedToken(newGrid);
 
-        Map<Integer, Integer> PointMap = new HashMap<>();
+        Map<Integer, Integer> pointMap = new HashMap<>();
 
         for (Map.Entry<Integer, EnumMap<TokenType, Integer>> entry : occurrenceMap.entrySet()) {
-            PointMap.put(entry.getKey(), calculate(entry.getValue()));
+            pointMap.put(entry.getKey(), calculate(entry.getValue()));
         }
 
-        return PointMap;
+        return pointMap;
     }
 
     /**

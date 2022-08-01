@@ -28,7 +28,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 
-public abstract class FileInputReader {
+public class FileInputReader {
+
+    private FileInputReader() {
+    }
 
     public static File selectFile(Scene scene) {
         FileChooser chooser = new FileChooser();
@@ -140,7 +143,6 @@ public abstract class FileInputReader {
                     }
                     game.getTokenDrawPile().remove(tokenPileToken);
                     break;
-
                 }
             }
         }

@@ -248,8 +248,8 @@ public class Player {
     public void drawToken() throws NoTokenException {
         //Test method to slow down the drawing of Tokens
         try {
-            if (CrossWise.slow)
-                Thread.sleep(CrossWise.delay);
+            if (CrossWise.SLOW)
+                Thread.sleep(CrossWise.DELAY);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

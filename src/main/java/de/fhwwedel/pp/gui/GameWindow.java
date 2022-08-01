@@ -55,6 +55,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
                 case 1 -> addTokenImagesForPlayer2(tokens);
                 case 2 -> addTokenImagesForPlayer3(tokens);
                 case 3 -> addTokenImagesForPlayer4(tokens);
+                default -> throw new IllegalArgumentException("PlayerID must be between 0 and 3");
             }
         });
     }
@@ -133,8 +134,6 @@ public class GameWindow extends Application implements Initializable, GameWindow
                 String id = "gridToken" + c + r;
                 GameWindow.getGameWindow().getFieldImages().put(id, imgNew);
                 imgNew.setId(id);
-/*
-                System.out.println(imgNew.getId());*/
 
                 Image img = new Image("/pictures/0none.png");
                 imgNew.setImage(img);
@@ -500,7 +499,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
         if (rowComplete && wonType != null) {
             message = "Team: " + wonType.getTeamName()
                     + " won, because the hit a full line!";
-        } else if (points == Objects.requireNonNull(lost).getPoints() && wonType != null) {
+        } else if (lost != null && points == lost.getPoints()) {
             message = "Draw! Both teams got the same amount of points (" + points + ")!";
         } else if (wonType != null) {
             message = "Team: " + wonType.getTeamName()
@@ -606,7 +605,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
         generateGrid();
     }
 
-    public HashMap<String, ImageView> getFieldImages() {
+    public Map<String, ImageView> getFieldImages() {
         return fieldImages;
     }
 

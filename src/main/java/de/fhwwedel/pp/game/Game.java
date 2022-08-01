@@ -157,16 +157,16 @@ public class Game {
      */
     private void nextPlayer() {
         //gets all active players
-        var players = this.players.stream().filter(Player::isActive).toList();
+        var allPlayers = this.players.stream().filter(Player::isActive).toList();
         //puts the first ever to play player to the one with the ID: 0
-        if (currentPlayer == null && !players.isEmpty()) {
-            currentPlayer = players.get(0);
-        } else if (currentPlayer != null && !players.isEmpty()) {
-            int index = players.indexOf(currentPlayer);
-            if (index == players.size() - 1) {
-                currentPlayer = players.get(0);
+        if (currentPlayer == null && !allPlayers.isEmpty()) {
+            currentPlayer = allPlayers.get(0);
+        } else if (currentPlayer != null && !allPlayers.isEmpty()) {
+            int index = allPlayers.indexOf(currentPlayer);
+            if (index == allPlayers.size() - 1) {
+                currentPlayer = allPlayers.get(0);
             } else {
-                currentPlayer = players.get(index + 1);
+                currentPlayer = allPlayers.get(index + 1);
             }
         } else {
             //handler for the fact that the game is over
@@ -246,8 +246,8 @@ public class Game {
             System.out.println("No more tokens left in the Pile!");
         }
         try {
-            if (CrossWise.slow)
-                Thread.sleep(CrossWise.delay);
+            if (CrossWise.SLOW)
+                Thread.sleep(CrossWise.DELAY);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

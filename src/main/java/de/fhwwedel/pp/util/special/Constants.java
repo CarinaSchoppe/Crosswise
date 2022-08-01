@@ -10,7 +10,7 @@
 
 package de.fhwwedel.pp.util.special;
 
-public class Constants {
+public abstract class Constants {
 
     public static final int GAMEGRID_ROWS = 6;
 

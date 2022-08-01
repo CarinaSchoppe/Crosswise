@@ -29,18 +29,18 @@ import java.util.List;
 public class CrossWise {
 
 
-    public static final boolean slow = false;
-    public static final int delay = 5000;
+    public static final boolean SLOW = false;
+    public static final int DELAY = 5000;
 
 
     public static void main(String... args) {
         var window = new GameWindow();
         new Thread(() -> {
             try {
-                if (CrossWise.slow) Thread.sleep(CrossWise.delay);
+                if (CrossWise.SLOW) Thread.sleep(CrossWise.DELAY);
 
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.currentThread().interrupt();
             }
             var player1 = new Player(0, true, "Player 1");
             player1.create();
@@ -55,7 +55,7 @@ public class CrossWise {
             game.setup(false);
             game.start();
         }).start();
-        if (CrossWise.slow) {
+        if (CrossWise.SLOW) {
             window.start();
         }
 

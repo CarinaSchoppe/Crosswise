@@ -21,6 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameLogger {
+
+    private GameLogger() {
+    }
+
     private static final ArrayList<String> logMessages = new ArrayList<>();
 
     public static void log(String logMessage) {
