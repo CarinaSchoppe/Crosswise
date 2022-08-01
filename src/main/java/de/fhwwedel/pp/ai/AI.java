@@ -27,8 +27,7 @@ import java.util.*;
  * Class of an AI player
  *
  * @author Jacob Klövekorn
- */
-public class AI extends Player {
+ */ public class AI extends Player {
     public AI(int playerID, boolean active, String name) {
         super(playerID, active, name);
     }
@@ -47,24 +46,23 @@ public class AI extends Player {
      */
     public void makeMove() {
         try {
-            //TODO booleans of turns -> false = exception
             TokenMove move = calculateAIMove();
             switch (move.getToken().getValue()) {
+                case 1, 2, 3, 4, 5, 6 -> {
+                    if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+
+                }
                 case 7 -> {
-                    if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition()))
-                        throw new IllegalArgumentException("Move could not be performed");
+                    if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
                 }
                 case 8 -> {
-                    if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition()))
-                        throw new IllegalArgumentException("Move could not be performed");
+                    if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
                 }
                 case 9 -> {
-                    if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition()))
-                        throw new IllegalArgumentException("Move could not be performed");
+                    if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
                 }
                 case 10 -> {
-                    if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition()))
-                        throw new IllegalArgumentException("Move could not be performed");
+                    if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
                 }
             }
             performAnimation();
@@ -92,8 +90,7 @@ public class AI extends Player {
         }
 
         for (var bla : bestMovePerToken) {
-            if (bla != null)
-                System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());
+            if (bla != null) System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());
         }
 
         Integer bestToken = null;
@@ -179,8 +176,7 @@ public class AI extends Player {
         }
 
         //Vergleich auf häufigstes Hand Vorkommen
-        int tokenAmountInHandDifference = this.tokenAmountInHand(newMove.getToken()) -
-                this.tokenAmountInHand(currentBestMove.getToken());
+        int tokenAmountInHandDifference = this.tokenAmountInHand(newMove.getToken()) - this.tokenAmountInHand(currentBestMove.getToken());
         if (tokenAmountInHandDifference > 0) {
             return true;
         }
@@ -190,9 +186,7 @@ public class AI extends Player {
 
         //Vergleich auf Anzahl des Tokens auf Brett (nur bei Symbolsteinen)
         if (newMove.getToken().getValue() <= Constants.UNIQUE_SYMBOL_TOKENS) {
-            int differenceOccurrencesOnBoard =
-                    countNumberOfTokenOnGrid(newMove.getToken()) - countNumberOfTokenOnGrid(
-                            currentBestMove.getToken());
+            int differenceOccurrencesOnBoard = countNumberOfTokenOnGrid(newMove.getToken()) - countNumberOfTokenOnGrid(currentBestMove.getToken());
             if (differenceOccurrencesOnBoard > 0) {
                 return false;
             }
@@ -202,8 +196,7 @@ public class AI extends Player {
         }
 
         //Vergleich auf Ordinalität von Token
-        int differenceOrdinalityOfToken = newMove.getToken().getValue() -
-                currentBestMove.getToken().getValue();
+        int differenceOrdinalityOfToken = newMove.getToken().getValue() - currentBestMove.getToken().getValue();
         if (differenceOrdinalityOfToken > 0) {
             return false;
         }
@@ -212,8 +205,7 @@ public class AI extends Player {
         }
 
         //Vergleich auf vertikale Position des Tokens
-        int differenceVerticalPosition = newMove.getPrimaryMovePosition().getX() -
-                currentBestMove.getPrimaryMovePosition().getX();
+        int differenceVerticalPosition = newMove.getPrimaryMovePosition().getX() - currentBestMove.getPrimaryMovePosition().getX();
 
         if (differenceVerticalPosition < 0) {
             return true;
@@ -222,8 +214,7 @@ public class AI extends Player {
             return false;
         }
         //Vergleich auf horizontale Position des Tokens
-        int differenceHorizontalPosition = newMove.getPrimaryMovePosition().getY() -
-                currentBestMove.getPrimaryMovePosition().getY();
+        int differenceHorizontalPosition = newMove.getPrimaryMovePosition().getY() - currentBestMove.getPrimaryMovePosition().getY();
         if (differenceHorizontalPosition < 0) {
             return true;
         }
@@ -232,17 +223,14 @@ public class AI extends Player {
         }
 
         //Falls SpezialStein: Vergleich auf zweite vertikale Position des Tokens
-        if (newMove.getToken().getValue() > Constants.UNIQUE_SYMBOL_TOKENS + 1 && newMove.getToken()
-                .getValue() < (Constants.UNIQUE_SYMBOL_TOKENS + Constants.UNIQUE_ACTION_TOKENS)) {
+        if (newMove.getToken().getValue() > Constants.UNIQUE_SYMBOL_TOKENS + 1 && newMove.getToken().getValue() < (Constants.UNIQUE_SYMBOL_TOKENS + Constants.UNIQUE_ACTION_TOKENS)) {
 
             //Falls Replacer, wird der neue Zug als besser bewertet
-            if (newMove.getToken().getValue() == Constants.UNIQUE_ACTION_TOKENS +
-                    Constants.UNIQUE_SYMBOL_TOKENS) {
+            if (newMove.getToken().getValue() == Constants.UNIQUE_ACTION_TOKENS + Constants.UNIQUE_SYMBOL_TOKENS) {
                 return true;
                 //TODO möglicherweise bessere AI Logik hier
             }
-            int differenceVerticalPosition2 = newMove.getSecondaryMovePosition().getX()
-                    - currentBestMove.getSecondaryMovePosition().getX();
+            int differenceVerticalPosition2 = newMove.getSecondaryMovePosition().getX() - currentBestMove.getSecondaryMovePosition().getX();
             if (differenceVerticalPosition2 < 0) {
                 return true;
             }
@@ -250,8 +238,7 @@ public class AI extends Player {
                 return false;
             }
             //Falls SpezialStein: Vergleich auf zweite horizontale Position des Tokens
-            int differenceHorizontalPosition2 = newMove.getSecondaryMovePosition().getY()
-                    - currentBestMove.getSecondaryMovePosition().getY();
+            int differenceHorizontalPosition2 = newMove.getSecondaryMovePosition().getY() - currentBestMove.getSecondaryMovePosition().getY();
             return differenceHorizontalPosition2 < 0;
         }
 
@@ -291,8 +278,7 @@ public class AI extends Player {
         int range = Constants.UNIQUE_SYMBOL_TOKENS;
         int nValue = newToken.getValue();
         int cValue = currentToken.getValue();
-        if (nValue <= range && cValue <= range ||
-                nValue > range && cValue > range) {
+        if (nValue <= range && cValue <= range || nValue > range && cValue > range) {
             return 0;
         } else if (nValue <= range) {
             return 1;
@@ -456,8 +442,7 @@ public class AI extends Player {
     private boolean isMovePreventingLoss(TokenType[][] changedMap) {
 
         HashMap<Integer, HashMap<TokenType, Integer>> map = getOccurrencesOfTokens();
-        Map<Integer, Map<TokenType, Integer>> changedOccurrenceMap =
-                getOccurrencesOfTokensWithChangedToken(changedMap);
+        Map<Integer, Map<TokenType, Integer>> changedOccurrenceMap = getOccurrencesOfTokensWithChangedToken(changedMap);
 
         for (Map.Entry<Integer, HashMap<TokenType, Integer>> entry : map.entrySet()) {
             if (entry.getKey() < 0) {
@@ -465,8 +450,7 @@ public class AI extends Player {
                     if (entry.getValue().size() == 1) {
                         for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
                             if (count.getValue() == Constants.GAMEGRID_ROWS - 1) {
-                                Map<TokenType, Integer> line =
-                                        changedOccurrenceMap.get(entry.getKey());
+                                Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
                                 //Check, if there are other tokens in the same line after the move
                                 if (line.size() != 1) {
                                     return true;
@@ -525,8 +509,7 @@ public class AI extends Player {
             TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(position, TokenType.NONE);
             Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
             //Create Token Move for every possible move and add it to the existing moves
-            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(),
-                    TokenType.REMOVER, false, isMovePreventingLoss(changedTokenGrid)));
+            tokenMoves.add(new TokenMove(position, currentCalculation.pointsChange(), TokenType.REMOVER, false, isMovePreventingLoss(changedTokenGrid)));
 
         }
         return tokenMoves;
@@ -549,13 +532,10 @@ public class AI extends Player {
         for (Position occupiedPosition : occupiedFields) {
             for (Position emptyPosition : emptyFields) {
 
-                TokenType[][] changedTokenGrid = getGridCopyWithSwappedTokens(emptyPosition,
-                        getTokenAtPosition(occupiedPosition), occupiedPosition, TokenType.NONE);
+                TokenType[][] changedTokenGrid = getGridCopyWithSwappedTokens(emptyPosition, getTokenAtPosition(occupiedPosition), occupiedPosition, TokenType.NONE);
                 Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
                 //Create Token Move for every possible move and add it to the existing moves
-                tokenMoves.add(new TokenMove(emptyPosition, occupiedPosition,
-                        currentCalculation.pointsChange(), TokenType.MOVER,
-                        currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+                tokenMoves.add(new TokenMove(emptyPosition, occupiedPosition, currentCalculation.pointsChange(), TokenType.MOVER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
             }
         }
         return tokenMoves;
@@ -576,11 +556,9 @@ public class AI extends Player {
         for (Position pos1 : occupiedFields) {
             for (Position pos2 : occupiedFields) {
                 if (!pos1.equals(pos2)) {
-                    TokenType[][] changedTokenGrid = getGridCopyWithSwappedTokens(pos1, getTokenAtPosition(pos2), pos2,
-                            getTokenAtPosition(pos1));
+                    TokenType[][] changedTokenGrid = getGridCopyWithSwappedTokens(pos1, getTokenAtPosition(pos2), pos2, getTokenAtPosition(pos1));
                     Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
-                    tokenMoves.add(new TokenMove(pos1, pos2, currentCalculation.pointsChange(),
-                            TokenType.SWAPPER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+                    tokenMoves.add(new TokenMove(pos1, pos2, currentCalculation.pointsChange(), TokenType.SWAPPER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
                 }
             }
         }
@@ -604,14 +582,11 @@ public class AI extends Player {
         HashSet<Position> occupiedFields = occupiedFields();
         for (Position occupiedField : occupiedFields) {
             for (Integer handPosition : handSymbolTokenSet) {
-                TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField,
-                        playerHand[handPosition].getTokenType());
+                TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType());
                 Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
                 //TODO Prevent Loss
                 //Create Token Move for every possible move and add it to the existing moves
-                tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition),
-                        currentCalculation.pointsChange(), TokenType.REPLACER,
-                        currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
+                tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(), TokenType.REPLACER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
             }
         }
         return tokenMoves;
