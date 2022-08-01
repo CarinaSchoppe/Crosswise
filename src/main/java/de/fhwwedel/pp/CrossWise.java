@@ -35,7 +35,7 @@ public class CrossWise {
     public static final boolean DEBUG = true;
     public static long time;
     public static final boolean SLOW = true;
-    public static final int DELAY = 2000;
+    public static final int DELAY = 250;
 
     public static void main(String... args) {
         var window = new GameWindow();

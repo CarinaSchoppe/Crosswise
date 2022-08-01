@@ -210,8 +210,9 @@ public class Game {
                     System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
                 System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
             }
+            System.out.println(System.currentTimeMillis()-CrossWise.time);
             GameLogger.saveLogToFile("Logfile");
-            System.out.println(System.currentTimeMillis() - CrossWise.time);
+
             return true;
         }
         return false;

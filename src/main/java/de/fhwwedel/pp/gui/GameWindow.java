@@ -10,7 +10,9 @@
 
 package de.fhwwedel.pp.gui;
 
+import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.game.PlayingField;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
@@ -514,7 +516,17 @@ public class GameWindow extends Application implements Initializable, GameWindow
         alert.setHeaderText("Game finished");
         alert.showAndWait();
         var window = new GameWindow();
-        Game.setGame(new Game(null, new ArrayList<>(), window));
+        var player1 = new AI(0, true, "Player 1");
+        player1.create();
+        var player2 = new AI(1, true, "Player 2");
+        player2.create();
+        var player3 = new AI(2, false, "Player 3");
+        player3.create();
+        var player4 = new AI(3, false, "Player 4");
+        player4.create();
+        var game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), window);
+        game.setup(false);
+        Game.setGame(game);
         gameWindow.stage.close();
         new Thread(() -> Game.getGame().start()).start();
         Platform.runLater(window::start);
