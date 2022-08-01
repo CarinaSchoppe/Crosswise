@@ -13,7 +13,6 @@ package de.fhwwedel.pp.ai;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoMovePossibleException;
-import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.TeamType;
 import de.fhwwedel.pp.util.game.Token;
@@ -45,31 +44,28 @@ import java.util.*;
      * Call Player Turn method for corresponding TokenMove
      */
     public void makeMove() {
-        try {
-            TokenMove move = calculateAIMove();
-            switch (move.getToken().getValue()) {
-                case 1, 2, 3, 4, 5, 6 -> {
-                    if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+        TokenMove move = calculateAIMove();
+        switch (move.getToken().getValue()) {
+            case 1, 2, 3, 4, 5, 6 -> {
+                if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
 
-                }
-                case 7 -> {
-                    if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-                }
-                case 8 -> {
-                    if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-                }
-                case 9 -> {
-                    if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-                }
-                case 10 -> {
-                    if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
-                }
             }
-            performAnimation();
-            Game.getGame().turnDone();
-        } catch (NoTokenException e) {
-            //TODO: needed?
+            case 7 -> {
+                if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
+            case 8 -> {
+                if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
+            case 9 -> {
+                if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
+            case 10 -> {
+                if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new IllegalArgumentException("Move could not be performed");
+            }
         }
+        performAnimation();
+        Game.getGame().turnDone();
+
     }
 
     /**
@@ -77,9 +73,8 @@ import java.util.*;
      * then compares those two with each other
      *
      * @return Best Move the AI can do with his Hand-Tokens
-     * @throws NoTokenException No tokens left
      */
-    public TokenMove calculateAIMove() throws NoTokenException {
+    public TokenMove calculateAIMove() {
         ArrayList<TokenMove> bestMovePerToken = new ArrayList<>();
         TokenType[] playerHand = this.convertHandToTokenTypeArray();
 
@@ -103,11 +98,8 @@ import java.util.*;
                 }
             }
         }
-        if (bestToken == null) {
-            throw new NoTokenException("No token more on hand!");
-        } else {
-            return bestMovePerToken.get(bestToken);
-        }
+        return bestMovePerToken.get(bestToken);
+
     }
 
     //##############################################################################################
