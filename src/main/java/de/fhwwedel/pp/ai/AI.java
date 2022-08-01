@@ -50,11 +50,22 @@ public class AI extends Player {
             //TODO booleans of turns -> false = exception
             TokenMove move = calculateAIMove();
             switch (move.getToken().getValue()) {
-                case 1, 2, 3, 4, 5, 6 -> normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition());
-                case 7 -> removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition());
-                case 8 -> moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition());
-                case 9 -> swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
-                case 10 -> replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition());
+                case 7 -> {
+                    if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition()))
+                        throw new IllegalArgumentException("Move could not be performed");
+                }
+                case 8 -> {
+                    if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition()))
+                        throw new IllegalArgumentException("Move could not be performed");
+                }
+                case 9 -> {
+                    if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition()))
+                        throw new IllegalArgumentException("Move could not be performed");
+                }
+                case 10 -> {
+                    if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition()))
+                        throw new IllegalArgumentException("Move could not be performed");
+                }
             }
             performAnimation();
             Game.getGame().turnDone();
@@ -93,8 +104,8 @@ public class AI extends Player {
                 } else if (isBetterMove(bestMovePerToken.get(i), bestMovePerToken.get(bestToken))) {
                     bestToken = i;
                 }
-                }
             }
+        }
         if (bestToken == null) {
             throw new NoTokenException("No token more on hand!");
         } else {
@@ -109,7 +120,7 @@ public class AI extends Player {
     /**
      * Compares two moves with each over with some given rules. If a rule doesn't apply, go to the
      * next one.
-     *
+     * <p>
      * 1. Check, if the move will win you the game
      * 2. Check, if the move will prevent the enemy team from winning
      * 3. Check, if the move gives you more points than the other
@@ -121,7 +132,7 @@ public class AI extends Player {
      * 9. Check, if the new move-token will be positioned more on the left side than the current
      * best one
      *
-     * @param newMove New input Token-Move
+     * @param newMove         New input Token-Move
      * @param currentBestMove Current best Token-Move
      * @return returns true, if newMove is better than the old one, otherwise returns false
      */
@@ -271,7 +282,7 @@ public class AI extends Player {
     /**
      * Compares two token with each other whether they are symbol or action tokens
      *
-     * @param newToken new TokenType, which will be compared
+     * @param newToken     new TokenType, which will be compared
      * @param currentToken current TokenType, which will be compared
      * @return 0 = Both are in the same category, 1 = newToken is a Symbol and current is a Special,
      * -1 = newToken is a Special and current is a Symbol
@@ -453,7 +464,7 @@ public class AI extends Player {
                 if (this.getTeam().getTeamType() == TeamType.VERTICAL) {
                     if (entry.getValue().size() == 1) {
                         for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
-                            if (count.getValue() == Constants.GAMEGRID_ROWS -1) {
+                            if (count.getValue() == Constants.GAMEGRID_ROWS - 1) {
                                 Map<TokenType, Integer> line =
                                         changedOccurrenceMap.get(entry.getKey());
                                 //Check, if there are other tokens in the same line after the move
@@ -475,7 +486,7 @@ public class AI extends Player {
                 if (this.getTeam().getTeamType() == TeamType.HORIZONTAL) {
                     if (entry.getValue().size() == 1) {
                         for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
-                            if (count.getValue() == Constants.GAMEGRID_COLUMNS -1) {
+                            if (count.getValue() == Constants.GAMEGRID_COLUMNS - 1) {
                                 Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
                                 //Check, if there are other tokens in the same line after the move
                                 if (line.size() != 1) {
@@ -520,8 +531,6 @@ public class AI extends Player {
         }
         return tokenMoves;
     }
-
-
 
 
     //##############################################################################################
@@ -744,7 +753,7 @@ public class AI extends Player {
      * Get copy of grid with an added Token
      *
      * @param position Position, where the token should be placed
-     * @param token Token, which will be placed
+     * @param token    Token, which will be placed
      * @return new grid with the added Token
      */
     public TokenType[][] getGridCopyWithAddedToken(Position position, TokenType token) {
@@ -775,9 +784,9 @@ public class AI extends Player {
      * Get a copy of a grid with two tokens swapped
      *
      * @param swap1pos Position of the first Token
-     * @param swap1 Token that will be swapped
+     * @param swap1    Token that will be swapped
      * @param swap2pos Position of the second Token
-     * @param swap2 Token that will be swapped
+     * @param swap2    Token that will be swapped
      * @return new grid with the swapped Tokens
      */
     public TokenType[][] getGridCopyWithSwappedTokens(Position swap1pos, TokenType swap1, Position swap2pos, TokenType swap2) {

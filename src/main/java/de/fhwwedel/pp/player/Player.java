@@ -74,7 +74,6 @@ public class Player {
         this.team = Team.addPlayerToTeam(this);
     }
 
-    //TODO: after turn: call Game#nextPlayer()
 
     /**
      * Perform a turn for a Symbol-Token
@@ -96,7 +95,6 @@ public class Player {
         tokens.remove(getCorrespondingToken(token));
         field.setToken(token);
         GameLogger.logMove(this, token, position, Action.PLACE);
-        //TODO: Update GUI
         return true;
     }
 
@@ -137,7 +135,6 @@ public class Player {
 
         return true;
 
-        //TODO: Update GUI for added Token
     }
 
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
@@ -186,7 +183,6 @@ public class Player {
             GameWindow.getGameWindow().swapperAmountText();
         GameLogger.logMove(this, fieldSecond.getToken(), fieldFirst, Action.PLACE);
         GameLogger.logMove(this, fieldFirst.getToken(), fieldSecond, Action.PLACE);
-        //TODO: Update GUI
         return true;
     }
 
@@ -223,6 +219,9 @@ public class Player {
         GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
         assert handToken != null;
         GameLogger.logMove(this, handToken, field, Action.PLACE);
+        if (GameWindowHandler.getGameWindowHandler() != null) {
+            GameWindowHandler.getGameWindowHandler().updatePlayerHandIcons(this);
+        }
         return true;
     }
 

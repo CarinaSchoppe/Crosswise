@@ -39,6 +39,8 @@ public class FileInputReader {
     }
 
     public static void readFile(File file) {
+
+        //TODO: Fehlerhafte Config überprüfen!
         //read in the lines from file
         FileReader reader;
         try {

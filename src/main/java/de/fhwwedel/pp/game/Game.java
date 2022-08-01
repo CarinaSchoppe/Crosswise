@@ -123,6 +123,7 @@ public class Game {
      */
     private void playerPileSetup() {
         for (Player player : players) {
+            if (!player.isActive()) continue;
             for (int i = 0; i < Constants.HAND_SIZE; i++) {
                 try {
                     player.drawToken();
@@ -199,7 +200,6 @@ public class Game {
             return true;
         } else if (over.containsKey(true)) {
             var team = over.get(true);
-            //noinspection StatementWithEmptyBody
             if (team == null) {
                 System.out.println("Game is over, but no team has won!");
                 //TODO: Handle game over! GUI stuff
@@ -210,7 +210,6 @@ public class Game {
             GameLogger.saveLogToFile("Logfile");
             return true;
         }
-        //TODO ??
         return false;
     }
 
@@ -233,6 +232,7 @@ public class Game {
      */
     public void turnDone() {
         Team.givePoints();
+        //TODO: Update UI gameWindow
         //if the turn is over, do nothing
         if (handleOver()) {
             return;
