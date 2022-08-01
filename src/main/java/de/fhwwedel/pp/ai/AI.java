@@ -256,7 +256,7 @@ import java.util.*;
      * @return returns a TokenMove with the necessary parameters
      */
     private TokenMove calculateBestTokenMove(TokenType token) {
-        HashSet<TokenMove> tokenMovesPerToken = createPossibleMoves(token);
+        Set<TokenMove> tokenMovesPerToken = createPossibleMoves(token);
         TokenMove bestMove = null;
         if (tokenMovesPerToken == null) {
             throw new NoMovePossibleException();
@@ -280,7 +280,7 @@ import java.util.*;
      * @param token TokenType, for which the possible moves will be created
      * @return HashSet of all possible TokenMoves for this Token
      */
-    private HashSet<TokenMove> createPossibleMoves(TokenType token) {
+    private Set<TokenMove> createPossibleMoves(TokenType token) {
         return switch (token.getValue()) {
             case 1, 2, 3, 4, 5, 6 -> createPossibleSymbolTokenMoves(token);
             case 7 -> createPossibleRemoverTokenMoves();
@@ -496,7 +496,7 @@ import java.util.*;
      */
     public Set<TokenMove> createPossibleSwapperTokenMoves() {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
-        HashSet<Position> occupiedFields = occupiedFields();
+        Set<Position> occupiedFields = occupiedFields();
         for (Position pos1 : occupiedFields) {
             for (Position pos2 : occupiedFields) {
                 if (!pos1.equals(pos2)) {
@@ -643,7 +643,7 @@ import java.util.*;
         //convert player.getTokens() to Array of Tokens
         Token[] playerHand = this.getTokens().toArray(new Token[0]);
         Set<Integer> handSymbolTokenSet = this.getHandSymbolTokenPositions();
-        HashSet<Position> occupiedFields = occupiedFields();
+        Set<Position> occupiedFields = occupiedFields();
         for (Position occupiedField : occupiedFields) {
             for (Integer handPosition : handSymbolTokenSet) {
                 TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType());
