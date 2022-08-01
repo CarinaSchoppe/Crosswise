@@ -12,6 +12,7 @@ package de.fhwwedel.pp.player;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Team;
@@ -278,9 +279,11 @@ public class Player {
 
         GameLogger.logDraw(this, token);
 
-        Game.getGame().getGameWindowHandler().updatePlayerHandIcons(playerID, tokens);
+        if (GameWindow.getGameWindow() != null) {
+            Game.getGame().getGameWindowHandler().updatePlayerHandIcons(playerID, tokens);
 
 
+        }
     }
 
     /**
