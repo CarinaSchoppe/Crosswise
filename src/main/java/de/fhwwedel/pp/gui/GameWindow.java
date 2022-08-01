@@ -12,7 +12,6 @@ package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.game.AnimationTime;
 import de.fhwwedel.pp.util.game.Team;
 import de.fhwwedel.pp.util.game.TeamType;
@@ -41,16 +40,6 @@ import java.util.ResourceBundle;
 public class GameWindow extends Application implements Initializable {
     private static GameWindow gameWindow;
 
-    public static void notifyTurn(Player player) {
-        Platform.runLater(() -> {
-            var alert = new Alert(Alert.AlertType.INFORMATION,
-                    "The Player: \"" + player.getName() + "\" with ID: \"" + player.getPlayerID()
-                            + " is now your turn!");
-            alert.setTitle("Next Turn");
-            alert.setHeaderText("Next Players Turn");
-            alert.showAndWait();
-        });
-    }
 
     public void replacerAmountText() {
         if (GameWindow.getGameWindow() != null)

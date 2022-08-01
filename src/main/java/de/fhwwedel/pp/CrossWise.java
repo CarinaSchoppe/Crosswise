@@ -14,6 +14,7 @@ import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
 import de.fhwwedel.pp.gui.GameWindow;
+import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class CrossWise {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        var player1 = new AI(0, true, "Player 1");
+        var player1 = new Player(0, true, "Player 1");
         player1.create();
         var player2 = new AI(1, true, "Player 2");
         player2.create();

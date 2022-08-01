@@ -178,7 +178,7 @@ public class Game {
         }
 
         if (GameWindowHandler.getGameWindowHandler() != null) {
-            GameWindowHandler.getGameWindowHandler().showHand(this);
+            GameWindowHandler.getGameWindowHandler().showHand(currentPlayer);
         }
         if (GameWindow.getGameWindow() != null) {
             Platform.runLater(() -> GameWindow.getGameWindow().getCurrentPlayerText().setText(currentPlayer.getName()));
@@ -188,7 +188,8 @@ public class Game {
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
-            GameWindow.notifyTurn(currentPlayer);
+            if (GameWindowHandler.getGameWindowHandler() != null)
+                GameWindowHandler.getGameWindowHandler().notifyTurn(currentPlayer);
         }
     }
 
@@ -228,7 +229,8 @@ public class Game {
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {
-            GameWindow.notifyTurn(currentPlayer);
+            if (GameWindowHandler.getGameWindowHandler() != null)
+                GameWindowHandler.getGameWindowHandler().notifyTurn(currentPlayer);
         }
     }
 

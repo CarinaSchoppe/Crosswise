@@ -14,15 +14,20 @@ import com.google.gson.Gson;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Position;
+import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.json.GameData;
 import de.fhwwedel.pp.util.game.json.PlayerData;
 import javafx.scene.Scene;
+
+import java.util.ArrayList;
 
 public class FileOutputWriter {
 
     public static void writeJSON(Scene scene) {
         var file = FileInputReader.selectFile(scene);
-        var json = new Gson().toJson(generateGameData(Game.getGame()));
+
+        var json = new Gson().toJson(generateGameData(Game.getGame().getPlayers(), Game.getGame().getCurrentPlayer().getPlayerID(), Game.getGame().getPlayingField().getSize(), Game.getGame().getPlayingField().getFieldMap(), Game.getGame().getUsedActionTokens()));
         //write the json to a file
         try (var writer = new java.io.PrintWriter(file)) {
             writer.write(json);
@@ -31,40 +36,40 @@ public class FileOutputWriter {
         }
     }
 
-    private static GameData generateGameData(Game game) {
+    private static GameData generateGameData(ArrayList<Player> gamePlayers, int currentPlayerID, int playingFieldSize, Position[][] playingFieldMap, ArrayList<Token> usedActionTokens) {
 
-        PlayerData[] players = new PlayerData[game.getPlayers().size()];
-        for (int i = 0; i < game.getPlayers().size(); i++) {
-            players[i] = generatePlayerData(game.getPlayers().get(i));
+        PlayerData[] players = new PlayerData[gamePlayers.size()];
+        for (int i = 0; i < gamePlayers.size(); i++) {
+            players[i] = generatePlayerData(gamePlayers.get(i).getTokens(), gamePlayers.get(i).getName(), gamePlayers.get(i) instanceof AI);
         }
-        return new GameData(players, game.getCurrentPlayer().getPlayerID(), generateCorrespondingPlayingField(game), generateUsedActionTilesArray(game));
+        return new GameData(players, currentPlayerID, generateCorrespondingPlayingField(playingFieldSize, playingFieldMap), generateUsedActionTilesArray(usedActionTokens));
 
     }
 
-    public static PlayerData generatePlayerData(Player player) {
-        var hand = new int[player.getTokens().size()];
-        for (int i = 0; i < player.getTokens().size(); i++) {
-            hand[i] = player.getTokens().get(i).getTokenType().getValue();
+    public static PlayerData generatePlayerData(ArrayList<Token> tokens, String playerName, boolean isAI) {
+        var hand = new int[tokens.size()];
+        for (int i = 0; i < tokens.size(); i++) {
+            hand[i] = tokens.get(i).getTokenType().getValue();
         }
-        return new PlayerData(player.getName(), true, (player instanceof AI), hand);
+        return new PlayerData(playerName, true, isAI, hand);
     }
 
-    private static int[][] generateCorrespondingPlayingField(Game game) {
-        int[][] field = new int[game.getPlayingField().getSize()][game.getPlayingField().getSize()];
-        for (int i = 0; i < game.getPlayingField().getSize(); i++) {
-            for (int j = 0; j < game.getPlayingField().getSize(); j++) {
-                field[i][j] = game.getPlayingField().getFieldMap()[i][j].getToken().getTokenType().getValue();
+    private static int[][] generateCorrespondingPlayingField(int playingFieldSize, Position[][] fieldMap) {
+        int[][] field = new int[playingFieldSize][playingFieldSize];
+        for (int i = 0; i < playingFieldSize; i++) {
+            for (int j = 0; j < playingFieldSize; j++) {
+                field[i][j] = fieldMap[i][j].getToken().getTokenType().getValue();
             }
         }
         return field;
     }
 
-    private static int[] generateUsedActionTilesArray(Game game) {
+    private static int[] generateUsedActionTilesArray(ArrayList<Token> usedActionTokens) {
         int[] usedActionTiles = new int[Constants.UNIQUE_ACTION_TOKENS];
         for (int i = 0; i < Constants.UNIQUE_ACTION_TOKENS; i++) {
             usedActionTiles[i] = 0;
         }
-        for (var token : game.getUsedActionTokens()) {
+        for (var token : usedActionTokens) {
             switch (token.getTokenType()) {
                 case REMOVER -> usedActionTiles[0] += 1;
                 case MOVER -> usedActionTiles[1] += 1;

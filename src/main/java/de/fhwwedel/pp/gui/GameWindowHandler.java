@@ -15,6 +15,7 @@ import de.fhwwedel.pp.game.PlayingField;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.special.Constants;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -60,6 +61,17 @@ public record GameWindowHandler(GameWindow gameWindow) {
         });
 
 
+    }
+
+    public void notifyTurn(Player player) {
+        Platform.runLater(() -> {
+            var alert = new Alert(Alert.AlertType.INFORMATION,
+                    "The Player: \"" + player.getName() + "\" with ID: \"" + player.getPlayerID()
+                            + " is now your turn!");
+            alert.setTitle("Next Turn");
+            alert.setHeaderText("Next Players Turn");
+            alert.showAndWait();
+        });
     }
 
     private void handVisibleSwitch(Player currentPlayer) {
