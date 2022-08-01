@@ -33,10 +33,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class GameWindow extends Application implements Initializable, GameWindowHandler {
 
@@ -45,7 +42,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
      */
     private AnimationTime animationTime = AnimationTime.MIDDLE;
 
-    public static final GameWindow getGameWindow() {
+    public static GameWindow getGameWindow() {
 
         return gameWindow;
     }
@@ -129,10 +126,6 @@ public class GameWindow extends Application implements Initializable, GameWindow
                 int cellWidth = (int) GameWindow.getGameWindow().getGameGrid().getWidth() / colcount;
                 int cellHeight = (int) GameWindow.getGameWindow().getGameGrid().getHeight() / rowcount;
 
-               /* System.out.println("grdPn.getHeight() = " + gameWindow.getGameGrid().getHeight());
-                System.out.println("grdPn.getWidth() = " + gameWindow.getGameGrid().getWidth());
-                System.out.println("cellHeight = " + cellHeight);
-                System.out.println("cellWidth = " + cellWidth);*/
                 imgNew.setFitWidth(cellWidth);
                 imgNew.setFitHeight(cellHeight);
                 imgNew.setPreserveRatio(false);
@@ -507,7 +500,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
         if (rowComplete && wonType != null) {
             message = "Team: " + wonType.getTeamName()
                     + " won, because the hit a full line!";
-        } else if (points == lost.getPoints() && wonType != null) {
+        } else if (points == Objects.requireNonNull(lost).getPoints() && wonType != null) {
             message = "Draw! Both teams got the same amount of points (" + points + ")!";
         } else if (wonType != null) {
             message = "Team: " + wonType.getTeamName()

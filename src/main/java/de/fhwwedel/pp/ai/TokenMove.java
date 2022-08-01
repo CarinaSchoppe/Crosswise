@@ -11,7 +11,6 @@
 package de.fhwwedel.pp.ai;
 
 import de.fhwwedel.pp.util.game.Position;
-import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 
 /**
@@ -19,6 +18,7 @@ import de.fhwwedel.pp.util.game.TokenType;
  *
  * @author Jacob Klövekorn
  */
+@SuppressWarnings("ALL")
 public class TokenMove {
 
     /**

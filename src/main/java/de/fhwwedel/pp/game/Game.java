@@ -31,6 +31,7 @@ import java.util.Random;
  *
  * @author Jacob Klövekorn
  */
+@SuppressWarnings("ALL")
 public class Game {
     /**
      * Static attribut for the current running game

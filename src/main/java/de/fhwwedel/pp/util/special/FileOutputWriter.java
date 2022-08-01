@@ -75,6 +75,7 @@ public class FileOutputWriter {
                 case MOVER -> usedActionTiles[1] += 1;
                 case SWAPPER -> usedActionTiles[2] += 1;
                 case REPLACER -> usedActionTiles[3] += 1;
+                default -> throw new IllegalArgumentException("TokenType not supported");
             }
         }
         return usedActionTiles;

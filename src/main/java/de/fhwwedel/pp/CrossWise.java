@@ -29,8 +29,8 @@ import java.util.List;
 public class CrossWise {
 
 
-    public static boolean slow = false;
-    public static int delay = 5000;
+    public static final boolean slow = false;
+    public static final int delay = 5000;
 
 
     public static void main(String... args) {

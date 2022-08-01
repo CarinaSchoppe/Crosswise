@@ -21,7 +21,7 @@ import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.*;
 
-@SuppressWarnings("DuplicatedCode")
+@SuppressWarnings({"DuplicatedCode", "Annotator"})
 /**
  * Class of an AI player
  *
