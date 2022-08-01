@@ -28,11 +28,14 @@ import java.util.List;
  */
 public class CrossWise {
 
+    //TODO: hands buggy not really showing
+    // TODO: hands on start remove
 
-    public static final boolean DEBUG = false;
+
+    public static final boolean DEBUG = true;
     public static long time;
-    public static final boolean SLOW = false;
-    public static final int DELAY = 5000;
+    public static final boolean SLOW = true;
+    public static final int DELAY = 2000;
 
     public static void main(String... args) {
         var window = new GameWindow();

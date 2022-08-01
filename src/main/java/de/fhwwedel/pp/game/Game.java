@@ -224,7 +224,9 @@ public class Game {
         if (!teamSizeEqual()) {
             return;
         }
+        gameWindowHandler.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
         if (currentPlayer instanceof AI ai) {
+
             ai.makeMove();
         } else {
             gameWindowHandler.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());

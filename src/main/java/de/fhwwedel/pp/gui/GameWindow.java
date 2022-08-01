@@ -517,7 +517,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
         Game.setGame(new Game(null, new ArrayList<>(), window));
         gameWindow.stage.close();
         new Thread(() -> Game.getGame().start()).start();
-        window.start();
+        Platform.runLater(window::start);
     }
 
     @FXML
