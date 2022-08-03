@@ -52,6 +52,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
     @Override
     public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
         Platform.runLater(() -> {
+            if (gameWindow == null) return;
             switch (playerID) {
                 case 0 -> addTokenImagesForPlayer1(tokens);
                 case 1 -> addTokenImagesForPlayer2(tokens);

@@ -12,6 +12,7 @@ package de.fhwwedel.pp.game;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
+import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.gui.GameWindowHandler;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
@@ -225,6 +226,18 @@ public class Game {
         if (!teamSizeEqual()) {
             return;
         }
+        if (gameWindowHandler instanceof GameWindow) {
+            synchronized (this) {
+                while (GameWindow.getGameWindow() == null) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+
+            }
+        }
         gameWindowHandler.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
         if (currentPlayer instanceof AI ai) {
 
@@ -251,7 +264,7 @@ public class Game {
             System.out.println("No more tokens left in the Pile!");
         }
         try {
-            if (CrossWise.SLOW)
+            if (CrossWise.UI)
                 Thread.sleep(CrossWise.DELAY);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

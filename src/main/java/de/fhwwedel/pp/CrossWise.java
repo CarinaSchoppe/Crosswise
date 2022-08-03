@@ -34,7 +34,7 @@ public class CrossWise {
 
     public static final boolean DEBUG = true;
     public static long time;
-    public static final boolean SLOW = true;
+    public static final boolean UI = true;
     public static final int DELAY = 250;
 
     public static void main(String... args) {
@@ -42,7 +42,7 @@ public class CrossWise {
         var fakeWindow = new FakeGUI();
         new Thread(() -> {
             try {
-                if (CrossWise.SLOW) Thread.sleep(CrossWise.DELAY);
+                if (CrossWise.UI) Thread.sleep(CrossWise.DELAY);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -56,7 +56,7 @@ public class CrossWise {
             var player4 = new AI(3, false, "Player 4");
             player4.create();
             Game game;
-            if (SLOW)
+            if (UI)
                 game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), window);
             else
                 game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), fakeWindow);
@@ -64,7 +64,7 @@ public class CrossWise {
             game.setup(false);
             game.start();
         }).start();
-        if (CrossWise.SLOW) {
+        if (CrossWise.UI) {
             window.start();
         }
 
