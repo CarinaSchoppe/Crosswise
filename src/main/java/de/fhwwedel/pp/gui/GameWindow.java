@@ -23,7 +23,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -38,7 +37,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class GameWindow extends Application implements Initializable, GameWindowHandler {
+public class GameWindow extends Application implements GameWindowHandler {
 
     /**
      * Time for an animation of an AI turn
@@ -680,17 +679,13 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        gameWindow = this;
-    }
 
 
     private ImageView[][] gridImages;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
+        Platform.setImplicitExit(false);
         var loader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
         loader.setController(this);
         var root = (Parent) loader.load();
@@ -700,6 +695,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
         initialize();
         stage = primaryStage;
         primaryStage.show();
+        gameWindow = this;
         generateGrid();
     }
 

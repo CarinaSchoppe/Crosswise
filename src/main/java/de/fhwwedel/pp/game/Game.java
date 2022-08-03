@@ -17,6 +17,7 @@ import de.fhwwedel.pp.gui.GameWindowHandler;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.Team;
+import de.fhwwedel.pp.util.game.TeamType;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 import de.fhwwedel.pp.util.special.Constants;
@@ -197,7 +198,6 @@ public class Game {
         if (players.isEmpty()) {
             System.out.println("No players left!");
             GameLogger.saveLogToFile("Logfile");
-            gameWindowHandler.gameWonNotifier(null, 0, false);
             return true;
         } else if (over.containsKey(true)) {
             var team = over.get(true);
@@ -211,12 +211,20 @@ public class Game {
                     System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
                 System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
             }
-            System.out.println(System.currentTimeMillis()-CrossWise.time);
+            System.out.println(System.currentTimeMillis() - CrossWise.time);
             GameLogger.saveLogToFile("Logfile");
 
             return true;
         }
         return false;
+    }
+
+    public synchronized void cancel() {
+        players.clear();
+        handleOver();
+        Team.setVerticalTeam(new Team(TeamType.VERTICAL));
+        Team.setHorizontalTeam(new Team(TeamType.HORIZONTAL));
+        Team.setDeactiveTeam(new Team(TeamType.DEACTIVE));
     }
 
     /**

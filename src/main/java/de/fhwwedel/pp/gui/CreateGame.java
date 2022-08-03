@@ -10,7 +10,6 @@
 
 package de.fhwwedel.pp.gui;
 
-import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
@@ -106,20 +105,16 @@ public class CreateGame {
         else
             playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
         playerFour.create();
-        Game game = new Game(field, new ArrayList<>(List.of(playerOne, playerTwo, playerThree, playerFour)), Game.getGame().getGameWindowHandler());
+        var window = new GameWindow();
+        Game game = new Game(field, new ArrayList<>(List.of(playerOne, playerTwo, playerThree, playerFour)), window);
         // get the current stage
-        Stage stage = (Stage) createGameButton.getScene().getWindow();
+        Game.getGame().cancel();
+        window.start(new Stage());
         new Thread(() -> {
-            try {
-                Thread.sleep(CrossWise.DELAY);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
             game.setup(false);
             Game.setGame(game);
             game.start();
         }).start();
-        new GameWindow().start(stage);
 
 
     }

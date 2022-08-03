@@ -25,15 +25,15 @@ public class Team {
     /**
      * Static instance of a horizontal team
      */
-    private static final Team horizontalTeam = new Team(TeamType.HORIZONTAL);
+    private static Team horizontalTeam = new Team(TeamType.HORIZONTAL);
     /**
      * Static instance of a vertical team
      */
-    private static final Team verticalTeam = new Team(TeamType.VERTICAL);
+    private static Team verticalTeam = new Team(TeamType.VERTICAL);
     /**
      * Static instance of an inactive team
      */
-    private static final Team deactiveTeam = new Team(TeamType.DEACTIVE);
+    private static Team deactiveTeam = new Team(TeamType.DEACTIVE);
     /**
      * TeamType
      */
@@ -99,6 +99,18 @@ public class Team {
                 horizontalTeam.points += pointsMap.get(key);
             }
         }
+    }
+
+    public static void setHorizontalTeam(Team horizontalTeam) {
+        Team.horizontalTeam = horizontalTeam;
+    }
+
+    public static void setVerticalTeam(Team verticalTeam) {
+        Team.verticalTeam = verticalTeam;
+    }
+
+    public static void setDeactiveTeam(Team deactiveTeam) {
+        Team.deactiveTeam = deactiveTeam;
     }
 
     public static Team getHorizontalTeam() {
