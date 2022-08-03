@@ -11,6 +11,7 @@
 package de.fhwwedel.pp.util.special;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.player.Player;
@@ -30,7 +31,8 @@ public class FileOutputWriter {
     public static void writeJSON(Scene scene) {
         var file = FileInputReader.selectFile(scene);
 
-        var json = new Gson().toJson(generateGameData(Game.getGame().getPlayers(), Game.getGame().getCurrentPlayer().getPlayerID(), Game.getGame().getPlayingField().getSize(), Game.getGame().getPlayingField().getFieldMap(), Game.getGame().getUsedActionTokens()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        var json = gson.toJson(generateGameData(Game.getGame().getPlayers(), Game.getGame().getCurrentPlayer().getPlayerID(), Game.getGame().getPlayingField().getSize(), Game.getGame().getPlayingField().getFieldMap(), Game.getGame().getUsedActionTokens()));
         //write the json to a file
         try (var writer = new java.io.PrintWriter(file)) {
             writer.write(json);
@@ -43,18 +45,18 @@ public class FileOutputWriter {
 
         PlayerData[] players = new PlayerData[gamePlayers.size()];
         for (int i = 0; i < gamePlayers.size(); i++) {
-            players[i] = generatePlayerData(gamePlayers.get(i).getTokens(), gamePlayers.get(i).getName(), gamePlayers.get(i) instanceof AI);
+            players[i] = generatePlayerData(gamePlayers.get(i).getTokens(), gamePlayers.get(i).getName(), gamePlayers.get(i) instanceof AI, gamePlayers.get(i).isActive());
         }
         return new GameData(players, currentPlayerID, generateCorrespondingPlayingField(playingFieldSize, playingFieldMap), generateUsedActionTilesArray(usedActionTokens));
 
     }
 
-    private static PlayerData generatePlayerData(List<Token> tokens, String playerName, boolean isAI) {
+    private static PlayerData generatePlayerData(List<Token> tokens, String playerName, boolean isAI, boolean isActive) {
         var hand = new int[tokens.size()];
         for (int i = 0; i < tokens.size(); i++) {
             hand[i] = tokens.get(i).getTokenType().getValue();
         }
-        return new PlayerData(playerName, true, isAI, hand);
+        return new PlayerData(playerName, isActive, isAI, hand);
     }
 
     private static int[][] generateCorrespondingPlayingField(int playingFieldSize, Position[][] fieldMap) {

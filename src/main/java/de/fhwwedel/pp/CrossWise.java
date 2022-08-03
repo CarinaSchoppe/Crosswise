@@ -35,7 +35,7 @@ public class CrossWise {
     public static final boolean DEBUG = true;
     public static long time;
     public static final boolean UI = true;
-    public static final int DELAY = 250;
+    public static int DELAY = 750;
 
     public static void main(String... args) {
         var window = new GameWindow();
@@ -62,7 +62,8 @@ public class CrossWise {
                 game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), fakeWindow);
             Game.setGame(game);
             game.setup(false);
-            //game.start();
+            DELAY = 250;
+            game.start();
         }).start();
         if (CrossWise.UI) {
             window.start();
