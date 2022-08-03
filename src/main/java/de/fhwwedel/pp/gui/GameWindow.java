@@ -51,6 +51,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     @Override
     public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
+        if (gameWindow == null) return;
         Platform.runLater(() -> {
             if (gameWindow == null) return;
             switch (playerID) {
@@ -78,10 +79,10 @@ public class GameWindow extends Application implements Initializable, GameWindow
     @Override
     public void handVisibleSwitch(int playerID) {
         switch (playerID) {
-            case 0 -> GameWindow.getGameWindow().getPlayerHandOne().setVisible(true);
-            case 1 -> GameWindow.getGameWindow().getPlayerHandTwo().setVisible(true);
-            case 2 -> GameWindow.getGameWindow().getPlayerHandThree().setVisible(true);
-            case 3 -> GameWindow.getGameWindow().getPlayerHandFour().setVisible(true);
+            case 0 -> playerHandOne.setVisible(true);
+            case 1 -> playerHandTwo.setVisible(true);
+            case 2 -> playerHandThree.setVisible(true);
+            case 3 -> playerHandFour.setVisible(true);
             default -> throw new IllegalArgumentException("Player ID not found");
         }
     }
@@ -105,7 +106,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
                     var image = new Image(token.getImagePath());
                     String id = "gridToken" + column + row;
 
-                    var imageView = GameWindow.getGameWindow().getFieldImages().get(id);
+                    var imageView = fieldImages.get(id);
                     imageView.setImage(image);
                 }
             }
@@ -114,39 +115,39 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     @Override
     public void setCurrentPlayerText(String playerName) {
-        Platform.runLater(() -> GameWindow.getGameWindow().getCurrentPlayerText().setText(playerName));
+        Platform.runLater(() -> currentPlayerText.setText(playerName));
 
     }
 
     @Override
     public void generateGrid() {
-        GameWindow.getGameWindow().setGridImages(new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS]);
+        gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
         int colcount = Constants.GAMEGRID_COLUMNS;
-        GameWindow.getGameWindow().getGameGrid().getChildren().clear();
+        gameGrid.getChildren().clear();
         int rowcount = Constants.GAMEGRID_ROWS;
         for (int r = 0; r < Constants.GAMEGRID_ROWS; r++) {
             for (int c = 0; c < Constants.GAMEGRID_COLUMNS; c++) {
                 ImageView imgNew = new ImageView();
-                int cellWidth = (int) GameWindow.getGameWindow().getGameGrid().getWidth() / colcount;
-                int cellHeight = (int) GameWindow.getGameWindow().getGameGrid().getHeight() / rowcount;
+                int cellWidth = (int) gameGrid.getWidth() / colcount;
+                int cellHeight = (int) gameGrid.getHeight() / rowcount;
 
                 imgNew.setFitWidth(cellWidth);
                 imgNew.setFitHeight(cellHeight);
                 imgNew.setPreserveRatio(false);
                 imgNew.setSmooth(true);
                 String id = "gridToken" + c + r;
-                GameWindow.getGameWindow().getFieldImages().put(id, imgNew);
+                fieldImages.put(id, imgNew);
                 imgNew.setId(id);
 
                 Image img = new Image("/pictures/0none.png");
                 imgNew.setImage(img);
 
-                GameWindow.getGameWindow().getGridImages()[r][c] = imgNew;
-                GameWindow.getGameWindow().getGameGrid().add(imgNew, c, r);
+                gridImages[r][c] = imgNew;
+                gameGrid.add(imgNew, c, r);
 
                 //the image shall resize when the cell resizes
-                imgNew.fitWidthProperty().bind(GameWindow.getGameWindow().getGameGrid().widthProperty().divide(colcount));
-                imgNew.fitHeightProperty().bind(GameWindow.getGameWindow().getGameGrid().heightProperty().divide(rowcount));
+                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(colcount));
+                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(rowcount));
 
             }
         }
@@ -154,76 +155,76 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     @Override
     public void moverAmountText() {
-        Platform.runLater(() -> GameWindow.getGameWindow().getMoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "")
+        Platform.runLater(() -> moverAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "")
         );
     }
 
     @Override
     public void swapperAmountText() {
-        Platform.runLater(() -> GameWindow.getGameWindow().getSwapperAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + ""));
+        Platform.runLater(() -> swapperAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + ""));
 
     }
 
     @Override
     public void replacerAmountText() {
-        Platform.runLater(() -> GameWindow.getGameWindow().getReplacerAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + ""));
+        Platform.runLater(() -> replacerAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + ""));
     }
 
     @Override
     public void removerAmountText() {
-        Platform.runLater(() -> GameWindow.getGameWindow().getRemoverAmountText().setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + "")
+        Platform.runLater(() -> removerAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + "")
         );
     }
 
     @Override
     public void addTokenImagesForPlayer1(List<Token> tokens) {
-        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandOne().getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandOne().getHeight() / Constants.HAND_SIZE;
-        GameWindow.getGameWindow().getPlayerHandOne().getChildren().clear();
+        int cellWidth = (int) playerHandOne.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) playerHandOne.getHeight() / Constants.HAND_SIZE;
+        playerHandOne.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            GameWindow.getGameWindow().getPlayerHandOne().add(imageView, i, 0);
+            playerHandOne.add(imageView, i, 0);
         }
     }
 
     @Override
     public void addTokenImagesForPlayer2(List<Token> tokens) {
-        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandTwo().getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandTwo().getHeight() / Constants.HAND_SIZE;
-        GameWindow.getGameWindow().getPlayerHandTwo().getChildren().clear();
+        int cellWidth = (int) playerHandTwo.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) playerHandTwo.getHeight() / Constants.HAND_SIZE;
+        playerHandTwo.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            GameWindow.getGameWindow().getPlayerHandTwo().add(imageView, 0, i);
+            playerHandTwo.add(imageView, 0, i);
         }
     }
 
     @Override
     public void addTokenImagesForPlayer3(List<Token> tokens) {
-        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandThree().getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandThree().getHeight() / Constants.HAND_SIZE;
-        GameWindow.getGameWindow().getPlayerHandThree().getChildren().clear();
+        int cellWidth = (int) playerHandThree.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) playerHandThree.getHeight() / Constants.HAND_SIZE;
+        playerHandThree.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            GameWindow.getGameWindow().getPlayerHandThree().add(imageView, i, 0);
+            playerHandThree.add(imageView, i, 0);
         }
     }
 
     @Override
     public void addTokenImagesForPlayer4(List<Token> tokens) {
-        int cellWidth = (int) GameWindow.getGameWindow().getPlayerHandFour().getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) GameWindow.getGameWindow().getPlayerHandFour().getHeight() / Constants.HAND_SIZE;
-        GameWindow.getGameWindow().getPlayerHandFour().getChildren().clear();
+        int cellWidth = (int) playerHandFour.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) playerHandFour.getHeight() / Constants.HAND_SIZE;
+        playerHandFour.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            GameWindow.getGameWindow().getPlayerHandFour().add(imageView, 0, i);
+            playerHandFour.add(imageView, 0, i);
 
         }
     }
@@ -232,7 +233,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     @Override
     public void gameWonNotifier(TeamType wonType, int points, boolean rowComplete) {
-        Platform.runLater(() -> GameWindow.getGameWindow().gameWonNotification(wonType, points, rowComplete));
+        Platform.runLater(() -> gameWonNotification(wonType, points, rowComplete));
     }
 
 
@@ -526,8 +527,8 @@ public class GameWindow extends Application implements Initializable, GameWindow
         var player4 = new AI(3, false, "Player 4");
         player4.create();
         var game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), window);
-        game.setup(false);
         Game.setGame(game);
+        Game.getGame().setup(false);
         gameWindow.stage.close();
         new Thread(() -> Game.getGame().start()).start();
         Platform.runLater(window::start);
