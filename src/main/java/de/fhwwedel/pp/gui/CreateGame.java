@@ -10,6 +10,7 @@
 
 package de.fhwwedel.pp.gui;
 
+import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
@@ -79,35 +80,47 @@ public class CreateGame {
     private TextField playerTwoField;
 
     @FXML
-    void createGame(ActionEvent event) {
+    void createGame(ActionEvent event) throws IOException {
         var field = new PlayingField(Constants.GAMEGRID_ROWS);
         Player playerOne;
         if (playerOneAI.isSelected())
-            playerOne = new AI(1, playerOneActive.isSelected(), playerOneField.getText());
+            playerOne = new AI(0, playerOneActive.isSelected(), playerOneField.getText());
         else
-            playerOne = new Player(1, playerOneActive.isSelected(), playerOneField.getText());
-
+            playerOne = new Player(0, playerOneActive.isSelected(), playerOneField.getText());
+        playerOne.create();
         Player playerTwo;
         if (playerTwoAI.isSelected())
-            playerTwo = new AI(2, playerTwoActive.isSelected(), playerTwoField.getText());
+            playerTwo = new AI(1, playerTwoActive.isSelected(), playerTwoField.getText());
         else
-            playerTwo = new Player(2, playerTwoActive.isSelected(), playerTwoField.getText());
-
+            playerTwo = new Player(1, playerTwoActive.isSelected(), playerTwoField.getText());
+        playerTwo.create();
         Player playerThree;
         if (playerThreeAI.isSelected())
-            playerThree = new AI(3, playerThreeActive.isSelected(), playerThreeField.getText());
+            playerThree = new AI(2, playerThreeActive.isSelected(), playerThreeField.getText());
         else
-            playerThree = new Player(3, playerThreeActive.isSelected(), playerThreeField.getText());
-
+            playerThree = new Player(2, playerThreeActive.isSelected(), playerThreeField.getText());
+        playerThree.create();
         Player playerFour;
         if (playerFourAI.isSelected())
-            playerFour = new AI(4, playerFourActive.isSelected(), playerFourField.getText());
+            playerFour = new AI(3, playerFourActive.isSelected(), playerFourField.getText());
         else
-            playerFour = new Player(4, playerFourActive.isSelected(), playerFourField.getText());
-
+            playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
+        playerFour.create();
         Game game = new Game(field, new ArrayList<>(List.of(playerOne, playerTwo, playerThree, playerFour)), Game.getGame().getGameWindowHandler());
-        game.setup(false);
-        Game.setGame(game);
+        // get the current stage
+        Stage stage = (Stage) createGameButton.getScene().getWindow();
+        new Thread(() -> {
+            try {
+                Thread.sleep(CrossWise.DELAY);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            game.setup(false);
+            Game.setGame(game);
+            game.start();
+        }).start();
+        new GameWindow().start(stage);
+
 
     }
 

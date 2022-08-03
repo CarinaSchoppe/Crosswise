@@ -62,7 +62,7 @@ public class CrossWise {
                 game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), fakeWindow);
             Game.setGame(game);
             game.setup(false);
-            game.start();
+            //game.start();
         }).start();
         if (CrossWise.UI) {
             window.start();

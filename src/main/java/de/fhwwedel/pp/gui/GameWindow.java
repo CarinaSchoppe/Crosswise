@@ -45,14 +45,14 @@ public class GameWindow extends Application implements Initializable, GameWindow
     private AnimationTime animationTime = AnimationTime.MIDDLE;
 
     public static GameWindow getGameWindow() {
-
         return gameWindow;
     }
 
     @Override
     public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
-        if (gameWindow == null) return;
         Platform.runLater(() -> {
+            if (gameWindow == null) return;
+
             if (gameWindow == null) return;
             switch (playerID) {
                 case 0 -> addTokenImagesForPlayer1(tokens);
@@ -67,9 +67,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
     @Override
     public void notifyTurn(String playerName, int playerID) {
         Platform.runLater(() -> {
-            var alert = new Alert(Alert.AlertType.INFORMATION,
-                    "The Player: \"" + playerName + "\" with ID: \"" + playerID
-                            + " is now your turn!");
+            var alert = new Alert(Alert.AlertType.INFORMATION, "The Player: \"" + playerName + "\" with ID: \"" + playerID + " is now your turn!");
             alert.setTitle("Next Turn");
             alert.setHeaderText("Next Players Turn");
             alert.showAndWait();
@@ -79,10 +77,10 @@ public class GameWindow extends Application implements Initializable, GameWindow
     @Override
     public void handVisibleSwitch(int playerID) {
         switch (playerID) {
-            case 0 -> playerHandOne.setVisible(true);
-            case 1 -> playerHandTwo.setVisible(true);
-            case 2 -> playerHandThree.setVisible(true);
-            case 3 -> playerHandFour.setVisible(true);
+            case 0 -> GameWindow.getGameWindow().playerHandOne.setVisible(true);
+            case 1 -> GameWindow.getGameWindow().playerHandTwo.setVisible(true);
+            case 2 -> GameWindow.getGameWindow().playerHandThree.setVisible(true);
+            case 3 -> GameWindow.getGameWindow().playerHandFour.setVisible(true);
             default -> throw new IllegalArgumentException("Player ID not found");
         }
     }
@@ -106,7 +104,8 @@ public class GameWindow extends Application implements Initializable, GameWindow
                     var image = new Image(token.getImagePath());
                     String id = "gridToken" + column + row;
 
-                    var imageView = fieldImages.get(id);
+                    var imageView = GameWindow.getGameWindow().
+                            fieldImages.get(id);
                     imageView.setImage(image);
                 }
             }
@@ -115,39 +114,40 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     @Override
     public void setCurrentPlayerText(String playerName) {
-        Platform.runLater(() -> currentPlayerText.setText(playerName));
+        Platform.runLater(() -> GameWindow.getGameWindow().currentPlayerText.setText(playerName));
 
     }
 
     @Override
     public void generateGrid() {
-        gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        GameWindow.getGameWindow().
+                gridImages = new ImageView[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
         int colcount = Constants.GAMEGRID_COLUMNS;
-        gameGrid.getChildren().clear();
+        GameWindow.getGameWindow().gameGrid.getChildren().clear();
         int rowcount = Constants.GAMEGRID_ROWS;
         for (int r = 0; r < Constants.GAMEGRID_ROWS; r++) {
             for (int c = 0; c < Constants.GAMEGRID_COLUMNS; c++) {
                 ImageView imgNew = new ImageView();
-                int cellWidth = (int) gameGrid.getWidth() / colcount;
-                int cellHeight = (int) gameGrid.getHeight() / rowcount;
+                int cellWidth = (int) GameWindow.getGameWindow().gameGrid.getWidth() / colcount;
+                int cellHeight = (int) GameWindow.getGameWindow().gameGrid.getHeight() / rowcount;
 
                 imgNew.setFitWidth(cellWidth);
                 imgNew.setFitHeight(cellHeight);
                 imgNew.setPreserveRatio(false);
                 imgNew.setSmooth(true);
                 String id = "gridToken" + c + r;
-                fieldImages.put(id, imgNew);
+                GameWindow.getGameWindow().fieldImages.put(id, imgNew);
                 imgNew.setId(id);
 
                 Image img = new Image("/pictures/0none.png");
                 imgNew.setImage(img);
 
-                gridImages[r][c] = imgNew;
-                gameGrid.add(imgNew, c, r);
+                GameWindow.getGameWindow().gridImages[r][c] = imgNew;
+                GameWindow.getGameWindow().gameGrid.add(imgNew, c, r);
 
                 //the image shall resize when the cell resizes
-                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(colcount));
-                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(rowcount));
+                imgNew.fitWidthProperty().bind(GameWindow.getGameWindow().gameGrid.widthProperty().divide(colcount));
+                imgNew.fitHeightProperty().bind(GameWindow.getGameWindow().gameGrid.heightProperty().divide(rowcount));
 
             }
         }
@@ -155,76 +155,74 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     @Override
     public void moverAmountText() {
-        Platform.runLater(() -> moverAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + "")
-        );
+        Platform.runLater(() -> GameWindow.getGameWindow().moverAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getMoverAmountText().getText()) + 1 + ""));
     }
 
     @Override
     public void swapperAmountText() {
-        Platform.runLater(() -> swapperAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + ""));
+        Platform.runLater(() -> GameWindow.getGameWindow().swapperAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getSwapperAmountText().getText()) + 1 + ""));
 
     }
 
     @Override
     public void replacerAmountText() {
-        Platform.runLater(() -> replacerAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + ""));
+        Platform.runLater(() -> GameWindow.getGameWindow().replacerAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getReplacerAmountText().getText()) + 1 + ""));
     }
 
     @Override
     public void removerAmountText() {
-        Platform.runLater(() -> removerAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + "")
-        );
+        Platform.runLater(() -> GameWindow.getGameWindow().removerAmountText.setText(Integer.parseInt(GameWindow.getGameWindow().getRemoverAmountText().getText()) + 1 + ""));
     }
 
     @Override
     public void addTokenImagesForPlayer1(List<Token> tokens) {
-        int cellWidth = (int) playerHandOne.getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) playerHandOne.getHeight() / Constants.HAND_SIZE;
-        playerHandOne.getChildren().clear();
+        int cellWidth = (int) GameWindow.getGameWindow().playerHandOne.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().playerHandOne.getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().playerHandOne.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            playerHandOne.add(imageView, i, 0);
+            GameWindow.getGameWindow().playerHandOne.add(imageView, i, 0);
         }
     }
 
     @Override
     public void addTokenImagesForPlayer2(List<Token> tokens) {
-        int cellWidth = (int) playerHandTwo.getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) playerHandTwo.getHeight() / Constants.HAND_SIZE;
-        playerHandTwo.getChildren().clear();
+        int cellWidth = (int) GameWindow.getGameWindow().playerHandTwo.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().playerHandTwo.getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().playerHandTwo.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            playerHandTwo.add(imageView, 0, i);
+            GameWindow.getGameWindow().playerHandTwo.add(imageView, 0, i);
         }
     }
 
     @Override
     public void addTokenImagesForPlayer3(List<Token> tokens) {
-        int cellWidth = (int) playerHandThree.getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) playerHandThree.getHeight() / Constants.HAND_SIZE;
-        playerHandThree.getChildren().clear();
+        int cellWidth = (int) GameWindow.getGameWindow().playerHandThree.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().playerHandThree.getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().playerHandThree.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            playerHandThree.add(imageView, i, 0);
+            GameWindow.getGameWindow().playerHandThree.add(imageView, i, 0);
         }
     }
 
     @Override
     public void addTokenImagesForPlayer4(List<Token> tokens) {
-        int cellWidth = (int) playerHandFour.getWidth() / Constants.HAND_SIZE;
-        int cellHeight = (int) playerHandFour.getHeight() / Constants.HAND_SIZE;
-        playerHandFour.getChildren().clear();
+        int cellWidth = (int) GameWindow.getGameWindow().playerHandFour.getWidth() / Constants.HAND_SIZE;
+        int cellHeight = (int) GameWindow.getGameWindow().playerHandFour.getHeight() / Constants.HAND_SIZE;
+        GameWindow.getGameWindow().playerHandFour.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
-            playerHandFour.add(imageView, 0, i);
+            GameWindow.getGameWindow().playerHandFour.add(imageView, 0, i);
 
         }
     }
@@ -233,7 +231,8 @@ public class GameWindow extends Application implements Initializable, GameWindow
 
     @Override
     public void gameWonNotifier(TeamType wonType, int points, boolean rowComplete) {
-        Platform.runLater(() -> gameWonNotification(wonType, points, rowComplete));
+        Platform.runLater(() -> GameWindow.getGameWindow().
+                gameWonNotification(wonType, points, rowComplete));
     }
 
 
@@ -423,8 +422,7 @@ public class GameWindow extends Application implements Initializable, GameWindow
             GameWindow.getGameWindow().getPlayerHandThree().setVisible(false);
             GameWindow.getGameWindow().getPlayerHandFour().setVisible(false);
             if (isAI) {
-                if (GameWindow.getGameWindow().getShowComputerHandButton().isSelected())
-                    handVisibleSwitch(playerID);
+                if (GameWindow.getGameWindow().getShowComputerHandButton().isSelected()) handVisibleSwitch(playerID);
             } else {
                 handVisibleSwitch(playerID);
             }
@@ -495,20 +493,15 @@ public class GameWindow extends Application implements Initializable, GameWindow
         Team lost = null;
 
         if (wonType != null) {
-            lost = wonType == TeamType.VERTICAL ?
-                    Team.getHorizontalTeam() :
-                    Team.getVerticalTeam();
+            lost = wonType == TeamType.VERTICAL ? Team.getHorizontalTeam() : Team.getVerticalTeam();
 
         }
         if (rowComplete && wonType != null) {
-            message = "Team: " + wonType.getTeamName()
-                    + " won, because the hit a full line!";
+            message = "Team: " + wonType.getTeamName() + " won, because the hit a full line!";
         } else if (lost != null && points == lost.getPoints()) {
             message = "Draw! Both teams got the same amount of points (" + points + ")!";
         } else if (wonType != null) {
-            message = "Team: " + wonType.getTeamName()
-                    + " won, because they have more points (" + points
-                    + ") than the other team (" + lost.getPoints() + ")!";
+            message = "Team: " + wonType.getTeamName() + " won, because they have more points (" + points + ") than the other team (" + lost.getPoints() + ")!";
         } else {
             message = "No players in the game";
         }

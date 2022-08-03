@@ -43,6 +43,7 @@ public class FileInputReader {
 
     public static void readFile(File file) {
 
+        if (file == null) return;
         //TODO: Fehlerhafte Config überprüfen!
         //read in the lines from file
         FileReader reader;
