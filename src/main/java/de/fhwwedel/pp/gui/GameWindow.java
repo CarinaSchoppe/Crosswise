@@ -24,12 +24,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -150,6 +151,96 @@ public class GameWindow extends Application implements Initializable, GameWindow
                 imgNew.fitHeightProperty().bind(GameWindow.getGameWindow().gameGrid.heightProperty().divide(rowcount));
 
             }
+        }
+    }
+
+    private void setupDragAndDropEvent() {
+        setDragEventsForPlayerHand(getPlayerHandOne());
+        setDragEventsForPlayerHand(getPlayerHandTwo());
+        setDragEventsForPlayerHand(getPlayerHandThree());
+        setDragEventsForPlayerHand(getPlayerHandFour());
+
+        ImageView[][] imageGrid = GameWindow.getGameWindow().getGridImages();
+        for (int i = 0; i < imageGrid.length; i++) {
+            for (int j = 0; j < imageGrid[i].length; j++) {
+                int finalI = i;
+                int finalJ = j;
+                imageGrid[i][j].setOnDragOver((DragEvent event) -> {
+
+                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
+                    // hier: eine die einen String liefert und nicht von dem Node selbst stammt
+                    if (event.getGestureSource() != imageGrid[finalI][finalJ] && event.getDragboard().hasString()) { // oder z.B. event.getGestureSource() == sourceNode
+                        /* nimmt sowohl COPY als auch MOVE Operationen an */
+                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                    }
+                    event.consume();
+                });
+                imageGrid[i][j].setOnDragDropped((DragEvent event) -> {
+
+                    Dragboard db = event.getDragboard();
+                    boolean success = false;
+
+                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
+                    //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
+                    if (db.hasString()) { // oder z.B. event.getGestureSource() == sourceNode
+                        System.out.println("success");
+                        //imageGrid[i][j].doSomething(...);
+                        success = true;
+                    }
+
+                    /* teile mit, ob der Drag&Drop erfolgreich war */
+                    event.setDropCompleted(success);
+
+                    event.consume();
+                });
+                int finalI1 = i;
+                int finalJ1 = j;
+                imageGrid[i][j].setOnDragEntered((DragEvent event) -> {
+
+                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
+                    //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
+                    if (event.getGestureSource() != imageGrid[finalI1][finalJ1] && event.getDragboard().hasString()) {
+                        // gebe ein visuelles Feedback, sodass der Nutzer weiß, dass die Information hier abgleget werden kann
+                        //imageGrid[i][j].doSomething(...);
+                    }
+                });
+                int finalI2 = i;
+                int finalJ2 = j;
+                imageGrid[i][j].setOnDragExited((DragEvent event) -> {
+
+                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
+                    //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
+                    if (!event.isDropCompleted() && event.getGestureSource() != imageGrid[finalI2][finalJ2] && event.getDragboard().hasString()) {
+                        // setzte das visuelles Feedback (im DragEntered Handler gesetzt) zurück
+                        //imageGrid[i][j].doSomething(...);
+                    }
+                    event.consume();
+                });
+            }
+        }
+    }
+
+    private void setDragEventsForPlayerHand(GridPane hand) {
+        for (Node child : hand.getChildren()) {
+            child.setOnDragDetected((MouseEvent event) -> {
+
+                /* lässt jeden Transfermode zu */
+                Dragboard db = child.startDragAndDrop(TransferMode.ANY);
+
+                /* legt einen String im Clipboard ab*/
+                ClipboardContent content = new ClipboardContent();
+                content.putString("has key");
+                db.setContent(content);
+
+                event.consume();
+            });
+            child.setOnDragDone((DragEvent event) -> {
+                // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt
+                if (event.getTransferMode() == TransferMode.MOVE) {
+                    //source.setText("");
+                }
+                event.consume();
+            });
         }
     }
 
