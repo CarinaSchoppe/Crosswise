@@ -697,6 +697,8 @@ public class GameWindow extends Application implements GameWindowHandler {
         primaryStage.show();
         gameWindow = this;
         generateGrid();
+
+        setupDragAndDropEvent();
     }
 
     public Map<String, ImageView> getFieldImages() {
