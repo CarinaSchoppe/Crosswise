@@ -188,7 +188,8 @@ public class Player {
         var replacerToken = getCorrespondingToken(token);
         if (replacerToken == null) return false;
         var handToken = getCorrespondingToken(handTokenPosition);
-        if (handToken == null && handToken.getTokenType() != TokenType.NONE) return false;
+        if (handToken == null) return false;
+        if (handToken.getTokenType() != TokenType.NONE) return false;
         GameLogger.logMoveReplacer(this, replacerField, handToken);
         tokens.remove(replacerToken);
         tokens.remove(handToken);
