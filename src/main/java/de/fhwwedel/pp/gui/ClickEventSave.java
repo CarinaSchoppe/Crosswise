@@ -5,7 +5,7 @@ public class ClickEventSave {
 
     private Integer posY;
 
-    private boolean isGrid;
+    private final boolean isGrid;
 
 
     private Integer handPosition;

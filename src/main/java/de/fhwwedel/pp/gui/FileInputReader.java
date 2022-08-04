@@ -87,7 +87,18 @@ public class FileInputReader {
     }
 
     private static boolean checkInvalidConfig(final GameData gameData) {
-        //check if all players are not active
+
+        if (gameData.getPlayers().length == 0 || gameData.getPlayers().length % 2 != 0)
+            return true;
+
+        var current = 0;
+        for (var i = 0; i < gameData.getPlayers().length; i++) {
+            if (gameData.getPlayers()[i].isActive())
+                current += i;
+        }
+        if (current % 2 == 0 && !Arrays.stream(gameData.getPlayers()).anyMatch(PlayerData::isActive))
+            return true;
+
         if (Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive))
             return true;
 
@@ -100,7 +111,10 @@ public class FileInputReader {
         if (Arrays.stream(gameData.getField()).anyMatch(fieldRow -> Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token > 10)))
             return true;
 
-        return Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE);
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE))
+            return true;
+
+        return Arrays.stream(gameData.getUsedActionTiles()).anyMatch(special -> special > Constants.AMOUNT_ACTION_TOKENS) || gameData.getUsedActionTiles().length > Constants.UNIQUE_ACTION_TOKENS;
     }
 
 
