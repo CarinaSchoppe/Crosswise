@@ -4,15 +4,13 @@ import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 
 import java.util.HashMap;
@@ -326,7 +324,7 @@ public class FXGUI implements GUIConnector {
                     String[] input = in.split("(?<=\\D)(?=\\d)");
 
                     //field empty
-                    if (/*TODO*/ finalI == 0) {
+                    if (this.gridImagesTokens.get(curr) == TokenType.NONE) {
                         switch (input[0]) {
                             case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
@@ -415,56 +413,22 @@ public class FXGUI implements GUIConnector {
 
 
     private synchronized void setDragEventsForPlayerHand(GridPane hand) {
-    /*  Integer counter = 0;
+        Integer counter = 0;
 
         for (Node child : hand.getChildren()) {
-            child.setOnDragDetected((ClickEventSave event) -> {
+            child.setOnDragDetected((MouseEvent event) -> {
                 System.out.println("Click");
-                *//* lässt jeden Transfermode zu *//*
+                /* lässt jeden Transfermode zu */
                 Dragboard db = child.startDragAndDrop(TransferMode.ANY);
 
-                *//* legt einen String im Clipboard ab*//*
+                /* legt einen String im Clipboard ab*/
                 ClipboardContent content = new ClipboardContent();
 
                 ImageView view = (ImageView) child;
-                *//*
-                switch (view.get) {
-                    case 0:
-                        //??
-                        break;
-                    case 1:
-                        tokenType = "SUN";
-                        break;
-                    case 2:
-                        tokenType = "CROSS";
-                        break;
-                    case 3:
-                        tokenType = "TRIANGLE";
-                        break;
-                    case 4:
-                        tokenType = "SQUARE";
-                        break;
-                    case 5:
-                        tokenType = "PENTAGON";
-                        break;
-                    case 6:
-                        tokenType = "STAR";
-                        break;
-                    case 7:
-                        tokenType = "REMOVER";
-                        break;
-                    case 8:
-                        tokenType = "MOVER";
-                        break;
-                    case 9:
-                        tokenType = "SWAPPER";
-                        break;
-                    case 10:
-                        tokenType = "REPLACER";
-                        break;
-                }
-                *//*
-                content.putString("TRIANGLE");
+                var tokenType = handImagesTokens.get(view);
+
+
+                content.putString(tokenType.name());
                 db.setContent(content);
 
                 event.consume();
@@ -484,7 +448,25 @@ public class FXGUI implements GUIConnector {
                 notifyAll();
             });
             counter++;
-        }*/
+        }
+    }
+
+    private boolean currentClickIsValid(String tokenType) {
+        switch (tokenType) {
+            case "MOVER": {
+                //non empty field 2nd, not same third
+                return this.clickEventSave.isGrid();
+            }
+            case "SWAPPER": {
+                //empty field 2nd, not same third
+                return false;
+            }
+            case "REPLACER": {
+                //must be symbol token 2nd
+                return false;
+            }
+        }
+        return false;
     }
 
     public void setAnimationTime(AnimationTime animationTime) {

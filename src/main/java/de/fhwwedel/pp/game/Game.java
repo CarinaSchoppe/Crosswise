@@ -353,7 +353,6 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-
     public static Game getGame() {
         return game;
     }
