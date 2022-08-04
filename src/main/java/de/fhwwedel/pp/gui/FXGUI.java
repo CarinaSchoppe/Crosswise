@@ -95,16 +95,17 @@ public class FXGUI implements GUIConnector {
 
     @Override
     public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField) {
-        for (var player : players)
-            updatePlayerHandIcons(player.getPlayerID(), player.getTokens());
-        Platform.runLater(() -> {
 
+        for (var player : players) {
+            updatePlayerHandIcons(player.getPlayerID(), player.getTokens());
+        }
+        Platform.runLater(() -> {
             for (int row = 0; row < Constants.GAMEGRID_SIZE; row++) {
                 for (int column = 0; column < Constants.GAMEGRID_SIZE; column++) {
+
                     var token = gameField[row][column];
                     var image = new Image(token.getImagePath());
                     String id = "gridToken" + column + row;
-
                     var imageView =
                             fieldImages.get(id);
                     gridImagesTokens.put(imageView, token);
@@ -112,6 +113,7 @@ public class FXGUI implements GUIConnector {
                 }
             }
         });
+
     }
 
 

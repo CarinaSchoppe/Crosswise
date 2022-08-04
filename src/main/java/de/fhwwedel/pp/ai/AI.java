@@ -363,7 +363,6 @@ import java.util.*;
         switch (move.getToken().getValue()) {
             case 1, 2, 3, 4, 5, 6 -> {
                 if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
-
             }
             case 7 -> {
                 if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();

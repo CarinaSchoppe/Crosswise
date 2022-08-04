@@ -90,6 +90,7 @@ public class Game {
     private static void createStuff(Game game, boolean fileSetup) {
         if (Game.getGame() != null) {
             Game.getGame().cancel();
+            game.guiConnector.generateGrid();
         }
         var thread = new Thread(() -> {
             while (!game.start) {
@@ -100,6 +101,7 @@ public class Game {
                 }
             }
             game.setup(fileSetup);
+            CrossWise.DELAY = 500;
             game.start();
         });
         Game.setGame(game, thread);
@@ -129,7 +131,9 @@ public class Game {
             alert.setTitle("Wrong configuration");
             alert.setHeaderText("Wrong configuration!");
             alert.showAndWait();
+
         });
+        game.cancel();
         return false;
     }
 
@@ -237,9 +241,9 @@ public class Game {
             handleOver();
             return;
         }
-
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
         guiConnector.changeCurrentPlayerText(currentPlayer.getName());
+
         System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
         //if the player is an AI player, let the AI make their move
         if (currentPlayer instanceof AI ai) {
@@ -365,7 +369,7 @@ public class Game {
             return;
         }
         Team.givePoints();
-        guiConnector.performMoveUIUpdate(players, playingField.convertToTokenTypeArray());
+
         //if the turn is over, do nothing
         if (handleOver()) {
             return;
@@ -383,6 +387,7 @@ public class Game {
             Thread.currentThread().interrupt();
         }
         //Let the next player do their turn
+
         nextPlayer();
     }
 

@@ -32,7 +32,7 @@ public class CrossWise extends Application {
     public static final boolean DEBUG = true;
     public static long time;
     public static final boolean UI = true;
-    public static final int DELAY = 200;
+    public static int DELAY = 10;
 
 
     public static void main(String[] args) {

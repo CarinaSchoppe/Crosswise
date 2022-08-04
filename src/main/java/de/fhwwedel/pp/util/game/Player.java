@@ -89,6 +89,7 @@ public class Player {
         field.setToken(token);
         field.getToken().setPosition(field);
         GameLogger.logMove(this, token, position);
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
         return true;
     }
 
@@ -120,6 +121,7 @@ public class Player {
         field.setToken(new Token(TokenType.NONE));
         field.getToken().setPosition(field);
         Game.getGame().getGameWindowHandler().removerAmountText();
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
         return true;
 
     }
@@ -141,6 +143,7 @@ public class Player {
         fieldStart.getToken().setPosition(fieldStart);
 
         Game.getGame().getGameWindowHandler().moverAmountText();
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
 
         return true;
     }
@@ -160,6 +163,8 @@ public class Player {
         fieldSecond.setToken(temp);
         fieldSecond.getToken().setPosition(fieldSecond);
         Game.getGame().getGameWindowHandler().swapperAmountText();
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
+
         return true;
     }
 
@@ -176,20 +181,20 @@ public class Player {
         if (token.getTokenType() != TokenType.REPLACER) return false;
         if (hasToken(getCorrespondingToken(handTokenPosition))) return false;
 
-        var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
-        if (field.getToken().getTokenType() == TokenType.NONE) return false;
-        var fieldToken = getCorrespondingToken(token);
-        if (fieldToken == null) return false;
+        var replacerField = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
+        if (replacerField.getToken().getTokenType() == TokenType.NONE) return false;
+        var replacerToken = getCorrespondingToken(token);
+        if (replacerToken == null) return false;
         var handToken = getCorrespondingToken(handTokenPosition);
         if (handToken == null) return false;
-        GameLogger.logMoveReplacer(this, fieldToken.getPosition(), handToken);
-        tokens.remove(fieldToken);
+        GameLogger.logMoveReplacer(this, replacerField, handToken);
+        tokens.remove(replacerToken);
         tokens.remove(handToken);
-        field.setToken(handToken);
-        field.getToken().setPosition(field);
+        replacerField.setToken(handToken);
+        replacerField.getToken().setPosition(replacerField);
         Game.getGame().getGameWindowHandler().replacerAmountText();
-        tokens.add(field.getToken());
-
+        tokens.add(replacerField.getToken());
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
         return true;
     }
 
