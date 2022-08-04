@@ -24,13 +24,6 @@ import java.util.ArrayList;
 public class GameLogger {
 
     private GameLogger() {
-
-        /*
-         *
-         * Spezialtokens funktioniert
-         *
-         *
-         * */
     }
 
     private static final ArrayList<String> logMessages = new ArrayList<>();
