@@ -7,7 +7,6 @@ public class ClickEventSave {
 
     private boolean isGrid;
 
-    private Integer playerID;
 
     private Integer handPosition;
 
@@ -15,11 +14,12 @@ public class ClickEventSave {
     public ClickEventSave(Integer posX, Integer posY) {
         this.posX = posX;
         this.posY = posY;
+        this.isGrid = true;
     }
 
-    public ClickEventSave(boolean isGrid, Integer playerID, Integer handPosition) {
-        this.isGrid = isGrid;
-        this.playerID = playerID;
+    public ClickEventSave(Integer handPosition) {
+        this.isGrid = false;
+
         this.handPosition = handPosition;
     }
 
@@ -33,10 +33,6 @@ public class ClickEventSave {
 
     public boolean isGrid() {
         return isGrid;
-    }
-
-    public Integer getPlayerID() {
-        return playerID;
     }
 
     public Integer getHandPosition() {

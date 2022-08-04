@@ -16,6 +16,8 @@ import java.util.List;
 
 public interface GUIConnector {
 
+    void setupDragAndDropEvent();
+
     void startGamePopUp();
 
     void changeCurrentAnimationTime(AnimationTime time);

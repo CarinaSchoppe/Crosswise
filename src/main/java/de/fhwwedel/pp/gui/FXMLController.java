@@ -156,6 +156,7 @@ public class FXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree, playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText, removerAmountText);
         guiConnector.generateGrid();
+        guiConnector.setupDragAndDropEvent();
     }
 
     @FXML

@@ -309,7 +309,7 @@ public class FXGUI implements GUIConnector {
         });
     }
 
-    private void setupDragAndDropEvent() {
+    public void setupDragAndDropEvent() {
         setDragEventsForPlayerHand(playerHandOne);
         setDragEventsForPlayerHand(playerHandTwo);
         setDragEventsForPlayerHand(playerHandThree);
@@ -360,11 +360,10 @@ public class FXGUI implements GUIConnector {
                                 } catch (InterruptedException ignored) {
                                     Thread.currentThread().interrupt();
                                 }
-                                if (currentClickIsValid(input[0])) {
+                                if (currentClickIsValid(input[0], curr, finalI, finalJ)) {
                                     validInput = true;
                                 }
                             }
-
                             if (input[0].equals("MOVER")) {
                                 Game.getGame().playerMoverTokenMove(finalI, finalJ, this.clickEventSave.getPosX(), this.clickEventSave.getPosY());
                             } else if (input[0].equals("SWAPPER")) {
@@ -455,23 +454,31 @@ public class FXGUI implements GUIConnector {
         }
     }
 
-    private boolean currentClickIsValid(String tokenType) {
+    private boolean currentClickIsValid(String tokenType, ImageView imageView, Integer xPos, Integer yPos) {
         switch (tokenType) {
-            case "MOVER": {
-                //non empty field 2nd, not same third
-                return this.clickEventSave.isGrid();
+            case "MOVER" -> {
+                //must be a token on the grid, must be an empty token
+                return this.clickEventSave.isGrid() &&
+                        this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
+                                [this.clickEventSave.getPosY()]) == TokenType.NONE;
             }
-            case "SWAPPER": {
-                //empty field 2nd, not same third
-                return false;
+            case "SWAPPER" -> {
+                //must be a token on the grid, must be a non empty field, must not be the same field as the original one
+                return this.clickEventSave.isGrid() &&
+                        this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
+                                [this.clickEventSave.getPosY()]) != TokenType.NONE &&
+                        this.clickEventSave.getPosX() != xPos && this.clickEventSave.getPosY() != yPos;
             }
-            case "REPLACER": {
-                //must be symbol token 2nd
-                return false;
+            case "REPLACER" -> {
+                //must be a token on the hand, must be a SymbolToken
+                return !this.clickEventSave.isGrid() &&
+                        !this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
+                                [this.clickEventSave.getPosY()]).isSpecial();
             }
             default -> throw new RuntimeException("Invalid token type");
         }
     }
+
 
     public void setAnimationTime(AnimationTime animationTime) {
         this.animationTime = animationTime;

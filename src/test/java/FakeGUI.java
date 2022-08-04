@@ -16,6 +16,16 @@ import java.util.List;
 public class FakeGUI implements GUIConnector {
 
     @Override
+    public void showError(String string) {
+
+    }
+
+    @Override
+    public void setupDragAndDropEvent() {
+
+    }
+
+    @Override
     public void startGamePopUp() {
 
     }
