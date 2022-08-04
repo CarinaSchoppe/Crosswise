@@ -152,7 +152,9 @@ public class Player {
         if (token.getTokenType() != TokenType.SWAPPER) return false;
         if (hasToken(token)) return false;
         var fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
+        if (fieldFirst == null) return false;
         var fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
+        if (fieldSecond == null) return false;
         if (fieldFirst.getToken().getTokenType() == TokenType.NONE) return false;
         if (fieldSecond.getToken().getTokenType() == TokenType.NONE) return false;
         tokens.remove(getCorrespondingToken(token));
@@ -186,7 +188,7 @@ public class Player {
         var replacerToken = getCorrespondingToken(token);
         if (replacerToken == null) return false;
         var handToken = getCorrespondingToken(handTokenPosition);
-        if (handToken == null) return false;
+        if (handToken == null && handToken.getTokenType() != TokenType.NONE) return false;
         GameLogger.logMoveReplacer(this, replacerField, handToken);
         tokens.remove(replacerToken);
         tokens.remove(handToken);
