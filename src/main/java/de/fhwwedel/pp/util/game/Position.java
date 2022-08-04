@@ -74,6 +74,13 @@ public class Position {
                 '}';
     }
 
+    public String toStringWithToken() {
+        return "Position{" +
+                "y=" + x +
+                ", x=" + y + ", token=" + token.getTokenType().getValue() +
+                '}';
+    }
+
     @Override
     public int hashCode() {
         int result = getX();

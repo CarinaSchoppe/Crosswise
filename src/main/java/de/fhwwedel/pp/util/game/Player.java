@@ -13,7 +13,6 @@ package de.fhwwedel.pp.util.game;
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
-import de.fhwwedel.pp.util.special.Action;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
 
@@ -45,7 +44,6 @@ public class Player {
      * The corresponding team of the player
      */
     private Team team;
-
 
 
     /**
@@ -89,7 +87,8 @@ public class Player {
         }
         tokens.remove(getCorrespondingToken(token));
         field.setToken(token);
-        GameLogger.logMove(this, token, position, Action.PLACE);
+        field.getToken().setPosition(field);
+        GameLogger.logMove(this, token, position);
         return true;
     }
 
@@ -101,79 +100,66 @@ public class Player {
      */
     private boolean hasToken(Token token) {
         for (var t : tokens) {
-            if (t.equals(token))
-                return false;
+            if (t.equals(token)) return false;
         }
         return true;
     }
 
 
     public boolean removerTokenTurn(final Token token, final Position position) {
-        if (token.getTokenType() != TokenType.REMOVER)
-            return false;
+        if (token.getTokenType() != TokenType.REMOVER) return false;
 
-        if (hasToken(token))
-            return false;
+        if (hasToken(token)) return false;
 
         var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken().getTokenType() == TokenType.NONE)
-            return false;
+        if (field.getToken().getTokenType() == TokenType.NONE) return false;
 
         tokens.remove(getCorrespondingToken(token));
         tokens.add(field.getToken());
+        GameLogger.logMoveRemove(this, field);
         field.setToken(new Token(TokenType.NONE));
         field.getToken().setPosition(field);
         Game.getGame().getGameWindowHandler().removerAmountText();
-        GameLogger.logMove(this, token, field, Action.REMOVE);
-
         return true;
 
     }
 
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
-        if (token.getTokenType() != TokenType.MOVER)
-            return false;
-        if (hasToken(token))
-            return false;
+        if (token.getTokenType() != TokenType.MOVER) return false;
+        if (hasToken(token)) return false;
         var fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
         var fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
 
-        if (fieldStart.getToken().getTokenType() == TokenType.NONE)
-            return false;
-        if (fieldEnd.getToken().getTokenType() != TokenType.NONE)
-            return false;
+        if (fieldStart.getToken().getTokenType() == TokenType.NONE) return false;
+        if (fieldEnd.getToken().getTokenType() != TokenType.NONE) return false;
 
         tokens.remove(getCorrespondingToken(token));
-
+        GameLogger.logMoveMove(this, fieldStart, fieldEnd);
         fieldEnd.setToken(fieldStart.getToken());
+        fieldEnd.getToken().setPosition(fieldEnd);
         fieldStart.setToken(new Token(TokenType.NONE));
+        fieldStart.getToken().setPosition(fieldStart);
 
         Game.getGame().getGameWindowHandler().moverAmountText();
-        GameLogger.logMove(this, token, fieldStart, Action.REMOVE);
-        GameLogger.logMove(this, token, fieldEnd, Action.PLACE);
 
         return true;
     }
 
-    public boolean swapperTokenTurn(final Token token, final Position first,
-                                    final Position second) {
-        if (token.getTokenType() != TokenType.SWAPPER)
-            return false;
-        if (hasToken(token))
-            return false;
+    public boolean swapperTokenTurn(final Token token, final Position first, final Position second) {
+        if (token.getTokenType() != TokenType.SWAPPER) return false;
+        if (hasToken(token)) return false;
         var fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         var fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
-        if (fieldFirst.getToken().getTokenType() == TokenType.NONE)
-            return false;
-        if (fieldSecond.getToken().getTokenType() == TokenType.NONE)
-            return false;
+        if (fieldFirst.getToken().getTokenType() == TokenType.NONE) return false;
+        if (fieldSecond.getToken().getTokenType() == TokenType.NONE) return false;
         tokens.remove(getCorrespondingToken(token));
+        GameLogger.logMoveSwapper(this, fieldFirst, fieldSecond);
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
+        fieldFirst.getToken().setPosition(fieldFirst);
         fieldSecond.setToken(temp);
+        fieldSecond.getToken().setPosition(fieldSecond);
         Game.getGame().getGameWindowHandler().swapperAmountText();
-        GameLogger.logMove(this, fieldSecond.getToken(), fieldFirst, Action.PLACE);
-        GameLogger.logMove(this, fieldFirst.getToken(), fieldSecond, Action.PLACE);
         return true;
     }
 
@@ -185,30 +171,24 @@ public class Player {
      * @param handTokenPosition  position on hand, that will be swapped with field
      * @return true, if everything went correctly, otherwise false
      */
-    public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition,
-                                     final Position handTokenPosition) {
-        if (hasToken(token))
-            return false;
-        if (token.getTokenType() != TokenType.REPLACER)
-            return false;
-        if (hasToken(getCorrespondingToken(handTokenPosition)))
-            return false;
+    public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition, final Position handTokenPosition) {
+        if (hasToken(token)) return false;
+        if (token.getTokenType() != TokenType.REPLACER) return false;
+        if (hasToken(getCorrespondingToken(handTokenPosition))) return false;
 
-        var field =
-                Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
-        if (field.getToken().getTokenType() == TokenType.NONE)
-            return false;
+        var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
+        if (field.getToken().getTokenType() == TokenType.NONE) return false;
         var fieldToken = getCorrespondingToken(token);
+        if (fieldToken == null) return false;
         var handToken = getCorrespondingToken(handTokenPosition);
+        if (handToken == null) return false;
+        GameLogger.logMoveReplacer(this, fieldToken.getPosition(), handToken);
         tokens.remove(fieldToken);
         tokens.remove(handToken);
         field.setToken(handToken);
+        field.getToken().setPosition(field);
         Game.getGame().getGameWindowHandler().replacerAmountText();
         tokens.add(field.getToken());
-        assert fieldToken != null;
-        GameLogger.logMove(this, fieldToken, field, Action.REMOVE);
-        assert handToken != null;
-        GameLogger.logMove(this, handToken, field, Action.PLACE);
 
         return true;
     }
@@ -221,8 +201,7 @@ public class Player {
      */
     private Token getCorrespondingToken(Token token) {
         for (var t : tokens) {
-            if (t.equals(token))
-                return t;
+            if (t.equals(token)) return t;
         }
         return null;
     }
@@ -234,8 +213,7 @@ public class Player {
      * @return corresponding Token, null it wasn't a hand position
      */
     private Token getCorrespondingToken(Position position) {
-        if (!position.isHand())
-            return null;
+        if (!position.isHand()) return null;
         return tokens.get(position.getHandPosition());
     }
 
@@ -256,21 +234,17 @@ public class Player {
     public void drawToken() throws NoTokenException {
         //Test method to slow down the drawing of Tokens
         try {
-            if (CrossWise.UI)
-                Thread.sleep(CrossWise.DELAY);
+            if (CrossWise.UI) Thread.sleep(CrossWise.DELAY);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         //If no tokens are left in the pile, throw NoTokensException
-        if (Game.getGame().getTokenDrawPile().isEmpty())
-            throw new NoTokenException("No more tokens left in the Pile!");
+        if (Game.getGame().getTokenDrawPile().isEmpty()) throw new NoTokenException("No more tokens left in the Pile!");
 
         //return if there is no None token in tokens
-        if (tokens.size() >= Constants.HAND_SIZE && tokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE)
-            return;
+        if (tokens.size() >= Constants.HAND_SIZE && tokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE) return;
 
-        var token = Game.getGame().getTokenDrawPile()
-                .get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
+        var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
 
 
@@ -301,8 +275,7 @@ public class Player {
         //the amount of tokens with the same TokenType in hand
         int amount = 0;
         for (var t : tokens) {
-            if (t.getTokenType() == token)
-                amount++;
+            if (t.getTokenType() == token) amount++;
         }
         return amount;
     }

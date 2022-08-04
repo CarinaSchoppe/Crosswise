@@ -87,7 +87,7 @@ public class FXGUI implements GUIConnector {
         }
     }
 
- 
+
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {
         this.animationTime = time;
@@ -148,7 +148,6 @@ public class FXGUI implements GUIConnector {
                 String id = "gridToken" + c + r;
                 fieldImages.put(id, imgNew);
                 imgNew.setId(id);
-
                 Image img = new Image("/pictures/0none.png");
                 imgNew.setImage(img);
                 gridImagesTokens.put(imgNew, TokenType.NONE);

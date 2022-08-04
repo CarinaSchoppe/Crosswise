@@ -11,7 +11,7 @@
 package de.fhwwedel.pp.util.special;
 
 public enum Action {
-    PLACE("placed"), REMOVE("removed");
+    PLACE("placed"), REMOVE("removed"), SWAPPED("swapped"), MOVED("moved"), REPLACED("replaced");
 
     private final String text;
 

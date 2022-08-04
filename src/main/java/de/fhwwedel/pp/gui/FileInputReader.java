@@ -96,7 +96,7 @@ public class FileInputReader {
             if (gameData.getPlayers()[i].isActive())
                 current += i;
         }
-        if (current % 2 == 0 && !Arrays.stream(gameData.getPlayers()).anyMatch(PlayerData::isActive))
+        if (current % 2 == 0 && Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive))
             return true;
 
         if (Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive))
