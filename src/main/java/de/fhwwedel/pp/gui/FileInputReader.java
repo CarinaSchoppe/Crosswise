@@ -58,6 +58,9 @@ public class FileInputReader {
         var players = getPlayersFromFile(gameData);
 
         Game.createNewGame(players, connector, true, new PlayingField(gameData.field().length));
+        players.forEach(it -> {
+            it.create(Game.getGame());
+        });
         var currentPlayer = Game.getGame().getPlayers().stream().filter(player -> player.getPlayerID() == gameData.currentPlayer()).findFirst().orElse(null);
         Game.getGame().setCurrentPlayer(currentPlayer);
         Game.getGame().getPlayingField().addDataFromJSON(gameData.field());
@@ -84,7 +87,6 @@ public class FileInputReader {
             var playerData = gameData.players()[i];
             if (!playerData.isAI()) {
                 var player = new Player(i, playerData.isActive(), playerData.name());
-                player.create();
                 Arrays.stream(playerData.hand()).forEach(token -> player.getTokens().add(new Token(TokenType.getTokenType(token))));
                 players.add(player);
             } else {

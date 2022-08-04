@@ -16,6 +16,8 @@ import java.util.List;
 
 public interface GUIConnector {
 
+    void startGamePopUp();
+
     void changeCurrentAnimationTime(AnimationTime time);
 
     void updatePlayerHandIcons(int playerID, List<Token> tokens);

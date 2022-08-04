@@ -86,26 +86,27 @@ public class CreateGame implements Initializable {
             playerOne = new AI(0, playerOneActive.isSelected(), playerOneField.getText());
         else
             playerOne = new Player(0, playerOneActive.isSelected(), playerOneField.getText());
-        playerOne.create();
         Player playerTwo;
         if (playerTwoAI.isSelected())
             playerTwo = new AI(1, playerTwoActive.isSelected(), playerTwoField.getText());
         else
             playerTwo = new Player(1, playerTwoActive.isSelected(), playerTwoField.getText());
-        playerTwo.create();
         Player playerThree;
         if (playerThreeAI.isSelected())
             playerThree = new AI(2, playerThreeActive.isSelected(), playerThreeField.getText());
         else
             playerThree = new Player(2, playerThreeActive.isSelected(), playerThreeField.getText());
-        playerThree.create();
         Player playerFour;
         if (playerFourAI.isSelected())
             playerFour = new AI(3, playerFourActive.isSelected(), playerFourField.getText());
         else
             playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
-        playerFour.create();
         Game.createNewGame(List.of(playerOne, playerTwo, playerThree, playerFour), guiConnector, false);
+        playerOne.create(Game.getGame());
+        playerTwo.create(Game.getGame());
+        playerThree.create(Game.getGame());
+        playerFour.create(Game.getGame());
+
         //close the current window
         ((Stage) createGameButton.getScene().getWindow()).close();
     }

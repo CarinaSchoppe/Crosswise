@@ -17,6 +17,7 @@ import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
@@ -64,6 +65,8 @@ public class Game {
      * Boolean to stop the current game
      */
     private boolean stop;
+
+    private boolean start;
     private Thread thread;
 
     //----------------------------------------------------------------------------------------------
@@ -81,17 +84,29 @@ public class Game {
         createStuff(game, fileSetup);
     }
 
+    /**
+     * Method to extract code duplication
+     */
     private static void createStuff(Game game, boolean fileSetup) {
         if (Game.getGame() != null) {
             Game.getGame().cancel();
         }
-        game.setup(fileSetup);
         var thread = new Thread(() -> {
+            while (!game.start) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+            game.setup(fileSetup);
             game.start();
         });
         Game.setGame(game, thread);
+        Game.game.guiConnector.startGamePopUp();
         thread.start();
     }
+
 
     public static void createNewGame(List<Player> players, GUIConnector connector, boolean fileSetup, PlayingField field) {
         var game = new Game(field, players, connector);
@@ -109,10 +124,12 @@ public class Game {
             return true;
         }
 
-        var alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
-        alert.setTitle("Wrong configuration");
-        alert.setHeaderText("Wrong configuration!");
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            var alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
+            alert.setTitle("Wrong configuration");
+            alert.setHeaderText("Wrong configuration!");
+            alert.showAndWait();
+        });
         return false;
     }
 
@@ -373,5 +390,11 @@ public class Game {
 
     public GUIConnector getGameWindowHandler() {
         return guiConnector;
+    }
+
+    public void startGame() {
+        synchronized (this) {
+            start = true;
+        }
     }
 }

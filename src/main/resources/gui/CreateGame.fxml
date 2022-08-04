@@ -3,7 +3,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" fx:controller="de.fhwwedel.pp.gui.CreateGame">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18">
     <children>
         <Label layoutX="55.0" layoutY="22.0" prefHeight="29.0" prefWidth="71.0" text="Player Name"/>
         <Button fx:id="createGameButton" layoutX="504.0" layoutY="347.0" mnemonicParsing="false" onAction="#createGame" text="Create Game"/>

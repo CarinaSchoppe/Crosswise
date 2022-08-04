@@ -47,6 +47,12 @@ public class Player {
     private Team team;
 
     /**
+     * The current Gameinstance
+     */
+    private Game game;
+
+
+    /**
      * Constructor
      *
      * @param playerID Player ID of that player
@@ -59,10 +65,12 @@ public class Player {
         this.name = name;
     }
 
+
     /**
      * add the player to a team
      */
-    public void create() {
+    public void create(Game game) {
+        this.game = game;
         this.team = Team.addPlayerToTeam(this);
     }
 
@@ -283,7 +291,7 @@ public class Player {
 
         GameLogger.logDraw(this, token);
 
-            Game.getGame().getGameWindowHandler().updatePlayerHandIcons(playerID, tokens);
+        Game.getGame().getGameWindowHandler().updatePlayerHandIcons(playerID, tokens);
 
 
     }

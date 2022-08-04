@@ -30,7 +30,7 @@
          <dependency>
              <groupId>org.openjfx</groupId>
              <artifactId>javafx-controls</artifactId>
-             <version>18.0.1</version>
+             <version>18.0.2</version>
          </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -78,7 +78,10 @@
                     <execution>
                         <!--   &lt;!&ndash; Default configuration for running with: mvn javafx:run &ndash;&gt; -->
                         <configuration>
-                            <mainClass>de.fhwwedel.pp.gui.FrontEnd</mainClass>
+                            <mainClass>${assembly.mainClass}</mainClass>
+                            <options>
+                                <option>--add-modules javafx.controls,javafx.fxml</option>
+                            </options>
                         </configuration>
                     </execution>
                 </executions>
@@ -119,7 +122,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.fhwwedel.pp.CrossWise</mainClass>
+                            <mainClass>de.fhwwedel.pp.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

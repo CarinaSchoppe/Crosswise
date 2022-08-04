@@ -35,179 +35,120 @@ public class FXMLController implements Initializable {
 
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private Label currentPlayerText;
-
     @FXML
     private GridPane dividerGrid;
-
     @FXML
     private MenuItem endGameButton;
-
     @FXML
     private RadioMenuItem fastAnimationSpeedButton;
-
     @FXML
     private GridPane gameGrid;
-
     @FXML
     private GridPane horizontalPointsGrid;
-
     @FXML
     private ImageView imageMover;
-
     @FXML
     private ImageView imageRemover;
-
     @FXML
     private ImageView imageReplacer;
-
     @FXML
     private ImageView imageSwapper;
-
     @FXML
     private GridPane innerGrid;
-
     @FXML
     private MenuItem loadGameButton;
-
     @FXML
     private RadioMenuItem lowAnimationSpeedButton;
-
     @FXML
     private GridPane masterGrid;
-
     @FXML
     private RadioMenuItem mediumAnimationSpeedButton;
-
     @FXML
     private MenuBar menuBar;
-
     @FXML
     private Menu menuComputer;
-
     @FXML
     private Menu menuPunkte;
-
     @FXML
     private Label moverAmountText;
-
     @FXML
     private MenuItem newGameButton;
-
     @FXML
     private ImageView playerHand1IconFour;
-
     @FXML
     private ImageView playerHand1IconOne;
-
     @FXML
     private ImageView playerHand1IconThree;
-
     @FXML
     private ImageView playerHand1IconTwo;
-
     @FXML
     private ImageView playerHand2IconFour;
-
     @FXML
     private ImageView playerHand2IconOne;
-
     @FXML
     private ImageView playerHand2IconThree;
-
     @FXML
     private ImageView playerHand2IconTwo;
-
     @FXML
     private ImageView playerHand3IconFour;
-
     @FXML
     private ImageView playerHand3IconOne;
-
     @FXML
     private ImageView playerHand3IconThree;
-
     @FXML
     private ImageView playerHand3IconTwo;
-
     @FXML
     private ImageView playerHand4IconFour;
-
     @FXML
     private ImageView playerHand4IconOne;
-
     @FXML
     private ImageView playerHand4IconThree;
-
     @FXML
     private ImageView playerHand4IconTwo;
-
-
     @FXML
     private GridPane playerHandFour;
-
     @FXML
     private GridPane playerHandOne;
-
     @FXML
     private GridPane playerHandThree;
-
     @FXML
     private GridPane playerHandTwo;
-
     @FXML
     private GridPane playersStuffGrid;
-
     @FXML
     private Label playersTurnLabel;
-
     @FXML
     private CheckMenuItem pointsPerRowColumnButton;
-
     @FXML
     private CheckMenuItem pointsPerTeamButton;
-
     @FXML
     private GridPane pointsTableGridPane;
-
     @FXML
     private ImageView pointsTableImageView;
-
     @FXML
     private Label pointsTableLabel;
-
     @FXML
     private Label removerAmountText;
-
     @FXML
     private Label replacerAmountText;
-
     @FXML
     private MenuItem saveGameButton;
-
     @FXML
     private CheckMenuItem showComputerHandButton;
-
     @FXML
     private GridPane specialImagesGrid;
-
     @FXML
     private GridPane specialStuffGrid;
-
     @FXML
     private GridPane specialUsedGrid;
-
     @FXML
     private Label swapperAmountText;
-
     @FXML
     private Label usedSpacialLabel;
-
     @FXML
     private GridPane verticalPointsGrid;
 
@@ -215,7 +156,7 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree, playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText, removerAmountText);
-
+        guiConnector.generateGrid();
     }
 
     @FXML
@@ -255,11 +196,13 @@ public class FXMLController implements Initializable {
     @FXML
     void clickNewGameButton(ActionEvent event) {
         try {
+            var createGame = new CreateGame(guiConnector);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
+            fxmlLoader.setController(createGame);
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initStyle(StageStyle.DECORATED);
             stage.setTitle("CrossWise Create Game");
             stage.setResizable(false);
             stage.setScene(new Scene(root));

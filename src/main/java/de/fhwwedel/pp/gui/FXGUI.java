@@ -282,9 +282,19 @@ public class FXGUI implements GUIConnector {
         });
     }
 
+    @Override
+    public void startGamePopUp() {
+        Platform.runLater(() -> {
+            var alert = new Alert(Alert.AlertType.INFORMATION, "Start game!");
+            alert.setTitle("Start Game");
+            alert.setHeaderText("Start Game");
+            alert.showAndWait();
+            Game.getGame().startGame();
+        });
+    }
 
     private void setupDragAndDropEvent() {
-       /* setDragEventsForPlayerHand(playerHandOne);
+        setDragEventsForPlayerHand(playerHandOne);
         setDragEventsForPlayerHand(playerHandTwo);
         setDragEventsForPlayerHand(playerHandThree);
         setDragEventsForPlayerHand(playerHandFour);
@@ -332,10 +342,11 @@ public class FXGUI implements GUIConnector {
 
                     Dragboard db = event.getDragboard();
                     boolean success = true;
-                    String input = db.getString();
+                    String in = db.getString();
+                    String[] input = in.split("(?<=\\D)(?=\\d)");
 
-                    switch (input) {
-                        case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> Game.getGame().playerSymbolTokenMove(input, finalI, finalJ);
+                    switch (input[0]) {
+                        case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> Game.getGame().playerSymbolTokenMove(input[0], finalI, finalJ);
                         case "REMOVER" -> Game.getGame().playerRemoverTokenMove(finalI, finalJ);
                         case "MOVER", "SWAPPER", "REPLACER" -> {
                             boolean validInput = false;
@@ -348,17 +359,18 @@ public class FXGUI implements GUIConnector {
                                     validInput = true;
                                 }
                             }
-                            if (input.equals("MOVER")) {
-                                Game.getGame().playerMoverTokenMove();
-                            } else if (input.equals("SWAPPER")) {
 
+                            if (input[0].equals("MOVER")) {
+                                Game.getGame().playerMoverTokenMove(finalI, finalJ, this.clickEventSave.getPosX(), this.clickEventSave.getPosY());
+                            } else if (input[0].equals("SWAPPER")) {
+                                Game.getGame().playerSwapperTokenMove(finalI, finalJ, this.clickEventSave.getPosX(), this.clickEventSave.getPosY());
+                            } else {
+                                Game.getGame().playerReplacerTokenMove(finalI, finalJ, this.clickEventSave.getHandPosition());
                             }
                         }
-
                     }
 
-
-                    *//* teile mit, ob der Drag&Drop erfolgreich war *//*
+                    /* teile mit, ob der Drag&Drop erfolgreich war */
                     event.setDropCompleted(success);
 
                     event.consume();
@@ -386,14 +398,30 @@ public class FXGUI implements GUIConnector {
                     event.consume();
                 });
 
-                child.setOnMouseClicked((MouseEvent event) -> {
+                curr.setOnMouseClicked((MouseEvent event) -> {
                     this.clickEventSave = new ClickEventSave(finalI, finalJ);
                     notifyAll();
                 });
-            counter++;
-
             }
-        }*/
+        }
+    }
+
+    private boolean currentClickIsValiD(String tokenType) {
+        switch (tokenType) {
+            case "MOVER": {
+                //non empty field 2nd, not same third
+                return this.clickEventSave.isGrid();
+            }
+            case "SWAPPER": {
+                //empty field 2nd, not same third
+                return false;
+            }
+            case "REPLACER": {
+                //must be symbol token 2nd
+                return false;
+            }
+        }
+        return false;
     }
 
 

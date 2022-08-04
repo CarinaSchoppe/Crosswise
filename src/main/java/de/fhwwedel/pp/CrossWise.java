@@ -36,9 +36,10 @@ public class CrossWise extends Application {
     public static int DELAY = 200;
 
 
-    public static void main(String... args) {
+    public static void main(String[] args) {
         launch(args);
     }
+
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -61,6 +62,4 @@ public class CrossWise extends Application {
 
 
     }
-
-
 }
