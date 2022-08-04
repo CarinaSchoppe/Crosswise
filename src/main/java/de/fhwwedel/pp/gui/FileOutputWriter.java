@@ -8,17 +8,18 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwwedel.pp.util.special;
+package de.fhwwedel.pp.gui;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.json.GameData;
 import de.fhwwedel.pp.util.game.json.PlayerData;
+import de.fhwwedel.pp.util.special.Constants;
 import javafx.scene.Scene;
 
 import java.util.List;

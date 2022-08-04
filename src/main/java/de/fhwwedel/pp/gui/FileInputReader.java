@@ -8,13 +8,13 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwwedel.pp.util.special;
+package de.fhwwedel.pp.gui;
 
 import com.google.gson.Gson;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
-import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 import de.fhwwedel.pp.util.game.json.GameData;

@@ -13,7 +13,7 @@ package de.fhwwedel.pp.gui;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
-import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.special.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -115,8 +115,6 @@ public class CreateGame {
             Game.setGame(game);
             game.start();
         }).start();
-
-
     }
 
     public void start(Stage primaryStage) throws IOException {
@@ -146,6 +144,5 @@ public class CreateGame {
         assert playerTwoAI != null : "fx:id=\"playerTwoAI\" was not injected: check your FXML file 'CreateGame.fxml'.";
         assert playerTwoActive != null : "fx:id=\"playerTwoActive\" was not injected: check your FXML file 'CreateGame.fxml'.";
         assert playerTwoField != null : "fx:id=\"playerTwoField\" was not injected: check your FXML file 'CreateGame.fxml'.";
-
     }
 }

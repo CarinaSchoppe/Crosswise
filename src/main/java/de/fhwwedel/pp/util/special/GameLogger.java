@@ -12,7 +12,7 @@ package de.fhwwedel.pp.util.special;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.game.Position;
 import de.fhwwedel.pp.util.game.Token;
 

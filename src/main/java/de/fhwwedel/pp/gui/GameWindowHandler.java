@@ -10,7 +10,7 @@
 
 package de.fhwwedel.pp.gui;
 
-import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.game.TeamType;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;

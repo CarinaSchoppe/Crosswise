@@ -12,13 +12,9 @@ package de.fhwwedel.pp.ai;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.MoveNotPerformedException;
 import de.fhwwedel.pp.util.exceptions.NoMovePossibleException;
-import de.fhwwedel.pp.util.game.Position;
-import de.fhwwedel.pp.util.game.TeamType;
-import de.fhwwedel.pp.util.game.Token;
-import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.*;

@@ -15,7 +15,7 @@ import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
 import de.fhwwedel.pp.gui.FakeGUI;
 import de.fhwwedel.pp.gui.GameWindow;
-import de.fhwwedel.pp.player.Player;
+import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.special.Constants;
 
 import java.util.ArrayList;

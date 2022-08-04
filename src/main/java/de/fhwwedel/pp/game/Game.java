@@ -14,7 +14,6 @@ import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.gui.GameWindowHandler;
-import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;

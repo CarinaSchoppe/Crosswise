@@ -8,16 +8,12 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwwedel.pp.player;
+package de.fhwwedel.pp.util.game;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
-import de.fhwwedel.pp.util.game.Position;
-import de.fhwwedel.pp.util.game.Team;
-import de.fhwwedel.pp.util.game.Token;
-import de.fhwwedel.pp.util.game.TokenType;
 import de.fhwwedel.pp.util.special.Action;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;

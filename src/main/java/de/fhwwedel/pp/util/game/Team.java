@@ -11,7 +11,6 @@
 package de.fhwwedel.pp.util.game;
 
 import de.fhwwedel.pp.ai.AI;
-import de.fhwwedel.pp.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
