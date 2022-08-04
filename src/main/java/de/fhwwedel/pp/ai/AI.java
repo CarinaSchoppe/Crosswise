@@ -411,7 +411,7 @@ import java.util.*;
                 bestToken = i;
             }
         }
-        return bestMovePerToken.get(Objects.requireNonNull(bestToken));
+        return bestMovePerToken.get(Objects.<Integer>requireNonNull(bestToken));
 
     }
 

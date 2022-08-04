@@ -15,6 +15,10 @@ import java.util.List;
 
 public class FakeGUI implements GUIConnector {
 
+    @Override
+    public void startGamePopUp() {
+
+    }
 
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {

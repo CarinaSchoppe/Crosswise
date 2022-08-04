@@ -12,7 +12,18 @@ package de.fhwwedel.pp.util.game.json;
 
 import java.util.Arrays;
 
-public record GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
+public final class GameData {
+    private PlayerData[] players;
+    private int currentPlayer;
+    private int[][] field;
+    private int[] usedActionTiles;
+
+    public GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
+        this.players = players;
+        this.currentPlayer = currentPlayer;
+        this.field = field;
+        this.usedActionTiles = usedActionTiles;
+    }
 
 
     @Override
@@ -44,5 +55,37 @@ public record GameData(PlayerData[] players, int currentPlayer, int[][] field, i
                 ", field=" + Arrays.toString(field) +
                 ", usedActionTiles=" + Arrays.toString(usedActionTiles) +
                 '}';
+    }
+
+    public PlayerData[] getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(PlayerData[] players) {
+        this.players = players;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public int[][] getField() {
+        return field;
+    }
+
+    public void setField(int[][] field) {
+        this.field = field;
+    }
+
+    public int[] getUsedActionTiles() {
+        return usedActionTiles;
+    }
+
+    public void setUsedActionTiles(int[] usedActionTiles) {
+        this.usedActionTiles = usedActionTiles;
     }
 }

@@ -15,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -184,8 +183,7 @@ public class FXMLController implements Initializable {
     @FXML
     void clickLoadGameButton(ActionEvent event) {
         //get current scene from the event
-        Node node = (Node) event.getSource();
-        Scene scene = node.getScene();
+        Scene scene = gameGrid.getScene();
         try {
             FileInputReader.readFile(FileInputReader.selectFile(scene), guiConnector);
             //TODO: update UI
@@ -216,8 +214,7 @@ public class FXMLController implements Initializable {
 
     @FXML
     void clickSaveGameButton(ActionEvent event) {
-        Node node = (Node) event.getSource();
-        Scene scene = node.getScene();
+        Scene scene = gameGrid.getScene();
         FileOutputWriter.writeJSON(scene);
 
     }

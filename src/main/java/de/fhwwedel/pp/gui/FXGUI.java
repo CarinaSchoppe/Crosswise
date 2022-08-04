@@ -35,6 +35,8 @@ public class FXGUI implements GUIConnector {
     private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
+    private final HashMap<ImageView, TokenType> gridImagesTokens;
+    private final HashMap<ImageView, TokenType> handImagesTokens;
 
     public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne, GridPane playerHandTwo, GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid, Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText) {
         this.playerHandOne = playerHandOne;
@@ -49,6 +51,8 @@ public class FXGUI implements GUIConnector {
         this.removerAmountText = removerAmountText;
         this.showComputerHandButton = showComputerHandButton;
         fieldImages = new HashMap<>();
+        gridImagesTokens = new HashMap<>();
+        handImagesTokens = new HashMap<>();
     }
 
     @Override
@@ -110,6 +114,7 @@ public class FXGUI implements GUIConnector {
 
                     var imageView =
                             fieldImages.get(id);
+                    gridImagesTokens.put(imageView, token);
                     imageView.setImage(image);
                 }
             }
@@ -145,6 +150,7 @@ public class FXGUI implements GUIConnector {
 
                 Image img = new Image("/pictures/0none.png");
                 imgNew.setImage(img);
+                gridImagesTokens.put(imgNew, TokenType.NONE);
 
                 gridImages[r][c] = imgNew;
                 gameGrid.add(imgNew, c, r);
@@ -189,6 +195,7 @@ public class FXGUI implements GUIConnector {
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             playerHandOne.add(imageView, i, 0);
+            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
         setDragEventsForPlayerHand(playerHandOne);
     }
@@ -204,6 +211,7 @@ public class FXGUI implements GUIConnector {
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             playerHandTwo.add(imageView, 0, i);
+            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
         setDragEventsForPlayerHand(playerHandTwo);
     }
@@ -219,6 +227,7 @@ public class FXGUI implements GUIConnector {
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             playerHandThree.add(imageView, i, 0);
+            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
         setDragEventsForPlayerHand(playerHandThree);
     }
@@ -234,6 +243,7 @@ public class FXGUI implements GUIConnector {
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             playerHandFour.add(imageView, 0, i);
+            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
         setDragEventsForPlayerHand(playerHandFour);
     }
@@ -319,8 +329,6 @@ public class FXGUI implements GUIConnector {
                     if (/*TODO*/ finalI == 0) {
                         switch (input[0]) {
                             case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                            default -> {
-                            }
                         }
                     } else {
                         switch (input[0]) {
@@ -355,7 +363,7 @@ public class FXGUI implements GUIConnector {
                                     wait();
                                 } catch (InterruptedException e) {
                                 }
-                                if (currentClickIsValiD(input[0])) {
+                                if (currentClickIsValid(input[0])) {
                                     validInput = true;
                                 }
                             }
@@ -405,24 +413,6 @@ public class FXGUI implements GUIConnector {
         }
     }
 
-    private boolean currentClickIsValiD(String tokenType) {
-        switch (tokenType) {
-            case "MOVER": {
-                //non empty field 2nd, not same third
-                return this.clickEventSave.isGrid();
-            }
-            case "SWAPPER": {
-                //empty field 2nd, not same third
-                return false;
-            }
-            case "REPLACER": {
-                //must be symbol token 2nd
-                return false;
-            }
-        }
-        return false;
-    }
-
 
     private synchronized void setDragEventsForPlayerHand(GridPane hand) {
     /*  Integer counter = 0;
@@ -435,7 +425,6 @@ public class FXGUI implements GUIConnector {
 
                 *//* legt einen String im Clipboard ab*//*
                 ClipboardContent content = new ClipboardContent();
-                String tokenType = null;
 
                 ImageView view = (ImageView) child;
                 *//*
@@ -487,7 +476,8 @@ public class FXGUI implements GUIConnector {
                 }
                 event.consume();
             });
-            final count = counter;
+
+            final var count = counter;
             child.setOnMouseClicked((MouseEvent event) -> {
                 //TODO playerID
                 this.clickEventSave = new ClickEventSave(true, 3, count);
