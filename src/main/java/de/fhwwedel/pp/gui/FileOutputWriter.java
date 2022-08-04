@@ -46,7 +46,7 @@ public class FileOutputWriter {
 
         PlayerData[] players = new PlayerData[gamePlayers.size()];
         for (int i = 0; i < gamePlayers.size(); i++) {
-            players[i] = generatePlayerData(gamePlayers.get(i).getTokens(), gamePlayers.get(i).getName(), gamePlayers.get(i) instanceof AI, gamePlayers.get(i).isActive());
+            players[i] = generatePlayerData(gamePlayers.get(i).getHandTokens(), gamePlayers.get(i).getName(), gamePlayers.get(i) instanceof AI, gamePlayers.get(i).isActive());
         }
         return new GameData(players, currentPlayerID, generateCorrespondingPlayingField(playingFieldSize, playingFieldMap), generateUsedActionTilesArray(usedActionTokens));
 

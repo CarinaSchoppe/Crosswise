@@ -405,7 +405,7 @@ import java.util.*;
             }
 
         Integer bestToken = null;
-        for (int i = 0; i < getTokens().size(); i++) {
+        for (int i = 0; i < getHandTokens().size(); i++) {
             if (bestMovePerToken.get(i) != null && (bestToken == null || isBetterMove(bestMovePerToken.get(i), bestMovePerToken.get(bestToken)))) {
                 bestToken = i;
             }
@@ -638,7 +638,7 @@ import java.util.*;
     public Set<TokenMove> createPossibleReplacerTokenMoves() {
         HashSet<TokenMove> tokenMoves = new HashSet<>();
         //convert player.getTokens() to Array of Tokens
-        Token[] playerHand = this.getTokens().toArray(new Token[0]);
+        Token[] playerHand = this.getHandTokens().toArray(new Token[0]);
         Set<Integer> handSymbolTokenSet = this.getHandSymbolTokenPositions();
         Set<Position> occupiedFields = occupiedFields();
         for (Position occupiedField : occupiedFields) {

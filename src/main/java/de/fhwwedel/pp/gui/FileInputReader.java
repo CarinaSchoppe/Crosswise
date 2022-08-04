@@ -124,11 +124,11 @@ public class FileInputReader {
             var playerData = gameData.getPlayers()[i];
             if (!playerData.isAI()) {
                 var player = new Player(i, playerData.isActive(), playerData.getName());
-                Arrays.stream(playerData.getHand()).forEach(token -> player.getTokens().add(new Token(TokenType.getTokenType(token))));
+                Arrays.stream(playerData.getHand()).forEach(token -> player.getHandTokens().add(new Token(TokenType.getTokenType(token))));
                 players.add(player);
             } else {
                 var ai = new AI(i, playerData.isActive(), playerData.getName());
-                Arrays.stream(playerData.getHand()).forEach(token -> ai.getTokens().add(new Token(TokenType.getTokenType(token))));
+                Arrays.stream(playerData.getHand()).forEach(token -> ai.getHandTokens().add(new Token(TokenType.getTokenType(token))));
                 players.add(ai);
             }
         }
@@ -161,7 +161,7 @@ public class FileInputReader {
         }
 
         for (var player : game.getPlayers()) {
-            for (var token : player.getTokens()) {
+            for (var token : player.getHandTokens()) {
                 if (map.containsKey(token.getTokenType())) {
                     map.put(token.getTokenType(), map.get(token.getTokenType()) + 1);
                 } else {

@@ -102,7 +102,7 @@ public class FXGUI implements GUIConnector {
     public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField) {
 
         for (var player : players) {
-            updatePlayerHandIcons(player.getPlayerID(), player.getTokens());
+            updatePlayerHandIcons(player.getPlayerID(), player.getHandTokens());
         }
         Platform.runLater(() -> {
             for (int row = 0; row < Constants.GAMEGRID_SIZE; row++) {
