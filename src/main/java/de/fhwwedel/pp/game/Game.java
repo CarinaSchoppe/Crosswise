@@ -91,6 +91,7 @@ public class Game {
         if (Game.getGame() != null) {
             Game.getGame().cancel();
             game.guiConnector.generateGrid();
+            game.guiConnector.setupDragAndDropEvent();
         }
         var thread = new Thread(() -> {
             while (!game.start) {
@@ -101,7 +102,7 @@ public class Game {
                 }
             }
             game.setup(fileSetup);
-            CrossWise.DELAY = 500;
+            CrossWise.DELAY = 10;
             game.start();
         });
         Game.setGame(game, thread);
@@ -213,7 +214,6 @@ public class Game {
             playerPileSetup();
         }
     }
-
 
 
     /**
