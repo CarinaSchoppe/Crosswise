@@ -52,8 +52,6 @@ public class GameWindow extends Application implements GameWindowHandler {
     public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
         Platform.runLater(() -> {
             if (gameWindow == null) return;
-
-            if (gameWindow == null) return;
             switch (playerID) {
                 case 0 -> addTokenImagesForPlayer1(tokens);
                 case 1 -> addTokenImagesForPlayer2(tokens);
@@ -112,6 +110,7 @@ public class GameWindow extends Application implements GameWindowHandler {
         });
     }
 
+
     @Override
     public void setCurrentPlayerText(String playerName) {
         Platform.runLater(() -> GameWindow.getGameWindow().currentPlayerText.setText(playerName));
@@ -162,29 +161,73 @@ public class GameWindow extends Application implements GameWindowHandler {
         ImageView[][] imageGrid = GameWindow.getGameWindow().getGridImages();
         for (int i = 0; i < imageGrid.length; i++) {
             for (int j = 0; j < imageGrid[i].length; j++) {
+                ImageView curr = imageGrid[i][j];
+
                 int finalI = i;
                 int finalJ = j;
-                imageGrid[i][j].setOnDragOver((DragEvent event) -> {
-
-                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
-                    // hier: eine die einen String liefert und nicht von dem Node selbst stammt
-                    if (event.getGestureSource() != imageGrid[finalI][finalJ] && event.getDragboard().hasString()) { // oder z.B. event.getGestureSource() == sourceNode
-                        /* nimmt sowohl COPY als auch MOVE Operationen an */
-                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                curr.setOnDragOver((DragEvent event) -> {
+                    String input = event.getDragboard().getString();
+                    //field empty
+                    if (/*TODO*/ finalI == 0) {
+                        switch (input) {
+                            case "SUN":
+                            case "CROSS":
+                            case "TRIANGLE":
+                            case "SQUARE":
+                            case "PENTAGON":
+                            case "STAR":
+                                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                                break;
+                            default:
+                                break;
+                        }
+                    } else {
+                        switch (input) {
+                            case "REMOVER":
+                            case "MOVER":
+                            case "SWAPPER":
+                            case "REPLACER":
+                                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                                break;
+                            default:
+                                break;
+                        }
                     }
+
                     event.consume();
                 });
-                imageGrid[i][j].setOnDragDropped((DragEvent event) -> {
+
+
+
+                curr.setOnDragDropped((DragEvent event) -> {
 
                     Dragboard db = event.getDragboard();
-                    boolean success = false;
+                    boolean success = true;
+                    String input = db.getString();
 
-                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
-                    //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
-                    if (db.hasString()) { // oder z.B. event.getGestureSource() == sourceNode
-                        System.out.println("success");
-                        //imageGrid[i][j].doSomething(...);
-                        success = true;
+                    switch (input) {
+                        case "SUN":
+                        case "CROSS":
+                        case "TRIANGLE":
+                        case "SQUARE":
+                        case "PENTAGON":
+                        case "STAR":
+                            Game.getGame().playerSymbolTokenMove(input, finalI, finalJ);
+                            break;
+                        case "REMOVER":
+                            Game.getGame().playerRemoverTokenMove(input, finalI, finalJ);
+                            break;
+                        case "MOVER":
+                        case "SWAPPER":
+                        case "REPLACER":
+                            boolean validInput = false;
+                            while (!validInput) {
+                                try {
+                                    wait();
+                                } catch (InterruptedException e) {}
+
+                            }
+                            break;
                     }
 
                     /* teile mit, ob der Drag&Drop erfolgreich war */
@@ -192,24 +235,25 @@ public class GameWindow extends Application implements GameWindowHandler {
 
                     event.consume();
                 });
-                int finalI1 = i;
-                int finalJ1 = j;
-                imageGrid[i][j].setOnDragEntered((DragEvent event) -> {
+
+
+
+                curr.setOnDragEntered((DragEvent event) -> {
 
                     // Welche Information kann auf diesem Target-Objekt abgelegt werden?
                     //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
-                    if (event.getGestureSource() != imageGrid[finalI1][finalJ1] && event.getDragboard().hasString()) {
+                    if (event.getGestureSource() != curr && event.getDragboard().hasString()) {
                         // gebe ein visuelles Feedback, sodass der Nutzer weiß, dass die Information hier abgleget werden kann
                         //imageGrid[i][j].doSomething(...);
                     }
                 });
-                int finalI2 = i;
-                int finalJ2 = j;
-                imageGrid[i][j].setOnDragExited((DragEvent event) -> {
+
+
+                curr.setOnDragExited((DragEvent event) -> {
 
                     // Welche Information kann auf diesem Target-Objekt abgelegt werden?
                     //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
-                    if (!event.isDropCompleted() && event.getGestureSource() != imageGrid[finalI2][finalJ2] && event.getDragboard().hasString()) {
+                    if (!event.isDropCompleted() && event.getGestureSource() != curr && event.getDragboard().hasString()) {
                         // setzte das visuelles Feedback (im DragEntered Handler gesetzt) zurück
                         //imageGrid[i][j].doSomething(...);
                     }
@@ -219,16 +263,58 @@ public class GameWindow extends Application implements GameWindowHandler {
         }
     }
 
-    private void setDragEventsForPlayerHand(GridPane hand) {
-        for (Node child : hand.getChildren()) {
-            child.setOnDragDetected((MouseEvent event) -> {
 
+    private void setDragEventsForPlayerHand(GridPane hand) {
+
+        for (Node child : hand.getChildren()) {
+            child.setOnDragDetected((ClickEventSave event) -> {
+                System.out.println("Click");
                 /* lässt jeden Transfermode zu */
                 Dragboard db = child.startDragAndDrop(TransferMode.ANY);
 
                 /* legt einen String im Clipboard ab*/
                 ClipboardContent content = new ClipboardContent();
-                content.putString("has key");
+                String tokenType = null;
+
+                ImageView view = (ImageView) child;
+                /*
+                switch (view.get) {
+                    case 0:
+                        //??
+                        break;
+                    case 1:
+                        tokenType = "SUN";
+                        break;
+                    case 2:
+                        tokenType = "CROSS";
+                        break;
+                    case 3:
+                        tokenType = "TRIANGLE";
+                        break;
+                    case 4:
+                        tokenType = "SQUARE";
+                        break;
+                    case 5:
+                        tokenType = "PENTAGON";
+                        break;
+                    case 6:
+                        tokenType = "STAR";
+                        break;
+                    case 7:
+                        tokenType = "REMOVER";
+                        break;
+                    case 8:
+                        tokenType = "MOVER";
+                        break;
+                    case 9:
+                        tokenType = "SWAPPER";
+                        break;
+                    case 10:
+                        tokenType = "REPLACER";
+                        break;
+                }
+                */
+                content.putString("TRIANGLE");
                 db.setContent(content);
 
                 event.consume();
@@ -241,6 +327,10 @@ public class GameWindow extends Application implements GameWindowHandler {
                 event.consume();
             });
         }
+    }
+
+    private void performPlayerSymbolMove(String input, Integer x, Integer y) {
+
     }
 
     @Override
@@ -269,12 +359,14 @@ public class GameWindow extends Application implements GameWindowHandler {
         int cellWidth = (int) GameWindow.getGameWindow().playerHandOne.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) GameWindow.getGameWindow().playerHandOne.getHeight() / Constants.HAND_SIZE;
         GameWindow.getGameWindow().playerHandOne.getChildren().clear();
+
         for (int i = 0; i < tokens.size(); i++) {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             GameWindow.getGameWindow().playerHandOne.add(imageView, i, 0);
         }
+        setDragEventsForPlayerHand(GameWindow.getGameWindow().playerHandOne);
     }
 
     @Override
@@ -288,6 +380,7 @@ public class GameWindow extends Application implements GameWindowHandler {
             imageView.setFitWidth(cellWidth);
             GameWindow.getGameWindow().playerHandTwo.add(imageView, 0, i);
         }
+        setDragEventsForPlayerHand(GameWindow.getGameWindow().playerHandTwo);
     }
 
     @Override
@@ -301,6 +394,7 @@ public class GameWindow extends Application implements GameWindowHandler {
             imageView.setFitWidth(cellWidth);
             GameWindow.getGameWindow().playerHandThree.add(imageView, i, 0);
         }
+        setDragEventsForPlayerHand(GameWindow.getGameWindow().playerHandThree);
     }
 
     @Override
@@ -313,8 +407,8 @@ public class GameWindow extends Application implements GameWindowHandler {
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             GameWindow.getGameWindow().playerHandFour.add(imageView, 0, i);
-
         }
+        setDragEventsForPlayerHand(GameWindow.getGameWindow().playerHandFour);
     }
 
     private static GameWindow gameWindow;
@@ -573,7 +667,7 @@ public class GameWindow extends Application implements GameWindowHandler {
     }
 
     @FXML
-    void onGrdPnMouseClicked(MouseEvent event) {
+    void onGrdPnMouseClicked(ClickEventSave event) {
 
     }
 
@@ -691,7 +785,7 @@ public class GameWindow extends Application implements GameWindowHandler {
         var root = (Parent) loader.load();
         primaryStage.setTitle("Crosswise");
         primaryStage.setResizable(true);
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1280, 1024));
         initialize();
         stage = primaryStage;
         primaryStage.show();

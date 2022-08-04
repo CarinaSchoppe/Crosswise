@@ -241,6 +241,15 @@ public class Player {
         return tokens.get(position.getHandPosition());
     }
 
+    public Token getCorrespondingToken(String tokenName) {
+        for (var t : tokens) {
+            if (t.getTokenType().name().equals(tokenName)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     /**
      * Draw a token out of the drawPile of the game
      *

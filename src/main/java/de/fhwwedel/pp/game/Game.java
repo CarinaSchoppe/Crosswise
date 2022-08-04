@@ -16,10 +16,7 @@ import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.gui.GameWindowHandler;
 import de.fhwwedel.pp.player.Player;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
-import de.fhwwedel.pp.util.game.Team;
-import de.fhwwedel.pp.util.game.TeamType;
-import de.fhwwedel.pp.util.game.Token;
-import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
 import javafx.scene.control.Alert;
@@ -188,6 +185,32 @@ public class Game {
         }
     }
 
+    public void playerSymbolTokenMove(String tokenString, Integer x, Integer y) {
+        currentPlayer.normalTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(x, y));
+        turnDone();
+    }
+
+    public void playerRemoverTokenMove(String tokenString,  Integer x, Integer y) {
+        currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(x, y));
+        turnDone();
+    }
+
+    public void playerMoverTokenMove(String tokenString,  Integer fromX, Integer fromY, Integer toX, Integer toY) {
+        currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(fromX, fromY), new Position(toX, toY));
+        turnDone();
+    }
+
+    public void playerSwapperTokenMove(String tokenString,  Integer fromX, Integer fromY, Integer toX, Integer toY) {
+        currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(fromX, fromY), new Position(toX, toY));
+        turnDone();
+    }
+
+    public void playerReplacerTokenMove(String tokenString,  Integer fromX, Integer fromY, Integer handIndex) {
+        currentPlayer.replacerTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(fromX, fromY), new Position(handIndex));
+        turnDone();
+    }
+
+
     /**
      * Computes logic for the ending of a game
      *
@@ -248,7 +271,6 @@ public class Game {
         }
         gameWindowHandler.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
         if (currentPlayer instanceof AI ai) {
-
             ai.makeMove();
         } else {
             gameWindowHandler.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());
