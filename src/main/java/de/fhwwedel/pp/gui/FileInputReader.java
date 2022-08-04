@@ -30,8 +30,6 @@ import java.util.EnumMap;
 
 public class FileInputReader {
 
-    private FileInputReader() {
-    }
 
     public static File selectFile(Scene scene) {
         FileChooser chooser = new FileChooser();
@@ -41,8 +39,9 @@ public class FileInputReader {
         return chooser.showOpenDialog(scene.getWindow());
     }
 
-    public static void readFile(File file) {
+    public static void readFile(File file, GUIConnector connector) {
 
+        //TOD: check here
         if (file == null) return;
         //TODO: Fehlerhafte Config überprüfen!
         //read in the lines from file
@@ -58,10 +57,10 @@ public class FileInputReader {
         //create a new game
         var players = getPlayersFromFile(gameData);
 
-        Game game = new Game(new PlayingField(gameData.field().length), players, Game.getGame().getGameWindowHandler());
-        var currentPlayer = game.getPlayers().stream().filter(player -> player.getPlayerID() == gameData.currentPlayer()).findFirst().orElse(null);
-        game.setCurrentPlayer(currentPlayer);
-        game.getPlayingField().addDataFromJSON(gameData.field());
+        Game.createNewGame(players, connector, true, new PlayingField(gameData.field().length));
+        var currentPlayer = Game.getGame().getPlayers().stream().filter(player -> player.getPlayerID() == gameData.currentPlayer()).findFirst().orElse(null);
+        Game.getGame().setCurrentPlayer(currentPlayer);
+        Game.getGame().getPlayingField().addDataFromJSON(gameData.field());
 
         for (int actionTileID = 0; actionTileID < gameData.usedActionTiles().length; actionTileID++) {
             TokenType token = switch (actionTileID) {
@@ -73,13 +72,10 @@ public class FileInputReader {
             };
 
             for (int amount = 0; amount < gameData.usedActionTiles()[actionTileID]; amount++) {
-                game.getUsedActionTokens().add(new Token(token));
+                Game.getGame().getUsedActionTokens().add(new Token(token));
             }
         }
-        removeUsedTokensFromPile(game);
-        game.setup(true);
-        Game.setGame(game);
-
+        removeUsedTokensFromPile(Game.getGame());
     }
 
     private static ArrayList<Player> getPlayersFromFile(GameData gameData) {

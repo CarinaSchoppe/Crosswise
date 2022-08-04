@@ -3,23 +3,23 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18">
-   <children>
-      <Label layoutX="55.0" layoutY="22.0" prefHeight="29.0" prefWidth="71.0" text="Player Name"/>
-      <Button fx:id="createGameButton" layoutX="504.0" layoutY="347.0" mnemonicParsing="false" onAction="#createGame" text="Create Game"/>
-      <TextField fx:id="playerOneField" layoutX="15.0" layoutY="60.0" promptText="Player1" text="Player1"/>
-      <TextField fx:id="playerTwoField" layoutX="15.0" layoutY="133.0" promptText="Player2" text="Player2"/>
-      <TextField fx:id="playerThreeField" layoutX="15.0" layoutY="212.0" promptText="Player3" text="Player3"/>
-      <TextField fx:id="playerFourField" layoutX="15.0" layoutY="293.0" promptText="Player4" text="Player4"/>
-      <CheckBox fx:id="playerOneAI" layoutX="235.0" layoutY="64.0" mnemonicParsing="false" text="AI"/>
-      <CheckBox fx:id="playerTwoAI" layoutX="235.0" layoutY="137.0" mnemonicParsing="false" text="AI"/>
-      <CheckBox fx:id="playerThreeAI" layoutX="235.0" layoutY="216.0" mnemonicParsing="false" text="AI"/>
-      <CheckBox fx:id="playerFourAI" layoutX="235.0" layoutY="297.0" mnemonicParsing="false" text="AI"/>
-      <CheckBox fx:id="playerOneActive" layoutX="444.0" layoutY="64.0" mnemonicParsing="false" text="Player Active"/>
-      <CheckBox fx:id="playerTwoActive" layoutX="444.0" layoutY="137.0" mnemonicParsing="false" text="Player Active"/>
-      <CheckBox fx:id="playerThreeActive" layoutX="444.0" layoutY="216.0" mnemonicParsing="false" text="Player Active"/>
-      <CheckBox fx:id="playerFourActive" layoutX="444.0" layoutY="297.0" mnemonicParsing="false" text="Player Active"/>
-      <Label layoutX="239.0" layoutY="28.0" text="Player is AI"/>
-      <Label layoutX="445.0" layoutY="28.0" text="Player is active"/>
-   </children>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" fx:controller="de.fhwwedel.pp.gui.CreateGame">
+    <children>
+        <Label layoutX="55.0" layoutY="22.0" prefHeight="29.0" prefWidth="71.0" text="Player Name"/>
+        <Button fx:id="createGameButton" layoutX="504.0" layoutY="347.0" mnemonicParsing="false" onAction="#createGame" text="Create Game"/>
+        <TextField fx:id="playerOneField" layoutX="15.0" layoutY="60.0" promptText="Player1" text="Player1"/>
+        <TextField fx:id="playerTwoField" layoutX="15.0" layoutY="133.0" promptText="Player2" text="Player2"/>
+        <TextField fx:id="playerThreeField" layoutX="15.0" layoutY="212.0" promptText="Player3" text="Player3"/>
+        <TextField fx:id="playerFourField" layoutX="15.0" layoutY="293.0" promptText="Player4" text="Player4"/>
+        <CheckBox fx:id="playerOneAI" layoutX="235.0" layoutY="64.0" mnemonicParsing="false" text="AI"/>
+        <CheckBox fx:id="playerTwoAI" layoutX="235.0" layoutY="137.0" mnemonicParsing="false" text="AI"/>
+        <CheckBox fx:id="playerThreeAI" layoutX="235.0" layoutY="216.0" mnemonicParsing="false" text="AI"/>
+        <CheckBox fx:id="playerFourAI" layoutX="235.0" layoutY="297.0" mnemonicParsing="false" text="AI"/>
+        <CheckBox fx:id="playerOneActive" layoutX="444.0" layoutY="64.0" mnemonicParsing="false" text="Player Active"/>
+        <CheckBox fx:id="playerTwoActive" layoutX="444.0" layoutY="137.0" mnemonicParsing="false" text="Player Active"/>
+        <CheckBox fx:id="playerThreeActive" layoutX="444.0" layoutY="216.0" mnemonicParsing="false" text="Player Active"/>
+        <CheckBox fx:id="playerFourActive" layoutX="444.0" layoutY="297.0" mnemonicParsing="false" text="Player Active"/>
+        <Label layoutX="239.0" layoutY="28.0" text="Player is AI"/>
+        <Label layoutX="445.0" layoutY="28.0" text="Player is active"/>
+    </children>
 </AnchorPane>

@@ -10,16 +10,13 @@
 
 package de.fhwwedel.pp;
 
-import de.fhwwedel.pp.ai.AI;
-import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.game.PlayingField;
-import de.fhwwedel.pp.gui.FakeGUI;
-import de.fhwwedel.pp.gui.GameWindow;
-import de.fhwwedel.pp.util.game.Player;
-import de.fhwwedel.pp.util.special.Constants;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * Wrapper class is necessary as the main class for our program must not inherit
@@ -27,7 +24,7 @@ import java.util.List;
  *
  * @author mjo
  */
-public class CrossWise {
+public class CrossWise extends Application {
 
     //TODO: hands buggy not really showing
     // TODO: hands on start remove
@@ -38,37 +35,30 @@ public class CrossWise {
     public static final boolean UI = true;
     public static int DELAY = 200;
 
+
     public static void main(String... args) {
-        var window = new GameWindow();
-        var fakeWindow = new FakeGUI();
-        new Thread(() -> {
-            try {
-                if (CrossWise.UI) Thread.sleep(CrossWise.DELAY);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            time = System.currentTimeMillis();
-            var player1 = new AI(0, true, "Player 1");
-            player1.create();
-            var player2 = new AI(1, true, "Player 2");
-            player2.create();
-            var player3 = new Player(2, true, "Player 3");
-            player3.create();
-            var player4 = new Player(3, true, "Player 4");
-            player4.create();
-            Game game;
-            if (UI)
-                game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), window);
-            else
-                game = new Game(new PlayingField(Constants.GAMEGRID_ROWS), new ArrayList<>(List.of(player1, player2, player3, player4)), fakeWindow);
-            Game.setGame(game);
-            game.setup(false);
-            DELAY = 200;
-            game.start();
-        }).start();
-        if (CrossWise.UI) {
-            window.start();
-        }
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        Platform.setImplicitExit(false);
+
+        //TODO: generateGrid();
+        //TODO: setupDragAndDropEvent();
+
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 1024);
+        primaryStage.setTitle("Crosswise");
+        primaryStage.setResizable(true);
+        primaryStage.setScene(scene);
+        primaryStage.onCloseRequestProperty().setValue(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
+        primaryStage.show();
+
 
     }
 

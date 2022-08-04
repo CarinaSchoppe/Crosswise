@@ -8,17 +8,18 @@
  * requires the express written consent of Crosswise-Jacob.
  */
 
-package de.fhwwedel.pp.gui;
-
-import de.fhwwedel.pp.util.game.Player;
-import de.fhwwedel.pp.util.game.TeamType;
-import de.fhwwedel.pp.util.game.Token;
-import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.gui.GUIConnector;
+import de.fhwwedel.pp.util.game.*;
 
 import java.util.List;
 
-public class FakeGUI implements GameWindowHandler {
+public class FakeGUI implements GUIConnector {
 
+
+    @Override
+    public void changeCurrentAnimationTime(AnimationTime time) {
+
+    }
 
     @Override
     public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
@@ -71,7 +72,7 @@ public class FakeGUI implements GameWindowHandler {
     }
 
     @Override
-    public void setCurrentPlayerText(String playerName) {
+    public void changeCurrentPlayerText(String playerName) {
 
     }
 

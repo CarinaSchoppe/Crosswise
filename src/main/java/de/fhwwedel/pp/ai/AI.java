@@ -319,12 +319,12 @@ import java.util.*;
      */
     public static Integer calculate(Map<TokenType, Integer> map) {
         int current = 0;
-        if (map.size() == Constants.GAMEGRID_ROWS) {
+        if (map.size() == Constants.GAMEGRID_SIZE) {
             return 6;
         }
         for (Map.Entry<TokenType, Integer> entry : map.entrySet()) {
             // if a row is filled with Tokens from a specific
-            if (entry.getValue() == Constants.GAMEGRID_ROWS && entry.getKey() != TokenType.NONE) {
+            if (entry.getValue() == Constants.GAMEGRID_SIZE && entry.getKey() != TokenType.NONE) {
                 return -1000;
             } else if (entry.getValue() > 1) {
                 //adds the amount of points for that line
@@ -590,7 +590,7 @@ import java.util.*;
             if (entry.getKey() < 0) {
                 if (this.getTeam().getTeamType() == TeamType.VERTICAL && entry.getValue().size() == 1) {
                     for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
-                        if (count.getValue() == Constants.GAMEGRID_ROWS - 1) {
+                        if (count.getValue() == Constants.GAMEGRID_SIZE - 1) {
                             EnumMap<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
                             //Check, if there are other tokens in the same line after the move
                             if (line.size() != 1) {
@@ -599,7 +599,7 @@ import java.util.*;
                             //Check, if there isnt just one missing Token anymore to win in the
                             //line
                             for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
-                                if (lineMap.getValue() != Constants.GAMEGRID_ROWS - 1) {
+                                if (lineMap.getValue() != Constants.GAMEGRID_SIZE - 1) {
                                     return true;
                                 }
                             }
@@ -610,7 +610,7 @@ import java.util.*;
             } else {
                 if (this.getTeam().getTeamType() == TeamType.HORIZONTAL && entry.getValue().size() == 1) {
                     for (Map.Entry<TokenType, Integer> count : entry.getValue().entrySet()) {
-                        if (count.getValue() == Constants.GAMEGRID_COLUMNS - 1) {
+                        if (count.getValue() == Constants.GAMEGRID_SIZE - 1) {
                             Map<TokenType, Integer> line = changedOccurrenceMap.get(entry.getKey());
                             //Check, if there are other tokens in the same line after the move
                             if (line.size() != 1) {
@@ -619,7 +619,7 @@ import java.util.*;
                             //Check, if there isnt just one missing Token anymore to win in the
                             //line
                             for (Map.Entry<TokenType, Integer> lineMap : line.entrySet()) {
-                                if (lineMap.getValue() != Constants.GAMEGRID_COLUMNS - 1) {
+                                if (lineMap.getValue() != Constants.GAMEGRID_SIZE - 1) {
                                     return true;
                                 }
                             }
@@ -717,10 +717,10 @@ import java.util.*;
      */
     public TokenType[][] getGridCopyWithAddedToken(Position position, TokenType token) {
         TokenType[][] originalGrid = Game.getGame().getPlayingField().convertToTokenTypeArray();
-        TokenType[][] grid = new TokenType[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        TokenType[][] grid = new TokenType[Constants.GAMEGRID_SIZE][Constants.GAMEGRID_SIZE];
 
-        for (int i = 0; i < Constants.GAMEGRID_ROWS; i++) {
-            System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_COLUMNS);
+        for (int i = 0; i < Constants.GAMEGRID_SIZE; i++) {
+            System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_SIZE);
         }
         //Add token to the original grid
         grid[position.getX()][position.getY()] = token;
@@ -750,10 +750,10 @@ import java.util.*;
      */
     public TokenType[][] getGridCopyWithSwappedTokens(Position swap1pos, TokenType swap1, Position swap2pos, TokenType swap2) {
         TokenType[][] originalGrid = Game.getGame().getPlayingField().convertToTokenTypeArray();
-        TokenType[][] grid = new TokenType[Constants.GAMEGRID_ROWS][Constants.GAMEGRID_COLUMNS];
+        TokenType[][] grid = new TokenType[Constants.GAMEGRID_SIZE][Constants.GAMEGRID_SIZE];
 
-        for (int i = 0; i < Constants.GAMEGRID_ROWS; i++) {
-            System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_COLUMNS);
+        for (int i = 0; i < Constants.GAMEGRID_SIZE; i++) {
+            System.arraycopy(originalGrid[i], 0, grid[i], 0, Constants.GAMEGRID_SIZE);
         }
         grid[swap1pos.getX()][swap1pos.getY()] = swap1;
         grid[swap2pos.getX()][swap2pos.getY()] = swap2;

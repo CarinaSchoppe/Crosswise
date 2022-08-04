@@ -12,7 +12,6 @@ package de.fhwwedel.pp.util.game;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.gui.GameWindow;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.special.Action;
 import de.fhwwedel.pp.util.special.Constants;
@@ -284,11 +283,9 @@ public class Player {
 
         GameLogger.logDraw(this, token);
 
-        if (GameWindow.getGameWindow() != null) {
             Game.getGame().getGameWindowHandler().updatePlayerHandIcons(playerID, tokens);
 
 
-        }
     }
 
     /**

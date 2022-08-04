@@ -10,18 +10,15 @@
 
 package de.fhwwedel.pp.gui;
 
-import de.fhwwedel.pp.util.game.Player;
-import de.fhwwedel.pp.util.game.TeamType;
-import de.fhwwedel.pp.util.game.Token;
-import de.fhwwedel.pp.util.game.TokenType;
+import de.fhwwedel.pp.util.game.*;
 
 import java.util.List;
 
-public interface GameWindowHandler {
+public interface GUIConnector {
 
+    void changeCurrentAnimationTime(AnimationTime time);
 
     void updatePlayerHandIcons(int playerID, List<Token> tokens);
-
 
     void showHand(boolean isAI, int playerID);
 
@@ -37,15 +34,13 @@ public interface GameWindowHandler {
 
     void addTokenImagesForPlayer3(List<Token> tokens);
 
-
     void addTokenImagesForPlayer2(List<Token> tokens);
 
     void addTokenImagesForPlayer1(List<Token> tokens);
 
-    void setCurrentPlayerText(String playerName);
+    void changeCurrentPlayerText(String playerName);
 
     void removerAmountText();
-
 
     void moverAmountText();
 
@@ -53,7 +48,6 @@ public interface GameWindowHandler {
 
 
     void replacerAmountText();
-
 
     void generateGrid();
 }

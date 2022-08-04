@@ -12,26 +12,27 @@ package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
-import de.fhwwedel.pp.game.PlayingField;
 import de.fhwwedel.pp.util.game.Player;
-import de.fhwwedel.pp.util.special.Constants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CreateGame {
+public class CreateGame implements Initializable {
+
+
+    private final GUIConnector guiConnector;
+
+    public CreateGame(GUIConnector guiConnector) {
+        this.guiConnector = guiConnector;
+    }
 
     @FXML
     private ResourceBundle resources;
@@ -79,8 +80,7 @@ public class CreateGame {
     private TextField playerTwoField;
 
     @FXML
-    void createGame(ActionEvent event) throws IOException {
-        var field = new PlayingField(Constants.GAMEGRID_ROWS);
+    void createGame(ActionEvent event) {
         Player playerOne;
         if (playerOneAI.isSelected())
             playerOne = new AI(0, playerOneActive.isSelected(), playerOneField.getText());
@@ -105,28 +105,9 @@ public class CreateGame {
         else
             playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
         playerFour.create();
-        var window = new GameWindow();
-        Game game = new Game(field, new ArrayList<>(List.of(playerOne, playerTwo, playerThree, playerFour)), window);
-        // get the current stage
-        Game.getGame().cancel();
-        window.start(new Stage());
-        new Thread(() -> {
-            game.setup(false);
-            Game.setGame(game);
-            game.start();
-        }).start();
-    }
-
-    public void start(Stage primaryStage) throws IOException {
-
-        var loader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
-        loader.setController(this);
-        var root = (Parent) loader.load();
-        primaryStage.setTitle("Create Game CrossWise");
-        primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root));
-        initialize();
-        primaryStage.show();
+        Game.createNewGame(List.of(playerOne, playerTwo, playerThree, playerFour), guiConnector, false);
+        //close the current window
+        ((Stage) createGameButton.getScene().getWindow()).close();
     }
 
     @FXML
@@ -144,5 +125,10 @@ public class CreateGame {
         assert playerTwoAI != null : "fx:id=\"playerTwoAI\" was not injected: check your FXML file 'CreateGame.fxml'.";
         assert playerTwoActive != null : "fx:id=\"playerTwoActive\" was not injected: check your FXML file 'CreateGame.fxml'.";
         assert playerTwoField != null : "fx:id=\"playerTwoField\" was not injected: check your FXML file 'CreateGame.fxml'.";
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initialize();
     }
 }
