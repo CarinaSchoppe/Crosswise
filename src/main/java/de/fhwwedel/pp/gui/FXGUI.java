@@ -1,5 +1,6 @@
 package de.fhwwedel.pp.gui;
 
+import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
 import javafx.application.Platform;
@@ -8,6 +9,10 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 
 import java.util.HashMap;
@@ -27,7 +32,7 @@ public class FXGUI implements GUIConnector {
     private final Label replacerAmountText;
     private final Label removerAmountText;
     private final CheckMenuItem showComputerHandButton;
-    private final ClickEventSave clickEventSave = null;
+    private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
 
@@ -307,23 +312,18 @@ public class FXGUI implements GUIConnector {
                 int finalI = i;
                 int finalJ = j;
                 curr.setOnDragOver((DragEvent event) -> {
-                    String input = event.getDragboard().getString();
+                    String in = event.getDragboard().getString();
+                    String[] input = in.split("(?<=\\D)(?=\\d)");
+
                     //field empty
-                    if (*//*TODO*//* finalI == 0) {
-                        switch (input) {
-                            case "SUN":
-                            case "CROSS":
-                            case "TRIANGLE":
-                            case "SQUARE":
-                            case "PENTAGON":
-                            case "STAR":
-                                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                                break;
-                            default:
-                                break;
+                    if (/*TODO*/ finalI == 0) {
+                        switch (input[0]) {
+                            case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                            default -> {
+                            }
                         }
                     } else {
-                        switch (input) {
+                        switch (input[0]) {
                             case "REMOVER":
                             case "MOVER":
                             case "SWAPPER":
@@ -355,7 +355,7 @@ public class FXGUI implements GUIConnector {
                                     wait();
                                 } catch (InterruptedException e) {
                                 }
-                                if (currentClickIsValiD(input, )) {
+                                if (currentClickIsValiD(input[0])) {
                                     validInput = true;
                                 }
                             }
@@ -385,7 +385,6 @@ public class FXGUI implements GUIConnector {
                         //imageGrid[i][j].doSomething(...);
                     }
                 });
-
 
                 curr.setOnDragExited((DragEvent event) -> {
 

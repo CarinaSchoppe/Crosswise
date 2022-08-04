@@ -177,7 +177,8 @@ public class FXMLController implements Initializable {
 
     @FXML
     void clickEndGameButton(ActionEvent event) {
-
+        Stage thisStage = (Stage) this.masterGrid.getScene().getWindow();
+        thisStage.close();
     }
 
     @FXML
