@@ -214,10 +214,7 @@ public class Game {
         }
     }
 
-    public void playerSymbolTokenMove(String tokenString, Integer x, Integer y) {
-        currentPlayer.normalTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(x, y));
-        turnDone();
-    }
+
 
     /**
      * Computes logic for having the next players turn
@@ -253,23 +250,28 @@ public class Game {
         }
     }
 
+    public void playerSymbolTokenMove(String tokenString, Integer x, Integer y) {
+        currentPlayer.normalTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(x, y));
+        turnDone();
+    }
+
     public void playerRemoverTokenMove(Integer x, Integer y) {
-        currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken("Remover"), new Position(x, y));
+        currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken("REMOVER"), new Position(x, y));
         turnDone();
     }
 
     public void playerMoverTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
-        currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken("Mover"), new Position(fromX, fromY), new Position(toX, toY));
+        currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken("MOVER"), new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 
     public void playerSwapperTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
-        currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken("Swapper"), new Position(fromX, fromY), new Position(toX, toY));
+        currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken("SWAPPER"), new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 
     public void playerReplacerTokenMove(Integer fromX, Integer fromY, Integer handIndex) {
-        currentPlayer.replacerTokenTurn(currentPlayer.getCorrespondingToken("Replacer"), new Position(fromX, fromY), new Position(handIndex));
+        currentPlayer.replacerTokenTurn(currentPlayer.getCorrespondingToken("REPLACER"), new Position(fromX, fromY), new Position(handIndex));
         turnDone();
     }
 
