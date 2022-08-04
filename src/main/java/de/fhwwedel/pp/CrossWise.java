@@ -27,8 +27,6 @@ import java.io.IOException;
 public class CrossWise extends Application {
 
 
-
-
     public static final boolean DEBUG = true;
     public static long time;
     public static final boolean UI = true;
@@ -39,6 +37,11 @@ public class CrossWise extends Application {
         launch(args);
     }
 
+    /*
+     * TODO: Animations
+     *  TODO: Responsive Design
+     *   GUI Points
+     * */
 
     @Override
     public void start(Stage primaryStage) throws IOException {
