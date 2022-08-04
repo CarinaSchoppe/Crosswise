@@ -102,10 +102,10 @@ public class CreateGame implements Initializable {
         else
             playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
         Game.createNewGame(List.of(playerOne, playerTwo, playerThree, playerFour), guiConnector, false);
-        playerOne.create(Game.getGame());
-        playerTwo.create(Game.getGame());
-        playerThree.create(Game.getGame());
-        playerFour.create(Game.getGame());
+        playerOne.create();
+        playerTwo.create();
+        playerThree.create();
+        playerFour.create();
 
         //close the current window
         ((Stage) createGameButton.getScene().getWindow()).close();

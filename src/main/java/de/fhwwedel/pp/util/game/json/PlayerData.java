@@ -77,8 +77,8 @@ public final class PlayerData {
         return isAI;
     }
 
-    public void setAI(boolean AI) {
-        isAI = AI;
+    public void setAI(boolean ai) {
+        isAI = ai;
     }
 
     public int[] getHand() {

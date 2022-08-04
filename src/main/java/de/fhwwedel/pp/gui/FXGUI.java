@@ -87,6 +87,7 @@ public class FXGUI implements GUIConnector {
         }
     }
 
+ 
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {
         this.animationTime = time;
@@ -97,13 +98,7 @@ public class FXGUI implements GUIConnector {
         for (var player : players)
             updatePlayerHandIcons(player.getPlayerID(), player.getTokens());
         Platform.runLater(() -> {
-            //TODO: here update gameField based on grid
-            /*
-             *
-             * hol dir die steine der map
-             * geh alle map felder durch
-             * erstelle ein neues grid und füge in das grid die für das feld passenden steinbilder ein
-             * */
+
             for (int row = 0; row < Constants.GAMEGRID_SIZE; row++) {
                 for (int column = 0; column < Constants.GAMEGRID_SIZE; column++) {
                     var token = gameField[row][column];
@@ -119,6 +114,14 @@ public class FXGUI implements GUIConnector {
         });
     }
 
+
+    @Override
+    public void showError(String message) {
+        var alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error");
+        alert.showAndWait();
+    }
 
     @Override
     public void changeCurrentPlayerText(String playerName) {
@@ -325,19 +328,12 @@ public class FXGUI implements GUIConnector {
 
                     //field empty
                     if (this.gridImagesTokens.get(curr) == TokenType.NONE) {
-                        switch (input[0]) {
-                            case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        if ("SUN".equals(input[0]) || "CROSS".equals(input[0]) || "TRIANGLE".equals(input[0]) || "SQUARE".equals(input[0]) || "PENTAGON".equals(input[0]) || "STAR".equals(input[0])) {
+                            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     } else {
-                        switch (input[0]) {
-                            case "REMOVER":
-                            case "MOVER":
-                            case "SWAPPER":
-                            case "REPLACER":
-                                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                                break;
-                            default:
-                                break;
+                        if ("REMOVER".equals(input[0]) || "MOVER".equals(input[0]) || "SWAPPER".equals(input[0]) || "REPLACER".equals(input[0])) {
+                            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     }
 
@@ -358,8 +354,11 @@ public class FXGUI implements GUIConnector {
                             boolean validInput = false;
                             while (!validInput) {
                                 try {
-                                    wait();
-                                } catch (InterruptedException e) {
+                                    synchronized (this) {
+                                        wait();
+                                    }
+                                } catch (InterruptedException ignored) {
+                                    Thread.currentThread().interrupt();
                                 }
                                 if (currentClickIsValid(input[0])) {
                                     validInput = true;
@@ -374,6 +373,7 @@ public class FXGUI implements GUIConnector {
                                 Game.getGame().playerReplacerTokenMove(finalI, finalJ, this.clickEventSave.getHandPosition());
                             }
                         }
+                        default -> throw new RuntimeException("Invalid token type");
                     }
 
                     /* teile mit, ob der Drag&Drop erfolgreich war */
@@ -405,7 +405,10 @@ public class FXGUI implements GUIConnector {
 
                 curr.setOnMouseClicked((MouseEvent event) -> {
                     this.clickEventSave = new ClickEventSave(finalI, finalJ);
-                    notifyAll();
+                    synchronized (this) {
+                        notifyAll();
+                    }
+
                 });
             }
         }
@@ -413,7 +416,7 @@ public class FXGUI implements GUIConnector {
 
 
     private synchronized void setDragEventsForPlayerHand(GridPane hand) {
-        Integer counter = 0;
+        int counter = 0;
 
         for (Node child : hand.getChildren()) {
             child.setOnDragDetected((MouseEvent event) -> {
@@ -443,9 +446,10 @@ public class FXGUI implements GUIConnector {
 
             final var count = counter;
             child.setOnMouseClicked((MouseEvent event) -> {
-                //TODO playerID
-                this.clickEventSave = new ClickEventSave(true, 3, count);
-                notifyAll();
+                this.clickEventSave = new ClickEventSave(count);
+                synchronized (this) {
+                    notifyAll();
+                }
             });
             counter++;
         }
@@ -465,8 +469,8 @@ public class FXGUI implements GUIConnector {
                 //must be symbol token 2nd
                 return false;
             }
+            default -> throw new RuntimeException("Invalid token type");
         }
-        return false;
     }
 
     public void setAnimationTime(AnimationTime animationTime) {

@@ -26,14 +26,13 @@ import java.io.IOException;
  */
 public class CrossWise extends Application {
 
-    //TODO: hands buggy not really showing
-    // TODO: hands on start remove
+
 
 
     public static final boolean DEBUG = true;
     public static long time;
     public static final boolean UI = true;
-    public static int DELAY = 200;
+    public static final int DELAY = 200;
 
 
     public static void main(String[] args) {
@@ -45,12 +44,11 @@ public class CrossWise extends Application {
     public void start(Stage primaryStage) throws IOException {
         Platform.setImplicitExit(false);
 
-        //TODO: generateGrid();
         //TODO: setupDragAndDropEvent();
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 1024);
+        Scene scene = new Scene(fxmlLoader.load(), 1350, 1100);
         primaryStage.setTitle("Crosswise");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);

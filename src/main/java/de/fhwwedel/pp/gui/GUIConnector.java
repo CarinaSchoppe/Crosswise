@@ -32,6 +32,7 @@ public interface GUIConnector {
 
     void performMoveUIUpdate(List<Player> players, TokenType[][] gameField);
 
+
     void addTokenImagesForPlayer4(List<Token> tokens);
 
     void addTokenImagesForPlayer3(List<Token> tokens);
@@ -52,4 +53,6 @@ public interface GUIConnector {
     void replacerAmountText();
 
     void generateGrid();
+
+    void showError(String message);
 }

@@ -46,10 +46,6 @@ public class Player {
      */
     private Team team;
 
-    /**
-     * The current Gameinstance
-     */
-    private Game game;
 
 
     /**
@@ -69,8 +65,7 @@ public class Player {
     /**
      * add the player to a team
      */
-    public void create(Game game) {
-        this.game = game;
+    public void create() {
         this.team = Team.addPlayerToTeam(this);
     }
 

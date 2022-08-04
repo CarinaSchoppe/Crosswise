@@ -646,7 +646,6 @@ import java.util.*;
             for (Integer handPosition : handSymbolTokenSet) {
                 TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType());
                 Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
-                //TODO Prevent Loss
                 //Create Token Move for every possible move and add it to the existing moves
                 tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(), TokenType.REPLACER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));
             }

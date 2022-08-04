@@ -12,6 +12,8 @@ package de.fhwwedel.pp.util.special;
 
 public abstract class Constants {
 
+    private Constants() {
+    }
 
     public static final int GAMEGRID_SIZE = 6;
 

@@ -287,7 +287,6 @@ public class Game {
             if (team == null) {
                 System.out.println("Game is over, but no team has won!");
                 guiConnector.gameWonNotifier(null, 0, false);
-                //TODO: Handle game over! GUI stuff
             } else {
                 guiConnector.gameWonNotifier(team.getTeamType(), team.getPoints(), team.isRowWin());
                 if (CrossWise.DEBUG)

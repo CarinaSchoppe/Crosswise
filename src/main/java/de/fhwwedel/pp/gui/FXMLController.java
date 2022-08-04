@@ -186,11 +186,11 @@ public class FXMLController implements Initializable {
         Scene scene = gameGrid.getScene();
         try {
             FileInputReader.readFile(FileInputReader.selectFile(scene), guiConnector);
-            //TODO: update UI
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
 
     @FXML
     void clickNewGameButton(ActionEvent event) {
@@ -216,11 +216,6 @@ public class FXMLController implements Initializable {
     void clickSaveGameButton(ActionEvent event) {
         Scene scene = gameGrid.getScene();
         FileOutputWriter.writeJSON(scene);
-
-    }
-
-    @FXML
-    void onGrdPnMouseClicked(ClickEventSave event) {
 
     }
 

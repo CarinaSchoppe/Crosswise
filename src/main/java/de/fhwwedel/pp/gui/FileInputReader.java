@@ -18,6 +18,8 @@ import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;
 import de.fhwwedel.pp.util.game.json.GameData;
+import de.fhwwedel.pp.util.game.json.PlayerData;
+import de.fhwwedel.pp.util.special.Constants;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 
@@ -30,6 +32,8 @@ import java.util.EnumMap;
 
 public class FileInputReader {
 
+    private FileInputReader() {
+    }
 
     public static File selectFile(Scene scene) {
         FileChooser chooser = new FileChooser();
@@ -39,9 +43,8 @@ public class FileInputReader {
         return chooser.showOpenDialog(scene.getWindow());
     }
 
-    public static void readFile(File file, GUIConnector connector) {
+    public static void readFile(File file, GUIConnector guiConnector) {
 
-        //TOD: check here
         if (file == null) return;
         //TODO: Fehlerhafte Config überprüfen!
         //read in the lines from file
@@ -52,15 +55,17 @@ public class FileInputReader {
             throw new RuntimeException(e);
         }
         Gson gson = new Gson();
-        var gameData = gson.fromJson(reader, GameData.class);
+        final var gameData = gson.fromJson(reader, GameData.class);
+        if (checkInvalidConfig(gameData)) {
+            guiConnector.showError("Config is not valid");
+            return;
+        }
 
         //create a new game
         var players = getPlayersFromFile(gameData);
 
-        Game.createNewGame(players, connector, true, new PlayingField(gameData.getField().length));
-        players.forEach(it -> {
-            it.create(Game.getGame());
-        });
+        Game.createNewGame(players, guiConnector, true, new PlayingField(gameData.getField().length));
+        players.forEach(Player::create);
         var currentPlayer = Game.getGame().getPlayers().stream().filter(player -> player.getPlayerID() == gameData.getCurrentPlayer()).findFirst().orElse(null);
         Game.getGame().setCurrentPlayer(currentPlayer);
         Game.getGame().getPlayingField().addDataFromJSON(gameData.getField());
@@ -80,6 +85,24 @@ public class FileInputReader {
         }
         removeUsedTokensFromPile(Game.getGame());
     }
+
+    private static boolean checkInvalidConfig(final GameData gameData) {
+        //check if all players are not active
+        if (Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive))
+            return true;
+
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.getHand().length == 0 || !player.isActive() && player.getHand().length > 0))
+            return true;
+
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.getHand()).anyMatch(token -> token < 0 || token > 10)))
+            return true;
+
+        if (Arrays.stream(gameData.getField()).anyMatch(fieldRow -> Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token > 10)))
+            return true;
+
+        return Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE);
+    }
+
 
     private static ArrayList<Player> getPlayersFromFile(GameData gameData) {
         var players = new ArrayList<Player>();
