@@ -480,7 +480,7 @@ public class FXGUI implements GUIConnector {
                 return this.clickEventSave.isGrid() &&
                         this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
                                 [this.clickEventSave.getPosY()]) != TokenType.NONE &&
-                        this.clickEventSave.getPosX() != this.clickXOrigin && this.clickEventSave.getPosY() != this.clickYOrigin;
+                        !(this.clickEventSave.getPosX() == this.clickXOrigin && this.clickEventSave.getPosY() == this.clickYOrigin);
             }
             case "REPLACER" -> {
                 //must be a token on the hand, must be a SymbolToken
