@@ -17,6 +17,8 @@ public abstract class Constants {
 
     public static final int GAMEGRID_SIZE = 6;
 
+    public static final int PLAYER_COUNT = 4;
+
     public static final int HAND_SIZE = 4;
 
     public static final int UNIQUE_SYMBOL_TOKENS = 6;

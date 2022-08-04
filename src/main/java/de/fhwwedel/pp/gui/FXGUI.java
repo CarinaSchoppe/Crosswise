@@ -33,6 +33,7 @@ public class FXGUI implements GUIConnector {
     private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
+    private final ImageView[][] handImages = new ImageView[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
     private final HashMap<ImageView, TokenType> gridImagesTokens;
     private final HashMap<ImageView, TokenType> handImagesTokens;
     private boolean checkForMouse = false;
@@ -200,6 +201,8 @@ public class FXGUI implements GUIConnector {
             var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
+
+            handImages[0][i] = imageView;
             playerHandOne.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
@@ -216,6 +219,8 @@ public class FXGUI implements GUIConnector {
             imageView.setId("token2:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
+            handImages[1][i] = imageView;
+
             playerHandTwo.add(imageView, 0, i);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
@@ -232,6 +237,8 @@ public class FXGUI implements GUIConnector {
             imageView.setId("token3:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
+            handImages[2][i] = imageView;
+
             playerHandThree.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
@@ -248,6 +255,7 @@ public class FXGUI implements GUIConnector {
             imageView.setId("token4:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
+            handImages[3][i] = imageView;
             playerHandFour.add(imageView, 0, i);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
         }
