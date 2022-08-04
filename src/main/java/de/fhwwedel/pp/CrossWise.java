@@ -30,7 +30,7 @@ public class CrossWise extends Application {
     public static final boolean DEBUG = true;
     public static long time;
     public static final boolean UI = true;
-    public static int DELAY = 10;
+    public static int DELAY = 500;
 
 
     public static void main(String[] args) {
@@ -38,6 +38,7 @@ public class CrossWise extends Application {
     }
 
     /*
+     * TODO: Structure of the program
      * TODO: Animations
      *  TODO: Responsive Design
      *   GUI Points

@@ -494,7 +494,7 @@ public class FXGUI implements GUIConnector {
                 //must be a token on the hand, must be a SymbolToken
                 return !this.clickEventSave.isGrid() &&
                         !this.handImagesTokens.get(this.handImages[Game.getGame().getCurrentPlayer().getPlayerID()][this.clickEventSave.getHandPosition()]).isSpecial();
-            }//TODO
+            }
             default -> throw new RuntimeException("Invalid token type");
         }
     }

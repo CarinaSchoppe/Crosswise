@@ -32,6 +32,7 @@ public class FileOutputWriter {
     public static void writeJSON(Scene scene) {
         var file = FileInputReader.selectFile(scene);
 
+        if (file == null) return;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         var json = gson.toJson(generateGameData(Game.getGame().getPlayers(), Game.getGame().getCurrentPlayer().getPlayerID(), Game.getGame().getPlayingField().getSize(), Game.getGame().getPlayingField().getFieldMap(), Game.getGame().getUsedActionTokens()));
         //write the json to a file

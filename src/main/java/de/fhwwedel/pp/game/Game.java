@@ -102,7 +102,6 @@ public class Game {
                 }
             }
             game.setup(fileSetup);
-            CrossWise.DELAY = 10;
             game.start();
         });
         Game.setGame(game, thread);

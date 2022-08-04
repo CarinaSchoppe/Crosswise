@@ -187,7 +187,6 @@ import java.util.*;
             //Falls Replacer, wird der neue Zug als besser bewertet
             if (newMove.getToken().getValue() == Constants.UNIQUE_ACTION_TOKENS + Constants.UNIQUE_SYMBOL_TOKENS) {
                 return true;
-                //TODO möglicherweise bessere AI Logik hier
             }
             int differenceVerticalPosition2 = newMove.getSecondaryMovePosition().getX() - currentBestMove.getSecondaryMovePosition().getX();
             if (differenceVerticalPosition2 < 0) {
