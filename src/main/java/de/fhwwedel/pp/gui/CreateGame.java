@@ -106,6 +106,11 @@ public class CreateGame implements Initializable {
         playerTwo.create();
         playerThree.create();
         playerFour.create();
+        guiConnector.showGUIElements();
+
+        guiConnector.generateGrid();
+        guiConnector.resetText();
+        guiConnector.setupDragAndDropEvent();
 
         //close the current window
         ((Stage) createGameButton.getScene().getWindow()).close();

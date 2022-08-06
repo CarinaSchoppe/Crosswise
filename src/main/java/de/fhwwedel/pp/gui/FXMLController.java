@@ -163,21 +163,35 @@ public class FXMLController implements Initializable {
     @FXML
     private GridPane playingGrid;
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.innerGrid.setVisible(false);
+        fitHVBox();
         this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree,
                 playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText,
                 removerAmountText, horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
-                sumPointsHorizontalTeam);
-        guiConnector.generateGrid();
-        guiConnector.setupDragAndDropEvent();
+                sumPointsHorizontalTeam, innerGrid);
 
-        fitHVBox();
-        this.horizontalPointsGrid.setPrefWidth(100);
-        this.horizontalPointsGrid.setMaxWidth(100);
-        this.horizontalPointsGrid.setMinWidth(100);
+        var createGame = new CreateGame(guiConnector);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
+        fxmlLoader.setController(createGame);
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.DECORATED);
+        stage.setTitle("CrossWise Create Game");
+        stage.setResizable(false);
+        stage.setAlwaysOnTop(true);
+
+        stage.setScene(new Scene((Parent) root));
+        stage.show();
+
     }
 
     private void fitHVBox() {
@@ -222,6 +236,7 @@ public class FXMLController implements Initializable {
 
     @FXML
     void clickNewGameButton(ActionEvent event) {
+
         try {
             var createGame = new CreateGame(guiConnector);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
@@ -237,13 +252,18 @@ public class FXMLController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
     }
 
     @FXML
     void clickSaveGameButton(ActionEvent event) {
         Scene scene = gameGrid.getScene();
         FileOutputWriter.writeJSON(scene);
+    }
+
+    @FXML
+    void pointsPerTeamButton() {
+
     }
 
 

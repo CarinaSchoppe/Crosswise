@@ -56,4 +56,6 @@ public interface GUIConnector {
     void generateGrid();
 
     void showError(String message);
+
+    void showGUIElements();
 }

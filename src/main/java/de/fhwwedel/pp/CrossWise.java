@@ -40,8 +40,10 @@ public class CrossWise extends Application {
     /*
      * TODO: Structure of the program
      * TODO: Animations
-     *  TODO: Responsive Design
-     *   GUI Points
+     * TODO: Responsive Design
+     * TODO: GUI Points
+     * TODO close logger file after every entry
+     * TODO end timer event premature
      * */
 
     @Override

@@ -88,8 +88,6 @@ public class Game {
     private static void createStuff(Game game, boolean fileSetup) {
         if (Game.getGame() != null) {
             Game.getGame().cancel();
-            game.guiConnector.generateGrid();
-            game.guiConnector.setupDragAndDropEvent();
         }
         var thread = new Thread(() -> {
             while (!game.start) {

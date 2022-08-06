@@ -37,6 +37,7 @@ public class FXGUI implements GUIConnector {
     private final GridPane horizontalPointsGrid;
     private Label sumPointsVerticalTeam;
     private Label sumPointsHorizontalTeam;
+    private GridPane innerGrid;
     private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
@@ -48,11 +49,13 @@ public class FXGUI implements GUIConnector {
     private Integer clickXOrigin;
     private Integer clickYOrigin;
 
+    private boolean disableGUI = false;
+
     public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne, GridPane playerHandTwo,
                  GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid,
                  Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText,
                  GridPane horizontalPointsGrid, GridPane verticalPointsGrid, Label sumPointsVerticalTeam,
-                 Label sumPointsHorizontalTeam) {
+                 Label sumPointsHorizontalTeam, GridPane innerGrid) {
         this.playerHandOne = playerHandOne;
         this.playerHandTwo = playerHandTwo;
         this.playerHandThree = playerHandThree;
@@ -68,6 +71,7 @@ public class FXGUI implements GUIConnector {
         this.verticalPointsGrid = verticalPointsGrid;
         this.sumPointsVerticalTeam = sumPointsVerticalTeam;
         this.sumPointsHorizontalTeam = sumPointsHorizontalTeam;
+        this.innerGrid = innerGrid;
         fieldImages = new HashMap<>();
         gridImagesTokens = new HashMap<>();
         handImagesTokens = new HashMap<>();
@@ -85,6 +89,7 @@ public class FXGUI implements GUIConnector {
             }
         });
     }
+
 
     @Override
     public void notifyTurn(String playerName, int playerID) {
@@ -164,7 +169,7 @@ public class FXGUI implements GUIConnector {
 
                 imgNew.setFitWidth(cellWidth);
                 imgNew.setFitHeight(cellHeight);
-                imgNew.setPreserveRatio(false);
+                imgNew.setPreserveRatio(true);
                 imgNew.setSmooth(true);
                 String id = "gridToken" + c + r;
                 fieldImages.put(id, imgNew);
@@ -189,58 +194,109 @@ public class FXGUI implements GUIConnector {
 
         int size = Constants.GAMEGRID_SIZE;
         this.horizontalPointsGrid.getChildren().clear();
-        ColumnConstraints newConstraint = new ColumnConstraints();
-        newConstraint.setPercentWidth(100);
-        newConstraint.setHgrow(Priority.ALWAYS);
-        newConstraint.fillWidthProperty();
-        horizontalPointsGrid.getColumnConstraints().add(newConstraint);
+        this.verticalPointsGrid.getChildren().clear();
 
-        for (int r = 0; r < Constants.GAMEGRID_SIZE; r++) {
-            Label horLabel = new Label();
-            Label verLabel = new Label();
-            int cellHeight = (int) horizontalPointsGrid.getHeight() / size;
-            int cellWidth = (int) verticalPointsGrid.getWidth() / size;
-
-            String id = "horPoints" + r;
-            horLabel.setId(id);
-
-            horLabel.setText("0");
-            horLabel.setPrefSize(horizontalPointsGrid.getWidth(), cellHeight);
-            System.out.println(gameGrid.getWidth());
-            GridPane.setFillWidth(horLabel, true);
-
-            horLabel.setStyle("-fx-background-color:grey; -fx-padding:5");
+        for (int rows = 0; rows < Constants.GAMEGRID_SIZE; rows++) {
+            Label horiLabel = new Label();
+            Label vertLabel = new Label();
+            vertLabel.setTextAlignment(TextAlignment.JUSTIFY);
+            vertLabel.setWrapText(true);
+            horiLabel.setTextAlignment(TextAlignment.JUSTIFY);
+            horiLabel.setWrapText(true);
 
 
-            String id2 = "verPoints" + r;
-            verLabel.setId(id2);
-            verLabel.setText("0");
-            verLabel.setPrefSize(cellWidth, horizontalPointsGrid.getHeight());
-            GridPane.setFillWidth(verLabel, true);
+            String idHor = "horPoints:" + rows;
+            horiLabel.setId(idHor);
+            horiLabel.setText("0");
 
-            //imgNew.fitWidthProperty().bind(horizontalPointsGrid.heightProperty().divide(size));
-            //imgNew.fitHeightProperty().bind(horizontalPointsGrid.heightProperty().divide(size));
+            String idVert = "verPoints:" + rows;
+            vertLabel.setId(idVert);
+            vertLabel.setText("1");
 
-            this.horizontalPointsGrid.add(horLabel,0, r);
-            this.verticalPointsGrid.add(verLabel, r, 0);
+
+            horiLabel.setStyle("-fx-background-color:grey; -fx-padding:5");
+            vertLabel.setStyle("-fx-background-color:grey; -fx-padding:5");
+
+
+            vertLabel.setPrefSize(verticalPointsGrid.getWidth(), verticalPointsGrid.getHeight() / Constants.GAMEGRID_SIZE);
+            horiLabel.setPrefSize(horizontalPointsGrid.getWidth() / Constants.GAMEGRID_SIZE, horizontalPointsGrid.getHeight());
+            vertLabel.prefWidthProperty().bind(verticalPointsGrid.widthProperty().divide(Constants.GAMEGRID_SIZE));
+            vertLabel.prefHeightProperty().bind(verticalPointsGrid.heightProperty());
+            horiLabel.prefHeightProperty().bind(horizontalPointsGrid.heightProperty().divide(Constants.GAMEGRID_SIZE));
+            horiLabel.prefWidthProperty().bind(horizontalPointsGrid.widthProperty());
+
+
+            this.horizontalPointsGrid.add(horiLabel, 0, rows);
+            this.verticalPointsGrid.add(vertLabel, rows, 0);
+
         }
+        /*TODO WiP
+        for (int i = 0; i < Constants.GAMEGRID_SIZE; i++) {
+            ColumnConstraints con = new ColumnConstraints();
+            con.setPercentWidth(16.5);
+            verticalPointsGrid.getColumnConstraints().add(con);
+
+
+        }
+        */
+
     }
 
+
     private void updatePointsGrid(Integer[] pointsMap) {
+        //Horizontal Team Points
         int counterH = Constants.GAMEGRID_SIZE - 1;
+        int sumHorizontal = 0;
         for (Node child : this.horizontalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
-            currLabel.setText(pointsMap[counterH].toString());
+            if (pointsMap[counterH] < -100) {
+                currLabel.setText("Sieg");
+            } else {
+                currLabel.setText(pointsMap[counterH].toString());
+            }
+
+            sumHorizontal = sumHorizontal + pointsMap[counterH];
             counterH--;
         }
+        if (sumHorizontal > 100) {
+            this.sumPointsHorizontalTeam.setText("Sieg");
+        } else {
+            this.sumPointsHorizontalTeam.setText(Integer.toString(sumHorizontal));
+        }
+
+        //Vertical Team Points
+        int sumVertical = 0;
         int counterV = Constants.GAMEGRID_SIZE;
         for (Node child : this.verticalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
-            currLabel.setText(pointsMap[counterV].toString());
+            if (pointsMap[counterV] < -100) {
+                currLabel.setText("Sieg");
+            } else {
+                currLabel.setText(pointsMap[counterV].toString());
+            }
+            sumVertical = sumVertical + pointsMap[counterV];
             counterV++;
+        }
+        if (sumVertical < -100) {
+            this.sumPointsVerticalTeam.setText("Sieg");
+        } else {
+            this.sumPointsVerticalTeam.setText(Integer.toString(sumVertical));
         }
 
 
+
+    }
+
+    public void showGUIElements() {
+        this.innerGrid.setVisible(true);
+    }
+
+    public void disableGUIElementes() {
+        this.disableGUI = true;
+    }
+
+    public void enableGUIElements() {
+        this.disableGUI = false;
     }
 
     @Override
@@ -278,6 +334,9 @@ public class FXGUI implements GUIConnector {
             handImages[0][i] = imageView;
             playerHandOne.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+
+            imageView.fitWidthProperty().bind(playerHandOne.widthProperty().divide(Constants.GAMEGRID_SIZE));
+            imageView.fitHeightProperty().bind(playerHandOne.heightProperty());
         }
         setDragEventsForPlayerHand(playerHandOne);
     }
@@ -296,6 +355,9 @@ public class FXGUI implements GUIConnector {
 
             playerHandTwo.add(imageView, 0, i);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+
+            imageView.fitWidthProperty().bind(playerHandTwo.widthProperty());
+            imageView.fitHeightProperty().bind(playerHandTwo.heightProperty().divide(Constants.GAMEGRID_SIZE));
         }
         setDragEventsForPlayerHand(playerHandTwo);
     }
@@ -314,6 +376,9 @@ public class FXGUI implements GUIConnector {
 
             playerHandThree.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+
+            imageView.fitWidthProperty().bind(playerHandThree.widthProperty().divide(Constants.GAMEGRID_SIZE));
+            imageView.fitHeightProperty().bind(playerHandThree.heightProperty());
         }
         setDragEventsForPlayerHand(playerHandThree);
     }
@@ -331,6 +396,9 @@ public class FXGUI implements GUIConnector {
             handImages[3][i] = imageView;
             playerHandFour.add(imageView, 0, i);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+
+            imageView.fitWidthProperty().bind(playerHandFour.widthProperty());
+            imageView.fitHeightProperty().bind(playerHandFour.widthProperty().divide(Constants.GAMEGRID_SIZE));
         }
         setDragEventsForPlayerHand(playerHandFour);
     }
@@ -409,16 +477,16 @@ public class FXGUI implements GUIConnector {
                 int finalI = i;
                 int finalJ = j;
                 curr.setOnDragOver((DragEvent event) -> {
-                    String in = event.getDragboard().getString();
-                    String[] input = in.split("(?<=\\D)(?=\\d)");
+                    String input = event.getDragboard().getString();
+
 
                     //field empty
                     if (this.gridImagesTokens.get(curr) == TokenType.NONE) {
-                        if ("SUN".equals(input[0]) || "CROSS".equals(input[0]) || "TRIANGLE".equals(input[0]) || "SQUARE".equals(input[0]) || "PENTAGON".equals(input[0]) || "STAR".equals(input[0])) {
+                        if ("SUN".equals(input) || "CROSS".equals(input) || "TRIANGLE".equals(input) || "SQUARE".equals(input) || "PENTAGON".equals(input) || "STAR".equals(input)) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     } else {
-                        if ("REMOVER".equals(input[0]) || "MOVER".equals(input[0]) || "SWAPPER".equals(input[0]) || "REPLACER".equals(input[0])) {
+                        if ("REMOVER".equals(input) || "MOVER".equals(input) || "SWAPPER".equals(input) || "REPLACER".equals(input)) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     }
@@ -430,15 +498,16 @@ public class FXGUI implements GUIConnector {
 
                     Dragboard db = event.getDragboard();
                     boolean success = false;
-                    String in = db.getString();
-                    String[] input = in.split("(?<=\\D)(?=\\d)");
-                    System.out.println(input[0]);
-                    switch (input[0]) {
-                        case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> Game.getGame().playerSymbolTokenMove(input[0], finalI, finalJ);
+                    String input = db.getString();
+
+                    System.out.println(input);
+                    switch (input) {
+                        case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" ->
+                                Game.getGame().playerSymbolTokenMove(input, finalI, finalJ);
                         case "REMOVER" -> Game.getGame().playerRemoverTokenMove(finalI, finalJ);
                         case "MOVER", "SWAPPER", "REPLACER" -> {
                             this.checkForMouse = true;
-                            this.clickToken = input[0];
+                            this.clickToken = input;
                             this.clickXOrigin = finalI;
                             this.clickYOrigin = finalJ;
                             /*
@@ -458,13 +527,7 @@ public class FXGUI implements GUIConnector {
                 });
 
                 curr.setOnDragEntered((DragEvent event) -> {
-
-                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
-                    //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
-                    if (event.getGestureSource() != curr && event.getDragboard().hasString()) {
-                        // gebe ein visuelles Feedback, sodass der Nutzer weiß, dass die Information hier abgleget werden kann
-                        //imageGrid[i][j].doSomething(...);
-                    }
+                    //
                 });
 
                 curr.setOnDragExited((DragEvent event) -> {
@@ -497,21 +560,25 @@ public class FXGUI implements GUIConnector {
 
         for (Node child : hand.getChildren()) {
             child.setOnDragDetected((MouseEvent event) -> {
-                System.out.println("Click");
-                /* lässt jeden Transfermode zu */
-                Dragboard db = child.startDragAndDrop(TransferMode.ANY);
+                if (!this.disableGUI) {
+                    System.out.println("Click");
+                    /* lässt jeden Transfermode zu */
+                    Dragboard db = child.startDragAndDrop(TransferMode.ANY);
 
-                /* legt einen String im Clipboard ab*/
-                ClipboardContent content = new ClipboardContent();
+                    /* legt einen String im Clipboard ab*/
+                    ClipboardContent content = new ClipboardContent();
 
-                ImageView view = (ImageView) child;
-                var tokenType = handImagesTokens.get(view);
+                    ImageView view = (ImageView) child;
+                    var tokenType = handImagesTokens.get(view);
 
 
-                content.putString(tokenType.name());
-                db.setContent(content);
+                    content.putString(tokenType.name());
+                    db.setContent(content);
 
-                event.consume();
+                    event.consume();
+                } else {
+                    System.out.println("gui disabled");
+                }
             });
             child.setOnDragDone((DragEvent event) -> {
                 // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt
@@ -550,31 +617,28 @@ public class FXGUI implements GUIConnector {
         switch (this.clickToken) {
             case "MOVER" -> {
                 //must be a token on the grid, must be an empty token
-                System.out.println("this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]\n" +
-                        "                                [this.clickEventSave.getPosY()])");
                 return this.clickEventSave.isGrid() &&
                         this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
                                 [this.clickEventSave.getPosY()]) == TokenType.NONE;
             }
 
             case "SWAPPER" -> {
-                System.out.println(this.clickEventSave.getPosX());
-                System.out.println(this.clickEventSave.getPosY());
                 //must be a token on the grid, must be a non empty field, must not be the same field as the original one
                 return this.clickEventSave.isGrid() &&
                         this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
                                 [this.clickEventSave.getPosY()]) != TokenType.NONE &&
-                        !(this.clickEventSave.getPosX() == this.clickXOrigin && this.clickEventSave.getPosY() == this.clickYOrigin);
+                        !(this.clickEventSave.getPosX() == this.clickXOrigin &&
+                                this.clickEventSave.getPosY() == this.clickYOrigin);
             }
             case "REPLACER" -> {
                 //must be a token on the hand, must be a SymbolToken
                 return !this.clickEventSave.isGrid() &&
-                        !this.handImagesTokens.get(this.handImages[Game.getGame().getCurrentPlayer().getPlayerID()][this.clickEventSave.getHandPosition()]).isSpecial();
+                        !this.handImagesTokens.get(this.handImages[Game.getGame().getCurrentPlayer().getPlayerID()]
+                                [this.clickEventSave.getHandPosition()]).isSpecial();
             }
             default -> throw new RuntimeException("Invalid token type");
         }
     }
-
 
     public void setAnimationTime(AnimationTime animationTime) {
         this.animationTime = animationTime;

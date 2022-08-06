@@ -115,4 +115,8 @@ public class FakeGUI implements GUIConnector {
     public void generateGrid() {
 
     }
+
+    public void showGUIElements() {
+
+    }
 }
