@@ -89,7 +89,8 @@ public class Player {
         field.setToken(token);
         field.getToken().setPosition(field);
         GameLogger.logMove(this, token, position);
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+                Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
         return true;
     }
 
@@ -121,7 +122,8 @@ public class Player {
         field.setToken(new Token(TokenType.NONE));
         field.getToken().setPosition(field);
         Game.getGame().getGameWindowHandler().removerAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+                Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
         return true;
 
     }
@@ -143,7 +145,8 @@ public class Player {
         fieldStart.getToken().setPosition(fieldStart);
 
         Game.getGame().getGameWindowHandler().moverAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+                Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
         return true;
     }
@@ -165,7 +168,8 @@ public class Player {
         fieldSecond.setToken(temp);
         fieldSecond.getToken().setPosition(fieldSecond);
         Game.getGame().getGameWindowHandler().swapperAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+                Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
         return true;
     }
@@ -197,7 +201,8 @@ public class Player {
         replacerField.setToken(handToken);
         replacerField.getToken().setPosition(replacerField);
         Game.getGame().getGameWindowHandler().replacerAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray());
+        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+                Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
         return true;
     }
 

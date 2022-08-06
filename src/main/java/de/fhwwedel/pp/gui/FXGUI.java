@@ -4,6 +4,7 @@ import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
@@ -11,8 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextFlow;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +33,10 @@ public class FXGUI implements GUIConnector {
     private final Label replacerAmountText;
     private final Label removerAmountText;
     private final CheckMenuItem showComputerHandButton;
+    private final GridPane verticalPointsGrid;
+    private final GridPane horizontalPointsGrid;
+    private Label sumPointsVerticalTeam;
+    private Label sumPointsHorizontalTeam;
     private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
@@ -41,7 +48,11 @@ public class FXGUI implements GUIConnector {
     private Integer clickXOrigin;
     private Integer clickYOrigin;
 
-    public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne, GridPane playerHandTwo, GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid, Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText) {
+    public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne, GridPane playerHandTwo,
+                 GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid,
+                 Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText,
+                 GridPane horizontalPointsGrid, GridPane verticalPointsGrid, Label sumPointsVerticalTeam,
+                 Label sumPointsHorizontalTeam) {
         this.playerHandOne = playerHandOne;
         this.playerHandTwo = playerHandTwo;
         this.playerHandThree = playerHandThree;
@@ -53,6 +64,10 @@ public class FXGUI implements GUIConnector {
         this.replacerAmountText = replacerAmountText;
         this.removerAmountText = removerAmountText;
         this.showComputerHandButton = showComputerHandButton;
+        this.horizontalPointsGrid = horizontalPointsGrid;
+        this.verticalPointsGrid = verticalPointsGrid;
+        this.sumPointsVerticalTeam = sumPointsVerticalTeam;
+        this.sumPointsHorizontalTeam = sumPointsHorizontalTeam;
         fieldImages = new HashMap<>();
         gridImagesTokens = new HashMap<>();
         handImagesTokens = new HashMap<>();
@@ -92,14 +107,13 @@ public class FXGUI implements GUIConnector {
         }
     }
 
-
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {
         this.animationTime = time;
     }
 
     @Override
-    public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField) {
+    public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField, Integer[] pointsMap) {
 
         for (var player : players) {
             updatePlayerHandIcons(player.getPlayerID(), player.getHandTokens());
@@ -118,7 +132,7 @@ public class FXGUI implements GUIConnector {
                 }
             }
         });
-
+        updatePointsGrid(pointsMap);
     }
 
 
@@ -140,8 +154,8 @@ public class FXGUI implements GUIConnector {
 
         gridImages = new ImageView[Constants.GAMEGRID_SIZE][Constants.GAMEGRID_SIZE];
         int colcount = Constants.GAMEGRID_SIZE;
-        gameGrid.getChildren().clear();
         int rowcount = Constants.GAMEGRID_SIZE;
+        gameGrid.getChildren().clear();
         for (int r = 0; r < Constants.GAMEGRID_SIZE; r++) {
             for (int c = 0; c < Constants.GAMEGRID_SIZE; c++) {
                 ImageView imgNew = new ImageView();
@@ -165,9 +179,68 @@ public class FXGUI implements GUIConnector {
                 //the image shall resize when the cell resizes
                 imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(colcount));
                 imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(rowcount));
-
             }
         }
+        generatePointsGrids();
+    }
+
+    private void generatePointsGrids() {
+        //Horizontal Team
+
+        int size = Constants.GAMEGRID_SIZE;
+        this.horizontalPointsGrid.getChildren().clear();
+        ColumnConstraints newConstraint = new ColumnConstraints();
+        newConstraint.setPercentWidth(100);
+        newConstraint.setHgrow(Priority.ALWAYS);
+        newConstraint.fillWidthProperty();
+        horizontalPointsGrid.getColumnConstraints().add(newConstraint);
+
+        for (int r = 0; r < Constants.GAMEGRID_SIZE; r++) {
+            Label horLabel = new Label();
+            Label verLabel = new Label();
+            int cellHeight = (int) horizontalPointsGrid.getHeight() / size;
+            int cellWidth = (int) verticalPointsGrid.getWidth() / size;
+
+            String id = "horPoints" + r;
+            horLabel.setId(id);
+
+            horLabel.setText("0");
+            horLabel.setPrefSize(horizontalPointsGrid.getWidth(), cellHeight);
+            System.out.println(gameGrid.getWidth());
+            GridPane.setFillWidth(horLabel, true);
+
+            horLabel.setStyle("-fx-background-color:grey; -fx-padding:5");
+
+
+            String id2 = "verPoints" + r;
+            verLabel.setId(id2);
+            verLabel.setText("0");
+            verLabel.setPrefSize(cellWidth, horizontalPointsGrid.getHeight());
+            GridPane.setFillWidth(verLabel, true);
+
+            //imgNew.fitWidthProperty().bind(horizontalPointsGrid.heightProperty().divide(size));
+            //imgNew.fitHeightProperty().bind(horizontalPointsGrid.heightProperty().divide(size));
+
+            this.horizontalPointsGrid.add(horLabel,0, r);
+            this.verticalPointsGrid.add(verLabel, r, 0);
+        }
+    }
+
+    private void updatePointsGrid(Integer[] pointsMap) {
+        int counterH = Constants.GAMEGRID_SIZE - 1;
+        for (Node child : this.horizontalPointsGrid.getChildren()) {
+            Label currLabel = (Label) child;
+            currLabel.setText(pointsMap[counterH].toString());
+            counterH--;
+        }
+        int counterV = Constants.GAMEGRID_SIZE;
+        for (Node child : this.verticalPointsGrid.getChildren()) {
+            Label currLabel = (Label) child;
+            currLabel.setText(pointsMap[counterV].toString());
+            counterV++;
+        }
+
+
     }
 
     @Override
@@ -483,7 +556,10 @@ public class FXGUI implements GUIConnector {
                         this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
                                 [this.clickEventSave.getPosY()]) == TokenType.NONE;
             }
+
             case "SWAPPER" -> {
+                System.out.println(this.clickEventSave.getPosX());
+                System.out.println(this.clickEventSave.getPosY());
                 //must be a token on the grid, must be a non empty field, must not be the same field as the original one
                 return this.clickEventSave.isGrid() &&
                         this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]

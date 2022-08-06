@@ -62,7 +62,7 @@ public class FakeGUI implements GUIConnector {
     }
 
     @Override
-    public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField) {
+    public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField, Integer[] pointsMap) {
 
     }
 

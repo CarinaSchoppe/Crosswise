@@ -20,9 +20,7 @@ import de.fhwwedel.pp.util.special.GameLogger;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Class for a game instance of the game Crosswise
@@ -400,5 +398,21 @@ public class Game {
         synchronized (this) {
             start = true;
         }
+    }
+
+    public Integer[] pointsArray() {
+        Map<Integer, Integer> map = AI.calculateCurrentOverallPoints();
+        System.out.println(map);
+        SortedSet<Integer> keys = new TreeSet<>(map.keySet());
+        System.out.println(keys);
+        Integer[] pointsArray = new Integer[Constants.GAMEGRID_SIZE * 2];
+        int counter = 0;
+        for (Integer key : keys) {
+            pointsArray[counter] = map.get(key);
+            counter++;
+        }
+        System.out.println(Arrays.toString(pointsArray));
+        return pointsArray;
+
     }
 }

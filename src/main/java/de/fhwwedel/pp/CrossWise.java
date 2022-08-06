@@ -30,7 +30,7 @@ public class CrossWise extends Application {
     public static final boolean DEBUG = true;
     public static long time;
     public static final boolean UI = true;
-    public static int DELAY = 500;
+    public static int DELAY = 10;
 
 
     public static void main(String[] args) {
@@ -52,7 +52,7 @@ public class CrossWise extends Application {
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1350, 1100);
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 1024);
         primaryStage.setTitle("Crosswise");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);

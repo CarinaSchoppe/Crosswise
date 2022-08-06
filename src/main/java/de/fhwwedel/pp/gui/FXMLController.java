@@ -20,6 +20,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -150,13 +152,39 @@ public class FXMLController implements Initializable {
     private Label usedSpacialLabel;
     @FXML
     private GridPane verticalPointsGrid;
+    @FXML
+    private Label sumPointsVerticalTeam;
+    @FXML
+    private Label sumPointsHorizontalTeam;
+    @FXML
+    private HBox hBoxWrappingVBox;
+    @FXML
+    private VBox vBoxWrappingGrdPn;
+    @FXML
+    private GridPane playingGrid;
+
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree, playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText, removerAmountText);
+        this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree,
+                playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText,
+                removerAmountText, horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
+                sumPointsHorizontalTeam);
         guiConnector.generateGrid();
         guiConnector.setupDragAndDropEvent();
+
+        fitHVBox();
+        this.horizontalPointsGrid.setPrefWidth(100);
+        this.horizontalPointsGrid.setMaxWidth(100);
+        this.horizontalPointsGrid.setMinWidth(100);
+    }
+
+    private void fitHVBox() {
+        playingGrid.prefWidthProperty().bind(vBoxWrappingGrdPn.widthProperty());
+        playingGrid.prefHeightProperty().bind(vBoxWrappingGrdPn.widthProperty());
+
+        vBoxWrappingGrdPn.prefWidthProperty().bind(hBoxWrappingVBox.heightProperty());
     }
 
     @FXML
@@ -167,7 +195,6 @@ public class FXMLController implements Initializable {
     @FXML
     void changeAnimationSpeedLow(ActionEvent event) {
         guiConnector.changeCurrentAnimationTime(AnimationTime.SLOW);
-
     }
 
     @FXML
@@ -217,7 +244,6 @@ public class FXMLController implements Initializable {
     void clickSaveGameButton(ActionEvent event) {
         Scene scene = gameGrid.getScene();
         FileOutputWriter.writeJSON(scene);
-
     }
 
 
