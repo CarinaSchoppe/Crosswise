@@ -34,7 +34,6 @@ import java.util.ResourceBundle;
 public class CreateGame implements Initializable {
 
 
-
     private final GUIConnector guiConnector;
 
     public CreateGame(GUIConnector guiConnector) {
@@ -108,6 +107,7 @@ public class CreateGame implements Initializable {
             playerFour = new AI(3, playerFourActive.isSelected(), playerFourField.getText());
         else
             playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
+        ((Stage) createGameButton.getScene().getWindow()).close();
         Game.createNewGame(List.of(playerOne, playerTwo, playerThree, playerFour), guiConnector, false);
         playerOne.create();
         playerTwo.create();
@@ -120,7 +120,6 @@ public class CreateGame implements Initializable {
         guiConnector.setupDragAndDropEvent();
 
         //close the current window
-        ((Stage) createGameButton.getScene().getWindow()).close();
     }
 
     @FXML
