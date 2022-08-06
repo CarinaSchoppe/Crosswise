@@ -26,6 +26,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -247,6 +248,7 @@ public class FXMLController implements Initializable {
             stage.initStyle(StageStyle.DECORATED);
             stage.setTitle("CrossWise Create Game");
             stage.setResizable(false);
+            stage.setAlwaysOnTop(true);
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {

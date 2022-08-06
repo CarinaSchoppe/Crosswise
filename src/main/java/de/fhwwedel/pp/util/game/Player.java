@@ -11,6 +11,7 @@
 package de.fhwwedel.pp.util.game;
 
 import de.fhwwedel.pp.CrossWise;
+import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.special.Constants;
@@ -88,9 +89,12 @@ public class Player {
         handTokens.remove(getCorrespondingToken(token));
         field.setToken(token);
         field.getToken().setPosition(field);
-        GameLogger.logMove(this, token, position);
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+        if (this instanceof AI)
+            Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().getTokenType());
+        GameLogger.logMove(this, token, position);
+
         return true;
     }
 
@@ -121,9 +125,13 @@ public class Player {
         GameLogger.logMoveRemove(this, field);
         field.setToken(new Token(TokenType.NONE));
         field.getToken().setPosition(field);
-        Game.getGame().getGameWindowHandler().removerAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+        Game.getGame().getGUIConnector().removerAmountText();
+        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+
+        if (this instanceof AI)
+            Game.getGame().getGUIConnector().removerAnimationFrame(field.getX(), field.getY());
+
         return true;
 
     }
@@ -143,10 +151,14 @@ public class Player {
         fieldEnd.getToken().setPosition(fieldEnd);
         fieldStart.setToken(new Token(TokenType.NONE));
         fieldStart.getToken().setPosition(fieldStart);
-
-        Game.getGame().getGameWindowHandler().moverAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+
+        if (this instanceof AI) {
+            Game.getGame().getGUIConnector().removerAnimationFrame(fieldStart.getX(), fieldStart.getY());
+            Game.getGame().getGUIConnector().placerAnimationFrame(fieldEnd.getX(), fieldEnd.getY(), fieldEnd.getToken().getTokenType());
+        }
+        Game.getGame().getGUIConnector().moverAmountText();
 
         return true;
     }
@@ -167,10 +179,14 @@ public class Player {
         fieldFirst.getToken().setPosition(fieldFirst);
         fieldSecond.setToken(temp);
         fieldSecond.getToken().setPosition(fieldSecond);
-        Game.getGame().getGameWindowHandler().swapperAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
-                Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
+        Game.getGame().getGUIConnector().swapperAmountText();
+        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
+                Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+        if (this instanceof AI) {
+            Game.getGame().getGUIConnector().placerAnimationFrame(fieldFirst.getX(), fieldFirst.getY(), fieldFirst.getToken().getTokenType());
+            Game.getGame().getGUIConnector().placerAnimationFrame(fieldSecond.getX(), fieldSecond.getY(), fieldSecond.getToken().getTokenType());
+        }
         return true;
     }
 
@@ -200,9 +216,14 @@ public class Player {
         handTokens.add(replacerField.getToken());
         replacerField.setToken(handToken);
         replacerField.getToken().setPosition(replacerField);
-        Game.getGame().getGameWindowHandler().replacerAmountText();
-        Game.getGame().getGameWindowHandler().performMoveUIUpdate(Game.getGame().getPlayers(),
+        Game.getGame().getGUIConnector().replacerAmountText();
+
+        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+
+        if (this instanceof AI)
+            Game.getGame().getGUIConnector().placerAnimationFrame(replacerField.getX(), replacerField.getY(), replacerField.getToken().getTokenType());
+
         return true;
     }
 
@@ -255,7 +276,8 @@ public class Player {
         if (Game.getGame().getTokenDrawPile().isEmpty()) throw new NoTokenException("No more tokens left in the Pile!");
 
         //return if there is no None token in tokens
-        if (handTokens.size() >= Constants.HAND_SIZE && handTokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE) return;
+        if (handTokens.size() >= Constants.HAND_SIZE && handTokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE)
+            return;
 
         var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().getTokenDrawPile().remove(token);
@@ -273,7 +295,7 @@ public class Player {
 
         GameLogger.logDraw(this, token);
 
-        Game.getGame().getGameWindowHandler().updatePlayerHandIcons(playerID, handTokens);
+        Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokens);
 
 
     }

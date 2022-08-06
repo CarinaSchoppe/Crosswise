@@ -13,6 +13,7 @@ package de.fhwwedel.pp;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -54,7 +55,10 @@ public class CrossWise extends Application {
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 1024);
+        Parent root = fxmlLoader.load();
+        //TODO: alles mit der GUI machen!
+
+        Scene scene = new Scene(root, 1280, 1024);
         primaryStage.setTitle("Crosswise");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);

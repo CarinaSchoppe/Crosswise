@@ -10,6 +10,8 @@
 
 package de.fhwwedel.pp.util.special;
 
+import java.util.concurrent.TimeUnit;
+
 public abstract class Constants {
 
     private Constants() {
@@ -29,7 +31,7 @@ public abstract class Constants {
 
     public static final int AMOUNT_NORMAL_TOKENS = 7;
 
-    public static final int ANIMATION_DURATION = 1000;
+    public static final long ANIMATION_TIME = 2;
 
     public static final int MIN_PLAYER_SIZE = 2;
 }

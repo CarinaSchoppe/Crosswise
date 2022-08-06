@@ -4,7 +4,6 @@ import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
@@ -12,12 +11,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.TextFlow;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.TextAlignment;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class FXGUI implements GUIConnector {
 
@@ -77,6 +77,40 @@ public class FXGUI implements GUIConnector {
         handImagesTokens = new HashMap<>();
     }
 
+
+    private void makeImageViewNormal(int x, int y, TokenType type) {
+        var scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            var image = new Image(type.getImagePathNormal());
+            String id = "gridToken:" + x + ":" + y;
+            var imageView =
+                    fieldImages.get(id);
+            gridImagesTokens.put(imageView, type);
+            imageView.setImage(image);
+        }, (long) animationTime.getTime() * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
+        scheduler.shutdown();
+    }
+
+    @Override
+    public void placerAnimationFrame(int y, int x, TokenType type) {
+
+        var image = new Image(type.getImagePathGolden());
+        String id = "gridToken:" + x + ":" + y;
+        var imageView =
+                fieldImages.get(id);
+        gridImagesTokens.put(imageView, type);
+        imageView.setImage(image);
+        makeImageViewNormal(x, y, type);
+    }
+
+
+    @Override
+    public void removerAnimationFrame(int y, int x) {
+        gridImages[x][y].setImage(new Image(TokenType.NONE.getImagePathGolden()));
+        makeImageViewNormal(x, y, TokenType.NONE);
+
+    }
+
     @Override
     public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
         Platform.runLater(() -> {
@@ -123,30 +157,30 @@ public class FXGUI implements GUIConnector {
         for (var player : players) {
             updatePlayerHandIcons(player.getPlayerID(), player.getHandTokens());
         }
-        Platform.runLater(() -> {
-            for (int row = 0; row < Constants.GAMEGRID_SIZE; row++) {
-                for (int column = 0; column < Constants.GAMEGRID_SIZE; column++) {
-
-                    var token = gameField[row][column];
-                    var image = new Image(token.getImagePath());
-                    String id = "gridToken" + column + row;
-                    var imageView =
-                            fieldImages.get(id);
-                    gridImagesTokens.put(imageView, token);
-                    imageView.setImage(image);
-                }
+        for (int row = 0; row < Constants.GAMEGRID_SIZE; row++) {
+            for (int column = 0; column < Constants.GAMEGRID_SIZE; column++) {
+                var token = gameField[row][column];
+                var image = new Image(token.getImagePathNormal());
+                String id = "gridToken:" + column + ":" + row;
+                var imageView =
+                        fieldImages.get(id);
+                gridImagesTokens.put(imageView, token);
+                imageView.setImage(image);
             }
-        });
-        updatePointsGrid(pointsMap);
+        }
+        Platform.runLater(() -> updatePointsGrid(pointsMap));
     }
 
 
     @Override
     public void showError(String message) {
-        var alert = new Alert(Alert.AlertType.ERROR, message);
-        alert.setTitle("Error");
-        alert.setHeaderText("Error");
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            var alert = new Alert(Alert.AlertType.ERROR, message);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.showAndWait();
+        });
+
     }
 
     @Override
@@ -154,45 +188,57 @@ public class FXGUI implements GUIConnector {
         Platform.runLater(() -> currentPlayerText.setText(playerName));
     }
 
+
+    @Override
+    public void resetText() {
+        currentPlayerText.setText("");
+        moverAmountText.setText("0");
+        swapperAmountText.setText("0");
+        replacerAmountText.setText("0");
+        removerAmountText.setText("0");
+
+    }
+
     @Override
     public void generateGrid() {
 
         gridImages = new ImageView[Constants.GAMEGRID_SIZE][Constants.GAMEGRID_SIZE];
-        int colcount = Constants.GAMEGRID_SIZE;
-        int rowcount = Constants.GAMEGRID_SIZE;
         gameGrid.getChildren().clear();
-        for (int r = 0; r < Constants.GAMEGRID_SIZE; r++) {
-            for (int c = 0; c < Constants.GAMEGRID_SIZE; c++) {
-                ImageView imgNew = new ImageView();
-                int cellWidth = (int) gameGrid.getWidth() / colcount;
-                int cellHeight = (int) gameGrid.getHeight() / rowcount;
+        //add a white border line around the grid
 
+        for (int rows = 0; rows < Constants.GAMEGRID_SIZE; rows++) {
+            for (int columns = 0; columns < Constants.GAMEGRID_SIZE; columns++) {
+                ImageView imgNew = new ImageView();
+
+                int cellWidth = (int) gameGrid.getWidth() / Constants.GAMEGRID_SIZE;
+                int cellHeight = (int) gameGrid.getHeight() / Constants.GAMEGRID_SIZE;
                 imgNew.setFitWidth(cellWidth);
                 imgNew.setFitHeight(cellHeight);
                 imgNew.setPreserveRatio(true);
                 imgNew.setSmooth(true);
-                String id = "gridToken" + c + r;
+                imgNew.setCache(true);
+                String id = "gridToken:" + columns + ":" + rows;
                 fieldImages.put(id, imgNew);
                 imgNew.setId(id);
                 Image img = new Image("/pictures/0none.png");
                 imgNew.setImage(img);
                 gridImagesTokens.put(imgNew, TokenType.NONE);
 
-                gridImages[r][c] = imgNew;
-                gameGrid.add(imgNew, c, r);
+                gridImages[rows][columns] = imgNew;
+                gameGrid.add(imgNew, columns, rows);
 
                 //the image shall resize when the cell resizes
-                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(colcount));
-                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(rowcount));
+                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(Constants.GAMEGRID_SIZE));
+                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(Constants.GAMEGRID_SIZE));
             }
         }
         generatePointsGrids();
     }
 
     private void generatePointsGrids() {
+        verticalPointsGrid.setVgap(-1);
+        verticalPointsGrid.setHgap(-1);
         //Horizontal Team
-
-        int size = Constants.GAMEGRID_SIZE;
         this.horizontalPointsGrid.getChildren().clear();
         this.verticalPointsGrid.getChildren().clear();
 
@@ -284,7 +330,6 @@ public class FXGUI implements GUIConnector {
         }
 
 
-
     }
 
     public void showGUIElements() {
@@ -327,7 +372,7 @@ public class FXGUI implements GUIConnector {
         playerHandOne.getChildren().clear();
 
         for (int i = 0; i < tokens.size(); i++) {
-            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
 
@@ -347,7 +392,7 @@ public class FXGUI implements GUIConnector {
         int cellHeight = (int) playerHandTwo.getHeight() / Constants.HAND_SIZE;
         playerHandTwo.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
-            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
             imageView.setId("token2:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
@@ -368,7 +413,7 @@ public class FXGUI implements GUIConnector {
         int cellHeight = (int) playerHandThree.getHeight() / Constants.HAND_SIZE;
         playerHandThree.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
-            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
             imageView.setId("token3:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
@@ -389,7 +434,7 @@ public class FXGUI implements GUIConnector {
         int cellHeight = (int) playerHandFour.getHeight() / Constants.HAND_SIZE;
         playerHandFour.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
-            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePath());
+            var imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
             imageView.setId("token4:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
@@ -406,8 +451,7 @@ public class FXGUI implements GUIConnector {
 
     @Override
     public void gameWonNotifier(TeamType wonType, int points, boolean rowComplete) {
-        Platform.runLater(() ->
-                gameWonNotification(wonType, points, rowComplete));
+        gameWonNotification(wonType, points, rowComplete);
     }
 
 
@@ -430,37 +474,39 @@ public class FXGUI implements GUIConnector {
             message = "No players in the game";
         }
 
-        var alert = new Alert(Alert.AlertType.INFORMATION, message);
-        alert.setTitle("Game finished");
-        alert.setHeaderText("Game finished");
-        alert.showAndWait();
+        playerHandOne.setVisible(false);
+        playerHandTwo.setVisible(false);
+        playerHandThree.setVisible(false);
+        playerHandFour.setVisible(false);
+        Platform.runLater(() -> {
+            var alert = new Alert(Alert.AlertType.INFORMATION, message);
+            alert.setTitle("Game finished");
+            alert.setHeaderText("Game finished");
+            alert.showAndWait();
+        });
     }
 
     @Override
     public void showHand(boolean isAI, int playerID) {
-        Platform.runLater(() -> {
-            playerHandOne.setVisible(false);
-            playerHandTwo.setVisible(false);
-            playerHandThree.setVisible(false);
-            playerHandFour.setVisible(false);
-            if (isAI) {
-                if (showComputerHandButton.isSelected()) handVisibleSwitch(playerID);
-            } else {
-                handVisibleSwitch(playerID);
-            }
+        playerHandOne.setVisible(false);
+        playerHandTwo.setVisible(false);
+        playerHandThree.setVisible(false);
+        playerHandFour.setVisible(false);
+        if (isAI) {
+            if (showComputerHandButton.isSelected()) handVisibleSwitch(playerID);
+        } else {
+            handVisibleSwitch(playerID);
+        }
 
-        });
     }
 
     @Override
     public void startGamePopUp() {
-        Platform.runLater(() -> {
-            var alert = new Alert(Alert.AlertType.INFORMATION, "Start game!");
-            alert.setTitle("Start Game");
-            alert.setHeaderText("Start Game");
-            alert.showAndWait();
-            Game.getGame().startGame();
-        });
+        var alert = new Alert(Alert.AlertType.INFORMATION, "Game is ready");
+        alert.setTitle("Start the game");
+        alert.setHeaderText("Start the game");
+        alert.showAndWait();
+        Game.getGame().startGame();
     }
 
     public void setupDragAndDropEvent() {

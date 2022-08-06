@@ -51,10 +51,7 @@ public class Game {
      * Draw pile of Tokens the players can draw from
      */
     private ArrayList<Token> tokenDrawPile = new ArrayList<>();
-    /**
-     * Instance of the GameLogic running for this game
-     */
-    private GameLogic gameLogic;
+
     /**
      * Current player
      */
@@ -199,7 +196,6 @@ public class Game {
             handleOver();
             return;
         }
-        gameLogic = new GameLogic(this);
         handleOver();
         if (players.size() < Constants.MIN_PLAYER_SIZE)
             throw new IllegalArgumentException("There must be at least 2 players");
@@ -278,7 +274,7 @@ public class Game {
     private boolean handleOver() {
         if (stop)
             return true;
-        var over = gameLogic.isGameOver(playingField);
+        var over = isGameOver(playingField);
         if (players.isEmpty()) {
             System.out.println("No players left!");
             GameLogger.saveLogToFile("Logfile");
@@ -388,7 +384,7 @@ public class Game {
         nextPlayer();
     }
 
-    public GUIConnector getGameWindowHandler() {
+    public GUIConnector getGUIConnector() {
         return guiConnector;
     }
 
@@ -413,4 +409,103 @@ public class Game {
         return pointsArray;
 
     }
+
+    /**
+     * Checks, if the game is over and which team won if it is
+     *
+     * @param field current playing field
+     * @return Map, with the boolean if the game is over and a team, that won
+     */
+    public Map<Boolean, Team> isGameOver(PlayingField field) {
+        var map = new HashMap<Boolean, Team>();
+        //if horizontal Team won via a full row
+        if (checkRows(field)) {
+            Team.getHorizontalTeam().setRowWin(true);
+            map.put(true, Team.getHorizontalTeam());
+            return map;
+        }
+        //if the vertical team won via a full collumn
+        if (checkColumns(field)) {
+            Team.getVerticalTeam().setRowWin(true);
+            map.put(true, Team.getVerticalTeam());
+            return map;
+        }
+        //check if there are still tokens missing on the playing field
+        for (int i = 0; i < field.getSize(); i++) {
+            for (int j = 0; j < field.getSize(); j++) {
+                if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE) {
+                    map.put(false, null);
+                    return map;
+                }
+            }
+        }
+        //if both teams have the same amount of points
+        if (Team.getHorizontalTeam().getPoints() == Team.getVerticalTeam().getPoints()) {
+            map.put(true, null);
+        } else if (Team.getHorizontalTeam().getPoints() > Team.getVerticalTeam().getPoints()) {
+            map.put(true, Team.getHorizontalTeam());
+        } else {
+            map.put(true, Team.getVerticalTeam());
+        }
+        return map;
+
+    }
+
+
+    @SuppressWarnings("DuplicatedCode")
+    private boolean checkRows(final PlayingField field) {
+        TokenType current = null;
+        for (int i = 0; i < field.getSize(); i++) { //get horizontal
+            boolean equal = true;
+            for (int j = 0; j < field.getSize(); j++) { // get field on row
+                if (current == null) {
+                    if (field.getFieldMap()[i][j].getToken().getTokenType() != TokenType.NONE) {
+                        current = field.getFieldMap()[i][j].getToken().getTokenType();
+                    } else {
+                        equal = false;
+                        break;
+                    }
+                } else {
+                    if (!(field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().getTokenType() != current)) continue;
+                    equal = false;
+                    current = null;
+                    break;
+
+                }
+
+            }
+            if (equal)
+                return true;
+        }
+        return false;
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private boolean checkColumns(final PlayingField field) {
+        TokenType current = null;
+
+        for (int i = 0; i < field.getSize(); i++) {
+            boolean equal = true;
+            for (int j = 0; j < field.getSize(); j++) {
+                if (current == null) {
+                    if (field.getFieldMap()[j][i].getToken().getTokenType() != TokenType.NONE) {
+                        current = field.getFieldMap()[j][i].getToken().getTokenType();
+                    } else {
+                        equal = false;
+                        break;
+                    }
+                } else {
+                    if (!(field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().getTokenType() != current)) continue;
+                    equal = false;
+                    current = null;
+                    break;
+
+                }
+            }
+            if (equal)
+                return true;
+        }
+        return false;
+    }
+
 }

@@ -11,6 +11,7 @@
 package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.util.game.*;
+import javafx.scene.image.ImageView;
 
 import java.util.List;
 
@@ -24,7 +25,11 @@ public interface GUIConnector {
 
     void updatePlayerHandIcons(int playerID, List<Token> tokens);
 
+
     void showHand(boolean isAI, int playerID);
+
+    void resetText();
+
 
     void notifyTurn(String playerName, int playerID);
 
@@ -54,6 +59,10 @@ public interface GUIConnector {
     void replacerAmountText();
 
     void generateGrid();
+
+    void placerAnimationFrame(int x, int y,  TokenType type);
+
+    void removerAnimationFrame(int x, int y);
 
     void showError(String message);
 
