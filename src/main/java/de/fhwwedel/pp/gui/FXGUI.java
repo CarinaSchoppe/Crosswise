@@ -191,7 +191,6 @@ public class FXGUI implements GUIConnector {
 
     @Override
     public void resetText() {
-        currentPlayerText.setText("");
         moverAmountText.setText("0");
         swapperAmountText.setText("0");
         replacerAmountText.setText("0");
