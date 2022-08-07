@@ -1,5 +1,4 @@
-import de.fhwwedel.pp.util.game.GUIConnector;
-import de.fhwwedel.pp.util.game.*;
+import logic.*;
 
 import java.util.List;
 
@@ -121,9 +120,15 @@ public class FakeGUI implements GUIConnector {
     }
 
     @Override
-    public void generateGrid(boolean newGrid, TokenType[][] gameField) {
+    public void generateGrid() {
 
     }
+
+    @Override
+    public void updateSpecialTokenIcons(TokenType type) {
+
+    }
+
 
     public void showGUIElements() {
 

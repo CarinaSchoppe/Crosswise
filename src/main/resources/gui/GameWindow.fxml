@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
-
-<GridPane fx:id="masterGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: rgb(187,247,197);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.fhwwedel.pp.gui.FXMLController">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:id="masterGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1280.0" style="-fx-background-color: rgb(187,247,197);" xmlns="http://javafx.com/javafx/18" fx:controller="gui.FXMLController">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="22.0" minHeight="22.0" prefHeight="22.0" vgrow="NEVER" />
-        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="22.0" minHeight="22.0" prefHeight="22.0" vgrow="NEVER"/>
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
         <MenuBar fx:id="menuBar" minWidth="22.0" prefHeight="22.0" GridPane.valignment="TOP">
@@ -145,14 +133,14 @@
                                                 <Image url="@../pictures/8move.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="imageReplacer" fitHeight="100.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                        <ImageView fx:id="imageSwapper" fitHeight="100.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                             <image>
-                                                <Image url="@../pictures/9swaponboard.png" />
+                                                <Image url="@../pictures/9swaponboard.png"/>
                                             </image>
                                         </ImageView>
-                                        <ImageView fx:id="imageSwapper" fitHeight="96.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
+                                        <ImageView fx:id="imageReplacer" fitHeight="96.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3">
                                             <image>
-                                                <Image url="@../pictures/10swapwithhand.png" />
+                                                <Image url="@../pictures/10swapwithhand.png"/>
                                             </image>
                                         </ImageView>
                                     </children>
