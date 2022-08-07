@@ -106,8 +106,7 @@ public class CreateGame implements Initializable {
         playerFour.create();
 
         guiConnector.showGUIElements();
-        TokenType[][] placeholder = {{}};
-        guiConnector.generateGrid(true, placeholder);
+        guiConnector.generateGrid();
         guiConnector.resetText();
         guiConnector.setupDragAndDropEvent();
     }

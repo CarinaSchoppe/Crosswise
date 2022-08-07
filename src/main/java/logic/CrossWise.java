@@ -24,7 +24,7 @@ public class CrossWise extends Application {
     }
 
     /*
-     * TODO: Structure of the program!!!
+     * TODO: Structure of the program?
      * TODO: Responsive Design
      * TODO: GUI Points
      * TODO end timer event premature

@@ -38,6 +38,11 @@ public class FXGUI implements GUIConnector {
     private final Label sumPointsVerticalTeam;
     private final Label sumPointsHorizontalTeam;
     private final GridPane innerGrid;
+    private final ImageView imageSwapper;
+    private final ImageView imageMover;
+    private final ImageView imageReplacer;
+    private final ImageView imageRemover;
+
     private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
@@ -152,6 +157,7 @@ public class FXGUI implements GUIConnector {
             alert.setTitle("Next Turn");
             alert.setHeaderText("Next Players Turn");
             alert.show();
+            enableGUIElements();
         });
     }
 
@@ -218,12 +224,9 @@ public class FXGUI implements GUIConnector {
     }
 
     @Override
-    public void generateGrid(boolean newGrid, TokenType[][] gameField) {
-
+    public void generateGrid() {
         gridImages = new ImageView[Constants.GAMEGRID_SIZE][Constants.GAMEGRID_SIZE];
         gameGrid.getChildren().clear();
-        //add a white border line around the grid
-
         for (int rows = 0; rows < Constants.GAMEGRID_SIZE; rows++) {
             for (int columns = 0; columns < Constants.GAMEGRID_SIZE; columns++) {
                 ImageView imgNew = new ImageView();
@@ -239,32 +242,23 @@ public class FXGUI implements GUIConnector {
                 fieldImages.put(id, imgNew);
                 imgNew.setId(id);
                 Image img;
-                if (newGrid) {
-                    img = new Image(TokenType.NONE.getImagePathNormal());
-                } else {
-                    img = new Image(gameField[rows][columns].getImagePathNormal());
-                }
+                //set emtpy token image
+                img = new Image(TokenType.NONE.getImagePathNormal());
 
                 imgNew.setImage(img);
                 gridImagesTokens.put(imgNew, TokenType.NONE);
 
                 gridImages[rows][columns] = imgNew;
-                Pane pane = new Pane(imgNew);
-                pane.setBorder(new Border(new BorderStroke(Color.BLACK,
-                        BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 gameGrid.add(imgNew, columns, rows);
 
                 //the image shall resize when the cell resizes
-                pane.prefWidthProperty().bind(gameGrid.widthProperty().divide(Constants.GAMEGRID_SIZE));
-                pane.prefHeightProperty().bind(gameGrid.heightProperty().divide(Constants.GAMEGRID_SIZE));
-
-                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(Constants.GAMEGRID_SIZE).subtract(12/Constants.GAMEGRID_SIZE));
-                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(Constants.GAMEGRID_SIZE).subtract(12/Constants.GAMEGRID_SIZE));
+                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(Constants.GAMEGRID_SIZE).subtract(12 / Constants.GAMEGRID_SIZE));
+                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(Constants.GAMEGRID_SIZE).subtract(12 / Constants.GAMEGRID_SIZE));
             }
         }
-        if (newGrid) {
-            generatePointsGrids();
-        }
+
+        generatePointsGrids();
+
     }
 
     private void generatePointsGrids() {
@@ -382,7 +376,6 @@ public class FXGUI implements GUIConnector {
     @Override
     public void swapperAmountText() {
         Platform.runLater(() -> swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + ""));
-
     }
 
     @Override
@@ -603,9 +596,12 @@ public class FXGUI implements GUIConnector {
                     switch (input) {
                         case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> {
                             Game.getGame().playerSymbolTokenMove(input, finalI, finalJ);
+                            disableGUIElementes();
                         }
-                        case "REMOVER" ->
+                        case "REMOVER" -> {
                             Game.getGame().playerRemoverTokenMove(finalI, finalJ);
+                            disableGUIElementes();
+                        }
 
                         case "MOVER", "SWAPPER", "REPLACER" -> {
                             this.checkForMouse = true;
@@ -699,6 +695,7 @@ public class FXGUI implements GUIConnector {
     }
 
     private void specialClickAction() {
+        disableGUIElementes();
         if (this.clickToken.equals("MOVER")) {
             Game.getGame().playerMoverTokenMove(clickXOrigin, clickYOrigin, this.clickEventSave.getPosX(), this.clickEventSave.getPosY());
         } else if (this.clickToken.equals("SWAPPER")) {
