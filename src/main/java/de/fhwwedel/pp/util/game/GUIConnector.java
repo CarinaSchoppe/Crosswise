@@ -16,8 +16,9 @@ public interface GUIConnector {
 
     void updatePlayerHandIcons(int playerID, List<Token> tokens);
 
+    void faultyAlert(Integer caseID);
 
-    void showHand(boolean isAI, int playerID);
+    void showHand(boolean isAI, int playerID, boolean hideAll);
 
     void resetText();
 

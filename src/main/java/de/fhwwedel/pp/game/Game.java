@@ -9,7 +9,7 @@ import de.fhwwedel.pp.util.game.json.PlayerData;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
+
 
 import java.util.*;
 
@@ -106,19 +106,13 @@ public class Game {
         createStuff(game, fileSetup);
     }
 
-
     /**
-     * Tests if the Teams have the same amount of active players
-     *
-     * @return true, if they have the same amount, otherwise false
+     * shows error message while trying to create a game with wrong parameters
      */
-    public void faultyStartup() {
+    public void faultyStartup(Integer caseID) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
-            alert.setTitle("Wrong configuration");
-            alert.setHeaderText("Wrong configuration!");
-            alert.showAndWait();
-
+            guiConnector.showHand(true, 0 , true);
+            guiConnector.faultyAlert(caseID);
         });
         game.cancel();
     }
@@ -191,7 +185,7 @@ public class Game {
         handleOver();
 
         if (Team.getHorizontalTeam().getPlayers().size() == 0 && Team.getVerticalTeam().getPlayers().size() == 0) {
-            faultyStartup();
+            faultyStartup(0);
             return;
         }
 
@@ -225,7 +219,7 @@ public class Game {
             handleOver();
             return;
         }
-        guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
+        guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
         guiConnector.changeCurrentPlayerText(currentPlayer.getName());
         if (CrossWise.DEBUG) {
             System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
@@ -315,15 +309,15 @@ public class Game {
             return;
         }
         if (Team.getHorizontalTeam().getPlayers().size() != Team.getVerticalTeam().getPlayers().size()) {
-            faultyStartup();
+            faultyStartup(1);
             return;
         }
         if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0) {
-            faultyStartup();
+            faultyStartup(2);
             return;
         }
 
-        guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
+        guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
         } else {

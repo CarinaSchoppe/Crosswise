@@ -494,20 +494,42 @@ public class FXGUI implements GUIConnector {
         });
     }
 
+    @Override
+    public void faultyAlert(Integer caseID) {
+        Alert alert = null;
+        switch (caseID) {
+            case 0:  {
+                alert = new Alert(Alert.AlertType.INFORMATION, "The game cannot be started with 0 Players!");
+                break;
+            }
+            case 1:  {
+                alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
+                break;
+            }
+            case 2:  {
+                alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
+                break;
+            }
 
+        }
+        alert.setTitle("Wrong configuration");
+        alert.setHeaderText("Wrong configuration!");
+        alert.showAndWait();
+    }
 
     @Override
-    public void showHand(boolean isAI, int playerID) {
+    public void showHand(boolean isAI, int playerID, boolean hideAll) {
         playerHandOne.setVisible(false);
         playerHandTwo.setVisible(false);
         playerHandThree.setVisible(false);
         playerHandFour.setVisible(false);
-        if (isAI) {
-            if (showComputerHandButton.isSelected()) handVisibleSwitch(playerID);
-        } else {
-            handVisibleSwitch(playerID);
+        if (!hideAll) {
+            if (isAI) {
+                if (showComputerHandButton.isSelected()) handVisibleSwitch(playerID);
+            } else {
+                handVisibleSwitch(playerID);
+            }
         }
-
     }
 
     @Override

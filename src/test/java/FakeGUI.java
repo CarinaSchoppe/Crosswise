@@ -20,6 +20,10 @@ public class FakeGUI implements GUIConnector {
 
     }
 
+    public void faultyAlert(Integer caseID) {
+
+    }
+
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {
 
@@ -31,10 +35,9 @@ public class FakeGUI implements GUIConnector {
     }
 
     @Override
-    public void showHand(boolean isAI, int playerID) {
+    public void showHand(boolean isAI, int playerID, boolean hideAll) {
 
     }
-
 
     @Override
     public void notifyTurn(String playerName, int playerID) {
