@@ -1,32 +1,18 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/29/22, 12:03 PM by Carina The Latest changes made by Carina on 7/29/22, 12:03 PM All contents of "CreateGame" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
 package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
+import de.fhwwedel.pp.util.game.GUIConnector;
 import de.fhwwedel.pp.util.game.Player;
+import de.fhwwedel.pp.util.game.TokenType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -112,19 +98,19 @@ public class CreateGame implements Initializable {
         } else {
             playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
         }
+        //close the current window
         ((Stage) createGameButton.getScene().getWindow()).close();
         Game.createNewGame(List.of(playerOne, playerTwo, playerThree, playerFour), guiConnector, false);
         playerOne.create();
         playerTwo.create();
         playerThree.create();
         playerFour.create();
-        guiConnector.showGUIElements();
 
-        guiConnector.generateGrid();
+        guiConnector.showGUIElements();
+        TokenType[][] placeholder = {{}};
+        guiConnector.generateGrid(true, placeholder);
         guiConnector.resetText();
         guiConnector.setupDragAndDropEvent();
-
-        //close the current window
     }
 
     @FXML

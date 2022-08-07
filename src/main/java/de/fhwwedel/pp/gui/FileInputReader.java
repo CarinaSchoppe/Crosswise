@@ -1,19 +1,10 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/27/22, 12:10 PM by Carina The Latest changes made by Carina on 7/27/22, 11:49 AM All contents of "FileInputReader" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
 package de.fhwwedel.pp.gui;
 
 import com.google.gson.Gson;
 import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.game.PlayingField;
+import de.fhwwedel.pp.util.game.GUIConnector;
 import de.fhwwedel.pp.util.game.Player;
 import de.fhwwedel.pp.util.game.Token;
 import de.fhwwedel.pp.util.game.TokenType;

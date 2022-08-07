@@ -1,13 +1,3 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/27/22, 11:07 AM All contents of "CrossWise" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
 package de.fhwwedel.pp;
 
 import javafx.application.Application;
@@ -28,7 +18,7 @@ import java.io.IOException;
 public class CrossWise extends Application {
 
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static long time;
     public static final boolean UI = true;
     public static int DELAY = 10;
@@ -39,24 +29,32 @@ public class CrossWise extends Application {
     }
 
     /*
-     * TODO: Structure of the program
-     * TODO: Animations
+     * TODO: Structure of the program!!!
      * TODO: Responsive Design
      * TODO: GUI Points
-     * TODO close logger file after every entry
      * TODO end timer event premature
+     * TODO Spiel startet mit 0 Spielern
+     * TODO Computer Hand anzeigen
+     * TODO spieler hand creation in 1 methode?
+     * TODO fakeGUI
+     * TODO Create players via createGame method and not in the createGame class
+     * TODO last token not responsive
+     * TODO border pane from empty token doesnt get removed
+     * TODO border pane to special tokens
+     * TODO colors of background and create game background
+     *  ----kleinere sachen
+     * TODO change opacity of special tokens when used up,  attribute usedSpeicalTokens never used
+     * TODO generateGrid revert
+     * TODO cant pick replacer, if no symbol tokens on hand
+     * TODO cant pick swapper if less than 2 tokens on field
      * */
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         Platform.setImplicitExit(false);
 
-        //TODO: setupDragAndDropEvent();
-
-
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
         Parent root = fxmlLoader.load();
-        //TODO: alles mit der GUI machen!
 
         Scene scene = new Scene(root, 1280, 1024);
         primaryStage.setTitle("Crosswise");
@@ -67,7 +65,5 @@ public class CrossWise extends Application {
             System.exit(0);
         });
         primaryStage.show();
-
-
     }
 }

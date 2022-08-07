@@ -1,13 +1,3 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/26/22, 4:39 PM All contents of "AI" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
 package de.fhwwedel.pp.ai;
 
 import de.fhwwedel.pp.CrossWise;
@@ -213,7 +203,7 @@ import java.util.*;
         Map<Integer, EnumMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokens();
         HashMap<Integer, Integer> pointMap = new HashMap<>();
 
-        for (var entry : occurrenceMap.entrySet()) {
+        for (Map.Entry<Integer, EnumMap<TokenType, Integer>> entry : occurrenceMap.entrySet()) {
             pointMap.put(entry.getKey(), calculate(entry.getValue()));
         }
         return pointMap;
@@ -397,7 +387,7 @@ import java.util.*;
                 bestMovePerToken.add(calculateBestTokenMove(token));
             }
         }
-
+        //Debug Ausgaben
         if (CrossWise.DEBUG)
             for (var bla : bestMovePerToken) {
                 if (bla != null) System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());

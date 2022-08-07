@@ -1,13 +1,3 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/27/22, 11:21 AM All contents of "Player" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
 package de.fhwwedel.pp.util.game;
 
 import de.fhwwedel.pp.CrossWise;
@@ -16,6 +6,7 @@ import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
+import javafx.application.Platform;
 
 import java.util.*;
 
@@ -91,9 +82,12 @@ public class Player {
         field.getToken().setPosition(field);
         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
-        if (this instanceof AI)
-            Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().getTokenType());
-        GameLogger.logMove(this, token, position);
+
+        if (this instanceof AI) {
+                Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().getTokenType());
+                GameLogger.logMove(this, token, position);
+
+        }
 
         return true;
     }

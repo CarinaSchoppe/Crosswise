@@ -1,14 +1,4 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 8/1/22, 12:36 PM by Carina The Latest changes made by Carina on 8/1/22, 12:36 PM All contents of "FakeGUI" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
-import de.fhwwedel.pp.gui.GUIConnector;
+import de.fhwwedel.pp.util.game.GUIConnector;
 import de.fhwwedel.pp.util.game.*;
 
 import java.util.List;
@@ -112,7 +102,7 @@ public class FakeGUI implements GUIConnector {
     }
 
     @Override
-    public void generateGrid() {
+    public void generateGrid(boolean newGrid, TokenType[][] gameField) {
 
     }
 

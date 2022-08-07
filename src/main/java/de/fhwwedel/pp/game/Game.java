@@ -1,18 +1,8 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/27/22, 11:22 AM by Carina The latest changes made by Carina on 7/27/22, 11:22 AM All contents of "Game" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
 package de.fhwwedel.pp.game;
 
 import de.fhwwedel.pp.CrossWise;
 import de.fhwwedel.pp.ai.AI;
-import de.fhwwedel.pp.gui.GUIConnector;
+import de.fhwwedel.pp.util.game.GUIConnector;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.game.json.PlayerData;
@@ -67,6 +57,13 @@ public class Game {
 
     //----------------------------------------------------------------------------------------------
 
+    /**
+     * Constructor
+     *
+     * @param playingField playing field, consisting out of Positions with Tokens
+     * @param players
+     * @param guiConnector
+     */
     public Game(PlayingField playingField, List<Player> players, GUIConnector guiConnector) {
         this.playingField = playingField;
         this.players = new ArrayList<>(players);
@@ -76,7 +73,7 @@ public class Game {
     }
 
     public static void createNewGame(List<Player> players, GUIConnector connector, boolean fileSetup) {
-        var game = new Game(new PlayingField(Constants.GAMEGRID_SIZE), players, connector);
+        Game game = new Game(new PlayingField(Constants.GAMEGRID_SIZE), players, connector);
         createStuff(game, fileSetup);
     }
 
@@ -87,7 +84,7 @@ public class Game {
         if (Game.getGame() != null) {
             Game.getGame().cancel();
         }
-        var thread = new Thread(() -> {
+        Thread thread = new Thread(() -> {
             while (!game.start) {
                 try {
                     Thread.sleep(50);
@@ -105,7 +102,7 @@ public class Game {
 
 
     public static void createNewGame(List<Player> players, GUIConnector connector, boolean fileSetup, PlayingField field) {
-        var game = new Game(field, players, connector);
+        Game game = new Game(field, players, connector);
         createStuff(game, fileSetup);
     }
 
@@ -115,20 +112,15 @@ public class Game {
      *
      * @return true, if they have the same amount, otherwise false
      */
-    public boolean teamSizeEqual() {
-        if (Team.getHorizontalTeam().getPlayers().size() == Team.getVerticalTeam().getPlayers().size()) {
-            return true;
-        }
-
+    public void faultyStartup() {
         Platform.runLater(() -> {
-            var alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
             alert.setTitle("Wrong configuration");
             alert.setHeaderText("Wrong configuration!");
             alert.showAndWait();
 
         });
         game.cancel();
-        return false;
     }
 
     public static void setGame(Game game, Thread thread) {
@@ -145,7 +137,7 @@ public class Game {
             return;
         }
         this.tokenDrawPile = new ArrayList<>();
-        for (var token : TokenType.values()) {
+        for (TokenType token : TokenType.values()) {
             if (token == TokenType.NONE) continue;
             if (token.isSpecial()) {
                 for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) { //12 tokens
@@ -159,7 +151,7 @@ public class Game {
         }
         for (int i = 0; i < tokenDrawPile.size(); i++) {
             int randomIndex = new Random().nextInt(tokenDrawPile.size());
-            var temp = tokenDrawPile.get(i);
+            Token temp = tokenDrawPile.get(i);
             tokenDrawPile.set(i, tokenDrawPile.get(randomIndex));
             tokenDrawPile.set(randomIndex, temp);
         }
@@ -197,8 +189,12 @@ public class Game {
             return;
         }
         handleOver();
-        if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0)
-            throw new IllegalArgumentException("There must be at least 2 players and an even number of players!");
+
+        if (Team.getHorizontalTeam().getPlayers().size() == 0 && Team.getVerticalTeam().getPlayers().size() == 0) {
+            faultyStartup();
+            return;
+        }
+
         fillPile();
         if (!fileLoaded) {
             currentPlayer = players.stream().filter(Player::isActive).findFirst().get();
@@ -212,7 +208,7 @@ public class Game {
      */
     private void nextPlayer() {
         //gets all active players
-        var allPlayers = this.players.stream().filter(Player::isActive).toList();
+        List<Player> allPlayers = this.players.stream().filter(Player::isActive).toList();
         //puts the first ever to play player to the one with the ID: 0
         if (currentPlayer == null && !allPlayers.isEmpty()) {
             currentPlayer = allPlayers.get(0);
@@ -231,11 +227,12 @@ public class Game {
         }
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
         guiConnector.changeCurrentPlayerText(currentPlayer.getName());
-
-        System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
-        //if the player is an AI player, let the AI make their move
+        if (CrossWise.DEBUG) {
+            System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
+        }
+        //if the player is an AI player, let the AI make their move, otherwise notify the next player
         if (currentPlayer instanceof AI ai) {
-            ai.makeMove();
+            Platform.runLater(ai::makeMove);
         } else {
             guiConnector.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());
         }
@@ -274,13 +271,13 @@ public class Game {
     private boolean handleOver() {
         if (stop)
             return true;
-        var over = isGameOver(playingField);
+        Map<Boolean, Team> over = isGameOver(playingField);
         if (players.isEmpty()) {
             System.out.println("No players left!");
             GameLogger.saveLogToFile("Logfile");
             return true;
         } else if (over.containsKey(true)) {
-            var team = over.get(true);
+            Team team = over.get(true);
             if (team == null) {
                 System.out.println("Game is over, but no team has won!");
                 guiConnector.gameWonNotifier(null, 0, false);
@@ -314,9 +311,18 @@ public class Game {
      * Starts the Game
      */
     public void start() {
-        if (!teamSizeEqual()) {
+        if (Team.getHorizontalTeam().getPlayers().size() == 0 && Team.getVerticalTeam().getPlayers().size() == 0) {
             return;
         }
+        if (Team.getHorizontalTeam().getPlayers().size() != Team.getVerticalTeam().getPlayers().size()) {
+            faultyStartup();
+            return;
+        }
+        if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0) {
+            faultyStartup();
+            return;
+        }
+
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID());
         if (currentPlayer instanceof AI ai) {
             ai.makeMove();
@@ -379,8 +385,8 @@ public class Game {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        //Let the next player do their turn
 
+        //Let the next player do their turn
         nextPlayer();
     }
 
@@ -398,14 +404,17 @@ public class Game {
         Map<Integer, Integer> map = AI.calculateCurrentOverallPoints();
         System.out.println(map);
         SortedSet<Integer> keys = new TreeSet<>(map.keySet());
-        System.out.println(keys);
+
         Integer[] pointsArray = new Integer[Constants.GAMEGRID_SIZE * 2];
         int counter = 0;
         for (Integer key : keys) {
             pointsArray[counter] = map.get(key);
             counter++;
         }
-        System.out.println(Arrays.toString(pointsArray));
+        if (CrossWise.DEBUG) {
+            System.out.println(map);
+            System.out.println(Arrays.toString(pointsArray));
+        }
         return pointsArray;
 
     }
@@ -417,7 +426,7 @@ public class Game {
      * @return Map, with the boolean if the game is over and a team, that won
      */
     public Map<Boolean, Team> isGameOver(PlayingField field) {
-        var map = new HashMap<Boolean, Team>();
+        Map<Boolean, Team> map = new HashMap<>();
         //if horizontal Team won via a full row
         if (checkRows(field)) {
             Team.getHorizontalTeam().setRowWin(true);

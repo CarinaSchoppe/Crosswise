@@ -1,16 +1,7 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/28/22, 6:12 PM by Carina The Latest changes made by Carina on 7/28/22, 6:12 PM All contents of "GameWindow" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
-
 package de.fhwwedel.pp.gui;
 
 import de.fhwwedel.pp.util.game.AnimationTime;
+import de.fhwwedel.pp.util.game.GUIConnector;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -162,10 +154,7 @@ public class FXMLController implements Initializable {
     @FXML
     private GridPane playingGrid;
     @FXML
-    private Pane hand3BorderPane;
-    @FXML
-    private Pane gameGridPaneBorder;
-
+    private TextFlow teamPointsDisplay;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.innerGrid.setVisible(false);
@@ -173,7 +162,7 @@ public class FXMLController implements Initializable {
         this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree,
                 playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText,
                 removerAmountText, horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
-                sumPointsHorizontalTeam, innerGrid, hand3BorderPane);
+                sumPointsHorizontalTeam, innerGrid);
 
         var createGame = new CreateGame(guiConnector);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
@@ -204,20 +193,7 @@ public class FXMLController implements Initializable {
         vBoxWrappingGrdPn.prefWidthProperty().bind(hBoxWrappingVBox.heightProperty());
     }
 
-    @FXML
-    void changeAnimationSpeedFast(ActionEvent event) {
-        guiConnector.changeCurrentAnimationTime(AnimationTime.FAST);
-    }
 
-    @FXML
-    void changeAnimationSpeedLow(ActionEvent event) {
-        guiConnector.changeCurrentAnimationTime(AnimationTime.SLOW);
-    }
-
-    @FXML
-    void changeAnimationSpeedMedium(ActionEvent event) {
-        guiConnector.changeCurrentAnimationTime(AnimationTime.MIDDLE);
-    }
 
     @FXML
     void clickEndGameButton(ActionEvent event) {
@@ -266,10 +242,68 @@ public class FXMLController implements Initializable {
     }
 
     @FXML
-    void pointsPerTeamButton() {
-
+    void clickPointsPerTeamButton(ActionEvent event) {
+        if (pointsPerTeamButton.isSelected()) {
+            this.teamPointsDisplay.setVisible(true);
+        } else {
+            this.teamPointsDisplay.setVisible(false);
+        }
     }
 
+    @FXML
+    void clickPointsPerRowColumnButton(ActionEvent event) {
+        if (pointsPerTeamButton.isSelected()) {
+            this.horizontalPointsGrid.setVisible(true);
+            this.verticalPointsGrid.setVisible(true);
+        } else {
+            this.horizontalPointsGrid.setVisible(false);
+            this.verticalPointsGrid.setVisible(false);
+        }
+    }
+
+    @FXML
+    void changeAnimationSpeedFast(ActionEvent event) {
+        changeAnimationSpeedHandler(AnimationTime.FAST);
+    }
+
+    @FXML
+    void changeAnimationSpeedLow(ActionEvent event) {
+        changeAnimationSpeedHandler(AnimationTime.SLOW);
+    }
+
+    @FXML
+    void changeAnimationSpeedMedium(ActionEvent event) {
+        changeAnimationSpeedHandler(AnimationTime.MIDDLE);
+    }
+
+    /**
+     * Changes the current animation speed of the AI and checks the given raioMenuItem
+     *
+     * @param animationTime the new animation Time given by the
+     */
+    private void changeAnimationSpeedHandler(AnimationTime animationTime) {
+        switch (animationTime) {
+            case FAST -> {
+                this.lowAnimationSpeedButton.setSelected(false);
+                this.mediumAnimationSpeedButton.setSelected(false);
+                this.fastAnimationSpeedButton.setSelected(true);
+                guiConnector.changeCurrentAnimationTime(AnimationTime.FAST);
+            }
+            case MIDDLE -> {
+                this.lowAnimationSpeedButton.setSelected(false);
+                this.mediumAnimationSpeedButton.setSelected(true);
+                this.fastAnimationSpeedButton.setSelected(false);
+                guiConnector.changeCurrentAnimationTime(AnimationTime.MIDDLE);
+
+            }
+            case SLOW -> {
+                this.lowAnimationSpeedButton.setSelected(true);
+                this.mediumAnimationSpeedButton.setSelected(false);
+                this.fastAnimationSpeedButton.setSelected(false);
+                guiConnector.changeCurrentAnimationTime(AnimationTime.SLOW);
+            }
+        }
+    }
 
     @FXML
     void initialize() {

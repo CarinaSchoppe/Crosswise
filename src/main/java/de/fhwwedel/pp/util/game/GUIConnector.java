@@ -1,15 +1,6 @@
-/*
- * Copyright Notice for Crosswise-PP
- * Copyright (c) at Crosswise-Jacob 2022
- * File created on 7/31/22, 12:41 PM by Carina The Latest changes made by Carina on 7/31/22, 12:41 PM All contents of "GameWindowHandler" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
- * at Crosswise-Jacob. All rights reserved
- * Any type of duplication, distribution, rental, sale, award,
- * Public accessibility or other use
- * requires the express written consent of Crosswise-Jacob.
- */
+package de.fhwwedel.pp.util.game;
 
-package de.fhwwedel.pp.gui;
-
+import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.util.game.*;
 import javafx.scene.image.ImageView;
 
@@ -58,7 +49,7 @@ public interface GUIConnector {
 
     void replacerAmountText();
 
-    void generateGrid();
+    void generateGrid(boolean newGrid, TokenType[][] gameField);
 
     void placerAnimationFrame(int x, int y,  TokenType type);
 
