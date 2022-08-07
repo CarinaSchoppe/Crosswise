@@ -31,7 +31,7 @@ public abstract class Constants {
 
     public static final int AMOUNT_NORMAL_TOKENS = 7;
 
-    public static final long ANIMATION_TIME = 2;
+    public static final long ANIMATION_TIME = 3;
 
     public static final int MIN_PLAYER_SIZE = 2;
 }
