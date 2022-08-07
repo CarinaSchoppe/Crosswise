@@ -9,12 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * Wrapper class is necessary as the main class for our program must not inherit
- * from {@link javafx.application.Application}
- *
- * @author mjo
- */
+
 public class CrossWise extends Application {
 
 

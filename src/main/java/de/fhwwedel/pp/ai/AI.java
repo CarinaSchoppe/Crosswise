@@ -20,9 +20,6 @@ import java.util.*;
     }
 
 
-    private void performAnimation() {
-        //TODO: here fill out
-    }
 
     //##############################################################################################
     //#################################### AI Move Calculation #####################################
@@ -349,25 +346,37 @@ import java.util.*;
      */
     public void makeMove() {
         TokenMove move = calculateAIMove();
+
+        try {
+            Thread.sleep(Constants.AI_TURN_TIME);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         switch (move.getToken().getValue()) {
             case 1, 2, 3, 4, 5, 6 -> {
-                if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
+                if (!normalTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition()))
+                    throw new MoveNotPerformedException();
             }
             case 7 -> {
-                if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
+                if (!removerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition()))
+                    throw new MoveNotPerformedException();
             }
             case 8 -> {
-                if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition())) throw new MoveNotPerformedException();
+                if (!moverTokenTurn(new Token(move.getToken()), move.getSecondaryMovePosition(), move.getPrimaryMovePosition()))
+                    throw new MoveNotPerformedException();
             }
             case 9 -> {
-                if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new MoveNotPerformedException();
+                if (!swapperTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition()))
+                    throw new MoveNotPerformedException();
             }
             case 10 -> {
-                if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition())) throw new MoveNotPerformedException();
+                if (!replacerTokenTurn(new Token(move.getToken()), move.getPrimaryMovePosition(), move.getSecondaryMovePosition()))
+                    throw new MoveNotPerformedException();
             }
             default -> throw new NoMovePossibleException("No move possible");
         }
-        performAnimation();
+
         Game.getGame().turnDone();
 
     }
@@ -389,8 +398,9 @@ import java.util.*;
         }
         //Debug Ausgaben
         if (CrossWise.DEBUG)
-            for (var bla : bestMovePerToken) {
-                if (bla != null) System.out.println(bla.getToken() + " " + bla.getRelativeChange() + " " + bla.getPrimaryMovePosition().getX() + "/" + bla.getPrimaryMovePosition().getY());
+            for (var move : bestMovePerToken) {
+                if (move != null)
+                    System.out.println(move.getToken() + " " + move.getRelativeChange() + " " + move.getPrimaryMovePosition().getX() + "/" + move.getPrimaryMovePosition().getY());
             }
 
         Integer bestToken = null;

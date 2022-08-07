@@ -1,5 +1,6 @@
 package de.fhwwedel.pp.gui;
 
+import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.game.Game;
 import de.fhwwedel.pp.util.game.*;
 import de.fhwwedel.pp.util.special.Constants;
@@ -89,7 +90,7 @@ public class FXGUI implements GUIConnector {
             ImageView imageView = fieldImages.get(id);
             gridImagesTokens.put(imageView, type);
             imageView.setImage(image);
-        }, (long) animationTime.getTime() * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
+        }, animationTime.getTime() * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
         scheduler.shutdown();
     }
 
@@ -133,7 +134,7 @@ public class FXGUI implements GUIConnector {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player: \"" + playerName + "\" with ID: \"" + playerID + ", it's your turn!");
             alert.setTitle("Next Turn");
             alert.setHeaderText("Next Players Turn");
-            alert.showAndWait();
+            alert.show();
         });
     }
 
@@ -173,6 +174,8 @@ public class FXGUI implements GUIConnector {
             }
         }
         Platform.runLater(() -> updatePointsGrid(pointsMap));
+        System.out.println(Game.getGame().getCurrentPlayer() instanceof AI);
+        System.out.println("UI UPDATED!");
     }
 
 
@@ -194,11 +197,11 @@ public class FXGUI implements GUIConnector {
 
     @Override
     public void resetText() {
+        currentPlayerText.setText("");
         moverAmountText.setText("0");
         swapperAmountText.setText("0");
         replacerAmountText.setText("0");
         removerAmountText.setText("0");
-
     }
 
     @Override
@@ -222,7 +225,13 @@ public class FXGUI implements GUIConnector {
                 String id = "gridToken:" + columns + ":" + rows;
                 fieldImages.put(id, imgNew);
                 imgNew.setId(id);
-                Image img = new Image("/pictures/0none.png");
+                Image img;
+                if (newGrid) {
+                    img = new Image(TokenType.NONE.getImagePathNormal());
+                } else {
+                    img = new Image(gameField[rows][columns].getImagePathNormal());
+                }
+
                 imgNew.setImage(img);
                 gridImagesTokens.put(imgNew, TokenType.NONE);
 
@@ -344,6 +353,8 @@ public class FXGUI implements GUIConnector {
         this.innerGrid.setVisible(true);
     }
 
+
+    //TODO: here?
     public void disableGUIElementes() {
         this.disableGUI = true;
     }
@@ -656,7 +667,7 @@ public class FXGUI implements GUIConnector {
             child.setOnDragDone((DragEvent event) -> {
                 // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt
                 if (event.getTransferMode() == TransferMode.MOVE) {
-                    //source.setText("");
+                    //TODO:  //source.setText("");
                 }
                 event.consume();
             });
@@ -711,9 +722,5 @@ public class FXGUI implements GUIConnector {
             }
             default -> throw new RuntimeException("Invalid token type");
         }
-    }
-
-    public void setAnimationTime(AnimationTime animationTime) {
-        this.animationTime = animationTime;
     }
 }

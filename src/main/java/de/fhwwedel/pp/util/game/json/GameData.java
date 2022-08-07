@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public final class GameData {
     private PlayerData[] players;
-    private int currentPlayer;
-    private int[][] field;
-    private int[] usedActionTiles;
+    private final int currentPlayer;
+    private final int[][] field;
+    private final int[] usedActionTiles;
 
     public GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
         this.players = players;
@@ -48,7 +48,7 @@ public final class GameData {
     }
 
     public PlayerData[] getPlayers() {
-        return players;
+        return players.clone();
     }
 
     public void setPlayers(PlayerData[] players) {
@@ -59,23 +59,14 @@ public final class GameData {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(int currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
 
     public int[][] getField() {
-        return field;
+        return field.clone();
     }
 
-    public void setField(int[][] field) {
-        this.field = field;
-    }
 
     public int[] getUsedActionTiles() {
-        return usedActionTiles;
+        return usedActionTiles.clone();
     }
 
-    public void setUsedActionTiles(int[] usedActionTiles) {
-        this.usedActionTiles = usedActionTiles;
-    }
 }

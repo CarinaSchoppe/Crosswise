@@ -115,7 +115,11 @@ public class Team {
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return (List<Player>) players.clone();
+    }
+
+    public Team clone() {
+        return new Team(teamType);
     }
 
     public int getPoints() {

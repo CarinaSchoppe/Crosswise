@@ -57,7 +57,9 @@ public class FileInputReader {
         Game.createNewGame(players, guiConnector, true, new PlayingField(gameData.getField().length));
         players.forEach(Player::create);
         var currentPlayer = Game.getGame().getPlayers().stream().filter(player -> player.getPlayerID() == gameData.getCurrentPlayer()).findFirst().orElse(null);
+
         Game.getGame().setCurrentPlayer(currentPlayer);
+
         Game.getGame().getPlayingField().addDataFromJSON(gameData.getField());
 
         for (int actionTileID = 0; actionTileID < gameData.getUsedActionTiles().length; actionTileID++) {
@@ -70,7 +72,7 @@ public class FileInputReader {
             };
 
             for (int amount = 0; amount < gameData.getUsedActionTiles()[actionTileID]; amount++) {
-                Game.getGame().getUsedActionTokens().add(new Token(token));
+                Game.getGame().addNewActionTile(new Token(token));
             }
         }
         removeUsedTokensFromPile(Game.getGame());
@@ -167,7 +169,7 @@ public class FileInputReader {
                     if (tokenPileToken.getTokenType() != token) {
                         continue;
                     }
-                    game.getTokenDrawPile().remove(tokenPileToken);
+                    game.removeTokenDrawPileToken(tokenPileToken);
                     break;
                 }
             }

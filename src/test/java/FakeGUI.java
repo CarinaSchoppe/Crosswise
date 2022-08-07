@@ -5,6 +5,22 @@ import java.util.List;
 
 public class FakeGUI implements GUIConnector {
 
+
+    @Override
+    public void resetText() {
+
+    }
+
+    @Override
+    public void placerAnimationFrame(int x, int y, TokenType type) {
+
+    }
+
+    @Override
+    public void removerAnimationFrame(int x, int y) {
+
+    }
+
     @Override
     public void showError(String string) {
 

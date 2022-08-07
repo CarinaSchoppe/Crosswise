@@ -1,15 +1,15 @@
 package de.fhwwedel.pp.util.game;
 
 public enum AnimationTime {
-    SLOW(2.0f), MIDDLE(1.0f), FAST(0.5f);
+    SLOW(4), MIDDLE(2), FAST(1);
 
-    private final float time;
+    private final int time;
 
-    AnimationTime(float time) {
+    AnimationTime(int time) {
         this.time = time;
     }
 
-    public float getTime() {
+    public int getTime() {
         return time;
     }
 }

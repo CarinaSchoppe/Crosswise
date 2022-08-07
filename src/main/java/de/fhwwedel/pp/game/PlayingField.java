@@ -20,7 +20,6 @@ public class PlayingField {
             for (int j = 0; j < size; j++) {
                 this.fieldMap[i][j] = new Position(i, j);
                 this.fieldMap[i][j].setToken(new Token(TokenType.NONE));
-                this.fieldMap[i][j].getToken().setPosition(this.fieldMap[i][j]);
             }
         }
     }
@@ -41,18 +40,15 @@ public class PlayingField {
     }
 
     public Position[][] getFieldMap() {
-        return fieldMap;
+        return fieldMap.clone();
     }
 
     public void addDataFromJSON(int[][] field) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 fieldMap[i][j].setToken(new Token(TokenType.getTokenType(field[i][j])));
-                fieldMap[i][j].getToken().setPosition(fieldMap[i][j]);
             }
         }
-
-
     }
 
     public TokenType[][] convertToTokenTypeArray() {

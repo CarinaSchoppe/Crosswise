@@ -79,8 +79,9 @@ public class Player {
         }
         handTokens.remove(getCorrespondingToken(token));
         field.setToken(token);
-        field.getToken().setPosition(field);
-        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
+        System.out.println("player name: " + name + "player: " + Game.getGame().getCurrentPlayer().name);
+
+         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
         if (this instanceof AI) {
@@ -118,7 +119,6 @@ public class Player {
         handTokens.add(field.getToken());
         GameLogger.logMoveRemove(this, field);
         field.setToken(new Token(TokenType.NONE));
-        field.getToken().setPosition(field);
         Game.getGame().getGUIConnector().removerAmountText();
         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
@@ -129,6 +129,17 @@ public class Player {
         return true;
 
     }
+
+    public Player copy() {
+        //create a copy of the player instance
+        Player player = new Player(this.playerID, this.isActive, this.name);
+        //copy the handTokens
+        player.handTokens.addAll(this.handTokens);
+        //copy the team
+        player.team = this.team;
+        return player;
+    }
+
 
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
         if (token.getTokenType() != TokenType.MOVER) return false;
@@ -142,9 +153,7 @@ public class Player {
         handTokens.remove(getCorrespondingToken(token));
         GameLogger.logMoveMove(this, fieldStart, fieldEnd);
         fieldEnd.setToken(fieldStart.getToken());
-        fieldEnd.getToken().setPosition(fieldEnd);
         fieldStart.setToken(new Token(TokenType.NONE));
-        fieldStart.getToken().setPosition(fieldStart);
         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
@@ -170,9 +179,7 @@ public class Player {
         GameLogger.logMoveSwapper(this, fieldFirst, fieldSecond);
         var temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
-        fieldFirst.getToken().setPosition(fieldFirst);
         fieldSecond.setToken(temp);
-        fieldSecond.getToken().setPosition(fieldSecond);
 
         Game.getGame().getGUIConnector().swapperAmountText();
         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
@@ -209,7 +216,6 @@ public class Player {
         handTokens.remove(handToken);
         handTokens.add(replacerField.getToken());
         replacerField.setToken(handToken);
-        replacerField.getToken().setPosition(replacerField);
         Game.getGame().getGUIConnector().replacerAmountText();
 
         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
@@ -274,7 +280,7 @@ public class Player {
             return;
 
         var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
-        Game.getGame().getTokenDrawPile().remove(token);
+        Game.getGame().removeTokenDrawPileToken(token);
 
 
         //remove all tokens from tokens if the TokenType is None
@@ -339,7 +345,11 @@ public class Player {
     }
 
     public List<Token> getHandTokens() {
-        return handTokens;
+        return (List<Token>) handTokens.clone();
+    }
+
+    public void addTokenToHand(Token token) {
+        handTokens.add(token);
     }
 
     public int getPlayerID() {
@@ -351,7 +361,7 @@ public class Player {
     }
 
     public String getName() {
-        return name;
+        return "" + name;
     }
 
     /**
@@ -375,6 +385,8 @@ public class Player {
     }
 
     public Team getTeam() {
-        return this.team;
+        return this.team.clone();
     }
+
+
 }

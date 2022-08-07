@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public final class PlayerData {
-    private String name;
-    private boolean isActive;
-    private boolean isAI;
+    private final String name;
+    private final boolean isActive;
+    private final boolean isAI;
     private int[] hand;
 
     public PlayerData(String name, boolean isActive, boolean isAI, int[] hand) {
@@ -48,31 +48,22 @@ public final class PlayerData {
     }
 
     public String getName() {
-        return name;
+        return "" + name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 
     public boolean isAI() {
         return isAI;
     }
 
-    public void setAI(boolean ai) {
-        isAI = ai;
-    }
 
     public int[] getHand() {
-        return hand;
+        return hand.clone();
     }
 
     public void setHand(int[] hand) {

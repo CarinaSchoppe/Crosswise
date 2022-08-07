@@ -2,7 +2,6 @@ package de.fhwwedel.pp.gui;
 
 public class ClickEventSave {
     private Integer posX;
-
     private Integer posY;
 
     private final boolean isGrid;

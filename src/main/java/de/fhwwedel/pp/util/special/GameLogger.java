@@ -23,6 +23,7 @@ public class GameLogger {
         if (CrossWise.DEBUG)
             System.out.println(logMessage);
         logMessages.add(new java.util.Date() + ": " + logMessage);
+        saveLogToFile(Constants.LOG_FILE_NAME);
     }
 
     public static void logMove(Player player, Token placed, Position to) {
@@ -61,7 +62,7 @@ public class GameLogger {
     }
 
     public static void saveLogToFile(String fileName) {
-        File file = new File(fileName + ".txt");
+        File file = new File(fileName);
         try (var writer = new FileWriter(file)) {
             for (var logMessage : logMessages) {
                 writer.write(logMessage + "\n");

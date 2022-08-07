@@ -10,10 +10,7 @@ public class Token {
      * Type of the Token
      */
     private final TokenType tokenType;
-    /**
-     * Position of the Token, if this is set its a Token on the field of the game
-     */
-    private Position position;
+
 
     //----------------------------------------------------------------------------------------------
 
@@ -24,19 +21,10 @@ public class Token {
      */
     public Token(TokenType tokenType) {
         this.tokenType = tokenType;
-        position = null;
     }
 
     public TokenType getTokenType() {
         return tokenType;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
     }
 
 
@@ -51,7 +39,7 @@ public class Token {
     @Override
     public int hashCode() {
         int result = getTokenType() != null ? getTokenType().hashCode() : 0;
-        result = 31 * result + (getPosition() != null ? getPosition().hashCode() : 0);
+        result = 31 * result;
         return result;
     }
 }

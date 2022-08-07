@@ -5,7 +5,6 @@ import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.util.game.GUIConnector;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.*;
-import de.fhwwedel.pp.util.game.json.PlayerData;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
 import javafx.application.Platform;
@@ -192,7 +191,11 @@ public class Game {
         fillPile();
         if (!fileLoaded) {
             currentPlayer = players.stream().filter(Player::isActive).findFirst().get();
+            guiConnector.changeCurrentPlayerText(currentPlayer.getName());
             playerPileSetup();
+        } else {
+            currentPlayer = Game.getGame().getPlayers().stream().filter(Player::isActive).toList().get(0);
+            guiConnector.changeCurrentPlayerText(currentPlayer.getName());
         }
     }
 
@@ -268,7 +271,7 @@ public class Game {
         Map<Boolean, Team> over = isGameOver(playingField);
         if (players.isEmpty()) {
             System.out.println("No players left!");
-            GameLogger.saveLogToFile("Logfile");
+            GameLogger.saveLogToFile(Constants.LOG_FILE_NAME);
             return true;
         } else if (over.containsKey(true)) {
             Team team = over.get(true);
@@ -282,7 +285,7 @@ public class Game {
                 System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
             }
             System.out.println(System.currentTimeMillis() - CrossWise.time);
-            GameLogger.saveLogToFile("Logfile");
+            GameLogger.saveLogToFile(Constants.LOG_FILE_NAME);
 
             return true;
         }
@@ -330,19 +333,27 @@ public class Game {
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return (List<Player>) players.clone();
     }
 
     public List<Token> getUsedActionTokens() {
-        return usedSpecialTokens;
+        return (List<Token>) usedSpecialTokens.clone();
+    }
+
+    public void addNewActionTile(Token token){
+        usedSpecialTokens.add(token);
+    }
+
+    public void removeTokenDrawPileToken(Token token){
+        tokenDrawPile.remove(token);
     }
 
     public List<Token> getTokenDrawPile() {
-        return tokenDrawPile;
+        return (List<Token>) tokenDrawPile.clone();
     }
 
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return currentPlayer.copy();
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
