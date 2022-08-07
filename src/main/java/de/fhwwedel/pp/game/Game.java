@@ -15,6 +15,7 @@ import de.fhwwedel.pp.ai.AI;
 import de.fhwwedel.pp.gui.GUIConnector;
 import de.fhwwedel.pp.util.exceptions.NoTokenException;
 import de.fhwwedel.pp.util.game.*;
+import de.fhwwedel.pp.util.game.json.PlayerData;
 import de.fhwwedel.pp.util.special.Constants;
 import de.fhwwedel.pp.util.special.GameLogger;
 import javafx.application.Platform;
@@ -172,8 +173,7 @@ public class Game {
             handleOver();
             return;
         }
-        for (Player player : players) {
-            if (!player.isActive()) continue;
+        for (Player player : players.stream().filter(Player::isActive).toList()) {
             for (int i = 0; i < Constants.HAND_SIZE; i++) {
                 try {
                     player.drawToken();
@@ -197,11 +197,11 @@ public class Game {
             return;
         }
         handleOver();
-        if (players.size() < Constants.MIN_PLAYER_SIZE)
-            throw new IllegalArgumentException("There must be at least 2 players");
+        if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0)
+            throw new IllegalArgumentException("There must be at least 2 players and an even number of players!");
         fillPile();
         if (!fileLoaded) {
-            currentPlayer = players.get(0);
+            currentPlayer = players.stream().filter(Player::isActive).findFirst().get();
             playerPileSetup();
         }
     }
@@ -466,7 +466,8 @@ public class Game {
                         break;
                     }
                 } else {
-                    if (!(field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().getTokenType() != current)) continue;
+                    if (!(field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().getTokenType() != current))
+                        continue;
                     equal = false;
                     current = null;
                     break;
@@ -495,7 +496,8 @@ public class Game {
                         break;
                     }
                 } else {
-                    if (!(field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().getTokenType() != current)) continue;
+                    if (!(field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().getTokenType() != current))
+                        continue;
                     equal = false;
                     current = null;
                     break;

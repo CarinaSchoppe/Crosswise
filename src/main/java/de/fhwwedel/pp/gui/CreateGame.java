@@ -87,26 +87,31 @@ public class CreateGame implements Initializable {
 
     @FXML
     void createGame(ActionEvent event) {
+        var playerID = 0;
         Player playerOne;
-        if (playerOneAI.isSelected())
+        if (playerOneAI.isSelected()) {
             playerOne = new AI(0, playerOneActive.isSelected(), playerOneField.getText());
-        else
+        } else {
             playerOne = new Player(0, playerOneActive.isSelected(), playerOneField.getText());
+        }
         Player playerTwo;
-        if (playerTwoAI.isSelected())
+        if (playerTwoAI.isSelected()) {
             playerTwo = new AI(1, playerTwoActive.isSelected(), playerTwoField.getText());
-        else
+        } else {
             playerTwo = new Player(1, playerTwoActive.isSelected(), playerTwoField.getText());
+        }
         Player playerThree;
-        if (playerThreeAI.isSelected())
+        if (playerThreeAI.isSelected()) {
             playerThree = new AI(2, playerThreeActive.isSelected(), playerThreeField.getText());
-        else
+        } else {
             playerThree = new Player(2, playerThreeActive.isSelected(), playerThreeField.getText());
+        }
         Player playerFour;
-        if (playerFourAI.isSelected())
+        if (playerFourAI.isSelected()) {
             playerFour = new AI(3, playerFourActive.isSelected(), playerFourField.getText());
-        else
+        } else {
             playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
+        }
         ((Stage) createGameButton.getScene().getWindow()).close();
         Game.createNewGame(List.of(playerOne, playerTwo, playerThree, playerFour), guiConnector, false);
         playerOne.create();
