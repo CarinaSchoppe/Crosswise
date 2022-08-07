@@ -11,7 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.TextAlignment;
 
 import java.util.HashMap;
@@ -35,6 +37,7 @@ public class FXGUI implements GUIConnector {
     private final CheckMenuItem showComputerHandButton;
     private final GridPane verticalPointsGrid;
     private final GridPane horizontalPointsGrid;
+    private Pane hand3BorderPane;
     private Label sumPointsVerticalTeam;
     private Label sumPointsHorizontalTeam;
     private GridPane innerGrid;
@@ -55,7 +58,7 @@ public class FXGUI implements GUIConnector {
                  GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid,
                  Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText,
                  GridPane horizontalPointsGrid, GridPane verticalPointsGrid, Label sumPointsVerticalTeam,
-                 Label sumPointsHorizontalTeam, GridPane innerGrid) {
+                 Label sumPointsHorizontalTeam, GridPane innerGrid, Pane hand3BorderPane) {
         this.playerHandOne = playerHandOne;
         this.playerHandTwo = playerHandTwo;
         this.playerHandThree = playerHandThree;
@@ -72,6 +75,7 @@ public class FXGUI implements GUIConnector {
         this.sumPointsVerticalTeam = sumPointsVerticalTeam;
         this.sumPointsHorizontalTeam = sumPointsHorizontalTeam;
         this.innerGrid = innerGrid;
+        this.hand3BorderPane = hand3BorderPane;
         fieldImages = new HashMap<>();
         gridImagesTokens = new HashMap<>();
         handImagesTokens = new HashMap<>();
@@ -227,6 +231,9 @@ public class FXGUI implements GUIConnector {
                 gameGrid.add(imgNew, columns, rows);
 
                 //the image shall resize when the cell resizes
+                //gameGrid.prefHeightProperty().bind(hand3BorderPane.heightProperty());
+                //gameGrid.prefWidthProperty().bind(hand3BorderPane.widthProperty());
+
                 imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(Constants.GAMEGRID_SIZE));
                 imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(Constants.GAMEGRID_SIZE));
             }
@@ -265,6 +272,7 @@ public class FXGUI implements GUIConnector {
 
             vertLabel.setPrefSize(verticalPointsGrid.getWidth(), verticalPointsGrid.getHeight() / Constants.GAMEGRID_SIZE);
             horiLabel.setPrefSize(horizontalPointsGrid.getWidth() / Constants.GAMEGRID_SIZE, horizontalPointsGrid.getHeight());
+
             vertLabel.prefWidthProperty().bind(verticalPointsGrid.widthProperty().divide(Constants.GAMEGRID_SIZE));
             vertLabel.prefHeightProperty().bind(verticalPointsGrid.heightProperty());
             horiLabel.prefHeightProperty().bind(horizontalPointsGrid.heightProperty().divide(Constants.GAMEGRID_SIZE));
@@ -275,7 +283,6 @@ public class FXGUI implements GUIConnector {
             this.verticalPointsGrid.add(vertLabel, rows, 0);
 
         }
-        /*TODO WiP
         for (int i = 0; i < Constants.GAMEGRID_SIZE; i++) {
             ColumnConstraints con = new ColumnConstraints();
             con.setPercentWidth(16.5);
@@ -283,7 +290,7 @@ public class FXGUI implements GUIConnector {
 
 
         }
-        */
+
 
     }
 

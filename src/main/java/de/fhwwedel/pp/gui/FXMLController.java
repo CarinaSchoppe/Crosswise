@@ -19,9 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -163,6 +161,10 @@ public class FXMLController implements Initializable {
     private VBox vBoxWrappingGrdPn;
     @FXML
     private GridPane playingGrid;
+    @FXML
+    private Pane hand3BorderPane;
+    @FXML
+    private Pane gameGridPaneBorder;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -171,7 +173,7 @@ public class FXMLController implements Initializable {
         this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree,
                 playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText,
                 removerAmountText, horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
-                sumPointsHorizontalTeam, innerGrid);
+                sumPointsHorizontalTeam, innerGrid, hand3BorderPane);
 
         var createGame = new CreateGame(guiConnector);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
