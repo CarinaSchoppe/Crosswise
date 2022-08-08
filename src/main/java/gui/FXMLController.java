@@ -136,7 +136,7 @@ public class FXMLController implements Initializable {
      * Initialize method, which creates a Game
      *
      * @param url not used here
-     * @param rb not used here
+     * @param rb  not used here
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -257,7 +257,7 @@ public class FXMLController implements Initializable {
      */
     @FXML
     void clickPointsPerTeamButton(ActionEvent event) {
-        this.teamPointsDisplay.setVisible(pointsPerTeamButton.isSelected());
+        teamPointsDisplay.setVisible(pointsPerTeamButton.isSelected());
     }
 
     /**
@@ -267,8 +267,8 @@ public class FXMLController implements Initializable {
      */
     @FXML
     void clickPointsPerRowColumnButton(ActionEvent event) {
-        this.horizontalPointsGrid.setVisible(pointsPerTeamButton.isSelected());
-        this.verticalPointsGrid.setVisible(pointsPerTeamButton.isSelected());
+        horizontalPointsGrid.setVisible(pointsPerRowColumnButton.isSelected());
+        verticalPointsGrid.setVisible(pointsPerRowColumnButton.isSelected());
     }
 
     /**
