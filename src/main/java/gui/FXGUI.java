@@ -640,6 +640,7 @@ public class FXGUI implements GUIConnector {
             imageView.fitWidthProperty().bind(playerHandThree.widthProperty().divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandThree.heightProperty());
         }
+        System.out.println("playerHandThree = " + playerHandThree + " playerHandThree.getChildren() = " + playerHandThree.getChildren().size());
         setDragEventsForPlayerHand(playerHandThree);
     }
 
@@ -915,7 +916,8 @@ public class FXGUI implements GUIConnector {
         for (Node child : hand.getChildren()) {
             //setup drag detected event for an imageview
             child.setOnDragDetected((MouseEvent event) -> {
-                if (!this.disableGUI) {
+                if (!disableGUI) {
+
                     /* lässt jeden Transfermode zu */
                     Dragboard db = child.startDragAndDrop(TransferMode.ANY);
 

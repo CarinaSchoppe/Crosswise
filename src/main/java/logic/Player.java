@@ -346,7 +346,14 @@ public class Player {
             Thread.currentThread().interrupt();
         }
         //If no tokens are left in the pile, throw NoTokensException
-        if (Game.getGame().getTokenDrawPile().isEmpty()) throw new NoTokenException("No more tokens left in the Pile!");
+        if (Game.getGame().getTokenDrawPile().isEmpty()) {
+            var handTokenTypeArray = new TokenType[handTokens.size()];
+            for (int i = 0; i < handTokens.size(); i++) {
+                handTokenTypeArray[i] = handTokens.get(i).tokenType();
+            }
+            Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokenTypeArray);
+            return;
+        }
 
         //return if there is no None token in tokens
         if (handTokens.size() >= Constants.HAND_SIZE && handTokens.get(Constants.HAND_SIZE - 1).tokenType() != TokenType.NONE)
@@ -372,7 +379,6 @@ public class Player {
             handTokenTypeArray[i] = handTokens.get(i).tokenType();
         }
         Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokenTypeArray);
-
 
     }
 

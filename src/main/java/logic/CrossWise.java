@@ -13,7 +13,7 @@ import java.io.IOException;
 public class CrossWise extends Application {
 
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static long time;
     public static final boolean UI = true;
     public static final int DELAY = 10;
@@ -26,18 +26,13 @@ public class CrossWise extends Application {
     /*
      * TODO Responsive Design
      * TODO last token not responsive?
-     *  ---vll
-     * TODO drag and drop having image in it
-     *  ---questions
+     * TODO drag and drop having image in it (optional)
      *
      * ---TODO's for jacob only:
-     * TODO end timer event premature
-     * TODO win text label of hori or verti ( > 100)
-     * TODO disable GUI elements while AI move
      * TODO drag and drop highlight
+     *  TODO: Drag and drop when less than 4 tokens on hand
      * TODO colors of background and create game background
      * TODO fix is preventing loss in big chooser method if both are preventing loss
-     * TODO Structure of the program?
      *
      * */
 
