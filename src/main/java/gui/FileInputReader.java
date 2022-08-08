@@ -92,7 +92,9 @@ public class FileInputReader {
                 }
             }
         }   //Create new game and setup parameters
-        Player currentPlayer = Game.getGame().getPlayers().stream().filter(player -> player.getPlayerID() == gameData.getCurrentPlayer()).findFirst().orElse(null);
+        Player currentPlayer = Game.getGame().getPlayers().get(gameData.getCurrentPlayer());
+        System.out.println(currentPlayer);
+
         Game.getGame().setCurrentPlayer(currentPlayer);
         Game.getGame().getPlayingField().addDataFromJSON(gameData.getField());
         //add special tokens to game
@@ -162,6 +164,10 @@ public class FileInputReader {
         for (var row : gameData.getField()) {
             if (row.length != gameData.getField()[0].length || row.length != gameData.getField().length) return true;
         }
+
+        //current player must be active
+        if (!gameData.getPlayers()[gameData.getCurrentPlayer()].isActive()) return true;
+
 
         //invalid if hands of players are 0 or above 4 (interpreted, that it should be possible to load players with less hand tokens and fill them up
         if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.getHand().length == 0 || !player.isActive() && player.getHand().length > 0)) return true;

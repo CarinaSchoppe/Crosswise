@@ -24,8 +24,8 @@
     },
     {
       "name": "Player3",
-      "isActive": false,
-      "isAI": true,
+      "isActive": true,
+      "isAI": false,
       "hand": [
         0,
         0,
@@ -35,8 +35,8 @@
     },
     {
       "name": "Player4",
-      "isActive": false,
-      "isAI": true,
+      "isActive": true,
+      "isAI": false,
       "hand": [
         0,
         0,
@@ -45,7 +45,7 @@
       ]
     }
   ],
-  "currPlayer": 0,
+  "currPlayer": 2,
   "field": [
     [
       3,

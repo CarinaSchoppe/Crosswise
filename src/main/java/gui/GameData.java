@@ -15,7 +15,7 @@ public final class GameData {
     /**
      * current player as int
      */
-    private final int currentPlayer;
+    private final Integer currPlayer;
     /**
      * game field as double array int representation
      */
@@ -28,14 +28,14 @@ public final class GameData {
     /**
      * Constructor
      *
-     * @param players Array of players
-     * @param currentPlayer current player
-     * @param field game field
+     * @param players         Array of players
+     * @param currPlayer      current player
+     * @param field           game field
      * @param usedActionTiles used action tiles
      */
-    public GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
+    public GameData(PlayerData[] players, Integer currPlayer, int[][] field, int[] usedActionTiles) {
         this.players = players;
-        this.currentPlayer = currentPlayer;
+        this.currPlayer = currPlayer;
         this.field = field;
         this.usedActionTiles = usedActionTiles;
     }
@@ -45,7 +45,7 @@ public final class GameData {
         if (this == o) return true;
         if (!(o instanceof GameData gameData)) return false;
 
-        if (currentPlayer != gameData.currentPlayer) return false;
+        if (currPlayer != gameData.currPlayer) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(players, gameData.players)) return false;
         if (!Arrays.deepEquals(field, gameData.field)) return false;
@@ -57,7 +57,7 @@ public final class GameData {
     public String toString() {
         return "GameData{" +
                 "players=" + Arrays.toString(players) +
-                ", currentPlayer=" + currentPlayer +
+                ", currentPlayer=" + currPlayer +
                 ", field=" + Arrays.toString(field) +
                 ", usedActionTiles=" + Arrays.toString(usedActionTiles) +
                 '}';
@@ -70,7 +70,7 @@ public final class GameData {
     }
 
     int getCurrentPlayer() {
-        return currentPlayer;
+        return currPlayer;
     }
 
     int[][] getField() {
