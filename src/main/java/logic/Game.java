@@ -66,7 +66,6 @@ public class Game {
     }
 
 
-
     /**
      * Remove already used tokens from new drawPile
      */
@@ -271,11 +270,9 @@ public class Game {
      * @param fileLoaded was the game loaded from a file
      */
     private void setup(boolean fileLoaded) {
-        if (stop) {
-            handleOver();
-            return;
-        }
         handleOver();
+        if (stop)
+            return;
         //check, if the game was started with 0 players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             faultyStartup(0);
@@ -286,7 +283,9 @@ public class Game {
         if (!fileLoaded) {
             playerPileSetup();
         }
-        currentPlayer = players.stream().filter(Player::isActive).toList().get(0);
+        //if the current player has already been set
+        if (currentPlayer == null)
+            currentPlayer = players.stream().filter(Player::isActive).toList().get(0);
         guiConnector.changeCurrentPlayerText(currentPlayer.getName());
     }
 
