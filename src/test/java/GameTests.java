@@ -2,6 +2,7 @@ import gui.FileInputReader;
 import logic.CrossWise;
 import logic.Game;
 import logic.Team;
+import logic.util.TeamType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class GameTests {
     @Test
     void gameTest1() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswise.json"), new FakeGUI());
-        Assertions.assertDoesNotThrow( () -> Game.getGame().testStart(false));
+        Assertions.assertDoesNotThrow(() -> Game.getGame().testStart(false));
     }
 
     @Test
@@ -104,5 +105,19 @@ class GameTests {
         var map = new HashMap<Boolean, Team>();
         map.put(false, null);
         Assertions.assertEquals(map, Game.getGame().isGameOver());
+    }
+
+    @Test
+    void gameTest12() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/verticalSixRow.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        var team = new Team(TeamType.VERTICAL);
+        team.getPlayers().addAll(Team.getVerticalTeam().getPlayers());
+        team.setRowWin(true);
+        Assertions.assertTrue(teamsEqual(team, Game.getGame().isGameOver().get(true)));
+    }
+
+    private boolean teamsEqual(Team t1, Team t2) {
+        return t1.equals(t2);
     }
 }

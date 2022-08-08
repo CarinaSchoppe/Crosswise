@@ -123,7 +123,7 @@ public class Team {
     }
 
     public List<Player> getPlayers() {
-        return (List<Player>) players.clone();
+        return players;
     }
 
     public Team clone() {
@@ -144,5 +144,15 @@ public class Team {
 
     public void setRowWin(boolean rowWin) {
         this.rowWin = rowWin;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Team team) {
+            if (teamType != team.teamType)
+                return false;
+            return rowWin == team.rowWin;
+        }
+        return false;
     }
 }
