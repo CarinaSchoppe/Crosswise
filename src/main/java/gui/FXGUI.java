@@ -187,7 +187,13 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void removerAnimationFrame(int y, int x) {
-        gridImages[x][y].setImage(new Image(TokenType.NONE.getImagePathGolden()));
+        Image image = new Image(TokenType.NONE.getImagePathGolden());
+        String id = "gridToken:" + x + ":" + y;
+        ImageView imageView =
+                fieldImages.get(id);
+        gridImagesTokens.put(imageView, TokenType.NONE);
+        imageView.setImage(image);
+        makeImageViewNormal(x, y, TokenType.NONE);
         makeImageViewNormal(x, y, TokenType.NONE);
     }
 

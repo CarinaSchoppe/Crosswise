@@ -181,10 +181,10 @@ public class Game {
     }
 
     /**
-     * Sets up the game and starts all neccesary methods to begin
+     * Sets up the game and starts all necessary methods to begin
      *
      * @param game      Current game
-     * @param fileSetup boolean, if the game was loaded with a file
+     * @param fileSetup boolean if the game was loaded with a file
      */
     private static void createStuff(Game game, boolean fileSetup) {
         if (Game.getGame() != null) {
