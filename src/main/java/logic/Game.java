@@ -427,7 +427,6 @@ public class Game {
         if (players.isEmpty()) {
             if (CrossWise.DEBUG)
                 System.out.println("No players left!");
-            GameLogger.saveLogToFile(Constants.LOG_FILE_NAME);
             return true;
         } else if (over.containsKey(true)) {
             Team team = over.get(true);
@@ -446,7 +445,6 @@ public class Game {
             }
             if (CrossWise.DEBUG)
                 System.out.println(System.currentTimeMillis() - CrossWise.time);
-            GameLogger.saveLogToFile(Constants.LOG_FILE_NAME);
             return true;
         }
         return false;

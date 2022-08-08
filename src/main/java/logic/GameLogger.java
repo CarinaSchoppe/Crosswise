@@ -66,7 +66,7 @@ public class GameLogger {
         log(builder);
     }
 
-    public static void saveLogToFile(String fileName) {
+    private static void saveLogToFile(String fileName) {
         File file = new File(fileName);
         try (FileWriter writer = new FileWriter(file)) {
             for (String logMessage : logMessages) {
