@@ -67,7 +67,7 @@ public class Player {
      */
     public boolean normalTokenTurn(final Token token, final Position position) {
         //return false, if the token isn't in the hand of the player
-        if (hasToken(token)) {
+        if (hasNotToken(token)) {
             return false;
         }
         Position field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
@@ -114,7 +114,7 @@ public class Player {
      * @param token Token to be checked
      * @return true, if it isn't, otherwise false
      */
-    private boolean hasToken(Token token) {
+    public boolean hasNotToken(Token token) {
         for (Token t : handTokens) {
             if (t.equals(token)) return false;
         }
@@ -125,7 +125,7 @@ public class Player {
     public boolean removerTokenTurn(final Token token, final Position position) {
         if (token.tokenType() != TokenType.REMOVER) return false;
 
-        if (hasToken(token)) return false;
+        if (hasNotToken(token)) return false;
 
         Position field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
         if (field.getToken().tokenType() == TokenType.NONE) return false;
@@ -169,7 +169,7 @@ public class Player {
 
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
         if (token.tokenType() != TokenType.MOVER) return false;
-        if (hasToken(token)) return false;
+        if (hasNotToken(token)) return false;
         Position fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
         Position fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
 
@@ -206,7 +206,7 @@ public class Player {
 
     public boolean swapperTokenTurn(final Token token, final Position first, final Position second) {
         if (token.tokenType() != TokenType.SWAPPER) return false;
-        if (hasToken(token)) return false;
+        if (hasNotToken(token)) return false;
         Position fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         if (fieldFirst == null) return false;
         Position fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
@@ -250,9 +250,9 @@ public class Player {
      * @return true, if everything went correctly, otherwise false
      */
     public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition, final Position handTokenPosition) {
-        if (hasToken(token)) return false;
+        if (hasNotToken(token)) return false;
         if (token.tokenType() != TokenType.REPLACER) return false;
-        if (hasToken(getCorrespondingToken(handTokenPosition))) return false;
+        if (hasNotToken(getCorrespondingToken(handTokenPosition))) return false;
 
         Position replacerField = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
         if (replacerField.getToken().tokenType() == TokenType.NONE) return false;

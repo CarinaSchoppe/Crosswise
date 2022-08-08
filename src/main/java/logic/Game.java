@@ -166,13 +166,14 @@ public class Game {
             var isActive = isActives.get(i);
             if (Boolean.TRUE.equals(isAI)) {
                 var ai = new AI(i, isActive, name);
+                ai.create();
                 players.add(ai);
             } else {
                 var player = new Player(i, isActive, name);
+                player.create();
                 players.add(player);
             }
         }
-        players.forEach(Player::create);
 
         Game game = new Game(new PlayingField(Constants.GAMEGRID_SIZE), players, connector);
         //setup game

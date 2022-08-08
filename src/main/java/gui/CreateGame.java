@@ -90,7 +90,6 @@ public class CreateGame implements Initializable {
         isAI.add(playerTwoAI.isSelected());
         isAI.add(playerThreeAI.isSelected());
         isAI.add(playerFourAI.isSelected());
-        System.out.println("her");
 
 
         if (playerNames.isEmpty() || isActive.isEmpty() || isAI.isEmpty())

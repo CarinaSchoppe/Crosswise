@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GameField {
+class GameField {
 
     @Test
-    public void gameFieldSizeCorrect() {
+    void gameFieldSizeCorrect() {
 
         Assertions.assertEquals(4, new PlayingField(4).getFieldMap().length);
         Assertions.assertEquals(5, new PlayingField(5).getFieldMap().length);
@@ -23,7 +23,7 @@ public class GameField {
     }
 
     @Test
-    public void allowedGameFieldValues() {
+    void allowedGameFieldValues() {
         assertThrows(IllegalArgumentException.class, () -> new PlayingField(-2));
         assertThrows(IllegalArgumentException.class, () -> new PlayingField(-1));
         assertThrows(IllegalArgumentException.class, () -> new PlayingField(-3));
@@ -38,7 +38,7 @@ public class GameField {
     }
 
     @Test
-    public void checkAllRowsSame() {
+    void checkAllRowsSame() {
         assertTrue(allRowsEqual(new PlayingField(2)));
         assertTrue(allRowsEqual(new PlayingField(3)));
         assertTrue(allRowsEqual(new PlayingField(4)));
