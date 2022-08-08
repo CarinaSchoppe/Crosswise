@@ -1,5 +1,9 @@
 import gui.FileInputReader;
-import logic.*;
+import logic.AI;
+import logic.Game;
+import logic.util.Position;
+import logic.util.TokenMove;
+import logic.util.TokenType;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
