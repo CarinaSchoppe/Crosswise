@@ -15,7 +15,7 @@ public class CrossWise extends Application {
 
     public static final boolean DEBUG = false;
     public static long time;
-    public static final boolean UI = true;
+    public static boolean UI = true;
     public static final int DELAY = 10;
 
 

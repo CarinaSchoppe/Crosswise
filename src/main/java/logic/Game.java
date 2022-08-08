@@ -1,7 +1,10 @@
 package logic;
 
 import javafx.application.Platform;
-import logic.util.*;
+import logic.util.Constants;
+import logic.util.Position;
+import logic.util.TeamType;
+import logic.util.TokenType;
 
 import java.util.*;
 
@@ -189,10 +192,16 @@ public class Game {
      */
     public void faultyStartup(Integer caseID) {
         //makes thread hide all hands and create an alert
-        Platform.runLater(() -> {
+        //try catch block for tests, that cant run "runlater"
+        try {
+            Platform.runLater(() -> {
+                guiConnector.showHand(true, 0, true);
+                guiConnector.faultyAlert(caseID);
+            });
+        } catch (Exception ignored) {
             guiConnector.showHand(true, 0, true);
             guiConnector.faultyAlert(caseID);
-        });
+        }
         //cancel the current game
         game.cancel();
     }
@@ -253,12 +262,7 @@ public class Game {
         //For each player, let them draw as many tokens as big their hand size is supposed to be
         for (Player player : players.stream().filter(Player::isActive).toList()) {
             for (int i = 0; i < Constants.HAND_SIZE; i++) {
-                try {
-                    player.drawToken();
-                } catch (NoTokenException e) {
-                    throw new NoTokenException("No more tokens left in the Pile while startup! "
-                            + "Configuration error!");
-                }
+                player.drawToken();
             }
         }
     }
@@ -271,21 +275,28 @@ public class Game {
      */
     private void setup(boolean fileLoaded) {
         handleOver();
+
+
         if (stop)
             return;
         //check, if the game was started with 0 players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             faultyStartup(0);
+
             return;
         }
         //create draw pile and if it wasnt loaded from a file, let the players draw their tokens
         fillPile();
+
         if (!fileLoaded) {
             playerPileSetup();
         }
+
+
         //if the current player has already been set
         if (currentPlayer == null)
             currentPlayer = players.stream().filter(Player::isActive).toList().get(0);
+
         guiConnector.changeCurrentPlayerText(currentPlayer.getName());
     }
 
@@ -317,11 +328,12 @@ public class Game {
         //shows the hand of the next player
         try {
             Platform.runLater((() -> {
-
                 guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
                 guiConnector.changeCurrentPlayerText(currentPlayer.getName());
             }));
         } catch (Exception ignored) {
+            guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
+            guiConnector.changeCurrentPlayerText(currentPlayer.getName());
         }
 
 
@@ -455,21 +467,33 @@ public class Game {
         thread.interrupt();
     }
 
+    public void testStart(boolean fileLoaded) {
+        setup(fileLoaded);
+        start();
+    }
+
     /**
      * Starts the Game
      */
-    public void start() {
+    private void start() {
         //check for faulty setup of the players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             return;
         }
         if (Team.getHorizontalTeam().getPlayers().size() != Team.getVerticalTeam().getPlayers().size()) {
             faultyStartup(1);
-            return;
+            if (CrossWise.UI)
+                return;
+            else
+                throw new IllegalArgumentException("Number of players in horizontal team is not equal to number of players in vertical team!");
         }
         if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0) {
             faultyStartup(2);
-            return;
+            if (CrossWise.UI)
+                return;
+            else
+                throw new IllegalArgumentException("Not enough players or not even number of players!");
+
         }
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
         if (currentPlayer instanceof AI ai) {
@@ -502,7 +526,7 @@ public class Game {
             return;
         }
         //otherwise try to draw a token
-            currentPlayer.drawToken();
+        currentPlayer.drawToken();
         try {
             if (CrossWise.UI)
                 Thread.sleep(CrossWise.DELAY);
@@ -636,12 +660,6 @@ public class Game {
                 return true;
         }
         return false;
-    }
-
-    public void activate() {
-        synchronized (this) {
-            thread.start();
-        }
     }
 
     public void addNewActionTile(Token token) {

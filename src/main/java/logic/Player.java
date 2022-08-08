@@ -310,8 +310,11 @@ public class Player {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        System.out.println("here1");
+
         //If no tokens are left in the pile, throw NoTokensException
         if (Game.getGame().getTokenDrawPile().isEmpty()) {
+
             if (CrossWise.DEBUG)
                 System.out.println("Draw-Tokenpile is empty!");
             var handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
@@ -321,11 +324,13 @@ public class Player {
                 else
                     handTokenTypeArray[i] = TokenType.NONE;
             }
+
             if (CrossWise.DEBUG) {
                 for (TokenType type : handTokenTypeArray) {
                     System.out.println(type.toString());
                 }
             }
+
             Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokenTypeArray);
             return;
         }
