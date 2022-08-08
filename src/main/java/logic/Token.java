@@ -29,4 +29,8 @@ public record Token(TokenType tokenType) {
     }
 
 
+    @Override
+    public String toString() {
+        return tokenType.name();
+    }
 }

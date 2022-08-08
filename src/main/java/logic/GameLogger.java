@@ -77,6 +77,14 @@ public class GameLogger {
         }
     }
 
+    public static void logGameSetupLog() {
+        var builder = new StringBuilder();
+        builder.append("Game Setup: \n");
+        for (var player : Game.getGame().getPlayers())
+            builder.append(player.toString() + "\n");
+        log(builder.toString());
+    }
+
     public static void logDraw(Player player, Token token) {
         String builder = "Player \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" draws: \"" + token.tokenType().getValue() + "\" new Hand: " + player.handRepresentation() + "\n";
         log(builder);

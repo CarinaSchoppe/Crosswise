@@ -392,6 +392,18 @@ public class Player {
         return returnSet;
     }
 
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "playerID=" + playerID +
+                ", handTokens=" + handTokens +
+                ", isActive=" + isActive +
+                ", name='" + name + '\'' +
+                ", team=" + team +
+                '}';
+    }
+
     /**
      * converts the Hand of the player to an Array
      *

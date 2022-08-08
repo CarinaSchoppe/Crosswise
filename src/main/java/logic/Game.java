@@ -475,6 +475,7 @@ public class Game {
      * Starts the Game
      */
     private void start() {
+        GameLogger.logGameSetupLog();
         //check for faulty setup of the players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             return;

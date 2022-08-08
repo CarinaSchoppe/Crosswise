@@ -45,6 +45,12 @@ public class Team {
     private boolean rowWin = false;
     //----------------------------------------------------------------------------------------------
 
+
+    @Override
+    public String toString() {
+        return "Team: " + teamType.getTeamName();
+    }
+
     /**
      * Constructor
      *
