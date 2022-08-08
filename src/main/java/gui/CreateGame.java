@@ -36,7 +36,6 @@ public class CreateGame implements Initializable {
 
     //--------------------------------------------FXML Objects----------------------------------------------------------
 
-
     @FXML
     private Button createGameButton;
     @FXML
@@ -90,10 +89,6 @@ public class CreateGame implements Initializable {
         isAI.add(playerTwoAI.isSelected());
         isAI.add(playerThreeAI.isSelected());
         isAI.add(playerFourAI.isSelected());
-
-
-        if (isActive.isEmpty())
-            return;
 
         //close the current window
         ((Stage) createGameButton.getScene().getWindow()).close();
