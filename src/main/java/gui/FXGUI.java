@@ -706,10 +706,13 @@ public class FXGUI implements GUIConnector {
         playerHandThree.setVisible(false);
         playerHandFour.setVisible(false);
         //let thread show alert message
+        Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
             alert.setTitle("Game finished");
             alert.setHeaderText("Game finished");
             alert.showAndWait();
+        });
+
     }
 
     /**
