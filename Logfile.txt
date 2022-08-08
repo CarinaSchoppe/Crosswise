@@ -1,0 +1,567 @@
+Mon Aug 08 23:25:49 CEST 2022: Player "Player1" and ID: "0" draws: "6" new Hand: [6, 0, 0, 0]
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player1" and ID: "0" draws: "10" new Hand: [6, 10, 0, 0]
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player1" and ID: "0" draws: "5" new Hand: [6, 10, 5, 0]
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player1" and ID: "0" draws: "3" new Hand: [6, 10, 5, 3]
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player2" and ID: "1" draws: "1" new Hand: [1, 0, 0, 0]
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player2" and ID: "1" draws: "1" new Hand: [1, 1, 0, 0]
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player2" and ID: "1" draws: "7" new Hand: [1, 1, 7, 0]
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player2" and ID: "1" draws: "5" new Hand: [1, 1, 7, 5]
+
+Mon Aug 08 23:25:49 CEST 2022: Player: "Player1" and ID: "0" placed: 3 on: Position{y=0, x=0} new Hand: [6, 10, 5]
+FieldMap:
+3 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:49 CEST 2022: Player "Player1" and ID: "0" draws: "1" new Hand: [6, 10, 5, 1]
+
+Mon Aug 08 23:25:50 CEST 2022: Player: "Player2" and ID: "1" placed: 1 on: Position{y=0, x=1} new Hand: [1, 7, 5]
+FieldMap:
+3 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:50 CEST 2022: Player "Player2" and ID: "1" draws: "2" new Hand: [1, 7, 5, 2]
+
+Mon Aug 08 23:25:50 CEST 2022: Player: "Player1" and ID: "0" placed: 1 on: Position{y=1, x=1} new Hand: [6, 10, 5]
+FieldMap:
+3 1 0 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:50 CEST 2022: Player "Player1" and ID: "0" draws: "6" new Hand: [6, 10, 5, 6]
+
+Mon Aug 08 23:25:50 CEST 2022: Player: "Player2" and ID: "1" placed: 1 on: Position{y=0, x=2} new Hand: [7, 5, 2]
+FieldMap:
+3 1 1 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:51 CEST 2022: Player "Player2" and ID: "1" draws: "6" new Hand: [7, 5, 2, 6]
+
+Mon Aug 08 23:25:51 CEST 2022: Player: "Player1" and ID: "0" replaced: Position{y=0, x=2, token=1} with vaule: 6 new Hand: [6, 10, 5, 6]
+FieldMap:
+3 1 1 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:51 CEST 2022: Player "Player1" and ID: "0" draws: "6" new Hand: [5, 6, 1, 6]
+
+Mon Aug 08 23:25:51 CEST 2022: Player: "Player2" and ID: "1" placed: 6 on: Position{y=0, x=3} new Hand: [7, 5, 2]
+FieldMap:
+3 1 6 6 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:51 CEST 2022: Player "Player2" and ID: "1" draws: "5" new Hand: [7, 5, 2, 5]
+
+Mon Aug 08 23:25:52 CEST 2022: Player: "Player1" and ID: "0" placed: 1 on: Position{y=2, x=1} new Hand: [5, 6, 6]
+FieldMap:
+3 1 6 6 0 0 
+0 1 0 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:52 CEST 2022: Player "Player1" and ID: "0" draws: "3" new Hand: [5, 6, 6, 3]
+
+Mon Aug 08 23:25:52 CEST 2022: Player: "Player2" and ID: "1" removed Token: 1 from: Position{y=0, x=1} new Hand: [5, 2, 5, 1]
+FieldMap:
+3 1 6 6 0 0 
+0 1 0 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:52 CEST 2022: Player: "Player1" and ID: "0" placed: 6 on: Position{y=1, x=2} new Hand: [5, 6, 3]
+FieldMap:
+3 0 6 6 0 0 
+0 1 6 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:52 CEST 2022: Player "Player1" and ID: "0" draws: "10" new Hand: [5, 6, 3, 10]
+
+Mon Aug 08 23:25:53 CEST 2022: Player: "Player2" and ID: "1" placed: 1 on: Position{y=1, x=0} new Hand: [5, 2, 5]
+FieldMap:
+3 0 6 6 0 0 
+1 1 6 0 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:53 CEST 2022: Player "Player2" and ID: "1" draws: "2" new Hand: [5, 2, 5, 2]
+
+Mon Aug 08 23:25:53 CEST 2022: Player: "Player1" and ID: "0" placed: 6 on: Position{y=2, x=2} new Hand: [5, 3, 10]
+FieldMap:
+3 0 6 6 0 0 
+1 1 6 0 0 0 
+0 1 6 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:54 CEST 2022: Player "Player1" and ID: "0" draws: "9" new Hand: [5, 3, 10, 9]
+
+Mon Aug 08 23:25:54 CEST 2022: Player: "Player2" and ID: "1" placed: 2 on: Position{y=0, x=1} new Hand: [5, 5, 2]
+FieldMap:
+3 2 6 6 0 0 
+1 1 6 0 0 0 
+0 1 6 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:54 CEST 2022: Player "Player2" and ID: "1" draws: "5" new Hand: [5, 5, 2, 5]
+
+Mon Aug 08 23:25:54 CEST 2022: Player: "Player1" and ID: "0" swapped: Position{y=0, x=1, token=2} with Position{y=1, x=0, token=1} new Hand: [5, 3, 10]
+FieldMap:
+3 2 6 6 0 0 
+1 1 6 0 0 0 
+0 1 6 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:55 CEST 2022: Player "Player1" and ID: "0" draws: "4" new Hand: [5, 3, 10, 4]
+
+Mon Aug 08 23:25:55 CEST 2022: Player: "Player2" and ID: "1" placed: 2 on: Position{y=1, x=3} new Hand: [5, 5, 5]
+FieldMap:
+3 1 6 6 0 0 
+2 1 6 2 0 0 
+0 1 6 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:55 CEST 2022: Player "Player2" and ID: "1" draws: "9" new Hand: [5, 5, 5, 9]
+
+Mon Aug 08 23:25:55 CEST 2022: Player: "Player1" and ID: "0" replaced: Position{y=1, x=0, token=2} with vaule: 3 new Hand: [5, 3, 10, 4]
+FieldMap:
+3 1 6 6 0 0 
+2 1 6 2 0 0 
+0 1 6 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:55 CEST 2022: Player "Player1" and ID: "0" draws: "5" new Hand: [5, 4, 2, 5]
+
+Mon Aug 08 23:25:55 CEST 2022: Player: "Player2" and ID: "1" swapped: Position{y=0, x=1, token=1} with Position{y=1, x=2, token=6} new Hand: [5, 5, 5]
+FieldMap:
+3 1 6 6 0 0 
+3 1 6 2 0 0 
+0 1 6 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:56 CEST 2022: Player "Player2" and ID: "1" draws: "3" new Hand: [5, 5, 5, 3]
+
+Mon Aug 08 23:25:56 CEST 2022: Player: "Player1" and ID: "0" placed: 2 on: Position{y=2, x=3} new Hand: [5, 4, 5]
+FieldMap:
+3 6 6 6 0 0 
+3 1 1 2 0 0 
+0 1 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:56 CEST 2022: Player "Player1" and ID: "0" draws: "2" new Hand: [5, 4, 5, 2]
+
+Mon Aug 08 23:25:56 CEST 2022: Player: "Player2" and ID: "1" placed: 3 on: Position{y=0, x=4} new Hand: [5, 5, 5]
+FieldMap:
+3 6 6 6 3 0 
+3 1 1 2 0 0 
+0 1 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:56 CEST 2022: Player "Player2" and ID: "1" draws: "4" new Hand: [5, 5, 5, 4]
+
+Mon Aug 08 23:25:57 CEST 2022: Player: "Player1" and ID: "0" placed: 2 on: Position{y=3, x=3} new Hand: [5, 4, 5]
+FieldMap:
+3 6 6 6 3 0 
+3 1 1 2 0 0 
+0 1 6 2 0 0 
+0 0 0 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:57 CEST 2022: Player "Player1" and ID: "0" draws: "10" new Hand: [5, 4, 5, 10]
+
+Mon Aug 08 23:25:57 CEST 2022: Player: "Player2" and ID: "1" placed: 5 on: Position{y=0, x=5} new Hand: [5, 5, 4]
+FieldMap:
+3 6 6 6 3 5 
+3 1 1 2 0 0 
+0 1 6 2 0 0 
+0 0 0 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:57 CEST 2022: Player "Player2" and ID: "1" draws: "3" new Hand: [5, 5, 4, 3]
+
+Mon Aug 08 23:25:57 CEST 2022: Player: "Player1" and ID: "0" replaced: Position{y=0, x=1, token=6} with vaule: 4 new Hand: [5, 4, 5, 10]
+FieldMap:
+3 6 6 6 3 5 
+3 1 1 2 0 0 
+0 1 6 2 0 0 
+0 0 0 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:57 CEST 2022: Player "Player1" and ID: "0" draws: "3" new Hand: [5, 5, 6, 3]
+
+Mon Aug 08 23:25:58 CEST 2022: Player: "Player2" and ID: "1" placed: 3 on: Position{y=1, x=5} new Hand: [5, 5, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 0 3 
+0 1 6 2 0 0 
+0 0 0 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:58 CEST 2022: Player "Player2" and ID: "1" draws: "1" new Hand: [5, 5, 4, 1]
+
+Mon Aug 08 23:25:58 CEST 2022: Player: "Player1" and ID: "0" placed: 6 on: Position{y=3, x=2} new Hand: [5, 5, 3]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 0 3 
+0 1 6 2 0 0 
+0 0 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:58 CEST 2022: Player "Player1" and ID: "0" draws: "1" new Hand: [5, 5, 3, 1]
+
+Mon Aug 08 23:25:58 CEST 2022: Player: "Player2" and ID: "1" placed: 1 on: Position{y=1, x=4} new Hand: [5, 5, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 1 3 
+0 1 6 2 0 0 
+0 0 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:58 CEST 2022: Player "Player2" and ID: "1" draws: "6" new Hand: [5, 5, 4, 6]
+
+Mon Aug 08 23:25:59 CEST 2022: Player: "Player1" and ID: "0" placed: 1 on: Position{y=3, x=1} new Hand: [5, 5, 3]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 1 3 
+0 1 6 2 0 0 
+0 1 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:59 CEST 2022: Player "Player1" and ID: "0" draws: "5" new Hand: [5, 5, 3, 5]
+
+Mon Aug 08 23:25:59 CEST 2022: Player: "Player2" and ID: "1" placed: 6 on: Position{y=2, x=0} new Hand: [5, 5, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 1 3 
+6 1 6 2 0 0 
+0 1 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:25:59 CEST 2022: Player "Player2" and ID: "1" draws: "8" new Hand: [5, 5, 4, 8]
+
+Mon Aug 08 23:26:00 CEST 2022: Player: "Player1" and ID: "0" placed: 3 on: Position{y=3, x=0} new Hand: [5, 5, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 1 3 
+6 1 6 2 0 0 
+3 1 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:00 CEST 2022: Player "Player1" and ID: "0" draws: "7" new Hand: [5, 5, 5, 7]
+
+Mon Aug 08 23:26:00 CEST 2022: Player: "Player2" and ID: "1" moved from: Position{y=3, x=2, token=6} to: Position{y=2, x=4} new Hand: [5, 5, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 1 3 
+6 1 6 2 0 0 
+3 1 6 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:00 CEST 2022: Player "Player2" and ID: "1" draws: "5" new Hand: [5, 5, 4, 5]
+
+Mon Aug 08 23:26:00 CEST 2022: Player: "Player1" and ID: "0" removed Token: 1 from: Position{y=1, x=2} new Hand: [5, 5, 5, 1]
+FieldMap:
+3 4 6 6 3 5 
+3 1 1 2 1 3 
+6 1 6 2 6 0 
+3 1 0 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:01 CEST 2022: Player: "Player2" and ID: "1" placed: 5 on: Position{y=1, x=2} new Hand: [5, 4, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 2 1 3 
+6 1 6 2 6 0 
+3 1 0 2 0 0 
+0 0 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:01 CEST 2022: Player "Player2" and ID: "1" draws: "2" new Hand: [5, 4, 5, 2]
+
+Mon Aug 08 23:26:01 CEST 2022: Player: "Player1" and ID: "0" placed: 1 on: Position{y=4, x=1} new Hand: [5, 5, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 2 1 3 
+6 1 6 2 6 0 
+3 1 0 2 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:01 CEST 2022: Player "Player1" and ID: "0" draws: "8" new Hand: [5, 5, 5, 8]
+
+Mon Aug 08 23:26:01 CEST 2022: Player: "Player2" and ID: "1" placed: 2 on: Position{y=2, x=5} new Hand: [5, 4, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 2 1 3 
+6 1 6 2 6 2 
+3 1 0 2 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:01 CEST 2022: Player "Player2" and ID: "1" draws: "8" new Hand: [5, 4, 5, 8]
+
+Mon Aug 08 23:26:02 CEST 2022: Player: "Player1" and ID: "0" moved from: Position{y=2, x=0, token=6} to: Position{y=3, x=2} new Hand: [5, 5, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 2 1 3 
+6 1 6 2 6 2 
+3 1 0 2 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:02 CEST 2022: Player "Player1" and ID: "0" draws: "3" new Hand: [5, 5, 5, 3]
+
+Mon Aug 08 23:26:02 CEST 2022: Player: "Player2" and ID: "1" moved from: Position{y=1, x=3, token=2} to: Position{y=2, x=0} new Hand: [5, 4, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 2 1 3 
+0 1 6 2 6 2 
+3 1 6 2 0 0 
+0 1 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:02 CEST 2022: Player "Player2" and ID: "1" draws: "7" new Hand: [5, 4, 5, 7]
+
+Mon Aug 08 23:26:02 CEST 2022: Player: "Player1" and ID: "0" placed: 3 on: Position{y=4, x=0} new Hand: [5, 5, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 0 1 3 
+2 1 6 2 6 2 
+3 1 6 2 0 0 
+3 1 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:02 CEST 2022: Player "Player1" and ID: "0" draws: "9" new Hand: [5, 5, 5, 9]
+
+Mon Aug 08 23:26:03 CEST 2022: Player: "Player2" and ID: "1" removed Token: 1 from: Position{y=2, x=1} new Hand: [5, 4, 5, 1]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 0 1 3 
+2 1 6 2 6 2 
+3 1 6 2 0 0 
+3 1 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:03 CEST 2022: Player: "Player1" and ID: "0" swapped: Position{y=1, x=5, token=3} with Position{y=2, x=0, token=2} new Hand: [5, 5, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 0 1 3 
+2 0 6 2 6 2 
+3 1 6 2 0 0 
+3 1 0 0 0 0 
+0 0 0 0 0 0 
+
+Mon Aug 08 23:26:03 CEST 2022: Player "Player1" and ID: "0" draws: "2" new Hand: [5, 5, 5, 2]
+
+Mon Aug 08 23:26:03 CEST 2022: Player: "Player2" and ID: "1" placed: 1 on: Position{y=5, x=0} new Hand: [5, 4, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 0 1 2 
+3 0 6 2 6 2 
+3 1 6 2 0 0 
+3 1 0 0 0 0 
+1 0 0 0 0 0 
+
+Mon Aug 08 23:26:03 CEST 2022: Player "Player2" and ID: "1" draws: "1" new Hand: [5, 4, 5, 1]
+
+Mon Aug 08 23:26:04 CEST 2022: Player: "Player1" and ID: "0" placed: 2 on: Position{y=4, x=3} new Hand: [5, 5, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 0 1 2 
+3 0 6 2 6 2 
+3 1 6 2 0 0 
+3 1 0 2 0 0 
+1 0 0 0 0 0 
+
+Mon Aug 08 23:26:04 CEST 2022: Player "Player1" and ID: "0" draws: "4" new Hand: [5, 5, 5, 4]
+
+Mon Aug 08 23:26:04 CEST 2022: Player: "Player2" and ID: "1" placed: 1 on: Position{y=1, x=3} new Hand: [5, 4, 5]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 0 6 2 6 2 
+3 1 6 2 0 0 
+3 1 0 2 0 0 
+1 0 0 0 0 0 
+
+Mon Aug 08 23:26:04 CEST 2022: Player "Player2" and ID: "1" draws: "6" new Hand: [5, 4, 5, 6]
+
+Mon Aug 08 23:26:05 CEST 2022: Player: "Player1" and ID: "0" placed: 5 on: Position{y=3, x=5} new Hand: [5, 5, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 0 6 2 6 2 
+3 1 6 2 0 5 
+3 1 0 2 0 0 
+1 0 0 0 0 0 
+
+Mon Aug 08 23:26:05 CEST 2022: Player "Player1" and ID: "0" draws: "4" new Hand: [5, 5, 4, 4]
+
+Mon Aug 08 23:26:05 CEST 2022: Player: "Player2" and ID: "1" placed: 4 on: Position{y=3, x=4} new Hand: [5, 5, 6]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 0 6 2 6 2 
+3 1 6 2 4 5 
+3 1 0 2 0 0 
+1 0 0 0 0 0 
+
+Mon Aug 08 23:26:05 CEST 2022: Player "Player2" and ID: "1" draws: "3" new Hand: [5, 5, 6, 3]
+
+Mon Aug 08 23:26:05 CEST 2022: Player: "Player1" and ID: "0" placed: 5 on: Position{y=4, x=5} new Hand: [5, 4, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 0 6 2 6 2 
+3 1 6 2 4 5 
+3 1 0 2 0 5 
+1 0 0 0 0 0 
+
+Mon Aug 08 23:26:05 CEST 2022: Player "Player1" and ID: "0" draws: "6" new Hand: [5, 4, 4, 6]
+
+Mon Aug 08 23:26:06 CEST 2022: Player: "Player2" and ID: "1" placed: 6 on: Position{y=2, x=1} new Hand: [5, 5, 3]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 0 2 0 5 
+1 0 0 0 0 0 
+
+Mon Aug 08 23:26:06 CEST 2022: Player "Player2" and ID: "1" draws: "4" new Hand: [5, 5, 3, 4]
+
+Mon Aug 08 23:26:06 CEST 2022: Player: "Player1" and ID: "0" placed: 5 on: Position{y=5, x=5} new Hand: [4, 4, 6]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 0 2 0 5 
+1 0 0 0 0 5 
+
+Mon Aug 08 23:26:06 CEST 2022: Player "Player1" and ID: "0" draws: "2" new Hand: [4, 4, 6, 2]
+
+Mon Aug 08 23:26:07 CEST 2022: Player: "Player2" and ID: "1" placed: 5 on: Position{y=4, x=4} new Hand: [5, 3, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 0 2 5 5 
+1 0 0 0 0 5 
+
+Mon Aug 08 23:26:07 CEST 2022: Player "Player2" and ID: "1" draws: "4" new Hand: [5, 3, 4, 4]
+
+Mon Aug 08 23:26:07 CEST 2022: Player: "Player1" and ID: "0" placed: 2 on: Position{y=5, x=4} new Hand: [4, 4, 6]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 0 2 5 5 
+1 0 0 0 2 5 
+
+Mon Aug 08 23:26:07 CEST 2022: Player "Player1" and ID: "0" draws: "1" new Hand: [4, 4, 6, 1]
+
+Mon Aug 08 23:26:07 CEST 2022: Player: "Player2" and ID: "1" placed: 3 on: Position{y=4, x=2} new Hand: [5, 4, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 3 2 5 5 
+1 0 0 0 2 5 
+
+Mon Aug 08 23:26:07 CEST 2022: Player "Player2" and ID: "1" draws: "4" new Hand: [5, 4, 4, 4]
+
+Mon Aug 08 23:26:08 CEST 2022: Player: "Player1" and ID: "0" placed: 6 on: Position{y=5, x=2} new Hand: [4, 4, 1]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 3 2 5 5 
+1 0 6 0 2 5 
+
+Mon Aug 08 23:26:08 CEST 2022: Player "Player1" and ID: "0" draws: "2" new Hand: [4, 4, 1, 2]
+
+Mon Aug 08 23:26:08 CEST 2022: Player: "Player2" and ID: "1" placed: 5 on: Position{y=5, x=1} new Hand: [4, 4, 4]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 3 2 5 5 
+1 5 6 0 2 5 
+
+Mon Aug 08 23:26:09 CEST 2022: Player: "Player1" and ID: "0" placed: 2 on: Position{y=5, x=3} new Hand: [4, 4, 1]
+FieldMap:
+3 4 6 6 3 5 
+3 1 5 1 1 2 
+3 6 6 2 6 2 
+3 1 6 2 4 5 
+3 1 3 2 5 5 
+1 5 6 2 2 5 
+
