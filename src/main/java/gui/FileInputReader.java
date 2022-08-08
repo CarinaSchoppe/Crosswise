@@ -64,7 +64,7 @@ public class FileInputReader {
         //checks in checkInvalidConfig method, if the given file creates a valid input
         if (checkInvalidConfig(gameData)) {
             guiConnector.showError("Config is not valid");
-            return;
+            throw new RuntimeException("Config is not valid");
         }
 
         //create objects needed for the game
@@ -95,8 +95,6 @@ public class FileInputReader {
             }
         }   //Create new game and setup parameters
         Player currentPlayer = Game.getGame().getPlayers().get(gameData.getCurrentPlayer());
-        System.out.println(currentPlayer);
-
         Game.getGame().setCurrentPlayer(currentPlayer);
         Game.getGame().getPlayingField().addDataFromJSON(gameData.getField());
         //add special tokens to game
