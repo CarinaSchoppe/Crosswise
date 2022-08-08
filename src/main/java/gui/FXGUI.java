@@ -15,6 +15,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import logic.*;
+import logic.util.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -665,6 +666,7 @@ public class FXGUI implements GUIConnector {
             imageView.fitWidthProperty().bind(playerHandFour.widthProperty());
             imageView.fitHeightProperty().bind(playerHandFour.heightProperty().divide(Constants.GAMEGRID_SIZE));
         }
+
         setDragEventsForPlayerHand(playerHandFour);
     }
 

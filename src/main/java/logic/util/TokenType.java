@@ -1,4 +1,4 @@
-package logic;
+package logic.util;
 
 public enum TokenType {
     NONE(0, false, "pictures/0none.png", "pictures/0noneBorder.png"),

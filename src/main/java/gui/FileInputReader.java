@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import logic.*;
+import logic.util.Constants;
+import logic.util.TokenType;
 
 import java.io.File;
 import java.io.FileNotFoundException;

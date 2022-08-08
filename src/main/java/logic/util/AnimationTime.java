@@ -1,4 +1,4 @@
-package logic;
+package logic.util;
 
 public enum AnimationTime {
     SLOW(4), MIDDLE(2), FAST(1);

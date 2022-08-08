@@ -1,6 +1,7 @@
 package logic;
 
 import javafx.application.Platform;
+import logic.util.*;
 
 import java.util.*;
 

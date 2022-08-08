@@ -1,6 +1,10 @@
 package logic;
 
 import javafx.application.Platform;
+import logic.util.Constants;
+import logic.util.NoTokenException;
+import logic.util.Position;
+import logic.util.TokenType;
 
 import java.util.*;
 
@@ -312,6 +316,12 @@ public class Player {
                     handTokenTypeArray[i] = handTokens.get(i).tokenType();
                 else
                     handTokenTypeArray[i] = TokenType.NONE;
+            }
+            System.out.println("Bin da" + Game.getGame().getCurrentPlayer().getPlayerID());
+            if (CrossWise.DEBUG) {
+                for (TokenType type : handTokenTypeArray) {
+                    System.out.println(type.toString());
+                }
             }
             Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokenTypeArray);
             return;

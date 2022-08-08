@@ -1,5 +1,9 @@
 package logic;
 
+import logic.util.AnimationTime;
+import logic.util.TeamType;
+import logic.util.TokenType;
+
 public interface GUIConnector {
     void resetSpecialTokenImages();
 

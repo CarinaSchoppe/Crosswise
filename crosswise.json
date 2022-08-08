@@ -3,7 +3,7 @@
     {
       "name": "Player1",
       "isActive": true,
-      "isAI": true,
+      "isAI": false,
       "hand": [
         1,
         2,
@@ -14,7 +14,7 @@
     {
       "name": "Player2",
       "isActive": true,
-      "isAI": true,
+      "isAI": false,
       "hand": [
         7,
         10,

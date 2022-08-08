@@ -1,4 +1,4 @@
-package logic;
+package logic.util;
 
 public class NoTokenException extends RuntimeException {
 

@@ -1,6 +1,9 @@
 package logic;
 
 
+import logic.util.Position;
+import logic.util.TokenType;
+
 public class PlayingField {
 
     private final int size;
