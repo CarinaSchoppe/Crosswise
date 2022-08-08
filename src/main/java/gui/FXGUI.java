@@ -909,22 +909,23 @@ public class FXGUI implements GUIConnector {
      * @param hand Grid pane of the hand of a specific player
      */
     private void setDragEventsForPlayerHand(GridPane hand) {
+        System.out.println();
         int counter = 0;
         //setup actions for every had token
         for (Node child : hand.getChildren()) {
             //setup drag detected event for an imageview
             child.setOnDragDetected((MouseEvent event) -> {
-                    /* lässt jeden Transfermode zu */
-                    Dragboard db = child.startDragAndDrop(TransferMode.ANY);
+                /* lässt jeden Transfermode zu */
+                Dragboard db = child.startDragAndDrop(TransferMode.ANY);
 
-                    /* legt einen String im Clipboard ab*/
-                    ClipboardContent content = new ClipboardContent();
+                /* legt einen String im Clipboard ab*/
+                ClipboardContent content = new ClipboardContent();
 
-                    ImageView view = (ImageView) child;
-                    TokenType tokenType = handImagesTokens.get(view);
+                ImageView view = (ImageView) child;
+                TokenType tokenType = handImagesTokens.get(view);
 
-                    content.putString(tokenType.name());
-                    db.setContent(content);
+                content.putString(tokenType.name());
+                db.setContent(content);
 
                 event.consume();
 
