@@ -315,11 +315,14 @@ public class Game {
         }
 
         //shows the hand of the next player
-        Platform.runLater((() -> {
+        try {
+            Platform.runLater((() -> {
 
-            guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
-            guiConnector.changeCurrentPlayerText(currentPlayer.getName());
-        }));
+                guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
+                guiConnector.changeCurrentPlayerText(currentPlayer.getName());
+            }));
+        } catch (Exception ignored) {
+        }
 
 
         if (CrossWise.DEBUG) {
@@ -328,7 +331,11 @@ public class Game {
         //if the player is an AI player, let the AI make their move, otherwise notify the next player
         if (currentPlayer instanceof AI ai) {
             //add the new move to the thread, so the player move will be finished until the ai move starts
-            Platform.runLater(ai::makeMove);
+            try {
+                Platform.runLater(ai::makeMove);
+            } catch (Exception ignored) {
+                ai.makeMove();
+            }
         } else {
             //notifies the next player with an alert
             guiConnector.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());
@@ -442,7 +449,8 @@ public class Game {
         Team.setHorizontalTeam(new Team(TeamType.HORIZONTAL));
         Team.setDeactiveTeam(new Team(TeamType.DEACTIVE));
         handleOver();
-        System.out.println("Game canceled!");
+        if (CrossWise.DEBUG)
+            System.out.println("Game canceled!");
         //kill the this.thread
         thread.interrupt();
     }
@@ -466,7 +474,11 @@ public class Game {
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
         if (currentPlayer instanceof AI ai) {
             //add the new move to the thread, so the player move will be finished until the ai move starts
-            Platform.runLater(ai::makeMove);
+            try {
+                Platform.runLater(ai::makeMove);
+            } catch (Exception e) {
+                ai.makeMove();
+            }
         } else {
             //notifies the next player with an alert
             guiConnector.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());

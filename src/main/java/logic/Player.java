@@ -88,13 +88,16 @@ public class Player {
 
         if (this instanceof AI) {
             Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().tokenType());
-            Platform.runLater(() -> {
-                try {
-                    Thread.sleep(Constants.AI_TURN_TIME);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            });
+            try {
+                Platform.runLater(() -> {
+                    try {
+                        Thread.sleep(Constants.AI_TURN_TIME);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                });
+            } catch (Exception ignored) {
+            }
         }
 
         return true;
@@ -309,7 +312,8 @@ public class Player {
         }
         //If no tokens are left in the pile, throw NoTokensException
         if (Game.getGame().getTokenDrawPile().isEmpty()) {
-            System.out.println("Draw-Tokenpile is empty!");
+            if (CrossWise.DEBUG)
+                System.out.println("Draw-Tokenpile is empty!");
             var handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
             for (int i = 0; i < Constants.HAND_SIZE; i++) {
                 if (handTokens.size() > i)
@@ -317,7 +321,6 @@ public class Player {
                 else
                     handTokenTypeArray[i] = TokenType.NONE;
             }
-            System.out.println("Bin da" + Game.getGame().getCurrentPlayer().getPlayerID());
             if (CrossWise.DEBUG) {
                 for (TokenType type : handTokenTypeArray) {
                     System.out.println(type.toString());

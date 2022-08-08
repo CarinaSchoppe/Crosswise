@@ -359,13 +359,17 @@ public class AI extends Player {
         //Debug sleep timer
 
 
-        Platform.runLater(() -> {
-            try {
-                Thread.sleep(Constants.AI_TURN_TIME * 2);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        });
+        try {
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(Constants.AI_TURN_TIME * 2);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        } catch (Exception ignored) {
+
+        }
 
         //perform different turn actions for each tokenType
         switch (move.getToken().getValue()) {
