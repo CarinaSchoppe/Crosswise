@@ -96,4 +96,13 @@ class GameTests {
         map.put(true, null);
         Assertions.assertEquals(map, Game.getGame().isGameOver());
     }
+
+    @Test
+    void gameTest11() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseNotFinishedGame1.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        var map = new HashMap<Boolean, Team>();
+        map.put(false, null);
+        Assertions.assertEquals(map, Game.getGame().isGameOver());
+    }
 }
