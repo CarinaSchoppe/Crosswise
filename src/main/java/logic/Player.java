@@ -73,7 +73,8 @@ public class Player {
         }
         handTokens.remove(getCorrespondingToken(token));
         field.setToken(token);
-        System.out.println("player name: " + name + "player: " + Game.getGame().getCurrentPlayer().name);
+        if (CrossWise.DEBUG)
+            System.out.println("player name: " + name + "player: " + Game.getGame().getCurrentPlayer().name);
 
          Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());

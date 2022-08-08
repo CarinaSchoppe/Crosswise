@@ -15,6 +15,7 @@ import logic.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -333,7 +334,7 @@ public class FXGUI implements GUIConnector {
         for (int rows = 0; rows < Constants.GAMEGRID_SIZE; rows++) {
             for (int columns = 0; columns < Constants.GAMEGRID_SIZE; columns++) {
                 ImageView imgNew = new ImageView();
-                //Set size of  the image to its proportional space on the grid
+                //Set size of the imageview to its proportional space on the grid
                 int cellWidth = (int) gameGrid.getWidth() / Constants.GAMEGRID_SIZE;
                 int cellHeight = (int) gameGrid.getHeight() / Constants.GAMEGRID_SIZE;
                 imgNew.setFitWidth(cellWidth);
@@ -341,16 +342,17 @@ public class FXGUI implements GUIConnector {
                 imgNew.setPreserveRatio(true);
                 imgNew.setSmooth(true);
                 imgNew.setCache(true);
+                //Give each imageview a unique id
                 String id = "gridToken:" + columns + ":" + rows;
                 fieldImages.put(id, imgNew);
                 imgNew.setId(id);
                 Image img;
                 //set empty token image
                 img = new Image(TokenType.NONE.getImagePathNormal());
-
                 imgNew.setImage(img);
-                gridImagesTokens.put(imgNew, TokenType.NONE);
 
+                //insert imageview into the grid
+                gridImagesTokens.put(imgNew, TokenType.NONE);
                 gridImages[rows][columns] = imgNew;
                 gameGrid.add(imgNew, columns, rows);
 
@@ -359,15 +361,16 @@ public class FXGUI implements GUIConnector {
                 imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(Constants.GAMEGRID_SIZE).subtract(12 / Constants.GAMEGRID_SIZE));
             }
         }
-
+        //generate points grids
         generatePointsGrids();
-
     }
 
+    /**
+     * Generates Points Grids, one number for each row and each column, all starting with 0
+     */
     private void generatePointsGrids() {
         verticalPointsGrid.setVgap(-1);
         verticalPointsGrid.setHgap(-1);
-        //Horizontal Team
         this.horizontalPointsGrid.getChildren().clear();
         this.verticalPointsGrid.getChildren().clear();
 
@@ -413,7 +416,11 @@ public class FXGUI implements GUIConnector {
         }
     }
 
-
+    /**
+     * Update the points grids
+     *
+     * @param pointsMap Integer Array of new points numbers
+     */
     private void updatePointsGrid(Integer[] pointsMap) {
         //Horizontal Team Points
         int counterH = Constants.GAMEGRID_SIZE - 1;
@@ -425,12 +432,11 @@ public class FXGUI implements GUIConnector {
             } else {
                 currLabel.setText(pointsMap[counterH].toString());
             }
-
             sumHorizontal = sumHorizontal + pointsMap[counterH];
             counterH--;
         }
         if (sumHorizontal > 100) {
-            this.sumPointsHorizontalTeam.setText("Sieg");
+            this.sumPointsHorizontalTeam.setText("Win");
         } else {
             this.sumPointsHorizontalTeam.setText(Integer.toString(sumHorizontal));
         }
@@ -449,31 +455,45 @@ public class FXGUI implements GUIConnector {
             counterV++;
         }
         if (sumVertical < -100) {
-            this.sumPointsVerticalTeam.setText("Sieg");
+            this.sumPointsVerticalTeam.setText("Win");
         } else {
             this.sumPointsVerticalTeam.setText(Integer.toString(sumVertical));
         }
-
-
     }
 
+    /**
+     * Make GUI elements visible
+     */
     public void showGUIElements() {
         this.innerGrid.setVisible(true);
     }
 
-
-    //TODO: here?
+    /**
+     * Disable GUI Elements
+     */
     public void disableGUIElementes() {
         this.disableGUI = true;
     }
 
+    /**
+     * Enable Gui Elements
+     */
     public void enableGUIElements() {
         this.disableGUI = false;
     }
 
+    /**
+     * Change Mover-Amount text
+     */
     @Override
     public void moverAmountText() {
-        Platform.runLater(() -> moverAmountText.setText(Integer.parseInt(moverAmountText.getText()) + 1 + ""));
+        Platform.runLater(() -> {
+            moverAmountText.setText(Integer.parseInt(moverAmountText.getText()) + 1 + "");
+
+            if (Objects.equals(moverAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+                imageMover.setOpacity(0.5);
+            }
+        });
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.io.IOException;
 public class CrossWise extends Application {
 
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static long time;
     public static final boolean UI = true;
     public static int DELAY = 10;
@@ -45,6 +45,7 @@ public class CrossWise extends Application {
      * TODO change opacity of special tokens when used up
      * TODO cant pick replacer, if no symbol tokens on hand
      * TODO cant pick swapper if less than 2 tokens on field
+     * TODO win text label of hori or verti ( > 100)
      *  ---tests
      * TODO faulty files
      *  ---vll

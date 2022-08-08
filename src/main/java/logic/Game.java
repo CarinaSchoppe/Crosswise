@@ -181,7 +181,6 @@ public class Game {
         }
         handleOver();
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
-            System.out.println("hiereee");
             faultyStartup(0);
             return;
         }
@@ -271,21 +270,25 @@ public class Game {
             return true;
         Map<Boolean, Team> over = isGameOver(playingField);
         if (players.isEmpty()) {
-            System.out.println("No players left!");
+            if (CrossWise.DEBUG)
+                System.out.println("No players left!");
             GameLogger.saveLogToFile(Constants.LOG_FILE_NAME);
             return true;
         } else if (over.containsKey(true)) {
             Team team = over.get(true);
             if (team == null) {
-                System.out.println("Game is over, but no team has won!");
+                if (CrossWise.DEBUG)
+                    System.out.println("Game is over, but no team has won!");
                 guiConnector.gameWonNotifier(null, 0, false);
             } else {
                 guiConnector.gameWonNotifier(team.getTeamType(), team.getPoints(), team.isRowWin());
-                if (CrossWise.DEBUG)
+                if (CrossWise.DEBUG) {
                     System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
-                System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
+                    System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
+                }
             }
-            System.out.println(System.currentTimeMillis() - CrossWise.time);
+            if (CrossWise.DEBUG)
+                System.out.println(System.currentTimeMillis() - CrossWise.time);
             GameLogger.saveLogToFile(Constants.LOG_FILE_NAME);
 
             return true;
@@ -383,7 +386,8 @@ public class Game {
         try {
             currentPlayer.drawToken();
         } catch (NoTokenException e) {
-            System.out.println("No more tokens left in the Pile!");
+            if (CrossWise.DEBUG)
+                System.out.println("No more tokens left in the Pile!");
         }
         try {
             if (CrossWise.UI)
@@ -408,7 +412,7 @@ public class Game {
 
     public Integer[] pointsArray() {
         Map<Integer, Integer> map = AI.calculateCurrentOverallPoints();
-        System.out.println(map);
+
         SortedSet<Integer> keys = new TreeSet<>(map.keySet());
 
         Integer[] pointsArray = new Integer[Constants.GAMEGRID_SIZE * 2];
