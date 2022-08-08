@@ -304,7 +304,6 @@ public class FXGUI implements GUIConnector {
             alert.setHeaderText("Error");
             alert.showAndWait();
         });
-
     }
 
     /**
