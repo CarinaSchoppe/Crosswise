@@ -57,6 +57,43 @@ class GameTests {
         var map = new HashMap<Boolean, Team>();
         map.put(false, null);
         Assertions.assertEquals(map, Game.getGame().isGameOver());
+    }
 
+    @Test
+    void gameTest7() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseNotFinishedGameFinished.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        var map = new HashMap<Boolean, Team>();
+        map.put(false, null);
+        Assertions.assertEquals(map, Game.getGame().isGameOver());
+    }
+
+
+    @Test
+    void gameTest8() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseNotFinishedGame2.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        var map = new HashMap<Boolean, Team>();
+        map.put(false, null);
+        Assertions.assertEquals(map, Game.getGame().isGameOver());
+    }
+
+    @Test
+    void gameTest9() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseFinished1.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        var map = new HashMap<Boolean, Team>();
+        map.put(true, Team.getVerticalTeam());
+        Assertions.assertEquals(map, Game.getGame().isGameOver());
+    }
+
+
+    @Test
+    void gameTest10() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseFinished2.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        var map = new HashMap<Boolean, Team>();
+        map.put(true, null);
+        Assertions.assertEquals(map, Game.getGame().isGameOver());
     }
 }
