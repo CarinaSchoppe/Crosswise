@@ -5,7 +5,7 @@ public abstract class Constants {
 
     private Constants() {
     }
-    public static final int AI_TURN_TIME = 200;
+    public static final int AI_TURN_TIME = 1000;
 
 
     public static final int GAMEGRID_SIZE = 6;

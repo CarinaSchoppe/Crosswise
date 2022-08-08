@@ -13,7 +13,7 @@ import java.io.IOException;
 public class CrossWise extends Application {
 
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static long time;
     public static final boolean UI = true;
     public static final int DELAY = 10;
@@ -24,7 +24,6 @@ public class CrossWise extends Application {
     }
 
     /*
-     * 1 TODO: Responsive Design
      * 3 TODO: drag and drop having image in it (optional)
      *
      * ---TODO's for jacob only:

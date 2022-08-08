@@ -47,10 +47,10 @@ public class TokenMove {
      * Constructor
      *
      * @param primaryMovePosition first move position (for clarification look at class variable)
-     * @param relativeChange change of points with this move
-     * @param token Token, that got used for this move
-     * @param gameWinning Is the move game winning
-     * @param isPreventingLoss Is the move preventing a loss
+     * @param relativeChange      change of points with this move
+     * @param token               Token, that got used for this move
+     * @param gameWinning         Is the move game winning
+     * @param isPreventingLoss    Is the move preventing a loss
      */
     public TokenMove(Position primaryMovePosition, Integer relativeChange,
                      TokenType token, boolean gameWinning, boolean isPreventingLoss) {
@@ -64,12 +64,12 @@ public class TokenMove {
     /**
      * Constructor for specific special TokenTypes
      *
-     * @param primaryMovePosition first move position (for clarification look at class variable)
+     * @param primaryMovePosition   first move position (for clarification look at class variable)
      * @param secondaryMovePosition second move position (for clarification look at class variable)
-     * @param relativeChange change of points with this move
-     * @param token Token, that got used for this move
-     * @param gameWinning Is the move game winning
-     * @param isPreventingLoss Is the move preventing a loss
+     * @param relativeChange        change of points with this move
+     * @param token                 Token, that got used for this move
+     * @param gameWinning           Is the move game winning
+     * @param isPreventingLoss      Is the move preventing a loss
      */
     public TokenMove(Position primaryMovePosition, Position secondaryMovePosition, Integer relativeChange,
                      TokenType token, boolean gameWinning, boolean isPreventingLoss) {
@@ -100,5 +100,31 @@ public class TokenMove {
 
     public boolean isPreventingLoss() {
         return isPreventingLoss;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof TokenMove move) {
+            return primaryMovePosition.equals(move.primaryMovePosition) &&
+                    secondaryMovePosition == null ? move.secondaryMovePosition == null : secondaryMovePosition.equals(move.secondaryMovePosition) &&
+                    relativeChange.equals(move.relativeChange) &&
+                    token.equals(move.token) &&
+                    gameWinning == move.gameWinning &&
+                    isPreventingLoss == move.isPreventingLoss;
+        } else
+            return false;
+
+    }
+
+    @Override
+    public String toString() {
+        return "TokenMove{" +
+                "primaryMovePosition=" + primaryMovePosition +
+                ", relativeChange=" + relativeChange +
+                ", token=" + token +
+                ", gameWinning=" + gameWinning +
+                ", isPreventingLoss=" + isPreventingLoss +
+                ", secondaryMovePosition=" + secondaryMovePosition +
+                '}';
     }
 }
