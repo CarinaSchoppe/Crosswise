@@ -9,6 +9,7 @@ import java.util.*;
  *
  * @author Jacob Klövekorn
  */
+@SuppressWarnings("unchecked")
 public class Game {
 
     /**
@@ -46,7 +47,6 @@ public class Game {
      */
     private boolean stop;
 
-    private boolean start;
 
     //----------------------------------------------------------------------------------------------
 
@@ -65,14 +65,115 @@ public class Game {
         this.guiConnector = guiConnector;
     }
 
+
     /**
      * Creates the actual game
      *
-     * @param players List of Players
-     * @param connector GuiConnector
-     * @param fileSetup If loaded from a file
+     * @param field       playing field
+     * @param isActives   List if the players are active
+     * @param isAis       List if the players are AIs
+     * @param playerNames List of player-names
+     * @param connector   GuiConnector
+     * @param fileSetup   If loaded from a file
      */
-    public static void createNewGame(List<Player> players, GUIConnector connector, boolean fileSetup) {
+    public static void createNewGame(List<String> playerNames, List<Boolean> isAis, List<Boolean> isActives, GUIConnector connector, boolean fileSetup, PlayingField field) {
+        var players = new ArrayList<Player>();
+        for (int i = 0; i < playerNames.size(); i++) {
+            var name = playerNames.get(i);
+            var isAI = isAis.get(i);
+            var isActive = isActives.get(i);
+            if (Boolean.TRUE.equals(isAI)) {
+                var ai = new AI(i, isActive, name);
+                players.add(ai);
+            } else {
+                var player = new Player(i, isActive, name);
+                players.add(player);
+            }
+        }
+        players.forEach(Player::create);
+
+        Game game = new Game(field, players, connector);
+        //setup game
+        createStuff(game, fileSetup);
+    }
+
+    /**
+     * Remove already used tokens from new drawPile
+     */
+    public static void removeUsedTokensFromPile() {
+        //removes tokens, that are laying on the playing field
+        EnumMap<TokenType, Integer> map = new EnumMap<>(TokenType.class);
+        for (int row = 0; row < game.getPlayingField().getFieldMap().length; row++) {
+            for (int col = 0; col < game.getPlayingField().getFieldMap()[row].length; col++) {
+                Token token = game.getPlayingField().getFieldMap()[row][col].getToken();
+                if (token.tokenType() == TokenType.NONE) {
+                    continue;
+                }
+                if (map.containsKey(token.tokenType())) {
+                    map.put(token.tokenType(), map.get(token.tokenType()) + 1);
+                } else {
+                    map.put(token.tokenType(), 1);
+                }
+            }
+        }
+        //removes action tokens
+        for (Token used : game.getUsedActionTokens()) {
+            if (map.containsKey(used.tokenType())) {
+                map.put(used.tokenType(), map.get(used.tokenType()) + 1);
+            } else {
+                map.put(used.tokenType(), 1);
+            }
+        }
+        //Removes tokens on the players hand
+        for (Player player : game.getPlayers()) {
+            for (Token token : player.getHandTokens()) {
+                if (map.containsKey(token.tokenType())) {
+                    map.put(token.tokenType(), map.get(token.tokenType()) + 1);
+                } else {
+                    map.put(token.tokenType(), 1);
+                }
+            }
+        }
+        //removes all tokens in the map from the draw pile of the game
+        for (Map.Entry<TokenType, Integer> entry : map.entrySet()) {
+            TokenType token = entry.getKey();
+            for (int i = 0; i < map.get(token); i++) {
+                for (Token tokenPileToken : game.getTokenDrawPile()) {
+                    if (tokenPileToken.tokenType() != token) {
+                        continue;
+                    }
+                    game.removeTokenDrawPileToken(tokenPileToken);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates the actual game
+     *
+     * @param isActives   List if the players are active
+     * @param isAis       List if the players are AIs
+     * @param playerNames List of player-names
+     * @param connector   GuiConnector
+     * @param fileSetup   If loaded from a file
+     */
+    public static void createNewGame(List<String> playerNames, List<Boolean> isAis, List<Boolean> isActives, GUIConnector connector, boolean fileSetup) {
+        var players = new ArrayList<Player>();
+        for (int i = 0; i < playerNames.size(); i++) {
+            var name = playerNames.get(i);
+            var isAI = isAis.get(i);
+            var isActive = isActives.get(i);
+            if (Boolean.TRUE.equals(isAI)) {
+                var ai = new AI(i, isActive, name);
+                players.add(ai);
+            } else {
+                var player = new Player(i, isActive, name);
+                players.add(player);
+            }
+        }
+        players.forEach(Player::create);
+
         Game game = new Game(new PlayingField(Constants.GAMEGRID_SIZE), players, connector);
         //setup game
         createStuff(game, fileSetup);
@@ -81,7 +182,7 @@ public class Game {
     /**
      * Sets up the game and starts all neccesary methods to begin
      *
-     * @param game Current game
+     * @param game      Current game
      * @param fileSetup boolean, if the game was loaded with a file
      */
     private static void createStuff(Game game, boolean fileSetup) {
@@ -90,15 +191,10 @@ public class Game {
         }
         //create new game thread
         Thread thread = new Thread(() -> {
-            while (!game.start) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
+            //make thread sleep
             game.setup(fileSetup);
             game.start();
+
         });
         //setup game with the running thread
         Game.setGame(game, thread);
@@ -106,24 +202,11 @@ public class Game {
         if (!fileSetup) {
             Game.game.guiConnector.startGamePopUp();
             Game.getGame().startGame();
-            thread.start();
         }
         //reset the specialTokensImages
         Game.getGame().guiConnector.resetSpecialTokenImages();
     }
 
-    /**
-     * create a new game with a given playingfield
-     *
-     * @param players List of players
-     * @param connector GuiConnector
-     * @param fileSetup boolean, if the game was loaded with a file
-     * @param field playing field
-     */
-    public static void createNewGame(List<Player> players, GUIConnector connector, boolean fileSetup, PlayingField field) {
-        Game game = new Game(field, players, connector);
-        createStuff(game, fileSetup);
-    }
 
     /**
      * shows error message while trying to create a game with wrong parameters
@@ -143,7 +226,7 @@ public class Game {
     /**
      * Set the current game
      *
-     * @param game current game
+     * @param game   current game
      * @param thread thread on which the game runs
      */
     public static void setGame(Game game, Thread thread) {
@@ -278,13 +361,14 @@ public class Game {
      * Handle symbol token move done by a player
      *
      * @param tokenString type of the token
-     * @param x x coordinate of the position on the board
-     * @param y y coordinate of the position on the board
+     * @param x           x coordinate of the position on the board
+     * @param y           y coordinate of the position on the board
      */
     public void playerSymbolTokenMove(String tokenString, Integer x, Integer y) {
         currentPlayer.normalTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(x, y));
         turnDone();
     }
+
     /**
      * Handle remover token move done by a player
      *
@@ -301,8 +385,8 @@ public class Game {
      *
      * @param fromX x coordinate of the start position on the board
      * @param fromY y coordinate of the start position on the board
-     * @param toX y coordinate of the end position on the board
-     * @param toY y coordinate of the end position on the board
+     * @param toX   y coordinate of the end position on the board
+     * @param toY   y coordinate of the end position on the board
      */
     public void playerMoverTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
         currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken("MOVER"), new Position(fromX, fromY), new Position(toX, toY));
@@ -314,8 +398,8 @@ public class Game {
      *
      * @param fromX x coordinate of the start position on the board
      * @param fromY y coordinate of the start position on the board
-     * @param toX y coordinate of the end position on the board
-     * @param toY y coordinate of the end position on the board
+     * @param toX   y coordinate of the end position on the board
+     * @param toY   y coordinate of the end position on the board
      */
     public void playerSwapperTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
         currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken("SWAPPER"), new Position(fromX, fromY), new Position(toX, toY));
@@ -325,8 +409,8 @@ public class Game {
     /**
      * Handle replacer token move done by a player
      *
-     * @param fromX x coordinate of the start position on the board
-     * @param fromY y coordinate of the start position on the board
+     * @param fromX     x coordinate of the start position on the board
+     * @param fromY     y coordinate of the start position on the board
      * @param handIndex hand index of position clicked on the hand
      */
     public void playerReplacerTokenMove(Integer fromX, Integer fromY, Integer handIndex) {
@@ -413,7 +497,6 @@ public class Game {
     }
 
 
-
     /**
      * Computes logic for turns, that are over
      */
@@ -442,16 +525,14 @@ public class Game {
             Thread.currentThread().interrupt();
         }
 
+
         //Let the next player do their turn
         nextPlayer();
     }
 
 
-
     public void startGame() {
-        synchronized (this) {
-            start = true;
-        }
+        thread.start();
     }
 
     public Integer[] pointsArray() {
@@ -496,7 +577,7 @@ public class Game {
         //check if there are still tokens missing on the playing field
         for (int i = 0; i < field.getSize(); i++) {
             for (int j = 0; j < field.getSize(); j++) {
-                if (field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE) {
+                if (field.getFieldMap()[i][j].getToken().tokenType() == TokenType.NONE) {
                     map.put(false, null);
                     return map;
                 }
@@ -521,14 +602,14 @@ public class Game {
             boolean equal = true;
             for (int j = 0; j < field.getSize(); j++) { // get field on row
                 if (current == null) {
-                    if (field.getFieldMap()[i][j].getToken().getTokenType() != TokenType.NONE) {
-                        current = field.getFieldMap()[i][j].getToken().getTokenType();
+                    if (field.getFieldMap()[i][j].getToken().tokenType() != TokenType.NONE) {
+                        current = field.getFieldMap()[i][j].getToken().tokenType();
                     } else {
                         equal = false;
                         break;
                     }
                 } else {
-                    if (!(field.getFieldMap()[i][j].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().getTokenType() != current))
+                    if (!(field.getFieldMap()[i][j].getToken().tokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().tokenType() != current))
                         continue;
                     equal = false;
                     current = null;
@@ -550,14 +631,14 @@ public class Game {
             boolean equal = true;
             for (int j = 0; j < field.getSize(); j++) {
                 if (current == null) {
-                    if (field.getFieldMap()[j][i].getToken().getTokenType() != TokenType.NONE) {
-                        current = field.getFieldMap()[j][i].getToken().getTokenType();
+                    if (field.getFieldMap()[j][i].getToken().tokenType() != TokenType.NONE) {
+                        current = field.getFieldMap()[j][i].getToken().tokenType();
                     } else {
                         equal = false;
                         break;
                     }
                 } else {
-                    if (!(field.getFieldMap()[j][i].getToken().getTokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().getTokenType() != current))
+                    if (!(field.getFieldMap()[j][i].getToken().tokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().tokenType() != current))
                         continue;
                     equal = false;
                     current = null;
@@ -572,7 +653,7 @@ public class Game {
     }
 
     public void activate() {
-        start = true;
+        thread.start();
     }
 
     public void addNewActionTile(Token token) {

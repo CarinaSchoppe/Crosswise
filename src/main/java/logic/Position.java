@@ -67,7 +67,7 @@ public class Position {
     public String toStringWithToken() {
         return "Position{" +
                 "y=" + x +
-                ", x=" + y + ", token=" + token.getTokenType().getValue() +
+                ", x=" + y + ", token=" + token.tokenType().getValue() +
                 '}';
     }
 

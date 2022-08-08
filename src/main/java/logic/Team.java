@@ -9,6 +9,7 @@ import java.util.Map;
  *
  * @author Jacob Klövekorn
  */
+@SuppressWarnings({"unchecked", "MethodDoesntCallSuperMethod"})
 public class Team {
     /**
      * Static instance of a horizontal team

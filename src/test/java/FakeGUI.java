@@ -1,31 +1,12 @@
-import logic.*;
-
-import java.util.List;
+import logic.AnimationTime;
+import logic.GUIConnector;
+import logic.TeamType;
+import logic.TokenType;
 
 public class FakeGUI implements GUIConnector {
 
     @Override
     public void resetSpecialTokenImages() {
-
-    }
-
-    @Override
-    public void resetText() {
-
-    }
-
-    @Override
-    public void placerAnimationFrame(int x, int y, TokenType type) {
-
-    }
-
-    @Override
-    public void removerAnimationFrame(int x, int y) {
-
-    }
-
-    @Override
-    public void showError(String string) {
 
     }
 
@@ -39,22 +20,28 @@ public class FakeGUI implements GUIConnector {
 
     }
 
-    public void faultyAlert(Integer caseID) {
-
-    }
-
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {
 
     }
 
     @Override
-    public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
+    public void updatePlayerHandIcons(int playerID, TokenType[] tokens) {
+
+    }
+
+    @Override
+    public void faultyAlert(Integer caseID) {
 
     }
 
     @Override
     public void showHand(boolean isAI, int playerID, boolean hideAll) {
+
+    }
+
+    @Override
+    public void resetText() {
 
     }
 
@@ -74,27 +61,27 @@ public class FakeGUI implements GUIConnector {
     }
 
     @Override
-    public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField, Integer[] pointsMap) {
+    public void performMoveUIUpdate(int[] players, TokenType[][] tokens, TokenType[][] gameField, Integer[] pointsMap) {
 
     }
 
     @Override
-    public void addTokenImagesForPlayer4(List<Token> tokens) {
+    public void addTokenImagesForPlayer4(TokenType[] tokens) {
 
     }
 
     @Override
-    public void addTokenImagesForPlayer3(List<Token> tokens) {
+    public void addTokenImagesForPlayer3(TokenType[] tokens) {
 
     }
 
     @Override
-    public void addTokenImagesForPlayer2(List<Token> tokens) {
+    public void addTokenImagesForPlayer2(TokenType[] tokens) {
 
     }
 
     @Override
-    public void addTokenImagesForPlayer1(List<Token> tokens) {
+    public void addTokenImagesForPlayer1(TokenType[] tokens) {
 
     }
 
@@ -133,7 +120,22 @@ public class FakeGUI implements GUIConnector {
 
     }
 
+    @Override
+    public void placerAnimationFrame(int x, int y, TokenType type) {
 
+    }
+
+    @Override
+    public void removerAnimationFrame(int x, int y) {
+
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
     public void showGUIElements() {
 
     }

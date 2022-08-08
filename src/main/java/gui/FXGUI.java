@@ -14,7 +14,6 @@ import javafx.scene.text.TextAlignment;
 import logic.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -195,10 +194,10 @@ public class FXGUI implements GUIConnector {
      * Update a players hand icons
      *
      * @param playerID player to be updates
-     * @param tokens new hand tokens
+     * @param tokens   new hand tokens
      */
     @Override
-    public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
+    public void updatePlayerHandIcons(int playerID, TokenType[] tokens) {
         //update the images of a player in the thread
         Platform.runLater(() -> {
             switch (playerID) {
@@ -259,14 +258,14 @@ public class FXGUI implements GUIConnector {
     /**
      * Update the UI of the game
      *
-     * @param players List of players
+     * @param players   List of players
      * @param gameField new game field
      * @param pointsMap new points for each line
      */
     @Override
-    public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField, Integer[] pointsMap) {
-        for (Player player : players) {
-            updatePlayerHandIcons(player.getPlayerID(), player.getHandTokens());
+    public void performMoveUIUpdate(int[] players, TokenType[][] tokens, TokenType[][] gameField, Integer[] pointsMap) {
+        for (var player : players) {
+            updatePlayerHandIcons(player, tokens[player]);
         }
         //replace each frame with the corresponding image of the new game field
         for (int row = 0; row < Constants.GAMEGRID_SIZE; row++) {
@@ -552,20 +551,23 @@ public class FXGUI implements GUIConnector {
      * @param tokens List of hand tokens
      */
     @Override
-    public void addTokenImagesForPlayer1(List<Token> tokens) {
+    public void addTokenImagesForPlayer1(TokenType[] tokens) {
+        if (tokens == null) return;
+
         int cellWidth = (int) playerHandOne.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandOne.getHeight() / Constants.HAND_SIZE;
         //remove all previous images
         playerHandOne.getChildren().clear();
 
-        for (int i = 0; i < tokens.size(); i++) {
-            ImageView imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i] == null) return;
+            ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
 
             handImages[0][i] = imageView;
             playerHandOne.add(imageView, i, 0);
-            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+            handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandOne.widthProperty().divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandOne.heightProperty());
@@ -579,20 +581,23 @@ public class FXGUI implements GUIConnector {
      * @param tokens List of hand tokens
      */
     @Override
-    public void addTokenImagesForPlayer2(List<Token> tokens) {
+    public void addTokenImagesForPlayer2(TokenType[] tokens) {
+        if (tokens == null) return;
+
         int cellWidth = (int) playerHandTwo.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandTwo.getHeight() / Constants.HAND_SIZE;
         //remove all previous images
         playerHandTwo.getChildren().clear();
-        for (int i = 0; i < tokens.size(); i++) {
-            ImageView imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i] == null) return;
+            ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token2:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             handImages[1][i] = imageView;
 
             playerHandTwo.add(imageView, 0, i);
-            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+            handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandTwo.widthProperty());
             imageView.fitHeightProperty().bind(playerHandTwo.heightProperty().divide(Constants.GAMEGRID_SIZE));
@@ -606,20 +611,24 @@ public class FXGUI implements GUIConnector {
      * @param tokens List of hand tokens
      */
     @Override
-    public void addTokenImagesForPlayer3(List<Token> tokens) {
+    public void addTokenImagesForPlayer3(TokenType[] tokens) {
+        if (tokens == null) return;
+
         int cellWidth = (int) playerHandThree.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandThree.getHeight() / Constants.HAND_SIZE;
         //remove all previous images
         playerHandThree.getChildren().clear();
-        for (int i = 0; i < tokens.size(); i++) {
-            ImageView imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i] == null) return;
+
+            ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token3:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             handImages[2][i] = imageView;
 
             playerHandThree.add(imageView, i, 0);
-            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+            handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandThree.widthProperty().divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandThree.heightProperty());
@@ -633,20 +642,22 @@ public class FXGUI implements GUIConnector {
      * @param tokens List of hand tokens
      */
     @Override
-    public void addTokenImagesForPlayer4(List<Token> tokens) {
+    public void addTokenImagesForPlayer4(TokenType[] tokens) {
+        if (tokens == null) return;
         int cellWidth = (int) playerHandFour.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandFour.getHeight() / Constants.HAND_SIZE;
         //remove all previous images
         playerHandFour.getChildren().clear();
-        for (int i = 0; i < tokens.size(); i++) {
-            ImageView imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i] == null) return;
+            ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token4:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             handImages[3][i] = imageView;
 
             playerHandFour.add(imageView, 0, i);
-            handImagesTokens.put(imageView, tokens.get(i).getTokenType());
+            handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandFour.widthProperty());
             imageView.fitHeightProperty().bind(playerHandFour.heightProperty().divide(Constants.GAMEGRID_SIZE));
@@ -654,26 +665,15 @@ public class FXGUI implements GUIConnector {
         setDragEventsForPlayerHand(playerHandFour);
     }
 
-    /**
-     * Creates Game won notification
-     *
-     * @param wonType
-     * @param points
-     * @param rowComplete
-     */
-    @Override
-    public void gameWonNotifier(TeamType wonType, int points, boolean rowComplete) {
-        gameWonNotification(wonType, points, rowComplete);
-    }
 
     /**
      * Create game won notification
      *
-     * @param wonType which team won
-     * @param points points of the winning team
+     * @param wonType     which team won
+     * @param points      points of the winning team
      * @param rowComplete boolean, if the game was won with a full row/column
      */
-    public void gameWonNotification(TeamType wonType, int points, boolean rowComplete) {
+    public void gameWonNotifier(TeamType wonType, int points, boolean rowComplete) {
         String message;
         Team lost = null;
         //check, which team won
@@ -718,22 +718,16 @@ public class FXGUI implements GUIConnector {
         Alert alert = null;
         switch (caseID) {
             //Game was started with 0 players
-            case 0: {
-                alert = new Alert(Alert.AlertType.INFORMATION, "The game cannot be started with 0 Players!");
-                break;
-            }
+            case 0 -> alert = new Alert(Alert.AlertType.INFORMATION, "The game cannot be started with 0 Players!");
+
             //Game was started with an unequal amount of players
-            case 1: {
-                alert = new Alert(Alert.AlertType.INFORMATION, "The teams need to be of equal size!");
-                break;
-            }
+            case 1 -> alert = new Alert(Alert.AlertType.INFORMATION, "The teams need to be of equal size!");
+
             //Game was started with another faulty config
-            case 2: {
-                alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
-                break;
-            }
+            case 2 -> alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
         }
         //Set alert title and show the alert
+        assert alert != null;
         alert.setTitle("Wrong configuration");
         alert.setHeaderText("Wrong configuration!");
         alert.showAndWait();
@@ -847,6 +841,7 @@ public class FXGUI implements GUIConnector {
                     // Welche Information kann auf diesem Target-Objekt abgelegt werden?
                     //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
                     if (!event.isDropCompleted() && event.getGestureSource() != curr && event.getDragboard().hasString()) {
+                        //TODO: hier @ Jacob: was ist das?
                         // setzte das visuelles Feedback (im DragEntered Handler gesetzt) zurück
                         //imageGrid[i][j].doSomething(...);
                     }
@@ -902,6 +897,7 @@ public class FXGUI implements GUIConnector {
             child.setOnDragDone((DragEvent event) -> {
                 // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt
                 if (event.getTransferMode() == TransferMode.MOVE) {
+                    //TODO: hier @ Jacob: was ist das?
                     //TODO:  //source.setText("");
                 }
                 event.consume();
@@ -957,8 +953,8 @@ public class FXGUI implements GUIConnector {
                 return this.clickEventSave.isGrid() &&
                         this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
                                 [this.clickEventSave.getPosY()]) != TokenType.NONE &&
-                        !(this.clickEventSave.getPosX() == this.clickXOrigin &&
-                                this.clickEventSave.getPosY() == this.clickYOrigin);
+                        !(this.clickEventSave.getPosX().equals(this.clickXOrigin) &&
+                                this.clickEventSave.getPosY().equals(this.clickYOrigin));
             }
             //for replacer action
             case "REPLACER" -> {

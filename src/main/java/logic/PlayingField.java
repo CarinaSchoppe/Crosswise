@@ -52,7 +52,7 @@ public class PlayingField {
         TokenType[][] tokenArray = new TokenType[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                tokenArray[i][j] = fieldMap[i][j].getToken().getTokenType();
+                tokenArray[i][j] = fieldMap[i][j].getToken().tokenType();
             }
         }
         return tokenArray;
@@ -75,7 +75,7 @@ public class PlayingField {
         stringBuilder.append("FieldMap:\n");
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                stringBuilder.append(fieldMap[i][j].getToken().getTokenType().getValue());
+                stringBuilder.append(fieldMap[i][j].getToken().tokenType().getValue());
                 stringBuilder.append(" ");
             }
             stringBuilder.append("\n");

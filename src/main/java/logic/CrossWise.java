@@ -16,7 +16,7 @@ public class CrossWise extends Application {
     public static final boolean DEBUG = false;
     public static long time;
     public static final boolean UI = true;
-    public static int DELAY = 10;
+    public static final int DELAY = 10;
 
 
     public static void main(String[] args) {
@@ -24,43 +24,34 @@ public class CrossWise extends Application {
     }
 
     /*
-     * TODO game wrong alert: "cant be started with 0 players"?!
-     * TODO: Structure of the program?
-     * TODO: Responsive Design
-     * TODO: GUI Points
-     * TODO end timer event premature
-     * TODO fakeGUI
+     * TODO Responsive Design
+     * TODO GUI Points
+
+     * TODO: Tests schreiben
      * TODO Create players via createGame method and not in the createGame class
      * TODO last token not responsive?
      * TODO border pane from empty token doesnt get removed
      * TODO border pane to special tokens
      * TODO drag and drop highlight
      * TODO loadinvalidfile - game can be created with currentplayer on an inactive ID or out of bounds, game field can be asymetrical
-     * TODO remove usedTokens from draw pile not working?
-     * TODO CrossWise CreateStuff BusyWaiting
-     * TODO createNewGame same as other createGame method
-     *  ----kleinere sachen
-     * TODO HashMap to Map
-     * TODO disable GUI elements while AI move
-     * TODO colors of background and create game background0
-     * TODO spieler hand creation in 1 methode?
-     * TODO change opacity of special tokens when used up
-     * TODO cant pick replacer, if no symbol tokens on hand
-     * TODO cant pick swapper if less than 2 tokens on field
-     * TODO win text label of hori or verti ( > 100)
-     * TODO remove game won double method in fxgui
-     * TODO remove calculation is doing win
-     * TODO playerMove  not with strings but with token types
      *  ---tests
      * TODO faulty files
      *  ---vll
      * TODO drag and drop having image in it
-     * TODO initial directory
-     * TODO put removeUsedTokens method into game class
-     * TODO maybe remove player instances from performMoveUIupdate method
-     * TODO fix is preventing loss in big chooser method if both are preventing loss
      *  ---questions
-     * TODO why hashcode
+     *
+     * ---TODO's for jacob only:
+     * TODO end timer event premature
+     * TODO win text label of hori or verti ( > 100)
+     * TODO cant pick replacer, if no symbol tokens on hand
+     * TODO cant pick swapper if less than 2 tokens on field
+     * TODO disable GUI elements while AI move
+     * TODO drag and drop highlight
+     * TODO HashMap to Map
+     * TODO colors of background and create game background0
+     * TODO fix is preventing loss in big chooser method if both are preventing loss
+     * TODO Structure of the program?
+     * TODO playerMove  not with strings but with token types
      *
      * */
 

@@ -7,7 +7,7 @@ public final class PlayerData {
     private final String name;
     private final boolean isActive;
     private final boolean isAI;
-    private int[] hand;
+    private final int[] hand;
 
     public PlayerData(String name, boolean isActive, boolean isAI, int[] hand) {
         this.name = name;
@@ -28,14 +28,6 @@ public final class PlayerData {
         return Arrays.equals(hand, that.hand);
     }
 
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (isActive() ? 1 : 0);
-        result = 31 * result + (isAI() ? 1 : 0);
-        result = 31 * result + Arrays.hashCode(hand);
-        return result;
-    }
 
     @Override
     public String toString() {
@@ -66,7 +58,4 @@ public final class PlayerData {
         return hand.clone();
     }
 
-    public void setHand(int[] hand) {
-        this.hand = hand;
-    }
 }

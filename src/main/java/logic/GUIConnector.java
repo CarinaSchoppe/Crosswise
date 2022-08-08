@@ -1,7 +1,5 @@
 package logic;
 
-import java.util.List;
-
 public interface GUIConnector {
     void resetSpecialTokenImages();
 
@@ -11,7 +9,7 @@ public interface GUIConnector {
 
     void changeCurrentAnimationTime(AnimationTime time);
 
-    void updatePlayerHandIcons(int playerID, List<Token> tokens);
+    void updatePlayerHandIcons(int playerID, TokenType[] tokens);
 
     void faultyAlert(Integer caseID);
 
@@ -26,15 +24,15 @@ public interface GUIConnector {
 
     void gameWonNotifier(TeamType wonType, int points, boolean rowComplete);
 
-    void performMoveUIUpdate(List<Player> players, TokenType[][] gameField, Integer[] pointsMap);
+    void performMoveUIUpdate(int[] players, TokenType[][] tokens, TokenType[][] gameField, Integer[] pointsMap);
 
-    void addTokenImagesForPlayer4(List<Token> tokens);
+    void addTokenImagesForPlayer4(TokenType[] tokens);
 
-    void addTokenImagesForPlayer3(List<Token> tokens);
+    void addTokenImagesForPlayer3(TokenType[] tokens);
 
-    void addTokenImagesForPlayer2(List<Token> tokens);
+    void addTokenImagesForPlayer2(TokenType[] tokens);
 
-    void addTokenImagesForPlayer1(List<Token> tokens);
+    void addTokenImagesForPlayer1(TokenType[] tokens);
 
     void changeCurrentPlayerText(String playerName);
 

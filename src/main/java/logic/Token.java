@@ -3,15 +3,10 @@ package logic;
 /**
  * Class for a token for the Game Crosswise
  *
+ * @param tokenType Type of the Token
  * @author Jacob Klövekorn
  */
-public class Token {
-    /**
-     * Type of the Token
-     */
-    private final TokenType tokenType;
-
-
+public record Token(TokenType tokenType) {
     //----------------------------------------------------------------------------------------------
 
     /**
@@ -19,12 +14,7 @@ public class Token {
      *
      * @param tokenType Type of the new Token
      */
-    public Token(TokenType tokenType) {
-        this.tokenType = tokenType;
-    }
-
-    public TokenType getTokenType() {
-        return tokenType;
+    public Token {
     }
 
 
@@ -33,7 +23,7 @@ public class Token {
         if (this == o) return true;
         if (!(o instanceof Token token)) return false;
 
-        return getTokenType() == token.getTokenType();
+        return tokenType() == token.tokenType();
     }
 
     @Override

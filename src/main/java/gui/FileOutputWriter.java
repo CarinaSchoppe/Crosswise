@@ -74,7 +74,7 @@ public class FileOutputWriter {
     private static PlayerData generatePlayerData(List<Token> tokens, String playerName, boolean isAI, boolean isActive) {
         int[] hand = new int[tokens.size()];
         for (int i = 0; i < tokens.size(); i++) {
-            hand[i] = tokens.get(i).getTokenType().getValue();
+            hand[i] = tokens.get(i).tokenType().getValue();
         }
         return new PlayerData(playerName, isActive, isAI, hand);
     }
@@ -91,7 +91,7 @@ public class FileOutputWriter {
         for (int i = 0; i < playingFieldSize; i++) {
             for (int j = 0; j < playingFieldSize; j++) {
                 //translate Token from position to TokenType int value
-                field[i][j] = fieldMap[i][j].getToken().getTokenType().getValue();
+                field[i][j] = fieldMap[i][j].getToken().tokenType().getValue();
             }
         }
         return field;
@@ -110,7 +110,7 @@ public class FileOutputWriter {
         }
         //add tokens to the array, (needs to be changed, if the tokens or their order is changed)
         for (Token token : usedActionTokens) {
-            switch (token.getTokenType()) {
+            switch (token.tokenType()) {
                 case REMOVER -> usedActionTiles[0] += 1;
                 case MOVER -> usedActionTiles[1] += 1;
                 case SWAPPER -> usedActionTiles[2] += 1;

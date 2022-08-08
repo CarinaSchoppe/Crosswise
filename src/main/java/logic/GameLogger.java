@@ -26,7 +26,7 @@ public class GameLogger {
     }
 
     public static void logMove(Player player, Token placed, Position to) {
-        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.PLACE.getText() + ": " + placed.getTokenType().getValue() + " on: " + to.toString() + " new Hand: " + player.handRepresentation() +
+        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.PLACE.getText() + ": " + placed.tokenType().getValue() + " on: " + to.toString() + " new Hand: " + player.handRepresentation() +
                 "\n" +
                 Game.getGame().getPlayingField().toString();
         log(builder);
@@ -40,7 +40,7 @@ public class GameLogger {
     }
 
     public static void logMoveRemove(Player player, Position from) {
-        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.REMOVE.getText() + " Token: " + from.getToken().getTokenType().getValue() + " from: " + from + " new Hand: " + player.handRepresentation() +
+        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.REMOVE.getText() + " Token: " + from.getToken().tokenType().getValue() + " from: " + from + " new Hand: " + player.handRepresentation() +
                 "\n" +
                 Game.getGame().getPlayingField().toString();
         log(builder);
@@ -54,7 +54,7 @@ public class GameLogger {
     }
 
     public static void logMoveReplacer(Player player, Position start, Token with) {
-        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.REPLACED.getText() + ": " + start.toStringWithToken() + " with vaule: " + with.getTokenType().getValue() + " new Hand: " + player.handRepresentation() +
+        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.REPLACED.getText() + ": " + start.toStringWithToken() + " with vaule: " + with.tokenType().getValue() + " new Hand: " + player.handRepresentation() +
                 "\n" +
                 Game.getGame().getPlayingField().toString();
         log(builder);
@@ -72,7 +72,7 @@ public class GameLogger {
     }
 
     public static void logDraw(Player player, Token token) {
-        String builder = "Player \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" draws: \"" + token.getTokenType().getValue() + "\" new Hand: " + player.handRepresentation() + "\n";
+        String builder = "Player \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" draws: \"" + token.tokenType().getValue() + "\" new Hand: " + player.handRepresentation() + "\n";
         log(builder);
     }
 }

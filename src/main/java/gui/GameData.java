@@ -11,7 +11,7 @@ public final class GameData {
     /**
      * Players as PlayerData objects
      */
-    private PlayerData[] players;
+    private final PlayerData[] players;
     /**
      * current player as int
      */
@@ -52,14 +52,6 @@ public final class GameData {
         return Arrays.equals(usedActionTiles, gameData.usedActionTiles);
     }
 
-    @Override
-    public int hashCode() {
-        int result = Arrays.hashCode(players);
-        result = 31 * result + currentPlayer;
-        result = 31 * result + Arrays.deepHashCode(field);
-        result = 31 * result + Arrays.hashCode(usedActionTiles);
-        return result;
-    }
 
     @Override
     public String toString() {

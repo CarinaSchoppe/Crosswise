@@ -9,6 +9,7 @@ import java.util.*;
  *
  * @author Jacob Klövekorn
  */
+@SuppressWarnings("unchecked")
 public class Player {
     /**
      * Tokens on the hand of the player
@@ -68,19 +69,28 @@ public class Player {
         }
         Position field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
         //return false, if the field is already occupied with a token
-        if (field.getToken().getTokenType() != TokenType.NONE) {
+        if (field.getToken().tokenType() != TokenType.NONE) {
             return false;
         }
         handTokens.remove(getCorrespondingToken(token));
         field.setToken(token);
         if (CrossWise.DEBUG)
             System.out.println("player name: " + name + "player: " + Game.getGame().getCurrentPlayer().name);
-
-         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
+        var playerIDs = new int[Constants.PLAYER_COUNT];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            playerIDs[i] = Game.getGame().getPlayers().get(i).getPlayerID();
+        }
+        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
+                playerHands[i][j] = Game.getGame().getPlayers().get(i).getHandTokens().get(j).tokenType();
+            }
+        }
+        Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands,
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
         if (this instanceof AI) {
-            Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().getTokenType());
+            Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().tokenType());
             GameLogger.logMove(this, token, position);
             Platform.runLater(() -> {
                 try {
@@ -110,19 +120,29 @@ public class Player {
 
 
     public boolean removerTokenTurn(final Token token, final Position position) {
-        if (token.getTokenType() != TokenType.REMOVER) return false;
+        if (token.tokenType() != TokenType.REMOVER) return false;
 
         if (hasToken(token)) return false;
 
         Position field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
-        if (field.getToken().getTokenType() == TokenType.NONE) return false;
+        if (field.getToken().tokenType() == TokenType.NONE) return false;
 
         handTokens.remove(getCorrespondingToken(token));
         handTokens.add(field.getToken());
         GameLogger.logMoveRemove(this, field);
         field.setToken(new Token(TokenType.NONE));
         Game.getGame().getGUIConnector().removerAmountText();
-        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
+        var playerIDs = new int[Constants.PLAYER_COUNT];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            playerIDs[i] = Game.getGame().getPlayers().get(i).getPlayerID();
+        }
+        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
+                playerHands[i][j] = Game.getGame().getPlayers().get(i).getHandTokens().get(j).tokenType();
+            }
+        }
+        Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands,
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
         if (this instanceof AI) {
@@ -145,24 +165,34 @@ public class Player {
 
 
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
-        if (token.getTokenType() != TokenType.MOVER) return false;
+        if (token.tokenType() != TokenType.MOVER) return false;
         if (hasToken(token)) return false;
         Position fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
         Position fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
 
-        if (fieldStart.getToken().getTokenType() == TokenType.NONE) return false;
-        if (fieldEnd.getToken().getTokenType() != TokenType.NONE) return false;
+        if (fieldStart.getToken().tokenType() == TokenType.NONE) return false;
+        if (fieldEnd.getToken().tokenType() != TokenType.NONE) return false;
 
         handTokens.remove(getCorrespondingToken(token));
         GameLogger.logMoveMove(this, fieldStart, fieldEnd);
         fieldEnd.setToken(fieldStart.getToken());
         fieldStart.setToken(new Token(TokenType.NONE));
-        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
+        var playerIDs = new int[Constants.PLAYER_COUNT];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            playerIDs[i] = Game.getGame().getPlayers().get(i).getPlayerID();
+        }
+        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
+                playerHands[i][j] = Game.getGame().getPlayers().get(i).getHandTokens().get(j).tokenType();
+            }
+        }
+        Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands,
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
         if (this instanceof AI) {
             Game.getGame().getGUIConnector().removerAnimationFrame(fieldStart.getX(), fieldStart.getY());
-            Game.getGame().getGUIConnector().placerAnimationFrame(fieldEnd.getX(), fieldEnd.getY(), fieldEnd.getToken().getTokenType());
+            Game.getGame().getGUIConnector().placerAnimationFrame(fieldEnd.getX(), fieldEnd.getY(), fieldEnd.getToken().tokenType());
             Game.getGame().getGUIConnector().updateSpecialTokenIcons(TokenType.MOVER);
 
         }
@@ -172,14 +202,14 @@ public class Player {
     }
 
     public boolean swapperTokenTurn(final Token token, final Position first, final Position second) {
-        if (token.getTokenType() != TokenType.SWAPPER) return false;
+        if (token.tokenType() != TokenType.SWAPPER) return false;
         if (hasToken(token)) return false;
         Position fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         if (fieldFirst == null) return false;
         Position fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
         if (fieldSecond == null) return false;
-        if (fieldFirst.getToken().getTokenType() == TokenType.NONE) return false;
-        if (fieldSecond.getToken().getTokenType() == TokenType.NONE) return false;
+        if (fieldFirst.getToken().tokenType() == TokenType.NONE) return false;
+        if (fieldSecond.getToken().tokenType() == TokenType.NONE) return false;
         handTokens.remove(getCorrespondingToken(token));
         GameLogger.logMoveSwapper(this, fieldFirst, fieldSecond);
         Token temp = fieldFirst.getToken();
@@ -187,11 +217,21 @@ public class Player {
         fieldSecond.setToken(temp);
 
         Game.getGame().getGUIConnector().swapperAmountText();
-        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
+        var playerIDs = new int[Constants.PLAYER_COUNT];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            playerIDs[i] = Game.getGame().getPlayers().get(i).getPlayerID();
+        }
+        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
+                playerHands[i][j] = Game.getGame().getPlayers().get(i).getHandTokens().get(j).tokenType();
+            }
+        }
+        Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands,
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
         if (this instanceof AI) {
-            Game.getGame().getGUIConnector().placerAnimationFrame(fieldFirst.getX(), fieldFirst.getY(), fieldFirst.getToken().getTokenType());
-            Game.getGame().getGUIConnector().placerAnimationFrame(fieldSecond.getX(), fieldSecond.getY(), fieldSecond.getToken().getTokenType());
+            Game.getGame().getGUIConnector().placerAnimationFrame(fieldFirst.getX(), fieldFirst.getY(), fieldFirst.getToken().tokenType());
+            Game.getGame().getGUIConnector().placerAnimationFrame(fieldSecond.getX(), fieldSecond.getY(), fieldSecond.getToken().tokenType());
             Game.getGame().getGUIConnector().updateSpecialTokenIcons(TokenType.SWAPPER);
 
         }
@@ -208,16 +248,16 @@ public class Player {
      */
     public boolean replacerTokenTurn(final Token token, final Position fieldTokenPosition, final Position handTokenPosition) {
         if (hasToken(token)) return false;
-        if (token.getTokenType() != TokenType.REPLACER) return false;
+        if (token.tokenType() != TokenType.REPLACER) return false;
         if (hasToken(getCorrespondingToken(handTokenPosition))) return false;
 
         Position replacerField = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
-        if (replacerField.getToken().getTokenType() == TokenType.NONE) return false;
+        if (replacerField.getToken().tokenType() == TokenType.NONE) return false;
         Token replacerToken = getCorrespondingToken(token);
         if (replacerToken == null) return false;
         Token handToken = getCorrespondingToken(handTokenPosition);
         if (handToken == null) return false;
-        if (handToken.getTokenType() == TokenType.NONE) return false;
+        if (handToken.tokenType() == TokenType.NONE) return false;
         GameLogger.logMoveReplacer(this, replacerField, handToken);
         handTokens.remove(replacerToken);
         handTokens.remove(handToken);
@@ -225,11 +265,21 @@ public class Player {
         replacerField.setToken(handToken);
         Game.getGame().getGUIConnector().replacerAmountText();
 
-        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(),
+        var playerIDs = new int[Constants.PLAYER_COUNT];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            playerIDs[i] = Game.getGame().getPlayers().get(i).getPlayerID();
+        }
+        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
+                playerHands[i][j] = Game.getGame().getPlayers().get(i).getHandTokens().get(j).tokenType();
+            }
+        }
+        Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands,
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
 
         if (this instanceof AI) {
-            Game.getGame().getGUIConnector().placerAnimationFrame(replacerField.getX(), replacerField.getY(), replacerField.getToken().getTokenType());
+            Game.getGame().getGUIConnector().placerAnimationFrame(replacerField.getX(), replacerField.getY(), replacerField.getToken().tokenType());
             Game.getGame().getGUIConnector().updateSpecialTokenIcons(TokenType.REPLACER);
 
         }
@@ -263,7 +313,7 @@ public class Player {
 
     public Token getCorrespondingToken(String tokenName) {
         for (Token t : handTokens) {
-            if (t.getTokenType().name().equals(tokenName)) {
+            if (t.tokenType().name().equals(tokenName)) {
                 return t;
             }
         }
@@ -286,7 +336,7 @@ public class Player {
         if (Game.getGame().getTokenDrawPile().isEmpty()) throw new NoTokenException("No more tokens left in the Pile!");
 
         //return if there is no None token in tokens
-        if (handTokens.size() >= Constants.HAND_SIZE && handTokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE)
+        if (handTokens.size() >= Constants.HAND_SIZE && handTokens.get(Constants.HAND_SIZE - 1).tokenType() != TokenType.NONE)
             return;
 
         Token token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
@@ -294,7 +344,7 @@ public class Player {
 
 
         //remove all tokens from tokens if the TokenType is None
-        handTokens.removeIf(t -> t.getTokenType() == TokenType.NONE);
+        handTokens.removeIf(t -> t.tokenType() == TokenType.NONE);
 
         //Add the token to the hand
         handTokens.add(token);
@@ -304,8 +354,11 @@ public class Player {
         }
 
         GameLogger.logDraw(this, token);
-
-        Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokens);
+        var handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
+        for (int i = 0; i < Constants.HAND_SIZE; i++) {
+            handTokenTypeArray[i] = handTokens.get(i).tokenType();
+        }
+        Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokenTypeArray);
 
 
     }
@@ -320,7 +373,7 @@ public class Player {
         //the amount of tokens with the same TokenType in hand
         int amount = 0;
         for (Token t : handTokens) {
-            if (t.getTokenType() == token) amount++;
+            if (t.tokenType() == token) amount++;
         }
         return amount;
     }
@@ -334,7 +387,7 @@ public class Player {
         Token[] handCopy = this.getHandTokens().toArray(new Token[0]);
         HashSet<Integer> returnSet = new HashSet<>();
         for (int i = 0; i < handCopy.length; i++) {
-            if (handCopy[i].getTokenType().getValue() <= Constants.UNIQUE_SYMBOL_TOKENS) {
+            if (handCopy[i].tokenType().getValue() <= Constants.UNIQUE_SYMBOL_TOKENS) {
                 returnSet.add(i);
             }
         }
@@ -349,7 +402,7 @@ public class Player {
     public TokenType[] convertHandToTokenTypeArray() {
         TokenType[] array = new TokenType[Constants.HAND_SIZE];
         for (int index = 0; index < handTokens.size(); index++) {
-            array[index] = handTokens.get(index).getTokenType();
+            array[index] = handTokens.get(index).tokenType();
         }
         return array;
     }
@@ -383,7 +436,7 @@ public class Player {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
         for (Token t : handTokens) {
-            builder.append(t.getTokenType().getValue());
+            builder.append(t.tokenType().getValue());
             builder.append(", ");
         }
         if (builder.length() > 2) {

@@ -7,13 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import logic.AI;
 import logic.GUIConnector;
 import logic.Game;
-import logic.Player;
 
 import java.net.URL;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -73,38 +71,33 @@ public class CreateGame implements Initializable {
      */
     @FXML
     void createGame(ActionEvent event) {
-        int playerID = 0;
-        Player playerOne;
-        if (playerOneAI.isSelected()) {
-            playerOne = new AI(0, playerOneActive.isSelected(), playerOneField.getText());
-        } else {
-            playerOne = new Player(0, playerOneActive.isSelected(), playerOneField.getText());
-        }
-        Player playerTwo;
-        if (playerTwoAI.isSelected()) {
-            playerTwo = new AI(1, playerTwoActive.isSelected(), playerTwoField.getText());
-        } else {
-            playerTwo = new Player(1, playerTwoActive.isSelected(), playerTwoField.getText());
-        }
-        Player playerThree;
-        if (playerThreeAI.isSelected()) {
-            playerThree = new AI(2, playerThreeActive.isSelected(), playerThreeField.getText());
-        } else {
-            playerThree = new Player(2, playerThreeActive.isSelected(), playerThreeField.getText());
-        }
-        Player playerFour;
-        if (playerFourAI.isSelected()) {
-            playerFour = new AI(3, playerFourActive.isSelected(), playerFourField.getText());
-        } else {
-            playerFour = new Player(3, playerFourActive.isSelected(), playerFourField.getText());
-        }
+
+        var playerNames = new ArrayList<String>();
+        var isActive = new ArrayList<Boolean>();
+        var isAI = new ArrayList<Boolean>();
+
+        playerNames.add(playerOneField.getText());
+        playerNames.add(playerTwoField.getText());
+        playerNames.add(playerThreeField.getText());
+        playerNames.add(playerFourField.getText());
+
+        isActive.add(playerOneActive.isSelected());
+        isActive.add(playerTwoActive.isSelected());
+        isActive.add(playerThreeActive.isSelected());
+        isActive.add(playerFourActive.isSelected());
+
+        playerNames.add(playerOneAI.getText());
+        playerNames.add(playerTwoAI.getText());
+        playerNames.add(playerThreeAI.getText());
+        playerNames.add(playerFourAI.getText());
+
+        if (playerNames.isEmpty() || isActive.isEmpty() || isAI.isEmpty())
+            return;
+
         //close the current window
         ((Stage) createGameButton.getScene().getWindow()).close();
-        Game.createNewGame(List.of(playerOne, playerTwo, playerThree, playerFour), guiConnector, false);
-        playerOne.create();
-        playerTwo.create();
-        playerThree.create();
-        playerFour.create();
+        Game.createNewGame(playerNames, isAI, isActive, guiConnector, false);
+
 
         //Setting up GUI elements of the game and creating drag and drop functions
         guiConnector.showGUIElements();

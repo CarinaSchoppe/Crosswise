@@ -430,7 +430,7 @@ public class AI extends Player {
         //increases counter for e occurrence of the asked token in the GameGrid
         for (Token[] tokens : grid) {
             for (Token value : tokens) {
-                if (value.getTokenType() == token) {
+                if (value.tokenType() == token) {
                     counter++;
                 }
             }
@@ -553,7 +553,7 @@ public class AI extends Player {
         //iterate through all fields of the game field and add it to the new HashSet of positions, if its empty
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j].getTokenType().getValue() == 0) {
+                if (grid[i][j].tokenType().getValue() == 0) {
                     positions.add(new Position(i, j));
                 }
             }
@@ -572,7 +572,7 @@ public class AI extends Player {
         //iterate through all fields of the game field and add it to the new HashSet of positions, if its not empty
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j].getTokenType().getValue() != 0) {
+                if (grid[i][j].tokenType().getValue() != 0) {
                     positions.add(new Position(i, j));
                 }
             }
@@ -650,7 +650,7 @@ public class AI extends Player {
         Set<Position> occupiedFields = occupiedFields();
         for (Position occupiedField : occupiedFields) {
             for (Integer handPosition : handSymbolTokenSet) {
-                TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].getTokenType());
+                TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(occupiedField, playerHand[handPosition].tokenType());
                 Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
                 //Create Token Move for every possible move and add it to the existing moves
                 tokenMoves.add(new TokenMove(occupiedField, new Position(handPosition), currentCalculation.pointsChange(), TokenType.REPLACER, currentCalculation.gameWinning(), isMovePreventingLoss(changedTokenGrid)));

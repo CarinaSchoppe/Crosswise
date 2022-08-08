@@ -10,8 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
 
 /**
  * Class for reading a json file and creating a game out of it
@@ -45,7 +43,7 @@ public class FileInputReader {
     /**
      * Static method for reading the contents of a file and creating a new game out of it, if possible
      *
-     * @param file File, which contains the game data
+     * @param file         File, which contains the game data
      * @param guiConnector gui connector for the new game
      */
     public static void readFile(File file, GUIConnector guiConnector) {
@@ -93,7 +91,19 @@ public class FileInputReader {
         }
         removeUsedTokensFromPile(Game.getGame());
         //start the game
-        Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+        //convert the player ids into an array of int
+        var playerIDs = new int[Constants.PLAYER_COUNT];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            playerIDs[i] = players.get(i).getPlayerID();
+        }
+        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
+            for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
+                playerHands[i][j] = players.get(i).getHandTokens().get(j).tokenType();
+            }
+        }
+
+        Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands, Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
         Game.getGame().getGUIConnector().startGamePopUp();
         Game.getGame().startGame();
         Game.getGame().getThread().start();
@@ -107,36 +117,41 @@ public class FileInputReader {
      */
     private static boolean checkInvalidConfig(final GameData gameData) {
         //invalid player config, cant be 0 and needs to load 4 players
-        if (gameData.getPlayers().length == 0 || gameData.getPlayers().length % 2 != 0)
+        if (gameData.getPlayers().length == 0 || gameData.getPlayers().length % 2 != 0) return true;
+
+
+        if (gameData.getCurrentPlayer() >= 3 || gameData.getCurrentPlayer() < 0)
             return true;
 
         //invalid  number of active players
         int current = 0;
         for (int i = 0; i < gameData.getPlayers().length; i++) {
-            if (gameData.getPlayers()[i].isActive())
-                current += i;
+            if (gameData.getPlayers()[i].isActive()) current += i;
         }
-        if (current % 2 == 0 && Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive))
-            return true;
+        if (current % 2 == 0 && Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive)) return true;
+
+
+        //check the minimum size of a game
+        if (gameData.getField().length < 2) return true;
+
+        //check rows and column size equal
+        for (var row : gameData.getField()) {
+            if (row.length != gameData.getField()[0].length || row.length != gameData.getField().length) return true;
+        }
+
 
         //invalid if no players are active
-        if (Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive))
-            return true;
+        if (Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive)) return true;
         //invalid if hands of players are 0 or above 4 (interpreted, that it should be possible to load players with less hand tokens and fill them up
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.getHand().length == 0 || !player.isActive() && player.getHand().length > 0))
-            return true;
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.getHand().length == 0 || !player.isActive() && player.getHand().length > 0)) return true;
         //Invalid if the IDs of the tokens are below 0 or above 10 (would needed to be changed if the game should be started with less or more unique tokens)
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.getHand()).anyMatch(token -> token < 0 || token > 10)))
-            return true;
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.getHand()).anyMatch(token -> token < 0 || token > 10))) return true;
         //same as above for the game field tokens
-        if (Arrays.stream(gameData.getField()).anyMatch(fieldRow -> Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token > 10)))
-            return true;
+        if (Arrays.stream(gameData.getField()).anyMatch(fieldRow -> Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token > 10))) return true;
         //hand must contain 4 players
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE))
-            return true;
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE)) return true;
         //special tokens need to fit the game rules
-        return Arrays.stream(gameData.getUsedActionTiles()).anyMatch(special -> special > Constants.AMOUNT_ACTION_TOKENS) ||
-                gameData.getUsedActionTiles().length > Constants.UNIQUE_ACTION_TOKENS;
+        return Arrays.stream(gameData.getUsedActionTiles()).anyMatch(special -> special > Constants.AMOUNT_ACTION_TOKENS) || gameData.getUsedActionTiles().length > Constants.UNIQUE_ACTION_TOKENS;
     }
 
     /**
@@ -146,7 +161,7 @@ public class FileInputReader {
      * @return ArrayList of players
      */
     private static ArrayList<Player> getPlayersFromFile(GameData gameData) {
-        ArrayList<Player> players = new ArrayList<Player>();
+        ArrayList<Player> players = new ArrayList<>();
         for (int i = 0; i < gameData.getPlayers().length; i++) {
             PlayerData playerData = gameData.getPlayers()[i];
             //checks if the player is an AI player or a normal player
