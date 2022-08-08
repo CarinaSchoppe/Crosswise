@@ -262,7 +262,7 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {
-        this.animationTime = time;
+        animationTime = time;
     }
 
     /**
@@ -380,8 +380,8 @@ public class FXGUI implements GUIConnector {
     private void generatePointsGrids() {
         verticalPointsGrid.setVgap(-1);
         verticalPointsGrid.setHgap(-1);
-        this.horizontalPointsGrid.getChildren().clear();
-        this.verticalPointsGrid.getChildren().clear();
+        horizontalPointsGrid.getChildren().clear();
+        verticalPointsGrid.getChildren().clear();
 
         for (int rows = 0; rows < Constants.GAMEGRID_SIZE; rows++) {
             Label horiLabel = new Label();
@@ -411,9 +411,8 @@ public class FXGUI implements GUIConnector {
             horiLabel.setAlignment(Pos.CENTER);
 
 
-
-            this.horizontalPointsGrid.add(horiLabel, 0, rows);
-            this.verticalPointsGrid.add(vertLabel, rows, 0);
+            horizontalPointsGrid.add(horiLabel, 0, rows);
+            verticalPointsGrid.add(vertLabel, rows, 0);
         }
 
         ColumnConstraints con = new ColumnConstraints();
@@ -432,7 +431,7 @@ public class FXGUI implements GUIConnector {
         //Horizontal Team Points
         int counterH = Constants.GAMEGRID_SIZE - 1;
         int sumHorizontal = 0;
-        for (Node child : this.horizontalPointsGrid.getChildren()) {
+        for (Node child : horizontalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
             if (pointsMap[counterH] < -100) {
                 currLabel.setText("Win");
@@ -443,15 +442,15 @@ public class FXGUI implements GUIConnector {
             counterH--;
         }
         if (sumHorizontal < -100) {
-            this.sumPointsHorizontalTeam.setText("Win");
+            sumPointsHorizontalTeam.setText("Win");
         } else {
-            this.sumPointsHorizontalTeam.setText(Integer.toString(sumHorizontal));
+            sumPointsHorizontalTeam.setText(Integer.toString(sumHorizontal));
         }
 
         //Vertical Team Points
         int sumVertical = 0;
         int counterV = Constants.GAMEGRID_SIZE;
-        for (Node child : this.verticalPointsGrid.getChildren()) {
+        for (Node child : verticalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
             if (pointsMap[counterV] < -100) {
                 currLabel.setText("Win");
@@ -462,9 +461,9 @@ public class FXGUI implements GUIConnector {
             counterV++;
         }
         if (sumVertical < -100) {
-            this.sumPointsVerticalTeam.setText("Win");
+            sumPointsVerticalTeam.setText("Win");
         } else {
-            this.sumPointsVerticalTeam.setText(Integer.toString(sumVertical));
+            sumPointsVerticalTeam.setText(Integer.toString(sumVertical));
         }
     }
 
@@ -472,21 +471,21 @@ public class FXGUI implements GUIConnector {
      * Make GUI elements visible
      */
     public void showGUIElements() {
-        this.innerGrid.setVisible(true);
+        innerGrid.setVisible(true);
     }
 
     /**
      * Disable GUI Elements
      */
     public void disableGUIElementes() {
-        this.disableGUI = true;
+        disableGUI = true;
     }
 
     /**
      * Enable Gui Elements
      */
     public void enableGUIElements() {
-        this.disableGUI = false;
+        disableGUI = false;
     }
 
     /**
@@ -806,7 +805,7 @@ public class FXGUI implements GUIConnector {
                     String input = event.getDragboard().getString();
                     var tokenType = TokenType.getTokenTypeFromString(input);
                     //field empty
-                    if (this.gridImagesTokens.get(curr) == TokenType.NONE) {
+                    if (gridImagesTokens.get(curr) == TokenType.NONE) {
                         if (tokenType == TokenType.SUN || tokenType == TokenType.CROSS || tokenType == TokenType.TRIANGLE || tokenType == TokenType.SQUARE || tokenType == TokenType.PENTAGON || tokenType == TokenType.STAR) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
@@ -859,10 +858,10 @@ public class FXGUI implements GUIConnector {
                         }
 
                         case MOVER, SWAPPER, REPLACER -> {
-                            this.checkForMouse = true;
-                            this.clickToken = input;
-                            this.clickXOrigin = finalI;
-                            this.clickYOrigin = finalJ;
+                            checkForMouse = true;
+                            clickToken = input;
+                            clickXOrigin = finalI;
+                            clickYOrigin = finalJ;
                         }
                         default -> throw new RuntimeException("Invalid token type");
                     }
@@ -891,12 +890,12 @@ public class FXGUI implements GUIConnector {
                 //set actions for a mouse click
                 curr.setOnMouseClicked((MouseEvent event) -> {
                     //game needs to listen to a mouse click input
-                    if (this.checkForMouse) {
-                        this.clickEventSave = new ClickEventSave(finalI, finalJ);
+                    if (checkForMouse) {
+                        clickEventSave = new ClickEventSave(finalI, finalJ);
                         //check if the click is valid with the configuration of the game
                         if (currentClickIsValid()) {
                             specialClickAction();
-                            this.checkForMouse = false;
+                            checkForMouse = false;
                         }
                     }
                 });
@@ -949,11 +948,11 @@ public class FXGUI implements GUIConnector {
             //setup action on mouse clicked event
             child.setOnMouseClicked((MouseEvent event) -> {
 
-                if (this.checkForMouse) {
-                    this.clickEventSave = new ClickEventSave(count);
+                if (checkForMouse) {
+                    clickEventSave = new ClickEventSave(count);
                     if (currentClickIsValid()) {
                         specialClickAction();
-                        this.checkForMouse = false;
+                        checkForMouse = false;
                     }
                 }
             });
@@ -966,12 +965,12 @@ public class FXGUI implements GUIConnector {
      */
     private void specialClickAction() {
         disableGUIElementes();
-        if (this.clickToken.equals("MOVER")) {
-            Game.getGame().playerMoverTokenMove(clickXOrigin, clickYOrigin, this.clickEventSave.getPosX(), this.clickEventSave.getPosY());
-        } else if (this.clickToken.equals("SWAPPER")) {
-            Game.getGame().playerSwapperTokenMove(clickXOrigin, clickYOrigin, this.clickEventSave.getPosX(), this.clickEventSave.getPosY());
+        if (clickToken.equals("MOVER")) {
+            Game.getGame().playerMoverTokenMove(clickXOrigin, clickYOrigin, clickEventSave.getPosX(), clickEventSave.getPosY());
+        } else if (clickToken.equals("SWAPPER")) {
+            Game.getGame().playerSwapperTokenMove(clickXOrigin, clickYOrigin, clickEventSave.getPosX(), clickEventSave.getPosY());
         } else {
-            Game.getGame().playerReplacerTokenMove(clickXOrigin, clickYOrigin, this.clickEventSave.getHandPosition());
+            Game.getGame().playerReplacerTokenMove(clickXOrigin, clickYOrigin, clickEventSave.getHandPosition());
         }
     }
 
@@ -981,29 +980,29 @@ public class FXGUI implements GUIConnector {
      * @return true, if it was valid, false if it wasn't
      */
     private boolean currentClickIsValid() {
-        switch (this.clickToken) {
+        switch (clickToken) {
             //for mover action
             case "MOVER" -> {
                 //must be a token on the grid, must be an empty token
-                return this.clickEventSave.isGrid() &&
-                        this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
-                                [this.clickEventSave.getPosY()]) == TokenType.NONE;
+                return clickEventSave.isGrid() &&
+                        gridImagesTokens.get(gridImages[clickEventSave.getPosX()]
+                                [clickEventSave.getPosY()]) == TokenType.NONE;
             }
             //for swapper action
             case "SWAPPER" -> {
                 //must be a token on the grid, must be a non empty field, must not be the same field as the original one
-                return this.clickEventSave.isGrid() &&
-                        this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
-                                [this.clickEventSave.getPosY()]) != TokenType.NONE &&
-                        !(this.clickEventSave.getPosX().equals(this.clickXOrigin) &&
-                                this.clickEventSave.getPosY().equals(this.clickYOrigin));
+                return clickEventSave.isGrid() &&
+                        gridImagesTokens.get(gridImages[clickEventSave.getPosX()]
+                                [clickEventSave.getPosY()]) != TokenType.NONE &&
+                        !(clickEventSave.getPosX().equals(clickXOrigin) &&
+                                clickEventSave.getPosY().equals(clickYOrigin));
             }
             //for replacer action
             case "REPLACER" -> {
                 //must be a token on the hand, must be a SymbolToken
-                return !this.clickEventSave.isGrid() &&
-                        !this.handImagesTokens.get(this.handImages[Game.getGame().getCurrentPlayer().getPlayerID()]
-                                [this.clickEventSave.getHandPosition()]).isSpecial();
+                return !clickEventSave.isGrid() &&
+                        !handImagesTokens.get(handImages[Game.getGame().getCurrentPlayer().getPlayerID()]
+                                [clickEventSave.getHandPosition()]).isSpecial();
             }
             default -> throw new RuntimeException("Invalid token type");
         }
