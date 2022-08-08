@@ -1,28 +1,15 @@
-Tue Aug 09 00:03:28 CEST 2022: Player "Player1" and ID: "0" draws: "6" new Hand: [6, 0, 0, 0]
-
-Tue Aug 09 00:03:28 CEST 2022: Player "Player1" and ID: "0" draws: "7" new Hand: [6, 7, 0, 0]
-
-Tue Aug 09 00:03:28 CEST 2022: Player "Player1" and ID: "0" draws: "5" new Hand: [6, 7, 5, 0]
-
-Tue Aug 09 00:03:28 CEST 2022: Player "Player1" and ID: "0" draws: "2" new Hand: [6, 7, 5, 2]
-
-Tue Aug 09 00:03:28 CEST 2022: Player "Player2" and ID: "1" draws: "3" new Hand: [3, 0, 0, 0]
-
-Tue Aug 09 00:03:28 CEST 2022: Player "Player2" and ID: "1" draws: "4" new Hand: [3, 4, 0, 0]
-
-Tue Aug 09 00:03:28 CEST 2022: Player "Player2" and ID: "1" draws: "5" new Hand: [3, 4, 5, 0]
-
-Tue Aug 09 00:03:28 CEST 2022: Player "Player2" and ID: "1" draws: "6" new Hand: [3, 4, 5, 6]
-
-Tue Aug 09 00:03:28 CEST 2022: Game Setup: 
-Player{playerID=0, handTokens=[STAR, REMOVER, PENTAGON, CROSS], isActive=true, name='Player1', team=Vertical}
-Player{playerID=1, handTokens=[TRIANGLE, SQUARE, PENTAGON, STAR], isActive=true, name='Player2', team=Horizontal}
+Tue Aug 09 00:07:27 CEST 2022: Game Setup: 
+Player{playerID=0, handTokens=[SQUARE, PENTAGON, SQUARE], isActive=true, name='Player1', team=Vertical}
+Player{playerID=1, handTokens=[PENTAGON, PENTAGON, STAR, PENTAGON], isActive=true, name='Player2', team=Horizontal}
 Player{playerID=2, handTokens=[], isActive=false, name='Player3', team=Deactive}
 Player{playerID=3, handTokens=[], isActive=false, name='Player4', team=Deactive}
 
-Tue Aug 09 00:03:33 CEST 2022: Game Setup: 
-Player{playerID=0, handTokens=[CROSS], isActive=true, name='Player1', team=Vertical}
-Player{playerID=1, handTokens=[STAR, SUN], isActive=true, name='Player2', team=Horizontal}
-Player{playerID=2, handTokens=[STAR], isActive=true, name='Player3', team=Vertical}
-Player{playerID=3, handTokens=[PENTAGON, SUN], isActive=true, name='Player4', team=Horizontal}
+Tue Aug 09 00:07:27 CEST 2022: Player: "Player1" and ID: "0" placed: 4 on: Position{y=5, x=1} new Hand: [5, 4]
+FieldMap:
+3 0 2 1 3 2 
+3 6 2 1 3 6 
+4 6 2 0 4 0 
+3 6 2 0 0 0 
+0 0 2 0 0 0 
+0 4 2 0 0 0 
 

@@ -274,15 +274,18 @@ public class Game {
      * @param fileLoaded was the game loaded from a file
      */
     private void setup(boolean fileLoaded) {
-        handleOver();
+        if (handleOver()) {
+            return;
+        }
+
 
         if (stop)
             return;
         //check, if the game was started with 0 players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             faultyStartup(0);
-            if(CrossWise.UI)
-            return;
+            if (CrossWise.UI)
+                return;
             else
                 throw new IllegalArgumentException("No players");
         }
@@ -475,6 +478,8 @@ public class Game {
      * Starts the Game
      */
     private void start() {
+        if (handleOver())
+            return;
         GameLogger.logGameSetupLog();
         //check for faulty setup of the players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
