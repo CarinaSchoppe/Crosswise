@@ -140,38 +140,36 @@ public class FileInputReader {
      */
     private static boolean checkInvalidConfig(final GameData gameData) {
         //invalid player config, cant be 0 and needs to load 4 players
-        if (gameData.getPlayers().length == 0 || gameData.getPlayers().length % 2 != 0) return true;
-
-
-        if (gameData.getCurrentPlayer() >= 3 || gameData.getCurrentPlayer() < 0)
+        if (gameData.getPlayers().length != 4) return true;
+        if (gameData.getCurrentPlayer() > 3 || gameData.getCurrentPlayer() < 0)
             return true;
 
-        //invalid  number of active players
-        int current = 0;
+        //turned off number of active players
+        int ids = 0;
+        int active = 0;
         for (int i = 0; i < gameData.getPlayers().length; i++) {
-            if (gameData.getPlayers()[i].isActive()) current += i;
+            if (gameData.getPlayers()[i].isActive()) {
+                ids += (i + 1);
+                active += 1;
+            }
         }
-        if (current % 2 == 0 && Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive)) return true;
-
+        //invalid if no players are active
+        if (active == 0 || ids % 2 == 0 && active != 4) return true;
 
         //check the minimum size of a game
         if (gameData.getField().length < 2) return true;
-
         //check rows and column size equal
         for (var row : gameData.getField()) {
             if (row.length != gameData.getField()[0].length || row.length != gameData.getField().length) return true;
         }
 
-
-        //invalid if no players are active
-        if (Arrays.stream(gameData.getPlayers()).noneMatch(PlayerData::isActive)) return true;
         //invalid if hands of players are 0 or above 4 (interpreted, that it should be possible to load players with less hand tokens and fill them up
         if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.getHand().length == 0 || !player.isActive() && player.getHand().length > 0)) return true;
-        //Invalid if the IDs of the tokens are below 0 or above 10 (would needed to be changed if the game should be started with less or more unique tokens)
+        //Invalid if the IDs of the tokens are below 0 or above 10 (would need to be changed if the game should be started with less or more unique tokens)
         if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.getHand()).anyMatch(token -> token < 0 || token > 10))) return true;
         //same as above for the game field tokens
         if (Arrays.stream(gameData.getField()).anyMatch(fieldRow -> Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token > 10))) return true;
-        //hand must contain 4 players
+        //hand must contain 4 tokens
         if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE)) return true;
         //special tokens need to fit the game rules
         return Arrays.stream(gameData.getUsedActionTiles()).anyMatch(special -> special > Constants.AMOUNT_ACTION_TOKENS) || gameData.getUsedActionTiles().length > Constants.UNIQUE_ACTION_TOKENS;
