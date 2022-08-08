@@ -16,7 +16,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import logic.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -619,7 +618,6 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void addTokenImagesForPlayer3(TokenType[] tokens) {
-        System.out.println(Arrays.toString(tokens));
         if (tokens == null) return;
 
         int cellWidth = (int) playerHandThree.getWidth() / Constants.HAND_SIZE;
@@ -832,7 +830,7 @@ public class FXGUI implements GUIConnector {
                             }
                         }
 
-                        if (tokenType == TokenType.REMOVER || tokenType == TokenType.MOVER || (tokenType == TokenType.SWAPPER && amount >= 2) || (replacerAllowed && tokenType == TokenType.REPLACER)) {
+                        if (tokenType == TokenType.REMOVER || tokenType == TokenType.MOVER || tokenType == TokenType.SWAPPER && amount >= 2 || replacerAllowed) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     }

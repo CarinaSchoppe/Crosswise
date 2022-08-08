@@ -203,7 +203,6 @@ public class Game {
      * @param thread thread on which the game runs
      */
     public static void setGame(Game game, Thread thread) {
-        System.out.println("Game.game = " + Game.game);
         Game.game = game;
         Game.game.thread = thread;
 
@@ -442,9 +441,9 @@ public class Game {
         Team.setHorizontalTeam(new Team(TeamType.HORIZONTAL));
         Team.setDeactiveTeam(new Team(TeamType.DEACTIVE));
         handleOver();
-        System.out.println("canceled");
+        System.out.println("Game canceled!");
         //kill the this.thread
-        thread.stop();
+        thread.interrupt();
     }
 
     /**
@@ -504,8 +503,6 @@ public class Game {
 
 
     public void startGame() {
-
-        System.out.println("thread = " + thread);
         synchronized (this) {
             thread.start();
         }
