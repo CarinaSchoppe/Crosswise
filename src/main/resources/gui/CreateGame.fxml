@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label layoutX="55.0" layoutY="22.0" prefHeight="29.0" prefWidth="71.0" text="Player Name"/>
+        <Label layoutX="55.0" layoutY="22.0" prefHeight="29.0" prefWidth="71.0" text="PlayerTests Name"/>
         <Button fx:id="createGameButton" layoutX="504.0" layoutY="347.0" mnemonicParsing="false" onAction="#createGame" text="Create Game"/>
         <TextField fx:id="playerOneField" layoutX="15.0" layoutY="60.0" promptText="Player1" text="Player1"/>
         <TextField fx:id="playerTwoField" layoutX="15.0" layoutY="133.0" promptText="Player2" text="Player2"/>
@@ -14,11 +14,11 @@
         <CheckBox fx:id="playerTwoAI" layoutX="235.0" layoutY="137.0" mnemonicParsing="false" text="ArtificialIntelligence"/>
         <CheckBox fx:id="playerThreeAI" layoutX="235.0" layoutY="216.0" mnemonicParsing="false" text="ArtificialIntelligence"/>
         <CheckBox fx:id="playerFourAI" layoutX="235.0" layoutY="297.0" mnemonicParsing="false" text="ArtificialIntelligence"/>
-        <CheckBox fx:id="playerOneActive" layoutX="444.0" layoutY="64.0" mnemonicParsing="false" text="Player Active"/>
-        <CheckBox fx:id="playerTwoActive" layoutX="444.0" layoutY="137.0" mnemonicParsing="false" text="Player Active"/>
-        <CheckBox fx:id="playerThreeActive" layoutX="444.0" layoutY="216.0" mnemonicParsing="false" text="Player Active"/>
-        <CheckBox fx:id="playerFourActive" layoutX="444.0" layoutY="297.0" mnemonicParsing="false" text="Player Active"/>
-        <Label layoutX="239.0" layoutY="28.0" text="Player is ArtificialIntelligence"/>
-        <Label layoutX="445.0" layoutY="28.0" text="Player is active"/>
+        <CheckBox fx:id="playerOneActive" layoutX="444.0" layoutY="64.0" mnemonicParsing="false" text="PlayerTests Active"/>
+        <CheckBox fx:id="playerTwoActive" layoutX="444.0" layoutY="137.0" mnemonicParsing="false" text="PlayerTests Active"/>
+        <CheckBox fx:id="playerThreeActive" layoutX="444.0" layoutY="216.0" mnemonicParsing="false" text="PlayerTests Active"/>
+        <CheckBox fx:id="playerFourActive" layoutX="444.0" layoutY="297.0" mnemonicParsing="false" text="PlayerTests Active"/>
+        <Label layoutX="239.0" layoutY="28.0" text="PlayerTests is ArtificialIntelligence"/>
+        <Label layoutX="445.0" layoutY="28.0" text="PlayerTests is active"/>
     </children>
 </AnchorPane>

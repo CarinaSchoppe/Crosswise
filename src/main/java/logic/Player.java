@@ -41,6 +41,9 @@ public class Player {
      * @param name     Name of the player
      */
     public Player(int playerID, boolean isActive, String name) {
+        if (playerID < 0 || playerID > 3) {
+            throw new IllegalArgumentException("Player ID must be between 0 and 3");
+        }
         this.playerID = playerID;
         this.isActive = isActive;
         this.name = name;
