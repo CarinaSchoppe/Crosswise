@@ -339,8 +339,8 @@ public class Game {
      * @param x           x coordinate of the position on the board
      * @param y           y coordinate of the position on the board
      */
-    public void playerSymbolTokenMove(String tokenString, Integer x, Integer y) {
-        currentPlayer.normalTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(x, y));
+    public void playerSymbolTokenMove(TokenType type, Integer x, Integer y) {
+        currentPlayer.normalTokenTurn(new Token(type), new Position(x, y));
         turnDone();
     }
 
@@ -377,7 +377,7 @@ public class Game {
      * @param toY   y coordinate of the end position on the board
      */
     public void playerSwapperTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
-        currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken("SWAPPER"), new Position(fromX, fromY), new Position(toX, toY));
+        currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken(TokenType.SWAPPER), new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 

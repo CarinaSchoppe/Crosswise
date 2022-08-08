@@ -842,12 +842,12 @@ public class FXGUI implements GUIConnector {
                             Game.getGame().playerSymbolTokenMove(input, finalI, finalJ);
                             disableGUIElementes();
                         }
-                        case "REMOVER" -> {
+                        case REMOVER -> {
                             Game.getGame().playerRemoverTokenMove(finalI, finalJ);
                             disableGUIElementes();
                         }
 
-                        case "MOVER", "SWAPPER", "REPLACER" -> {
+                        case MOVER, SWAPPER, REPLACER -> {
                             this.checkForMouse = true;
                             this.clickToken = input;
                             this.clickXOrigin = finalI;
