@@ -92,7 +92,7 @@ public class CreateGame implements Initializable {
         isAI.add(playerFourAI.isSelected());
 
 
-        if (playerNames.isEmpty() || isActive.isEmpty() || isAI.isEmpty())
+        if (isActive.isEmpty())
             return;
 
         //close the current window

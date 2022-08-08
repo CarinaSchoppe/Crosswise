@@ -3,6 +3,7 @@ package gui;
 import java.util.Arrays;
 import java.util.Objects;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class PlayerData {
 
     private final String name;
