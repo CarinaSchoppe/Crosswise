@@ -66,36 +66,6 @@ public class Game {
     }
 
 
-    /**
-     * Creates the actual game
-     *
-     * @param field       playing field
-     * @param isActives   List if the players are active
-     * @param isAis       List if the players are AIs
-     * @param playerNames List of player-names
-     * @param connector   GuiConnector
-     * @param fileSetup   If loaded from a file
-     */
-    public static void createNewGame(List<String> playerNames, List<Boolean> isAis, List<Boolean> isActives, GUIConnector connector, boolean fileSetup, PlayingField field) {
-        var players = new ArrayList<Player>();
-        for (int i = 0; i < playerNames.size(); i++) {
-            var name = playerNames.get(i);
-            var isAI = isAis.get(i);
-            var isActive = isActives.get(i);
-            if (Boolean.TRUE.equals(isAI)) {
-                var ai = new AI(i, isActive, name);
-                players.add(ai);
-            } else {
-                var player = new Player(i, isActive, name);
-                players.add(player);
-            }
-        }
-        players.forEach(Player::create);
-
-        Game game = new Game(field, players, connector);
-        //setup game
-        makeGameReady(game, fileSetup);
-    }
 
     /**
      * Remove already used tokens from new drawPile
@@ -152,13 +122,16 @@ public class Game {
     /**
      * Creates the actual game
      *
+     * @param field       playing field
      * @param isActives   List if the players are active
      * @param isAis       List if the players are AIs
      * @param playerNames List of player-names
      * @param connector   GuiConnector
      * @param fileSetup   If loaded from a file
      */
-    public static void createNewGame(List<String> playerNames, List<Boolean> isAis, List<Boolean> isActives, GUIConnector connector, boolean fileSetup) {
+    public static void createNewGame(List<String> playerNames, List<Boolean> isAis, List<Boolean> isActives, GUIConnector connector, boolean fileSetup, PlayingField field) {
+        if (field == null)
+            field = new PlayingField(Constants.GAMEGRID_SIZE);
         var players = new ArrayList<Player>();
         for (int i = 0; i < playerNames.size(); i++) {
             var name = playerNames.get(i);
@@ -173,7 +146,7 @@ public class Game {
             }
         }
 
-        Game game = new Game(new PlayingField(Constants.GAMEGRID_SIZE), players, connector);
+        Game game = new Game(field, players, connector);
         //setup game
         makeGameReady(game, fileSetup);
     }
@@ -536,6 +509,8 @@ public class Game {
 
 
     public void startGame() {
+
+        System.out.println("thread = " + thread);
         thread.start();
     }
 

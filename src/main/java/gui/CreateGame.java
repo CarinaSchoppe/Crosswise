@@ -97,7 +97,7 @@ public class CreateGame implements Initializable {
 
         //close the current window
         ((Stage) createGameButton.getScene().getWindow()).close();
-        Game.createNewGame(playerNames, isAI, isActive, guiConnector, false);
+        Game.createNewGame(playerNames, isAI, isActive, guiConnector, false, null);
 
 
         //Setting up GUI elements of the game and creating drag and drop functions

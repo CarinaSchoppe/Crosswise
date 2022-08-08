@@ -80,7 +80,18 @@ public class FileInputReader {
 
         Game.createNewGame(playerNames, isAI, isActive, guiConnector, true, new PlayingField(gameData.getField().length));
         players.forEach(Player::create);
-        //Create new game and setup parameters
+
+        //add tokens to playerhands
+        for (var playerItem : players) {
+            for (var player : Game.getGame().getPlayers()) {
+                if (player.getPlayerID() == playerItem.getPlayerID()) {
+                    for (var token : playerItem.getHandTokens()) {
+                        player.addTokenToHand(token);
+                    }
+                    break;
+                }
+            }
+        }   //Create new game and setup parameters
         Player currentPlayer = Game.getGame().getPlayers().stream().filter(player -> player.getPlayerID() == gameData.getCurrentPlayer()).findFirst().orElse(null);
         Game.getGame().setCurrentPlayer(currentPlayer);
         Game.getGame().getPlayingField().addDataFromJSON(gameData.getField());
@@ -112,10 +123,13 @@ public class FileInputReader {
             }
         }
 
-        Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands, Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
-        Game.getGame().getGUIConnector().startGamePopUp();
-        Game.getGame().startGame();
-        Game.getGame().getThread().start();
+        guiConnector.showGUIElements();
+        guiConnector.generateGrid();
+        guiConnector.resetText();
+        guiConnector.setupDragAndDropEvent();
+
+        guiConnector.performMoveUIUpdate(playerIDs, playerHands, Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+        guiConnector.startGamePopUp();
     }
 
     /**
