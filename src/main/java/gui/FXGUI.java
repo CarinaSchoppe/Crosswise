@@ -909,7 +909,7 @@ public class FXGUI implements GUIConnector {
      * @param hand Grid pane of the hand of a specific player
      */
     private void setDragEventsForPlayerHand(GridPane hand) {
-        System.out.println();
+        System.out.println(AOWDAWDUNADWIUB);
         int counter = 0;
         //setup actions for every had token
         for (Node child : hand.getChildren()) {
