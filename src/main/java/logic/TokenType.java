@@ -36,6 +36,23 @@ public enum TokenType {
         return NONE;
     }
 
+    public static TokenType getTokenTypeFromString(String input) {
+        return switch (input) {
+            case "REMOVER" -> REMOVER;
+            case "MOVER" -> MOVER;
+            case "SWAPPER" -> SWAPPER;
+            case "REPLACER" -> REPLACER;
+            case "SUN" -> SUN;
+            case "CROSS" -> CROSS;
+            case "TRIANGLE" -> TRIANGLE;
+            case "SQUARE" -> SQUARE;
+            case "PENTAGON" -> PENTAGON;
+            case "STAR" -> STAR;
+            case "NONE" -> NONE;
+            default -> throw new IllegalArgumentException("Invalid token type");
+        };
+    }
+
     public String getImagePathNormal() {
         return imagePathNormal;
     }

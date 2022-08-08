@@ -836,10 +836,11 @@ public class FXGUI implements GUIConnector {
                     Dragboard db = event.getDragboard();
                     boolean success = false;
                     String input = db.getString();
+                    var tokenType = TokenType.getTokenTypeFromString(input);
 
-                    switch (input) {
-                        case "SUN", "CROSS", "TRIANGLE", "SQUARE", "PENTAGON", "STAR" -> {
-                            Game.getGame().playerSymbolTokenMove(input, finalI, finalJ);
+                    switch (tokenType) {
+                        case SUN, CROSS, TRIANGLE, SQUARE, PENTAGON, STAR -> {
+                            Game.getGame().playerSymbolTokenMove(tokenType, finalI, finalJ);
                             disableGUIElementes();
                         }
                         case REMOVER -> {

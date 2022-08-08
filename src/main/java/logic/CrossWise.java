@@ -44,7 +44,6 @@ public class CrossWise extends Application {
      * TODO colors of background and create game background
      * TODO fix is preventing loss in big chooser method if both are preventing loss
      * TODO Structure of the program?
-     * TODO playerMove  not with strings but with token types
      *
      * */
 

@@ -323,6 +323,15 @@ public class Player {
         return null;
     }
 
+    public Token getCorrespondingToken(TokenType type) {
+        for (Token t : handTokens) {
+            if (t.tokenType() == type) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     /**
      * Draw a token out of the drawPile of the game
      *

@@ -335,9 +335,9 @@ public class Game {
     /**
      * Handle symbol token move done by a player
      *
-     * @param tokenString type of the token
-     * @param x           x coordinate of the position on the board
-     * @param y           y coordinate of the position on the board
+     * @param type type of the token
+     * @param x    x coordinate of the position on the board
+     * @param y    y coordinate of the position on the board
      */
     public void playerSymbolTokenMove(TokenType type, Integer x, Integer y) {
         currentPlayer.normalTokenTurn(new Token(type), new Position(x, y));
@@ -351,7 +351,7 @@ public class Game {
      * @param y y coordinate of the position on the board
      */
     public void playerRemoverTokenMove(Integer x, Integer y) {
-        currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken("REMOVER"), new Position(x, y));
+        currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken(TokenType.REMOVER), new Position(x, y));
         turnDone();
     }
 
@@ -364,7 +364,7 @@ public class Game {
      * @param toY   y coordinate of the end position on the board
      */
     public void playerMoverTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
-        currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken("MOVER"), new Position(fromX, fromY), new Position(toX, toY));
+        currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken(TokenType.MOVER), new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 
@@ -389,7 +389,7 @@ public class Game {
      * @param handIndex hand index of position clicked on the hand
      */
     public void playerReplacerTokenMove(Integer fromX, Integer fromY, Integer handIndex) {
-        currentPlayer.replacerTokenTurn(currentPlayer.getCorrespondingToken("REPLACER"), new Position(fromX, fromY), new Position(handIndex));
+        currentPlayer.replacerTokenTurn(currentPlayer.getCorrespondingToken(TokenType.REPLACER), new Position(fromX, fromY), new Position(handIndex));
         turnDone();
     }
 
