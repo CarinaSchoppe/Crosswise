@@ -1,11 +1,13 @@
 import gui.FileInputReader;
 import logic.CrossWise;
 import logic.Game;
+import logic.Team;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 class GameTests {
@@ -45,5 +47,16 @@ class GameTests {
     void gameTest5() {
         Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(false, true, false, true), new FakeGUI(), false, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
+    }
+
+
+    @Test
+    void gameTest6() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswise.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        var map = new HashMap<Boolean, Team>();
+        map.put(false, null);
+        Assertions.assertEquals(map, Game.getGame().isGameOver());
+
     }
 }
