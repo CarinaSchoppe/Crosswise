@@ -45,7 +45,7 @@ public final class GameData {
         if (this == o) return true;
         if (!(o instanceof GameData gameData)) return false;
 
-        if (!currPlayer.equals(gameData.currPlayer)) return false;
+        if (currPlayer != gameData.currPlayer) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         if (!Arrays.equals(players, gameData.players)) return false;
         if (!Arrays.deepEquals(field, gameData.field)) return false;

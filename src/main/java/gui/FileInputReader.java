@@ -170,13 +170,13 @@ public class FileInputReader {
 
 
         //invalid if hands of players are 0 or above 4 (interpreted, that it should be possible to load players with less hand tokens and fill them up
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.hand().length == 0 || !player.isActive() && player.hand().length > 0)) return true;
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.getHand().length == 0 || !player.isActive() && player.getHand().length > 0)) return true;
         //Invalid if the IDs of the tokens are below 0 or above 10 (would need to be changed if the game should be started with less or more unique tokens)
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.hand()).anyMatch(token -> token < 0 || token > 10))) return true;
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.getHand()).anyMatch(token -> token < 0 || token > 10))) return true;
         //same as above for the game field tokens
         if (Arrays.stream(gameData.getField()).anyMatch(fieldRow -> Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token > 10))) return true;
         //hand must contain 4 tokens
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.hand().length > Constants.HAND_SIZE)) return true;
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE)) return true;
         //special tokens need to fit the game rules
         return Arrays.stream(gameData.getUsedActionTiles()).anyMatch(special -> special > Constants.AMOUNT_ACTION_TOKENS) || gameData.getUsedActionTiles().length > Constants.UNIQUE_ACTION_TOKENS;
     }
@@ -193,12 +193,12 @@ public class FileInputReader {
             PlayerData playerData = gameData.getPlayers()[i];
             //checks if the player is an AI player or a normal player
             if (!playerData.isAI()) {
-                Player player = new Player(i, playerData.isActive(), playerData.name());
-                Arrays.stream(playerData.hand()).forEach(token -> player.addTokenToHand(new Token(TokenType.getTokenType(token))));
+                Player player = new Player(i, playerData.isActive(), playerData.getName());
+                Arrays.stream(playerData.getHand()).forEach(token -> player.addTokenToHand(new Token(TokenType.getTokenType(token))));
                 players.add(player);
             } else {
-                AI ai = new AI(i, playerData.isActive(), playerData.name());
-                Arrays.stream(playerData.hand()).forEach(token -> ai.addTokenToHand(new Token(TokenType.getTokenType(token))));
+                AI ai = new AI(i, playerData.isActive(), playerData.getName());
+                Arrays.stream(playerData.getHand()).forEach(token -> ai.addTokenToHand(new Token(TokenType.getTokenType(token))));
                 players.add(ai);
             }
         }

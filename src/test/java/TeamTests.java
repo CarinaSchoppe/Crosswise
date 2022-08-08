@@ -9,8 +9,7 @@ public class TeamTests {
     void teamCreationTests() {
         Team newTeam = new Team(TeamType.VERTICAL);
         Player player = new Player(0, true, "Max");
-        Team.
-
+      
 
     }
 }
