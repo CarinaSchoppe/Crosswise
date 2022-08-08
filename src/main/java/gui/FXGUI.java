@@ -640,7 +640,6 @@ public class FXGUI implements GUIConnector {
             imageView.fitWidthProperty().bind(playerHandThree.widthProperty().divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandThree.heightProperty());
         }
-        System.out.println("playerHandThree = " + playerHandThree + " playerHandThree.getChildren() = " + playerHandThree.getChildren().size());
         setDragEventsForPlayerHand(playerHandThree);
     }
 

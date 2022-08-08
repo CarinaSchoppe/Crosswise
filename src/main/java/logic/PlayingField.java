@@ -80,7 +80,6 @@ public class PlayingField {
             }
             stringBuilder.append("\n");
         }
-
         return stringBuilder.toString();
     }
 }

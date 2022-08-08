@@ -91,10 +91,10 @@ public class Player {
         }
         Game.getGame().getGUIConnector().performMoveUIUpdate(playerIDs, playerHands,
                 Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+        GameLogger.logMove(this, token, position);
 
         if (this instanceof AI) {
             Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().tokenType());
-            GameLogger.logMove(this, token, position);
             Platform.runLater(() -> {
                 /*
                 try {

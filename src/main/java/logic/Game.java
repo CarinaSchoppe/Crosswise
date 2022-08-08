@@ -649,9 +649,6 @@ public class Game {
 
     //-------------------------------------------Getter and Setter------------------------------------------------------
 
-    public Thread getThread() {
-        return thread;
-    }
 
     public PlayingField getPlayingField() {
         return playingField;
