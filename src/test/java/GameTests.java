@@ -117,6 +117,7 @@ class GameTests {
         Assertions.assertTrue(teamsEqual(team, Game.getGame().isGameOver().get(true)));
     }
 
+
     private boolean teamsEqual(Team t1, Team t2) {
         return t1.equals(t2);
     }
