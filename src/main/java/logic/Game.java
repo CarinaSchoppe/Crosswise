@@ -273,7 +273,7 @@ public class Game {
      *
      * @param fileLoaded was the game loaded from a file
      */
-    private void setup(boolean fileLoaded) {
+    public void setup(boolean fileLoaded) {
         if (handleOver()) {
             return;
         }
@@ -426,7 +426,7 @@ public class Game {
      */
     private boolean handleOver() {
         if (stop) return true;
-        Map<Boolean, Team> over = isGameOver(playingField);
+        Map<Boolean, Team> over = isGameOver();
         if (players.isEmpty()) {
             if (CrossWise.DEBUG)
                 System.out.println("No players left!");
@@ -573,27 +573,27 @@ public class Game {
     /**
      * Checks, if the game is over and which team won if it is
      *
-     * @param field current playing field
      * @return Map, with the boolean if the game is over and a team, that won
      */
-    public Map<Boolean, Team> isGameOver(PlayingField field) {
+    public Map<Boolean, Team> isGameOver() {
         Map<Boolean, Team> map = new HashMap<>();
         //if horizontal Team won via a full row
-        if (checkRows(field)) {
+
+        if (checkRows(playingField)) {
             Team.getHorizontalTeam().setRowWin(true);
             map.put(true, Team.getHorizontalTeam());
             return map;
         }
         //if the vertical team won via a full collumn
-        if (checkColumns(field)) {
+        if (checkColumns(playingField)) {
             Team.getVerticalTeam().setRowWin(true);
             map.put(true, Team.getVerticalTeam());
             return map;
         }
         //check if there are still tokens missing on the playing field
-        for (int i = 0; i < field.getSize(); i++) {
-            for (int j = 0; j < field.getSize(); j++) {
-                if (field.getFieldMap()[i][j].getToken().tokenType() == TokenType.NONE) {
+        for (int i = 0; i < playingField.getSize(); i++) {
+            for (int j = 0; j < playingField.getSize(); j++) {
+                if (playingField.getFieldMap()[i][j].getToken().tokenType() == TokenType.NONE) {
                     map.put(false, null);
                     return map;
                 }
