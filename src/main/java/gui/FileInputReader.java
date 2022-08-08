@@ -47,7 +47,6 @@ public class FileInputReader {
      * @param guiConnector gui connector for the new game
      */
     public static void readFile(File file, GUIConnector guiConnector) {
-
         if (file == null) return;
         //read in the lines from file
         FileReader reader;
@@ -68,8 +67,18 @@ public class FileInputReader {
 
         //create objects needed for the game
         ArrayList<Player> players = getPlayersFromFile(gameData);
+        var playerNames = new ArrayList<String>();
+        var isAI = new ArrayList<Boolean>();
+        var isActive = new ArrayList<Boolean>();
 
-        Game.createNewGame(players, guiConnector, true, new PlayingField(gameData.getField().length));
+        for (Player value : players) {
+            playerNames.add(value.getName());
+            isAI.add(value instanceof AI);
+            isActive.add(value.isActive());
+        }
+
+
+        Game.createNewGame(playerNames, isAI, isActive, guiConnector, true, new PlayingField(gameData.getField().length));
         players.forEach(Player::create);
         //Create new game and setup parameters
         Player currentPlayer = Game.getGame().getPlayers().stream().filter(player -> player.getPlayerID() == gameData.getCurrentPlayer()).findFirst().orElse(null);
@@ -89,7 +98,7 @@ public class FileInputReader {
                 Game.getGame().addNewActionTile(new Token(token));
             }
         }
-        removeUsedTokensFromPile(Game.getGame());
+        Game.removeUsedTokensFromPile();
         //start the game
         //convert the player ids into an array of int
         var playerIDs = new int[Constants.PLAYER_COUNT];
@@ -178,57 +187,5 @@ public class FileInputReader {
         return players;
     }
 
-    /**
-     * Remove already used tokens from new drawPile
-     *
-     * @param game Game
-     */
-    private static void removeUsedTokensFromPile(Game game) {
-        //removes tokens, that are laying on the playing field
-        EnumMap<TokenType, Integer> map = new EnumMap<>(TokenType.class);
-        for (int row = 0; row < game.getPlayingField().getFieldMap().length; row++) {
-            for (int col = 0; col < game.getPlayingField().getFieldMap()[row].length; col++) {
-                Token token = game.getPlayingField().getFieldMap()[row][col].getToken();
-                if (token.getTokenType() == TokenType.NONE) {
-                    continue;
-                }
-                if (map.containsKey(token.getTokenType())) {
-                    map.put(token.getTokenType(), map.get(token.getTokenType()) + 1);
-                } else {
-                    map.put(token.getTokenType(), 1);
-                }
-            }
-        }
-        //removes action tokens
-        for (Token used : game.getUsedActionTokens()) {
-            if (map.containsKey(used.getTokenType())) {
-                map.put(used.getTokenType(), map.get(used.getTokenType()) + 1);
-            } else {
-                map.put(used.getTokenType(), 1);
-            }
-        }
-        //Removes tokens on the players hand
-        for (Player player : game.getPlayers()) {
-            for (Token token : player.getHandTokens()) {
-                if (map.containsKey(token.getTokenType())) {
-                    map.put(token.getTokenType(), map.get(token.getTokenType()) + 1);
-                } else {
-                    map.put(token.getTokenType(), 1);
-                }
-            }
-        }
 
-        for (Map.Entry<TokenType, Integer> entry : map.entrySet()) {
-            TokenType token = entry.getKey();
-            for (int i = 0; i < map.get(token); i++) {
-                for (Token tokenPileToken : game.getTokenDrawPile()) {
-                    if (tokenPileToken.getTokenType() != token) {
-                        continue;
-                    }
-                    game.removeTokenDrawPileToken(tokenPileToken);
-                    break;
-                }
-            }
-        }
-    }
 }

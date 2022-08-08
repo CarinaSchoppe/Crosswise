@@ -670,7 +670,6 @@ public class AI extends Player {
 
         int curr = 0;
         boolean isWinning = false;
-        boolean isCreatingLoss = false;
         for (Map.Entry<Integer, Integer> entry : pointsMap.entrySet()) {
             if (entry.getValue() < -100) {
                 if (entry.getKey() > 0) {
@@ -693,7 +692,7 @@ public class AI extends Player {
                 curr = curr - entry.getValue();
             }
         }
-        return new Calculation(curr, isCreatingLoss, isWinning);
+        return new Calculation(curr, isWinning);
     }
 
     /**

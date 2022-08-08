@@ -42,7 +42,6 @@ public interface GUIConnector {
 
     void swapperAmountText();
 
-
     void replacerAmountText();
 
     void generateGrid();

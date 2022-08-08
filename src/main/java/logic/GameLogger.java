@@ -8,12 +8,15 @@ import java.util.ArrayList;
 /**
  * Logger class, which writes a log entry after every Turn
  *
- *
+ * @author Jacob Klövekorn
  */
 public class GameLogger {
-
+    /**
+     * Constructor, ignored here
+     */
     private GameLogger() {
     }
+
 
     private static final ArrayList<String> logMessages = new ArrayList<>();
 

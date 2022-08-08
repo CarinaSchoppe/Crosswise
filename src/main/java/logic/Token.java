@@ -26,10 +26,5 @@ public record Token(TokenType tokenType) {
         return tokenType() == token.tokenType();
     }
 
-    @Override
-    public int hashCode() {
-        int result = getTokenType() != null ? getTokenType().hashCode() : 0;
-        result = 31 * result;
-        return result;
-    }
+
 }

@@ -429,7 +429,7 @@ public class FXGUI implements GUIConnector {
         for (Node child : this.horizontalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
             if (pointsMap[counterH] < -100) {
-                currLabel.setText("Sieg");
+                currLabel.setText("Win");
             } else {
                 currLabel.setText(pointsMap[counterH].toString());
             }

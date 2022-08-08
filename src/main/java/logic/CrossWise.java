@@ -31,8 +31,6 @@ public class CrossWise extends Application {
      * TODO Create players via createGame method and not in the createGame class
      * TODO last token not responsive?
      * TODO border pane from empty token doesnt get removed
-     * TODO border pane to special tokens
-     * TODO drag and drop highlight
      * TODO loadinvalidfile - game can be created with currentplayer on an inactive ID or out of bounds, game field can be asymetrical
      *  ---tests
      *  ---vll

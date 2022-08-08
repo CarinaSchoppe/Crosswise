@@ -71,13 +71,5 @@ public class Position {
                 '}';
     }
 
-    @Override
-    public int hashCode() {
-        int result = getX();
-        result = 31 * result + getY();
-        result = 31 * result + (getToken() != null ? getToken().hashCode() : 0);
-        result = 31 * result + (isHand() ? 1 : 0);
-        result = 31 * result + getHandPosition();
-        return result;
-    }
+
 }

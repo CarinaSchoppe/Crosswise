@@ -7,5 +7,5 @@ package logic;
  * @param gameWinning  will the move win the game
  * @author Jacob Klövekorn
  */
-public record Calculation(Integer pointsChange, boolean isCreatingLoss, boolean gameWinning) {
+public record Calculation(Integer pointsChange, boolean gameWinning) {
 }
