@@ -5,6 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Logger class, which writes a log entry after every Turn
+ *
+ *
+ */
 public class GameLogger {
 
     private GameLogger() {
