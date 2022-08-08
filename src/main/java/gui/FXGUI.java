@@ -796,6 +796,7 @@ public class FXGUI implements GUIConnector {
                         }
                     } else {
                         var replacerAllowed = false;
+                        var amount = 0;
                         if ("REPLACER".equals(input)) {
                             //go through the handTokens of the player and check if one number is between 1 and 6
                             for (var token : Game.getGame().getCurrentPlayer().getHandTokens()) {
@@ -804,11 +805,8 @@ public class FXGUI implements GUIConnector {
                                     break;
                                 }
                             }
-                        }
-
-                        var amount = 0;
-                        //check if the gamefield has less than 2 tokens (when using swapper)
-                        if ("SWAPPER".equals(input)) {
+                        } else if ("SWAPPER".equals(input)) {
+                            //check if the gamefield has less than 2 tokens (when using swapper)
                             for (var row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
                                 for (TokenType token : row) {
                                     if (token != TokenType.NONE) {

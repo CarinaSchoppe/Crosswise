@@ -31,7 +31,6 @@ public class CrossWise extends Application {
      * TODO Create players via createGame method and not in the createGame class
      * TODO last token not responsive?
      * TODO border pane from empty token doesnt get removed
-     * TODO loadinvalidfile - game can be created with currentplayer on an inactive ID or out of bounds, game field can be asymetrical
      *  ---tests
      *  ---vll
      * TODO drag and drop having image in it
@@ -40,7 +39,6 @@ public class CrossWise extends Application {
      * ---TODO's for jacob only:
      * TODO end timer event premature
      * TODO win text label of hori or verti ( > 100)
-     * TODO cant pick replacer, if no symbol tokens on hand
      * TODO disable GUI elements while AI move
      * TODO drag and drop highlight
      * TODO colors of background and create game background
