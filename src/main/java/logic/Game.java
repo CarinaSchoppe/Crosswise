@@ -487,6 +487,7 @@ public class Game {
             else
                 throw new IllegalArgumentException("Number of players in horizontal team is not equal to number of players in vertical team!");
         }
+
         if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0) {
             faultyStartup(2);
             if (CrossWise.UI)
