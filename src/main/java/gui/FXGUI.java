@@ -690,13 +690,12 @@ public class FXGUI implements GUIConnector {
         //if a team won because of a full line
         if (rowComplete && wonType != null) {
             message = "Team: " + wonType.getTeamName() + " won, because the hit a full line!";
-        } else if (lost != null && points == lost.getPoints()) {
-            //if no team won, because if equal points
-            message = "Draw! Both teams got the same amount of points (" + points + ")!";
         } else if (wonType != null) {
             assert lost != null;
             //if a specific team won, display the team and the points of both teams
             message = "Team: " + wonType.getTeamName() + " won, because they have more points (" + points + ") than the other team (" + lost.getPoints() + ")!";
+        } else if (wonType == null && Team.getHorizontalTeam().getPoints() != Team.getVerticalTeam().getPoints()) {
+            message = "Draw! Both teams got the same amount of points (" + points + ")!";
         } else {
             //error message
             message = "No players in the game";
