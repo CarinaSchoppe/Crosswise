@@ -804,16 +804,16 @@ public class FXGUI implements GUIConnector {
 
                 curr.setOnDragOver((DragEvent event) -> {
                     String input = event.getDragboard().getString();
-
+                    var tokenType = TokenType.getTokenTypeFromString(input);
                     //field empty
                     if (this.gridImagesTokens.get(curr) == TokenType.NONE) {
-                        if ("SUN".equals(input) || "CROSS".equals(input) || "TRIANGLE".equals(input) || "SQUARE".equals(input) || "PENTAGON".equals(input) || "STAR".equals(input)) {
+                        if (tokenType == TokenType.SUN || tokenType == TokenType.CROSS || tokenType == TokenType.TRIANGLE || tokenType == TokenType.SQUARE || tokenType == TokenType.PENTAGON || tokenType == TokenType.STAR) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     } else {
                         var replacerAllowed = false;
                         var amount = 0;
-                        if ("REPLACER".equals(input)) {
+                        if (tokenType == TokenType.REPLACER) {
                             //go through the handTokens of the player and check if one number is between 1 and 6
                             for (var token : Game.getGame().getCurrentPlayer().getHandTokens()) {
                                 if (token.tokenType().getValue() >= 1 && token.tokenType().getValue() <= 6) {
@@ -821,7 +821,7 @@ public class FXGUI implements GUIConnector {
                                     break;
                                 }
                             }
-                        } else if ("SWAPPER".equals(input)) {
+                        } else if (tokenType == TokenType.SWAPPER) {
                             //check if the gamefield has less than 2 tokens (when using swapper)
                             for (var row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
                                 for (TokenType token : row) {
@@ -834,7 +834,7 @@ public class FXGUI implements GUIConnector {
                             }
                         }
 
-                        if ("REMOVER".equals(input) || "MOVER".equals(input) || ("SWAPPER".equals(input) && amount >= 2) || (replacerAllowed && "REPLACER".equals(input))) {
+                        if (tokenType == TokenType.REMOVER || tokenType == TokenType.MOVER || (tokenType == TokenType.SWAPPER && amount >= 2) || (replacerAllowed && tokenType == TokenType.REPLACER)) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     }
