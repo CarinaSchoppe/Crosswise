@@ -126,6 +126,10 @@ public class Team {
         return points;
     }
 
+    public static Team getDeactiveTeam() {
+        return deactiveTeam;
+    }
+
     public boolean isRowWin() {
         return rowWin;
     }
