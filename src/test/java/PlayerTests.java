@@ -26,4 +26,10 @@ public class PlayerTests {
         assertThrows(IllegalArgumentException.class, () -> new Player(6, true, "test"));
     }
 
+
+    @Test
+    public void hasTokenOnHand() {
+        var player = new Player(0, true, "test");
+        player.create();
+    }
 }
