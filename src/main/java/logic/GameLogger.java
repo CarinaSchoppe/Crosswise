@@ -81,7 +81,7 @@ public class GameLogger {
         var builder = new StringBuilder();
         builder.append("Game Setup: \n");
         for (var player : Game.getGame().getPlayers())
-            builder.append(player.toString() + "\n");
+            builder.append(player.toString()).append("\n");
         log(builder.toString());
     }
 
