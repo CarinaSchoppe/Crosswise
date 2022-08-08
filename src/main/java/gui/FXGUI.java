@@ -914,8 +914,6 @@ public class FXGUI implements GUIConnector {
         for (Node child : hand.getChildren()) {
             //setup drag detected event for an imageview
             child.setOnDragDetected((MouseEvent event) -> {
-                if (!disableGUI) {
-
                     /* lässt jeden Transfermode zu */
                     Dragboard db = child.startDragAndDrop(TransferMode.ANY);
 
@@ -928,12 +926,9 @@ public class FXGUI implements GUIConnector {
                     content.putString(tokenType.name());
                     db.setContent(content);
 
-                    event.consume();
-                } else {
-                    if (CrossWise.DEBUG)
-                        System.out.println("gui disabled");
-                }
-            });
+                event.consume();
+
+            })
             //setup action on drag done event
             child.setOnDragDone((DragEvent event) -> {
                 // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt
