@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import logic.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -595,7 +596,7 @@ public class FXGUI implements GUIConnector {
         //remove all previous images
         playerHandTwo.getChildren().clear();
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) return;
+            if (tokens[i] == null) break;
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token2:" + i);
             imageView.setFitHeight(cellHeight);
@@ -618,6 +619,7 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void addTokenImagesForPlayer3(TokenType[] tokens) {
+        System.out.println(Arrays.toString(tokens));
         if (tokens == null) return;
 
         int cellWidth = (int) playerHandThree.getWidth() / Constants.HAND_SIZE;
@@ -631,7 +633,6 @@ public class FXGUI implements GUIConnector {
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             handImages[2][i] = imageView;
-
             playerHandThree.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
@@ -654,13 +655,12 @@ public class FXGUI implements GUIConnector {
         //remove all previous images
         playerHandFour.getChildren().clear();
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) return;
+            if (tokens[i] == null) break;
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token4:" + i);
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             handImages[3][i] = imageView;
-
             playerHandFour.add(imageView, 0, i);
             handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
@@ -908,7 +908,6 @@ public class FXGUI implements GUIConnector {
      * @param hand Grid pane of the hand of a specific player
      */
     private void setDragEventsForPlayerHand(GridPane hand) {
-        System.out.println("AOWDAWDUNADWIUB");
         int counter = 0;
         //setup actions for every had token
         for (Node child : hand.getChildren()) {
