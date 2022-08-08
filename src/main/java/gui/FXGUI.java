@@ -771,6 +771,7 @@ public class FXGUI implements GUIConnector {
         alert.setTitle("Start the game");
         alert.setHeaderText("Start the game");
         alert.showAndWait();
+        Game.getGame().startGame();
     }
 
     /**

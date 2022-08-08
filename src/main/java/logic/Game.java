@@ -202,7 +202,7 @@ public class Game {
         //if the game wasnt loaded from a file, start it here
         if (!fileSetup) {
             Game.game.guiConnector.startGamePopUp();
-            Game.getGame().startGame();
+
         }
         //reset the specialTokensImages
         Game.getGame().guiConnector.resetSpecialTokenImages();
@@ -425,8 +425,7 @@ public class Game {
      * @return true, if the game is over
      */
     private boolean handleOver() {
-        if (stop)
-            return true;
+        if (stop) return true;
         Map<Boolean, Team> over = isGameOver(playingField);
         if (players.isEmpty()) {
             if (CrossWise.DEBUG)
@@ -507,6 +506,8 @@ public class Game {
             return;
         }
         Team.givePoints();
+        if (currentPlayer == null)
+            game.cancel();
 
         //if the turn is over, do nothing
         if (handleOver()) {
