@@ -14,6 +14,7 @@ import javafx.scene.text.TextAlignment;
 import logic.*;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -55,8 +56,8 @@ public class FXGUI implements GUIConnector {
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
     private final ImageView[][] handImages = new ImageView[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
-    private final HashMap<ImageView, TokenType> gridImagesTokens;
-    private final HashMap<ImageView, TokenType> handImagesTokens;
+    private final Map<ImageView, TokenType> gridImagesTokens;
+    private final Map<ImageView, TokenType> handImagesTokens;
     private boolean checkForMouse = false;
     private String clickToken;
     private Integer clickXOrigin;
@@ -66,26 +67,26 @@ public class FXGUI implements GUIConnector {
     /**
      * Constructor for the FX gui class
      *
-     * @param showComputerHandButton toggleButton, to show the AI hands during their turn
-     * @param playerHandOne Hand of player 1
-     * @param playerHandTwo Hand of player 2
-     * @param playerHandThree Hand of player 3
-     * @param playerHandFour Hand of player 4
-     * @param currentPlayerText Current player text field
-     * @param gameGrid Playing field grid
-     * @param moverAmountText Amount of used mover Tokens textbox
-     * @param swapperAmountText Amount of used swapper Tokens textbox
-     * @param replacerAmountText Amount of used replacer Tokens textbox
-     * @param removerAmountText Amount of used remover Tokens textbox
-     * @param horizontalPointsGrid grid points for single line for the horizontal team
-     * @param verticalPointsGrid grid points for single line for the vertical team
-     * @param sumPointsVerticalTeam label for points of vertical team
+     * @param showComputerHandButton  toggleButton, to show the AI hands during their turn
+     * @param playerHandOne           Hand of player 1
+     * @param playerHandTwo           Hand of player 2
+     * @param playerHandThree         Hand of player 3
+     * @param playerHandFour          Hand of player 4
+     * @param currentPlayerText       Current player text field
+     * @param gameGrid                Playing field grid
+     * @param moverAmountText         Amount of used mover Tokens textbox
+     * @param swapperAmountText       Amount of used swapper Tokens textbox
+     * @param replacerAmountText      Amount of used replacer Tokens textbox
+     * @param removerAmountText       Amount of used remover Tokens textbox
+     * @param horizontalPointsGrid    grid points for single line for the horizontal team
+     * @param verticalPointsGrid      grid points for single line for the vertical team
+     * @param sumPointsVerticalTeam   label for points of vertical team
      * @param sumPointsHorizontalTeam label for points of horizontal team
-     * @param innerGrid Inner grid, for toggling display of UI elemtns
-     * @param imageSwapper Image of the swapper special token counter
-     * @param imageMover Image of the mover special token counter
-     * @param imageReplacer Image of the replacer special token counter
-     * @param imageRemover Image of the remover special token counter
+     * @param innerGrid               Inner grid, for toggling display of UI elemtns
+     * @param imageSwapper            Image of the swapper special token counter
+     * @param imageMover              Image of the mover special token counter
+     * @param imageReplacer           Image of the replacer special token counter
+     * @param imageRemover            Image of the remover special token counter
      */
     public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne, GridPane playerHandTwo,
                  GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid,
@@ -122,8 +123,8 @@ public class FXGUI implements GUIConnector {
     /**
      * Removes the golden frame from highlighted images after the animation time is over
      *
-     * @param x x-coordinate of game grid
-     * @param y y-coordinate of game grid
+     * @param x    x-coordinate of game grid
+     * @param y    y-coordinate of game grid
      * @param type TokenType of the token, that will be changed
      */
     private void makeImageViewNormal(int x, int y, TokenType type) {
@@ -143,8 +144,8 @@ public class FXGUI implements GUIConnector {
     /**
      * Change picture of specific grid token to a highlighted one
      *
-     * @param y y coordinate of game grid
-     * @param x x coordinate of game grid
+     * @param y    y coordinate of game grid
+     * @param x    x coordinate of game grid
      * @param type TokenType of the token, that will be changed
      */
     @Override
@@ -214,7 +215,7 @@ public class FXGUI implements GUIConnector {
      * Creates alert, that a player can do their turn now
      *
      * @param playerName name of the player
-     * @param playerID ID of the player
+     * @param playerID   ID of the player
      */
     @Override
     public void notifyTurn(String playerName, int playerID) {
@@ -736,9 +737,9 @@ public class FXGUI implements GUIConnector {
     /**
      * Shows hand of a specific player and hides all other hands, only shows hand of AI if option is selected to do so
      *
-     * @param isAI boolean, if player is AI
+     * @param isAI     boolean, if player is AI
      * @param playerID Player, whose hand should be shown
-     * @param hideAll wont show any hands
+     * @param hideAll  wont show any hands
      */
     @Override
     public void showHand(boolean isAI, int playerID, boolean hideAll) {
@@ -784,6 +785,7 @@ public class FXGUI implements GUIConnector {
                 int finalI = i;
                 int finalJ = j;
                 //Set actions on a drag over action
+
                 curr.setOnDragOver((DragEvent event) -> {
                     String input = event.getDragboard().getString();
 
@@ -793,11 +795,35 @@ public class FXGUI implements GUIConnector {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     } else {
-                        if ("REMOVER".equals(input) || "MOVER".equals(input) || "SWAPPER".equals(input) || "REPLACER".equals(input)) {
+                        var replacerAllowed = false;
+                        if ("REPLACER".equals(input)) {
+                            //go through the handTokens of the player and check if one number is between 1 and 6
+                            for (var token : Game.getGame().getCurrentPlayer().getHandTokens()) {
+                                if (token.tokenType().getValue() >= 1 && token.tokenType().getValue() <= 6) {
+                                    replacerAllowed = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        var amount = 0;
+                        //check if the gamefield has less than 2 tokens (when using swapper)
+                        if ("SWAPPER".equals(input)) {
+                            for (var row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
+                                for (TokenType token : row) {
+                                    if (token != TokenType.NONE) {
+                                        amount += 1;
+                                        if (amount >= 2)
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if ("REMOVER".equals(input) || "MOVER".equals(input) || ("SWAPPER".equals(input) && amount >= 2) || (replacerAllowed && "REPLACER".equals(input))) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     }
-
                     event.consume();
                 });
                 //set actions for a dropped event

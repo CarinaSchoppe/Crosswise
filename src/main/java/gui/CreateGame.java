@@ -86,10 +86,12 @@ public class CreateGame implements Initializable {
         isActive.add(playerThreeActive.isSelected());
         isActive.add(playerFourActive.isSelected());
 
-        playerNames.add(playerOneAI.getText());
-        playerNames.add(playerTwoAI.getText());
-        playerNames.add(playerThreeAI.getText());
-        playerNames.add(playerFourAI.getText());
+        isAI.add(playerOneAI.isSelected());
+        isAI.add(playerTwoAI.isSelected());
+        isAI.add(playerThreeAI.isSelected());
+        isAI.add(playerFourAI.isSelected());
+        System.out.println("her");
+
 
         if (playerNames.isEmpty() || isActive.isEmpty() || isAI.isEmpty())
             return;

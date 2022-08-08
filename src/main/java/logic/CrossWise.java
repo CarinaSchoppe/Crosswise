@@ -35,7 +35,6 @@ public class CrossWise extends Application {
      * TODO drag and drop highlight
      * TODO loadinvalidfile - game can be created with currentplayer on an inactive ID or out of bounds, game field can be asymetrical
      *  ---tests
-     * TODO faulty files
      *  ---vll
      * TODO drag and drop having image in it
      *  ---questions
@@ -44,11 +43,9 @@ public class CrossWise extends Application {
      * TODO end timer event premature
      * TODO win text label of hori or verti ( > 100)
      * TODO cant pick replacer, if no symbol tokens on hand
-     * TODO cant pick swapper if less than 2 tokens on field
      * TODO disable GUI elements while AI move
      * TODO drag and drop highlight
-     * TODO HashMap to Map
-     * TODO colors of background and create game background0
+     * TODO colors of background and create game background
      * TODO fix is preventing loss in big chooser method if both are preventing loss
      * TODO Structure of the program?
      * TODO playerMove  not with strings but with token types

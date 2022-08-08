@@ -200,7 +200,7 @@ public class AI extends Player {
     public static Map<Integer, Integer> calculateCurrentOverallPoints() {
         //get all occurrences of tokens
         Map<Integer, EnumMap<TokenType, Integer>> occurrenceMap = getOccurrencesOfTokens();
-        HashMap<Integer, Integer> pointMap = new HashMap<>();
+        Map<Integer, Integer> pointMap = new HashMap<>();
 
         for (Map.Entry<Integer, EnumMap<TokenType, Integer>> entry : occurrenceMap.entrySet()) {
             //calculates the amount of points for each line and puts them into the resultMap
@@ -333,7 +333,7 @@ public class AI extends Player {
      * are named -1, -2, ... and the column-indexes are named 1, 2, ...
      */
     public static Map<Integer, EnumMap<TokenType, Integer>> getOccurrencesOfTokens() {
-        HashMap<Integer, EnumMap<TokenType, Integer>> occurrenceMap = new HashMap<>();
+        Map<Integer, EnumMap<TokenType, Integer>> occurrenceMap = new HashMap<>();
         TokenType[][] grid = Game.getGame().getPlayingField().convertToTokenTypeArray();
         //get occurrences for the horizontal team
         for (int i = 0; i < grid.length; i++) {
