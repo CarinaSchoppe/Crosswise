@@ -96,12 +96,13 @@ public class Player {
             Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().tokenType());
             GameLogger.logMove(this, token, position);
             Platform.runLater(() -> {
+                /*
                 try {
                     Thread.sleep(Constants.AI_TURN_TIME);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-
+                */
             });
         }
 

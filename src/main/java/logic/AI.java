@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.application.Platform;
+
 import java.util.*;
 
 /**
@@ -354,11 +356,16 @@ public class AI extends Player {
     public void makeMove() {
         TokenMove move = calculateAIMove();
         //Debug sleep timer
-        try {
-            Thread.sleep(Constants.AI_TURN_TIME);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+
+
+        Platform.runLater(() -> {
+            try {
+                Thread.sleep(Constants.AI_TURN_TIME * 2);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
         //perform different turn actions for each tokenType
         switch (move.getToken().getValue()) {
             case 1, 2, 3, 4, 5, 6 -> {

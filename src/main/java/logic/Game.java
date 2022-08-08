@@ -313,11 +313,14 @@ public class Game {
             handleOver();
             return;
         }
+
         //shows the hand of the next player
         Platform.runLater((() -> {
+
             guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
             guiConnector.changeCurrentPlayerText(currentPlayer.getName());
         }));
+
 
         if (CrossWise.DEBUG) {
             System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
@@ -470,7 +473,6 @@ public class Game {
         }
     }
 
-
     /**
      * Computes logic for turns, that are over
      */
@@ -501,7 +503,6 @@ public class Game {
             Thread.currentThread().interrupt();
         }
 
-
         //Let the next player do their turn
         nextPlayer();
     }
@@ -510,7 +511,9 @@ public class Game {
     public void startGame() {
 
         System.out.println("thread = " + thread);
-        thread.start();
+        synchronized (this) {
+            thread.start();
+        }
     }
 
     public Integer[] pointsArray() {
@@ -631,7 +634,9 @@ public class Game {
     }
 
     public void activate() {
-        thread.start();
+        synchronized (this) {
+            thread.start();
+        }
     }
 
     public void addNewActionTile(Token token) {

@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
@@ -10,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import logic.*;
 
@@ -392,34 +395,32 @@ public class FXGUI implements GUIConnector {
             String idHor = "horPoints:" + rows;
             horiLabel.setId(idHor);
             horiLabel.setText("0");
+            horiLabel.setFont(new Font("Arial", 30));
 
             String idVert = "verPoints:" + rows;
             vertLabel.setId(idVert);
             vertLabel.setText("0");
+            vertLabel.setFont(new Font("Arial", 30));
 
-
-            horiLabel.setStyle("-fx-background-color:grey; -fx-padding:5");
-            vertLabel.setStyle("-fx-background-color:grey; -fx-padding:5");
-
-
-            vertLabel.setPrefSize(verticalPointsGrid.getWidth(), verticalPointsGrid.getHeight() / Constants.GAMEGRID_SIZE);
-            horiLabel.setPrefSize(horizontalPointsGrid.getWidth() / Constants.GAMEGRID_SIZE, horizontalPointsGrid.getHeight());
-
-            vertLabel.prefWidthProperty().bind(verticalPointsGrid.widthProperty().divide(Constants.GAMEGRID_SIZE));
+            vertLabel.prefWidthProperty().bind(verticalPointsGrid.widthProperty().divide(Constants.GAMEGRID_SIZE).add(20));
             vertLabel.prefHeightProperty().bind(verticalPointsGrid.heightProperty());
             horiLabel.prefHeightProperty().bind(horizontalPointsGrid.heightProperty().divide(Constants.GAMEGRID_SIZE));
             horiLabel.prefWidthProperty().bind(horizontalPointsGrid.widthProperty());
 
+            vertLabel.setAlignment(Pos.CENTER);
+            horiLabel.setAlignment(Pos.CENTER);
+
+
 
             this.horizontalPointsGrid.add(horiLabel, 0, rows);
             this.verticalPointsGrid.add(vertLabel, rows, 0);
+        }
 
-        }
-        for (int i = 0; i < Constants.GAMEGRID_SIZE; i++) {
-            ColumnConstraints con = new ColumnConstraints();
-            con.setPercentWidth(16.5);
-            verticalPointsGrid.getColumnConstraints().add(con);
-        }
+        ColumnConstraints con = new ColumnConstraints();
+        con.setPercentWidth(16);
+        con.setHgrow(Priority.ALWAYS);
+        verticalPointsGrid.getColumnConstraints().add(con);
+
     }
 
     /**
@@ -441,7 +442,7 @@ public class FXGUI implements GUIConnector {
             sumHorizontal = sumHorizontal + pointsMap[counterH];
             counterH--;
         }
-        if (sumHorizontal > 100) {
+        if (sumHorizontal < -100) {
             this.sumPointsHorizontalTeam.setText("Win");
         } else {
             this.sumPointsHorizontalTeam.setText(Integer.toString(sumHorizontal));
@@ -453,7 +454,7 @@ public class FXGUI implements GUIConnector {
         for (Node child : this.verticalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
             if (pointsMap[counterV] < -100) {
-                currLabel.setText("Sieg");
+                currLabel.setText("Win");
             } else {
                 currLabel.setText(pointsMap[counterV].toString());
             }
@@ -754,7 +755,16 @@ public class FXGUI implements GUIConnector {
         playerHandFour.setVisible(false);
         if (!hideAll) {
             if (isAI) {
-                if (showComputerHandButton.isSelected()) handVisibleSwitch(playerID);
+                if (showComputerHandButton.isSelected()) {
+                    Platform.runLater((() -> {
+                        handVisibleSwitch(playerID);
+                        try {
+                            Thread.sleep(Constants.AI_TURN_TIME * 2);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }));
+                }
             } else {
                 handVisibleSwitch(playerID);
             }
