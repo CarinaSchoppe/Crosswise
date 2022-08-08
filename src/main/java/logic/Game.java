@@ -94,7 +94,7 @@ public class Game {
 
         Game game = new Game(field, players, connector);
         //setup game
-        createStuff(game, fileSetup);
+        makeGameReady(game, fileSetup);
     }
 
     /**
@@ -166,18 +166,16 @@ public class Game {
             var isActive = isActives.get(i);
             if (Boolean.TRUE.equals(isAI)) {
                 var ai = new AI(i, isActive, name);
-                ai.create();
                 players.add(ai);
             } else {
                 var player = new Player(i, isActive, name);
-                player.create();
                 players.add(player);
             }
         }
 
         Game game = new Game(new PlayingField(Constants.GAMEGRID_SIZE), players, connector);
         //setup game
-        createStuff(game, fileSetup);
+        makeGameReady(game, fileSetup);
     }
 
     /**
@@ -186,7 +184,7 @@ public class Game {
      * @param game      Current game
      * @param fileSetup boolean if the game was loaded with a file
      */
-    private static void createStuff(Game game, boolean fileSetup) {
+    private static void makeGameReady(Game game, boolean fileSetup) {
         if (Game.getGame() != null) {
             Game.getGame().cancel();
         }
@@ -198,14 +196,16 @@ public class Game {
 
         });
         //setup game with the running thread
-        Game.setGame(game, thread);
+        game.players.forEach(Player::create);
+        setGame(game, thread);
+
         //if the game wasnt loaded from a file, start it here
+        Game.getGame().guiConnector.resetSpecialTokenImages();
         if (!fileSetup) {
             Game.game.guiConnector.startGamePopUp();
 
         }
         //reset the specialTokensImages
-        Game.getGame().guiConnector.resetSpecialTokenImages();
     }
 
 
@@ -231,8 +231,10 @@ public class Game {
      * @param thread thread on which the game runs
      */
     public static void setGame(Game game, Thread thread) {
+        System.out.println("Game.game = " + Game.game);
         Game.game = game;
         Game.game.thread = thread;
+
     }
 
     /**
@@ -461,13 +463,13 @@ public class Game {
     public synchronized void cancel() {
         stop = true;
         players.clear();
-        handleOver();
         Team.setVerticalTeam(new Team(TeamType.VERTICAL));
         Team.setHorizontalTeam(new Team(TeamType.HORIZONTAL));
         Team.setDeactiveTeam(new Team(TeamType.DEACTIVE));
+        handleOver();
+        System.out.println("canceled");
         //kill the this.thread
-        if (thread.isAlive())
-            thread.interrupt();
+        thread.stop();
     }
 
     /**
