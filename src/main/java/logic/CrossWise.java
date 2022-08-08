@@ -25,13 +25,7 @@ public class CrossWise extends Application {
 
     /*
      * TODO Responsive Design
-     * TODO GUI Points
-
-     * TODO: Tests schreiben
-     * TODO Create players via createGame method and not in the createGame class
      * TODO last token not responsive?
-     * TODO border pane from empty token doesnt get removed
-     *  ---tests
      *  ---vll
      * TODO drag and drop having image in it
      *  ---questions
