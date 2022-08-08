@@ -310,7 +310,6 @@ public class Player {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        System.out.println("here1");
 
         //If no tokens are left in the pile, throw NoTokensException
         if (Game.getGame().getTokenDrawPile().isEmpty()) {
