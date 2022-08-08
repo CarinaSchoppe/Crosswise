@@ -19,8 +19,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * FX-Class for Hanlding GUI changes of the current scene "GameWindow"
+ *
+ * @author Jacob Klövekorn
+ */
 public class FXGUI implements GUIConnector {
 
+    //--------------------------------------------------FX-Objects------------------------------------------------------
     private final GridPane playerHandOne;
     private final GridPane playerHandTwo;
     private final GridPane playerHandThree;
@@ -43,6 +49,8 @@ public class FXGUI implements GUIConnector {
     private final ImageView imageReplacer;
     private final ImageView imageRemover;
 
+    //-------------------------------------------------Attributes-------------------------------------------------------
+
     private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
@@ -55,14 +63,36 @@ public class FXGUI implements GUIConnector {
     private Integer clickYOrigin;
     private boolean disableGUI = false;
 
-
+    /**
+     * Constructor for the FX gui class
+     *
+     * @param showComputerHandButton toggleButton, to show the AI hands during their turn
+     * @param playerHandOne Hand of player 1
+     * @param playerHandTwo Hand of player 2
+     * @param playerHandThree Hand of player 3
+     * @param playerHandFour Hand of player 4
+     * @param currentPlayerText Current player text field
+     * @param gameGrid Playing field grid
+     * @param moverAmountText Amount of used mover Tokens textbox
+     * @param swapperAmountText Amount of used swapper Tokens textbox
+     * @param replacerAmountText Amount of used replacer Tokens textbox
+     * @param removerAmountText Amount of used remover Tokens textbox
+     * @param horizontalPointsGrid grid points for single line for the horizontal team
+     * @param verticalPointsGrid grid points for single line for the vertical team
+     * @param sumPointsVerticalTeam label for points of vertical team
+     * @param sumPointsHorizontalTeam label for points of horizontal team
+     * @param innerGrid Inner grid, for toggling display of UI elemtns
+     * @param imageSwapper Image of the swapper special token counter
+     * @param imageMover Image of the mover special token counter
+     * @param imageReplacer Image of the replacer special token counter
+     * @param imageRemover Image of the remover special token counter
+     */
     public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne, GridPane playerHandTwo,
                  GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid,
                  Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText,
                  GridPane horizontalPointsGrid, GridPane verticalPointsGrid, Label sumPointsVerticalTeam,
                  Label sumPointsHorizontalTeam, GridPane innerGrid, ImageView imageSwapper, ImageView imageMover,
                  ImageView imageReplacer, ImageView imageRemover) {
-
         this.playerHandOne = playerHandOne;
         this.playerHandTwo = playerHandTwo;
         this.playerHandThree = playerHandThree;
@@ -89,8 +119,15 @@ public class FXGUI implements GUIConnector {
         handImagesTokens = new HashMap<>();
     }
 
-
+    /**
+     * Removes the golden frame from highlighted images after the animation time is over
+     *
+     * @param x x-coordinate of game grid
+     * @param y y-coordinate of game grid
+     * @param type TokenType of the token, that will be changed
+     */
     private void makeImageViewNormal(int x, int y, TokenType type) {
+        //create schedule-executor, who will change the picture after the given time
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.schedule(() -> {
             Image image = new Image(type.getImagePathNormal());
@@ -99,9 +136,17 @@ public class FXGUI implements GUIConnector {
             gridImagesTokens.put(imageView, type);
             imageView.setImage(image);
         }, animationTime.getTime() * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
+        //close the scheduler
         scheduler.shutdown();
     }
 
+    /**
+     * Change picture of specific grid token to a highlighted one
+     *
+     * @param y y coordinate of game grid
+     * @param x x coordinate of game grid
+     * @param type TokenType of the token, that will be changed
+     */
     @Override
     public void placerAnimationFrame(int y, int x, TokenType type) {
         Image image = new Image(type.getImagePathGolden());
@@ -113,7 +158,9 @@ public class FXGUI implements GUIConnector {
         makeImageViewNormal(x, y, type);
     }
 
-
+    /**
+     * Remove the highlighted SpecialToken image below it's counter after the animation time
+     */
     @Override
     public void updateSpecialTokenIcons(TokenType type) {
         var imageView = switch (type) {
@@ -124,20 +171,34 @@ public class FXGUI implements GUIConnector {
             default -> throw new NoTokenException("Unknown token type!");
         };
         imageView.setImage(new Image(type.getImagePathGolden()));
+        //create, start and end scheduler which will replace the image with the normal image after the animation time
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.schedule(() -> imageView.setImage(new Image(type.getImagePathNormal())), animationTime.getTime() * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
+        scheduler.schedule(() -> imageView.setImage(new Image(type.getImagePathNormal())), animationTime.getTime()
+                * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
         scheduler.shutdown();
     }
 
+    /**
+     * Highlights the new empty field with a golden border
+     *
+     * @param y y coordinate of game grid
+     * @param x x coordinate of game grid
+     */
     @Override
     public void removerAnimationFrame(int y, int x) {
         gridImages[x][y].setImage(new Image(TokenType.NONE.getImagePathGolden()));
         makeImageViewNormal(x, y, TokenType.NONE);
-
     }
 
+    /**
+     * Update a players hand icons
+     *
+     * @param playerID player to be updates
+     * @param tokens new hand tokens
+     */
     @Override
     public void updatePlayerHandIcons(int playerID, List<Token> tokens) {
+        //update the images of a player in the thread
         Platform.runLater(() -> {
             switch (playerID) {
                 case 0 -> addTokenImagesForPlayer1(tokens);
@@ -149,9 +210,15 @@ public class FXGUI implements GUIConnector {
         });
     }
 
-
+    /**
+     * Creates alert, that a player can do their turn now
+     *
+     * @param playerName name of the player
+     * @param playerID ID of the player
+     */
     @Override
     public void notifyTurn(String playerName, int playerID) {
+        //let current thread show an alert with the name and Id of the current player
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player: \"" + playerName + "\" with ID: \"" + playerID + ", it's your turn!");
             alert.setTitle("Next Turn");
@@ -161,8 +228,14 @@ public class FXGUI implements GUIConnector {
         });
     }
 
+    /**
+     * Shows hand of a single player
+     *
+     * @param playerID player id of the player, whose hand will be shown
+     */
     @Override
     public void handVisibleSwitch(int playerID) {
+        //sets visibility to true of the player whos hand will be shown
         switch (playerID) {
             case 0 -> playerHandOne.setVisible(true);
             case 1 -> playerHandTwo.setVisible(true);
@@ -172,32 +245,50 @@ public class FXGUI implements GUIConnector {
         }
     }
 
+    /**
+     * Chnage the current Animation-Time for the AI move highlights
+     *
+     * @param time New animation time
+     */
     @Override
     public void changeCurrentAnimationTime(AnimationTime time) {
         this.animationTime = time;
     }
 
+    /**
+     * Update the UI of the game
+     *
+     * @param players List of players
+     * @param gameField new game field
+     * @param pointsMap new points for each line
+     */
     @Override
     public void performMoveUIUpdate(List<Player> players, TokenType[][] gameField, Integer[] pointsMap) {
         for (Player player : players) {
             updatePlayerHandIcons(player.getPlayerID(), player.getHandTokens());
         }
+        //replace each frame with the corresponding image of the new game field
         for (int row = 0; row < Constants.GAMEGRID_SIZE; row++) {
             for (int column = 0; column < Constants.GAMEGRID_SIZE; column++) {
 
                 TokenType token = gameField[row][column];
                 Image image = new Image(token.getImagePathNormal());
                 String id = "gridToken:" + column + ":" + row;
-                ImageView imageView =
-                        fieldImages.get(id);
+                //get imageview from ID
+                ImageView imageView = fieldImages.get(id);
                 gridImagesTokens.put(imageView, token);
                 imageView.setImage(image);
             }
         }
+        //update points of each line
         Platform.runLater(() -> updatePointsGrid(pointsMap));
     }
 
-
+    /**
+     * Creates alert for invalid config
+     *
+     * @param message Error message
+     */
     @Override
     public void showError(String message) {
         Platform.runLater(() -> {
@@ -209,11 +300,19 @@ public class FXGUI implements GUIConnector {
 
     }
 
+    /**
+     * Change the current player text
+     *
+     * @param playerName Current player name
+     */
     @Override
     public void changeCurrentPlayerText(String playerName) {
         Platform.runLater(() -> currentPlayerText.setText(playerName));
     }
 
+    /**
+     * Resets all textFields to their default value
+     */
     @Override
     public void resetText() {
         currentPlayerText.setText("");
@@ -223,14 +322,18 @@ public class FXGUI implements GUIConnector {
         removerAmountText.setText("0");
     }
 
+    /**
+     * Generate GameGrid at the start of a game
+     */
     @Override
     public void generateGrid() {
         gridImages = new ImageView[Constants.GAMEGRID_SIZE][Constants.GAMEGRID_SIZE];
+        //Remove all previous images
         gameGrid.getChildren().clear();
         for (int rows = 0; rows < Constants.GAMEGRID_SIZE; rows++) {
             for (int columns = 0; columns < Constants.GAMEGRID_SIZE; columns++) {
                 ImageView imgNew = new ImageView();
-
+                //Set size of  the image to its proportional space on the grid
                 int cellWidth = (int) gameGrid.getWidth() / Constants.GAMEGRID_SIZE;
                 int cellHeight = (int) gameGrid.getHeight() / Constants.GAMEGRID_SIZE;
                 imgNew.setFitWidth(cellWidth);
@@ -242,7 +345,7 @@ public class FXGUI implements GUIConnector {
                 fieldImages.put(id, imgNew);
                 imgNew.setId(id);
                 Image img;
-                //set emtpy token image
+                //set empty token image
                 img = new Image(TokenType.NONE.getImagePathNormal());
 
                 imgNew.setImage(img);

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright Notice for Crosswise-PP
-  ~ Copyright (c) at Crosswise-Jacob 2022
-  ~ File created on 7/27/22, 11:22 AM by Carina The Latest changes made by Carina on 7/27/22, 11:15 AM All contents of "pom.xml" are protected by copyright. The copyright law, unless expressly indicated otherwise, is
-  ~ at Crosswise-Jacob. All rights reserved
-  ~ Any type of duplication, distribution, rental, sale, award,
-  ~ Public accessibility or other use
-  ~ require the express-written consent of Crosswise-Jacob.
-  -->
+
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"

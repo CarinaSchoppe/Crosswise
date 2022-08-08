@@ -16,63 +16,64 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Create-Game window for the game Crosswise.
+ *
+ * @author Jacob Klövekorn
+ */
 public class CreateGame implements Initializable {
-
-
+    /**
+     * Gui-Connector Class
+     */
     private final GUIConnector guiConnector;
 
+    /**
+     * Constructor
+     *
+     * @param guiConnector Gui-Connector
+     */
     public CreateGame(GUIConnector guiConnector) {
         this.guiConnector = guiConnector;
     }
 
-    @FXML
-    private ResourceBundle resources;
+    //--------------------------------------------FXML Objects----------------------------------------------------------
 
-    @FXML
-    private URL location;
 
     @FXML
     private Button createGameButton;
-
     @FXML
     private CheckBox playerFourAI;
-
     @FXML
     private CheckBox playerFourActive;
-
     @FXML
     private TextField playerFourField;
-
     @FXML
     private CheckBox playerOneAI;
-
     @FXML
     private CheckBox playerOneActive;
-
     @FXML
     private TextField playerOneField;
-
     @FXML
     private CheckBox playerThreeAI;
-
     @FXML
     private CheckBox playerThreeActive;
-
     @FXML
     private TextField playerThreeField;
-
     @FXML
     private CheckBox playerTwoAI;
-
     @FXML
     private CheckBox playerTwoActive;
-
     @FXML
     private TextField playerTwoField;
 
+    /**
+     * Create game from the create Game button
+     *
+     * @param event Event isn't used in this method
+     */
     @FXML
     void createGame(ActionEvent event) {
-        var playerID = 0;
+        int playerID = 0;
         Player playerOne;
         if (playerOneAI.isSelected()) {
             playerOne = new AI(0, playerOneActive.isSelected(), playerOneField.getText());
@@ -105,12 +106,16 @@ public class CreateGame implements Initializable {
         playerThree.create();
         playerFour.create();
 
+        //Setting up GUI elements of the game and creating drag and drop functions
         guiConnector.showGUIElements();
         guiConnector.generateGrid();
         guiConnector.resetText();
         guiConnector.setupDragAndDropEvent();
     }
 
+    /**
+     * Assertions to check, if all objects were loaded into the scene
+     */
     @FXML
     void initialize() {
         assert createGameButton != null : "fx:id=\"createGameButton\" was not injected: check your FXML file 'CreateGame.fxml'.";
@@ -128,6 +133,12 @@ public class CreateGame implements Initializable {
         assert playerTwoField != null : "fx:id=\"playerTwoField\" was not injected: check your FXML file 'CreateGame.fxml'.";
     }
 
+    /**
+     * Initialize, not used here other than checking for assertion described in the other initialize method
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initialize();

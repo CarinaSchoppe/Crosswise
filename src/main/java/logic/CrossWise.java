@@ -24,6 +24,7 @@ public class CrossWise extends Application {
     }
 
     /*
+     * TODO game wrong alert: "cant be started with 0 players"?!
      * TODO: Structure of the program?
      * TODO: Responsive Design
      * TODO: GUI Points
@@ -33,13 +34,24 @@ public class CrossWise extends Application {
      * TODO last token not responsive?
      * TODO border pane from empty token doesnt get removed
      * TODO border pane to special tokens
+     * TODO drag and drop highlight
+     * TODO loadinvalidfile - game can be created with currentplayer on an inactive ID or out of bounds, game field can be asymetrical
+     * TODO remove usedTokens from draw pile not working?
      *  ----kleinere sachen
+     * TODO HashMap to Map
      * TODO disable GUI elements while AI move
      * TODO colors of background and create game background0
      * TODO spieler hand creation in 1 methode?
      * TODO change opacity of special tokens when used up
      * TODO cant pick replacer, if no symbol tokens on hand
      * TODO cant pick swapper if less than 2 tokens on field
+     *  ---tests
+     * TODO faulty files
+     *  ---vll
+     * TODO drag and drop having inmage in it
+     * TODO initial directory
+     * TODO put removeUsedTokens method into game class
+     * TODO maybe remove player instances from performMoveUIupdate method
      * */
 
     @Override
