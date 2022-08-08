@@ -566,7 +566,7 @@ public class FXGUI implements GUIConnector {
         playerHandOne.getChildren().clear();
 
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) return;
+            if (tokens[i] == null) break;
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
@@ -625,8 +625,7 @@ public class FXGUI implements GUIConnector {
         //remove all previous images
         playerHandThree.getChildren().clear();
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) return;
-
+            if (tokens[i] == null) break;
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token3:" + i);
             imageView.setFitHeight(cellHeight);
@@ -929,7 +928,7 @@ public class FXGUI implements GUIConnector {
 
                 event.consume();
 
-            })
+            });
             //setup action on drag done event
             child.setOnDragDone((DragEvent event) -> {
                 // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt

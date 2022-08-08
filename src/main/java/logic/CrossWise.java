@@ -24,14 +24,13 @@ public class CrossWise extends Application {
     }
 
     /*
-     * 1 TODO Responsive Design
-     * 1 TODO last token not responsive?
-     * 3 TODO drag and drop having image in it (optional)
+     * 1 TODO: Responsive Design
+     * 3 TODO: drag and drop having image in it (optional)
      *
      * ---TODO's for jacob only:
-     * 3 TODO drag and drop highlight
-     * 3 TODO colors of background and create game background
-     * 2 TODO fix is preventing loss in big chooser method if both are preventing loss
+     * 3 TODO: drag and drop highlight
+     * 3 TODO: colors of background and create game background
+     * 2 TODO: fix is preventing loss in big chooser method if both are preventing loss
      *
      * */
 
