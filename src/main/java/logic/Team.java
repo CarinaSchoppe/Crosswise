@@ -48,7 +48,7 @@ public class Team {
 
     @Override
     public String toString() {
-        return "Team: " + teamType.getTeamName();
+        return teamType.getTeamName();
     }
 
     /**

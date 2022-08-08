@@ -31,10 +31,10 @@ Mon Aug 08 23:55:43 CEST 2022: Player "Player4" and ID: "3" draws: "1" new Hand:
 Mon Aug 08 23:55:43 CEST 2022: Player "Player4" and ID: "3" draws: "2" new Hand: [4, 9, 1, 2]
 
 Mon Aug 08 23:55:43 CEST 2022: Game Setup: 
-Player{playerID=0, handTokens=[REMOVER, STAR, STAR, PENTAGON], isActive=true, name='Player1', team=Team: Vertical}
-Player{playerID=1, handTokens=[STAR, PENTAGON, REPLACER, SQUARE], isActive=true, name='Player2', team=Team: Horizontal}
-Player{playerID=2, handTokens=[PENTAGON, STAR, TRIANGLE, SWAPPER], isActive=true, name='Player3', team=Team: Vertical}
-Player{playerID=3, handTokens=[SQUARE, SWAPPER, SUN, CROSS], isActive=true, name='Player4', team=Team: Horizontal}
+Player{playerID=0, handTokens=[REMOVER, STAR, STAR, PENTAGON], isActive=true, name='Player1', team=Vertical}
+Player{playerID=1, handTokens=[STAR, PENTAGON, REPLACER, SQUARE], isActive=true, name='Player2', team=Horizontal}
+Player{playerID=2, handTokens=[PENTAGON, STAR, TRIANGLE, SWAPPER], isActive=true, name='Player3', team=Vertical}
+Player{playerID=3, handTokens=[SQUARE, SWAPPER, SUN, CROSS], isActive=true, name='Player4', team=Horizontal}
 
 Mon Aug 08 23:55:43 CEST 2022: Player: "Player1" and ID: "0" placed: 6 on: Position{y=0, x=0} new Hand: [7, 6, 5]
 FieldMap:
