@@ -70,7 +70,6 @@ public class FXMLController implements Initializable {
     private Label moverAmountText;
     @FXML
     private MenuItem newGameButton;
-
     @FXML
     private GridPane playerHandFour;
     @FXML
