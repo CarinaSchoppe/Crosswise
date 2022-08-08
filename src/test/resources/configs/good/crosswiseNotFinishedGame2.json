@@ -5,7 +5,10 @@
       "isActive": true,
       "isAI": true,
       "hand": [
-        2
+        2,
+		1,
+		1,
+		9
       ]
     },
     {
@@ -14,25 +17,22 @@
       "isAI": true,
       "hand": [
         6,
-        1
+        1,
+		3,
+		4
       ]
     },
     {
       "name": "Player3",
-      "isActive": true,
+      "isActive": false,
       "isAI": true,
-      "hand": [
-        6
-      ]
+      "hand": []
     },
     {
       "name": "Player4",
-      "isActive": true,
+      "isActive": false,
       "isAI": true,
-      "hand": [
-        5,
-        1
-      ]
+      "hand": []
     }
   ],
   "currPlayer": 2,
