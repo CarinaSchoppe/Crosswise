@@ -276,14 +276,15 @@ public class Game {
     private void setup(boolean fileLoaded) {
         handleOver();
 
-
         if (stop)
             return;
         //check, if the game was started with 0 players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             faultyStartup(0);
-
+            if(CrossWise.UI)
             return;
+            else
+                throw new IllegalArgumentException("No players");
         }
         //create draw pile and if it wasnt loaded from a file, let the players draw their tokens
         fillPile();

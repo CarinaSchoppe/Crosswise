@@ -20,12 +20,12 @@ class GameTests {
     @Test
     void gameTest1() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswise.json"), new FakeGUI());
-        Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
+        Assertions.assertDoesNotThrow( () -> Game.getGame().testStart(false));
     }
 
     @Test
     void gameTest2() {
-        Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(true, true, true, true), new FakeGUI(), false, null);
+        Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(true, false, true, true), new FakeGUI(), false, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
     }
 
@@ -43,7 +43,7 @@ class GameTests {
 
     @Test
     void gameTest5() {
-        Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(false, false, true, true), new FakeGUI(), false, null);
+        Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(false, true, false, true), new FakeGUI(), false, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
     }
 }

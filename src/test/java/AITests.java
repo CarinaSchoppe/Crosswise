@@ -17,7 +17,7 @@ class AITests {
 
     @Test
     void configValidTest() {
-        var file = new File("crosswise1.json");
+        var file = new File("src/test/resources/configs/good/crosswise.json");
         FileInputReader.readFile(file, gui);
         TokenMove move = new TokenMove(new Position(4, 5), 3, TokenType.getTokenType(2), false, false);
         AI ai = (AI) Game.getGame().getPlayers().get(0);
