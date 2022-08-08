@@ -338,7 +338,8 @@ public class Player {
      *
      * @throws NoTokenException If no more tokens are left
      */
-    public void drawToken() throws NoTokenException {
+    public void drawToken() {
+        System.out.println("Draw-Tokenpile is empty!");
         //Test method to slow down the drawing of Tokens
         try {
             if (CrossWise.UI) Thread.sleep(CrossWise.DELAY);
@@ -347,9 +348,12 @@ public class Player {
         }
         //If no tokens are left in the pile, throw NoTokensException
         if (Game.getGame().getTokenDrawPile().isEmpty()) {
-            var handTokenTypeArray = new TokenType[handTokens.size()];
-            for (int i = 0; i < handTokens.size(); i++) {
-                handTokenTypeArray[i] = handTokens.get(i).tokenType();
+            var handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
+            for (int i = 0; i < Constants.HAND_SIZE; i++) {
+                if (handTokens.size() > i)
+                    handTokenTypeArray[i] = handTokens.get(i).tokenType();
+                else
+                    handTokenTypeArray[i] = TokenType.NONE;
             }
             Game.getGame().getGUIConnector().updatePlayerHandIcons(playerID, handTokenTypeArray);
             return;

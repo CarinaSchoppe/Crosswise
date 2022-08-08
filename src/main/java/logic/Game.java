@@ -490,12 +490,7 @@ public class Game {
             return;
         }
         //otherwise try to draw a token
-        try {
             currentPlayer.drawToken();
-        } catch (NoTokenException e) {
-            if (CrossWise.DEBUG)
-                System.out.println("No more tokens left in the Pile!");
-        }
         try {
             if (CrossWise.UI)
                 Thread.sleep(CrossWise.DELAY);

@@ -18,9 +18,9 @@ public abstract class Constants {
 
     public static final int UNIQUE_ACTION_TOKENS = 4;
 
-    public static final int AMOUNT_ACTION_TOKENS = 3;
+    public static final int AMOUNT_ACTION_TOKENS = 0;
 
-    public static final int AMOUNT_NORMAL_TOKENS = 7;
+    public static final int AMOUNT_NORMAL_TOKENS = 3;
 
     public static final String LOG_FILE_NAME = "Logfile.txt";
     public static final long ANIMATION_TIME = 1;
