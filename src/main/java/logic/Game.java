@@ -9,7 +9,6 @@ import java.util.*;
  *
  * @author Jacob Klövekorn
  */
-@SuppressWarnings("ALL")
 public class Game {
 
     /**
@@ -52,7 +51,7 @@ public class Game {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * Constructor
+     * Constructor, initialize parameters
      *
      * @param playingField playing field, consisting out of Positions with Tokens
      * @param players
@@ -66,19 +65,30 @@ public class Game {
         this.guiConnector = guiConnector;
     }
 
+    /**
+     * Creates the actual game
+     *
+     * @param players List of Players
+     * @param connector GuiConnector
+     * @param fileSetup If loaded from a file
+     */
     public static void createNewGame(List<Player> players, GUIConnector connector, boolean fileSetup) {
         Game game = new Game(new PlayingField(Constants.GAMEGRID_SIZE), players, connector);
+        //setup game
         createStuff(game, fileSetup);
     }
 
     /**
-     * Method to extract code duplication
+     * Sets up the game and starts all neccesary methods to begin
+     *
+     * @param game Current game
+     * @param fileSetup boolean, if the game was loaded with a file
      */
     private static void createStuff(Game game, boolean fileSetup) {
         if (Game.getGame() != null) {
             Game.getGame().cancel();
         }
-
+        //create new game thread
         Thread thread = new Thread(() -> {
             while (!game.start) {
                 try {
@@ -90,14 +100,26 @@ public class Game {
             game.setup(fileSetup);
             game.start();
         });
+        //setup game with the running thread
         Game.setGame(game, thread);
+        //if the game wasnt loaded from a file, start it here
         if (!fileSetup) {
             Game.game.guiConnector.startGamePopUp();
+            Game.getGame().startGame();
             thread.start();
         }
+        //reset the specialTokensImages
+        Game.getGame().guiConnector.resetSpecialTokenImages();
     }
 
-
+    /**
+     * create a new game with a given playingfield
+     *
+     * @param players List of players
+     * @param connector GuiConnector
+     * @param fileSetup boolean, if the game was loaded with a file
+     * @param field playing field
+     */
     public static void createNewGame(List<Player> players, GUIConnector connector, boolean fileSetup, PlayingField field) {
         Game game = new Game(field, players, connector);
         createStuff(game, fileSetup);
@@ -105,15 +127,25 @@ public class Game {
 
     /**
      * shows error message while trying to create a game with wrong parameters
+     *
+     * @param caseID error type id
      */
     public void faultyStartup(Integer caseID) {
+        //makes thread hide all hands and create an alert
         Platform.runLater(() -> {
             guiConnector.showHand(true, 0, true);
             guiConnector.faultyAlert(caseID);
         });
+        //cancel the current game
         game.cancel();
     }
 
+    /**
+     * Set the current game
+     *
+     * @param game current game
+     * @param thread thread on which the game runs
+     */
     public static void setGame(Game game, Thread thread) {
         Game.game = game;
         Game.game.thread = thread;
@@ -128,18 +160,22 @@ public class Game {
             return;
         }
         this.tokenDrawPile = new ArrayList<>();
+        //iterate through all different types of tokens
         for (TokenType token : TokenType.values()) {
             if (token == TokenType.NONE) continue;
             if (token.isSpecial()) {
+                //Creates all special tokens and adds them to the draw pile
                 for (int i = 0; i < Constants.AMOUNT_ACTION_TOKENS; i++) { //12 tokens
                     tokenDrawPile.add(new Token(token));
                 }
             } else {
+                //creates all symbol tokens and adds them to the draw pile
                 for (int i = 0; i < Constants.AMOUNT_NORMAL_TOKENS; i++) { //42 tokens
                     tokenDrawPile.add(new Token(token));
                 }
             }
         }
+        //shuffle the draw pile
         for (int i = 0; i < tokenDrawPile.size(); i++) {
             int randomIndex = new Random().nextInt(tokenDrawPile.size());
             Token temp = tokenDrawPile.get(i);
@@ -156,6 +192,7 @@ public class Game {
             handleOver();
             return;
         }
+        //For each player, let them draw as many tokens as big their hand size is supposed to be
         for (Player player : players.stream().filter(Player::isActive).toList()) {
             for (int i = 0; i < Constants.HAND_SIZE; i++) {
                 try {
@@ -180,18 +217,18 @@ public class Game {
             return;
         }
         handleOver();
+        //check, if the game was started with 0 players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             faultyStartup(0);
             return;
         }
-
+        //create draw pile and if it wasnt loaded from a file, let the players draw their tokens
         fillPile();
         if (!fileLoaded) {
             playerPileSetup();
         }
         currentPlayer = players.stream().filter(Player::isActive).toList().get(0);
         guiConnector.changeCurrentPlayerText(currentPlayer.getName());
-
     }
 
 
@@ -205,6 +242,7 @@ public class Game {
         if (currentPlayer == null && !allPlayers.isEmpty()) {
             currentPlayer = allPlayers.get(0);
         } else if (currentPlayer != null && !allPlayers.isEmpty()) {
+            //set next player
             int index = allPlayers.indexOf(currentPlayer);
             if (index == allPlayers.size() - 1) {
                 currentPlayer = allPlayers.get(0);
@@ -217,7 +255,7 @@ public class Game {
             handleOver();
             return;
         }
-
+        //shows the hand of the next player
         Platform.runLater((() -> {
             guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
             guiConnector.changeCurrentPlayerText(currentPlayer.getName());
@@ -228,33 +266,69 @@ public class Game {
         }
         //if the player is an AI player, let the AI make their move, otherwise notify the next player
         if (currentPlayer instanceof AI ai) {
+            //add the new move to the thread, so the player move will be finished until the ai move starts
             Platform.runLater(ai::makeMove);
         } else {
+            //notifies the next player with an alert
             guiConnector.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());
         }
-
     }
 
+    /**
+     * Handle symbol token move done by a player
+     *
+     * @param tokenString type of the token
+     * @param x x coordinate of the position on the board
+     * @param y y coordinate of the position on the board
+     */
     public void playerSymbolTokenMove(String tokenString, Integer x, Integer y) {
         currentPlayer.normalTokenTurn(currentPlayer.getCorrespondingToken(tokenString), new Position(x, y));
         turnDone();
     }
-
+    /**
+     * Handle remover token move done by a player
+     *
+     * @param x x coordinate of the position on the board
+     * @param y y coordinate of the position on the board
+     */
     public void playerRemoverTokenMove(Integer x, Integer y) {
         currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken("REMOVER"), new Position(x, y));
         turnDone();
     }
 
+    /**
+     * Handle mover token move done by a player
+     *
+     * @param fromX x coordinate of the start position on the board
+     * @param fromY y coordinate of the start position on the board
+     * @param toX y coordinate of the end position on the board
+     * @param toY y coordinate of the end position on the board
+     */
     public void playerMoverTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
         currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken("MOVER"), new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 
+    /**
+     * Handle swapper token move done by a player
+     *
+     * @param fromX x coordinate of the start position on the board
+     * @param fromY y coordinate of the start position on the board
+     * @param toX y coordinate of the end position on the board
+     * @param toY y coordinate of the end position on the board
+     */
     public void playerSwapperTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
         currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken("SWAPPER"), new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 
+    /**
+     * Handle replacer token move done by a player
+     *
+     * @param fromX x coordinate of the start position on the board
+     * @param fromY y coordinate of the start position on the board
+     * @param handIndex hand index of position clicked on the hand
+     */
     public void playerReplacerTokenMove(Integer fromX, Integer fromY, Integer handIndex) {
         currentPlayer.replacerTokenTurn(currentPlayer.getCorrespondingToken("REPLACER"), new Position(fromX, fromY), new Position(handIndex));
         turnDone();
@@ -279,8 +353,10 @@ public class Game {
             if (team == null) {
                 if (CrossWise.DEBUG)
                     System.out.println("Game is over, but no team has won!");
+                //handle game won with a draw
                 guiConnector.gameWonNotifier(null, 0, false);
             } else {
+                //handle game won with a specific team won
                 guiConnector.gameWonNotifier(team.getTeamType(), team.getPoints(), team.isRowWin());
                 if (CrossWise.DEBUG) {
                     System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
@@ -290,12 +366,14 @@ public class Game {
             if (CrossWise.DEBUG)
                 System.out.println(System.currentTimeMillis() - CrossWise.time);
             GameLogger.saveLogToFile(Constants.LOG_FILE_NAME);
-
             return true;
         }
         return false;
     }
 
+    /**
+     * Cancel the current game and stop its thread
+     */
     public synchronized void cancel() {
         stop = true;
         players.clear();
@@ -312,6 +390,7 @@ public class Game {
      * Starts the Game
      */
     public void start() {
+        //check for faulty setup of the players
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             return;
         }
@@ -323,50 +402,17 @@ public class Game {
             faultyStartup(2);
             return;
         }
-
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
         if (currentPlayer instanceof AI ai) {
-            ai.makeMove();
+            //add the new move to the thread, so the player move will be finished until the ai move starts
+            Platform.runLater(ai::makeMove);
         } else {
+            //notifies the next player with an alert
             guiConnector.notifyTurn(currentPlayer.getName(), currentPlayer.getPlayerID());
         }
     }
 
-    public PlayingField getPlayingField() {
-        return playingField;
-    }
 
-    public List<Player> getPlayers() {
-        return (List<Player>) players.clone();
-    }
-
-    public List<Token> getUsedActionTokens() {
-        return (List<Token>) usedSpecialTokens.clone();
-    }
-
-    public void addNewActionTile(Token token) {
-        usedSpecialTokens.add(token);
-    }
-
-    public void removeTokenDrawPileToken(Token token) {
-        tokenDrawPile.remove(token);
-    }
-
-    public List<Token> getTokenDrawPile() {
-        return (List<Token>) tokenDrawPile.clone();
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer.copy();
-    }
-
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-
-    public static Game getGame() {
-        return game;
-    }
 
     /**
      * Computes logic for turns, that are over
@@ -400,9 +446,7 @@ public class Game {
         nextPlayer();
     }
 
-    public GUIConnector getGUIConnector() {
-        return guiConnector;
-    }
+
 
     public void startGame() {
         synchronized (this) {
@@ -471,7 +515,6 @@ public class Game {
     }
 
 
-    @SuppressWarnings("DuplicatedCode")
     private boolean checkRows(final PlayingField field) {
         TokenType current = null;
         for (int i = 0; i < field.getSize(); i++) { //get horizontal
@@ -500,7 +543,6 @@ public class Game {
         return false;
     }
 
-    @SuppressWarnings("DuplicatedCode")
     private boolean checkColumns(final PlayingField field) {
         TokenType current = null;
 
@@ -529,12 +571,54 @@ public class Game {
         return false;
     }
 
+    public void activate() {
+        start = true;
+    }
+
+    public void addNewActionTile(Token token) {
+        usedSpecialTokens.add(token);
+    }
+
+    public void removeTokenDrawPileToken(Token token) {
+        tokenDrawPile.remove(token);
+    }
+
+    //-------------------------------------------Getter and Setter------------------------------------------------------
 
     public Thread getThread() {
         return thread;
     }
 
-    public void activate() {
-        start = true;
+    public PlayingField getPlayingField() {
+        return playingField;
     }
+
+    public List<Player> getPlayers() {
+        return (List<Player>) players.clone();
+    }
+
+    public List<Token> getUsedActionTokens() {
+        return (List<Token>) usedSpecialTokens.clone();
+    }
+
+    public List<Token> getTokenDrawPile() {
+        return (List<Token>) tokenDrawPile.clone();
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer.copy();
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public static Game getGame() {
+        return game;
+    }
+
+    public GUIConnector getGUIConnector() {
+        return guiConnector;
+    }
+
 }

@@ -4,7 +4,6 @@ public enum TeamType {
 
     VERTICAL("Vertical"), HORIZONTAL("Horizontal"), DEACTIVE("Deactive");
 
-
     private final String team;
 
     TeamType(String team) {

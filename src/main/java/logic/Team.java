@@ -2,6 +2,7 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class for the Team of the game Crosswise
@@ -76,10 +77,10 @@ public class Team {
      * Calculate points for the teams
      */
     public static void givePoints() {
-        var pointsMap = AI.calculateCurrentOverallPoints();
+        Map<Integer, Integer> pointsMap = AI.calculateCurrentOverallPoints();
         horizontalTeam.points = 0;
         verticalTeam.points = 0;
-        for (var key : pointsMap.keySet()) {
+        for (Integer key : pointsMap.keySet()) {
             if (key > 0) {
                 verticalTeam.points += pointsMap.get(key);
             } else {

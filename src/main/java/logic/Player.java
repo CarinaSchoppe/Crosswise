@@ -102,7 +102,7 @@ public class Player {
      * @return true, if it isn't, otherwise false
      */
     private boolean hasToken(Token token) {
-        for (var t : handTokens) {
+        for (Token t : handTokens) {
             if (t.equals(token)) return false;
         }
         return true;
@@ -114,7 +114,7 @@ public class Player {
 
         if (hasToken(token)) return false;
 
-        var field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
+        Position field = Game.getGame().getPlayingField().getCorrespondingPlayingField(position);
         if (field.getToken().getTokenType() == TokenType.NONE) return false;
 
         handTokens.remove(getCorrespondingToken(token));
@@ -147,8 +147,8 @@ public class Player {
     public boolean moverTokenTurn(final Token token, Position start, Position end) {
         if (token.getTokenType() != TokenType.MOVER) return false;
         if (hasToken(token)) return false;
-        var fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
-        var fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
+        Position fieldStart = Game.getGame().getPlayingField().getCorrespondingPlayingField(start);
+        Position fieldEnd = Game.getGame().getPlayingField().getCorrespondingPlayingField(end);
 
         if (fieldStart.getToken().getTokenType() == TokenType.NONE) return false;
         if (fieldEnd.getToken().getTokenType() != TokenType.NONE) return false;
@@ -174,15 +174,15 @@ public class Player {
     public boolean swapperTokenTurn(final Token token, final Position first, final Position second) {
         if (token.getTokenType() != TokenType.SWAPPER) return false;
         if (hasToken(token)) return false;
-        var fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
+        Position fieldFirst = Game.getGame().getPlayingField().getCorrespondingPlayingField(first);
         if (fieldFirst == null) return false;
-        var fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
+        Position fieldSecond = Game.getGame().getPlayingField().getCorrespondingPlayingField(second);
         if (fieldSecond == null) return false;
         if (fieldFirst.getToken().getTokenType() == TokenType.NONE) return false;
         if (fieldSecond.getToken().getTokenType() == TokenType.NONE) return false;
         handTokens.remove(getCorrespondingToken(token));
         GameLogger.logMoveSwapper(this, fieldFirst, fieldSecond);
-        var temp = fieldFirst.getToken();
+        Token temp = fieldFirst.getToken();
         fieldFirst.setToken(fieldSecond.getToken());
         fieldSecond.setToken(temp);
 
@@ -211,11 +211,11 @@ public class Player {
         if (token.getTokenType() != TokenType.REPLACER) return false;
         if (hasToken(getCorrespondingToken(handTokenPosition))) return false;
 
-        var replacerField = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
+        Position replacerField = Game.getGame().getPlayingField().getCorrespondingPlayingField(fieldTokenPosition);
         if (replacerField.getToken().getTokenType() == TokenType.NONE) return false;
-        var replacerToken = getCorrespondingToken(token);
+        Token replacerToken = getCorrespondingToken(token);
         if (replacerToken == null) return false;
-        var handToken = getCorrespondingToken(handTokenPosition);
+        Token handToken = getCorrespondingToken(handTokenPosition);
         if (handToken == null) return false;
         if (handToken.getTokenType() == TokenType.NONE) return false;
         GameLogger.logMoveReplacer(this, replacerField, handToken);
@@ -244,7 +244,7 @@ public class Player {
      * @return corresponding Token, null if it didn't exist
      */
     private Token getCorrespondingToken(Token token) {
-        for (var t : handTokens) {
+        for (Token t : handTokens) {
             if (t.equals(token)) return t;
         }
         return null;
@@ -262,7 +262,7 @@ public class Player {
     }
 
     public Token getCorrespondingToken(String tokenName) {
-        for (var t : handTokens) {
+        for (Token t : handTokens) {
             if (t.getTokenType().name().equals(tokenName)) {
                 return t;
             }
@@ -289,7 +289,7 @@ public class Player {
         if (handTokens.size() >= Constants.HAND_SIZE && handTokens.get(Constants.HAND_SIZE - 1).getTokenType() != TokenType.NONE)
             return;
 
-        var token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
+        Token token = Game.getGame().getTokenDrawPile().get(new Random().nextInt(Game.getGame().getTokenDrawPile().size()));
         Game.getGame().removeTokenDrawPileToken(token);
 
 
@@ -319,7 +319,7 @@ public class Player {
     public int tokenAmountInHand(TokenType token) {
         //the amount of tokens with the same TokenType in hand
         int amount = 0;
-        for (var t : handTokens) {
+        for (Token t : handTokens) {
             if (t.getTokenType() == token) amount++;
         }
         return amount;
@@ -348,7 +348,7 @@ public class Player {
      */
     public TokenType[] convertHandToTokenTypeArray() {
         TokenType[] array = new TokenType[Constants.HAND_SIZE];
-        for (var index = 0; index < handTokens.size(); index++) {
+        for (int index = 0; index < handTokens.size(); index++) {
             array[index] = handTokens.get(index).getTokenType();
         }
         return array;
@@ -382,7 +382,7 @@ public class Player {
     public String handRepresentation() {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
-        for (var t : handTokens) {
+        for (Token t : handTokens) {
             builder.append(t.getTokenType().getValue());
             builder.append(", ");
         }

@@ -95,6 +95,7 @@ public class FileInputReader {
         //start the game
         Game.getGame().getGUIConnector().performMoveUIUpdate(Game.getGame().getPlayers(), Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
         Game.getGame().getGUIConnector().startGamePopUp();
+        Game.getGame().startGame();
         Game.getGame().getThread().start();
     }
 
@@ -110,8 +111,8 @@ public class FileInputReader {
             return true;
 
         //invalid  number of active players
-        var current = 0;
-        for (var i = 0; i < gameData.getPlayers().length; i++) {
+        int current = 0;
+        for (int i = 0; i < gameData.getPlayers().length; i++) {
             if (gameData.getPlayers()[i].isActive())
                 current += i;
         }
@@ -145,16 +146,16 @@ public class FileInputReader {
      * @return ArrayList of players
      */
     private static ArrayList<Player> getPlayersFromFile(GameData gameData) {
-        var players = new ArrayList<Player>();
+        ArrayList<Player> players = new ArrayList<Player>();
         for (int i = 0; i < gameData.getPlayers().length; i++) {
-            var playerData = gameData.getPlayers()[i];
+            PlayerData playerData = gameData.getPlayers()[i];
             //checks if the player is an AI player or a normal player
             if (!playerData.isAI()) {
-                var player = new Player(i, playerData.isActive(), playerData.getName());
+                Player player = new Player(i, playerData.isActive(), playerData.getName());
                 Arrays.stream(playerData.getHand()).forEach(token -> player.addTokenToHand(new Token(TokenType.getTokenType(token))));
                 players.add(player);
             } else {
-                var ai = new AI(i, playerData.isActive(), playerData.getName());
+                AI ai = new AI(i, playerData.isActive(), playerData.getName());
                 Arrays.stream(playerData.getHand()).forEach(token -> ai.addTokenToHand(new Token(TokenType.getTokenType(token))));
                 players.add(ai);
             }

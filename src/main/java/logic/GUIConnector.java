@@ -3,6 +3,7 @@ package logic;
 import java.util.List;
 
 public interface GUIConnector {
+    void resetSpecialTokenImages();
 
     void setupDragAndDropEvent();
 

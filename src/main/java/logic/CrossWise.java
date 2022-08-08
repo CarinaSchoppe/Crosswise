@@ -37,6 +37,8 @@ public class CrossWise extends Application {
      * TODO drag and drop highlight
      * TODO loadinvalidfile - game can be created with currentplayer on an inactive ID or out of bounds, game field can be asymetrical
      * TODO remove usedTokens from draw pile not working?
+     * TODO CrossWise CreateStuff BusyWaiting
+     * TODO createNewGame same as other createGame method
      *  ----kleinere sachen
      * TODO HashMap to Map
      * TODO disable GUI elements while AI move
@@ -46,13 +48,20 @@ public class CrossWise extends Application {
      * TODO cant pick replacer, if no symbol tokens on hand
      * TODO cant pick swapper if less than 2 tokens on field
      * TODO win text label of hori or verti ( > 100)
+     * TODO remove game won double method in fxgui
+     * TODO remove calculation is doing win
+     * TODO playerMove  not with strings but with token types
      *  ---tests
      * TODO faulty files
      *  ---vll
-     * TODO drag and drop having inmage in it
+     * TODO drag and drop having image in it
      * TODO initial directory
      * TODO put removeUsedTokens method into game class
      * TODO maybe remove player instances from performMoveUIupdate method
+     * TODO fix is preventing loss in big chooser method if both are preventing loss
+     *  ---questions
+     * TODO why hashcode
+     *
      * */
 
     @Override

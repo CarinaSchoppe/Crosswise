@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import logic.*;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class FileOutputWriter {
                 Game.getGame().getCurrentPlayer().getPlayerID(), Game.getGame().getPlayingField().getSize(),
                 Game.getGame().getPlayingField().getFieldMap(), Game.getGame().getUsedActionTokens()));
         //write the json to a file
-        try (var writer = new java.io.PrintWriter(file)) {
+        try (PrintWriter writer = new java.io.PrintWriter(file)) {
             writer.write(json);
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,7 +72,7 @@ public class FileOutputWriter {
      * @return PlayerData instance for a single player
      */
     private static PlayerData generatePlayerData(List<Token> tokens, String playerName, boolean isAI, boolean isActive) {
-        var hand = new int[tokens.size()];
+        int[] hand = new int[tokens.size()];
         for (int i = 0; i < tokens.size(); i++) {
             hand[i] = tokens.get(i).getTokenType().getValue();
         }
@@ -108,7 +109,7 @@ public class FileOutputWriter {
             usedActionTiles[i] = 0;
         }
         //add tokens to the array, (needs to be changed, if the tokens or their order is changed)
-        for (var token : usedActionTokens) {
+        for (Token token : usedActionTokens) {
             switch (token.getTokenType()) {
                 case REMOVER -> usedActionTiles[0] += 1;
                 case MOVER -> usedActionTiles[1] += 1;

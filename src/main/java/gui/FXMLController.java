@@ -22,15 +22,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the GameWindow FXML, only handles inputs and
+ *
+ * @author Jacob Klövekorn
+ */
 public class FXMLController implements Initializable {
 
-
-    private GUIConnector guiConnector;
-
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
+    //-------------------------------------------------FX elements------------------------------------------------------
     @FXML
     private Label currentPlayerText;
     @FXML
@@ -71,38 +70,7 @@ public class FXMLController implements Initializable {
     private Label moverAmountText;
     @FXML
     private MenuItem newGameButton;
-    @FXML
-    private ImageView playerHand1IconFour;
-    @FXML
-    private ImageView playerHand1IconOne;
-    @FXML
-    private ImageView playerHand1IconThree;
-    @FXML
-    private ImageView playerHand1IconTwo;
-    @FXML
-    private ImageView playerHand2IconFour;
-    @FXML
-    private ImageView playerHand2IconOne;
-    @FXML
-    private ImageView playerHand2IconThree;
-    @FXML
-    private ImageView playerHand2IconTwo;
-    @FXML
-    private ImageView playerHand3IconFour;
-    @FXML
-    private ImageView playerHand3IconOne;
-    @FXML
-    private ImageView playerHand3IconThree;
-    @FXML
-    private ImageView playerHand3IconTwo;
-    @FXML
-    private ImageView playerHand4IconFour;
-    @FXML
-    private ImageView playerHand4IconOne;
-    @FXML
-    private ImageView playerHand4IconThree;
-    @FXML
-    private ImageView playerHand4IconTwo;
+
     @FXML
     private GridPane playerHandFour;
     @FXML
@@ -157,16 +125,33 @@ public class FXMLController implements Initializable {
     private GridPane playingGrid;
     @FXML
     private TextFlow teamPointsDisplay;
+
+    /**
+     * GuiConnector
+     */
+    private GUIConnector guiConnector;
+
+    //---------------------------------------------Class methods--------------------------------------------------------
+
+    /**
+     * Initialize method, which creates a Game
+     *
+     * @param url not used here
+     * @param rb not used here
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //hide current window until the creation of game
         this.innerGrid.setVisible(false);
+        //fit the grid into the wrapped h-box and v-box setup
         fitHVBox();
+        //create new FX-GUI and give it all the needed javafx elements, it needs to interact with
         this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree,
                 playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText,
                 removerAmountText, horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
                 sumPointsHorizontalTeam, innerGrid, imageSwapper, imageMover, imageReplacer, imageRemover);
-
-        var createGame = new CreateGame(guiConnector);
+        //setup new createGame window when the game starts
+        CreateGame createGame = new CreateGame(guiConnector);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
         fxmlLoader.setController(createGame);
         Parent root;
@@ -175,19 +160,31 @@ public class FXMLController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        setupStage(root);
+        initialize();
+    }
 
+    /**
+     * Setup stage parameters and show the stage
+     *
+     * @param root Parent
+     */
+    private void setupStage(Parent root) {
+        //create new Stage with name
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.DECORATED);
-        stage.setTitle("CrossWise Create Game");
+        stage.setTitle("Create Game");
         stage.setResizable(false);
         stage.setAlwaysOnTop(true);
-
         stage.setScene(new Scene(root));
+        //show the stage
         stage.show();
-
     }
 
+    /**
+     * Fit the grid into the wrapped h-box and v-box setup
+     */
     private void fitHVBox() {
         playingGrid.prefWidthProperty().bind(vBoxWrappingGrdPn.widthProperty());
         playingGrid.prefHeightProperty().bind(vBoxWrappingGrdPn.widthProperty());
@@ -195,89 +192,120 @@ public class FXMLController implements Initializable {
         vBoxWrappingGrdPn.prefWidthProperty().bind(hBoxWrappingVBox.heightProperty());
     }
 
-
-
+    /**
+     * Event handler when the endgame button gets pressed
+     *
+     * @param event not used here
+     */
     @FXML
     void clickEndGameButton(ActionEvent event) {
         Stage thisStage = (Stage) this.masterGrid.getScene().getWindow();
+        //close the current stage
         thisStage.close();
     }
 
+    /**
+     * Event handler, when the load game button gets pressed
+     *
+     * @param event not used here
+     */
     @FXML
     void clickLoadGameButton(ActionEvent event) {
         //get current scene from the event
         Scene scene = gameGrid.getScene();
         try {
+            //Load file with current scene and guiConnector
             FileInputReader.readFile(FileInputReader.selectFile(scene), guiConnector);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-
+    /**
+     * Event handler, when the new game button gets pressed
+     *
+     * @param event not used here
+     */
     @FXML
     void clickNewGameButton(ActionEvent event) {
-
         try {
-            var createGame = new CreateGame(guiConnector);
+            //Create a new createGame window
+            CreateGame createGame = new CreateGame(guiConnector);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
             fxmlLoader.setController(createGame);
             Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.DECORATED);
-            stage.setTitle("CrossWise Create Game");
-            stage.setResizable(false);
-            stage.setAlwaysOnTop(true);
-            stage.setScene(new Scene(root));
-            stage.show();
+            setupStage(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Event handler, when the save game button gets pressed
+     *
+     * @param event not used here
+     */
     @FXML
     void clickSaveGameButton(ActionEvent event) {
         Scene scene = gameGrid.getScene();
         FileOutputWriter.writeJSON(scene);
     }
 
+    /**
+     * Handler for a toggle of the show-points-per-team-button
+     *
+     * @param event not used here
+     */
     @FXML
     void clickPointsPerTeamButton(ActionEvent event) {
         this.teamPointsDisplay.setVisible(pointsPerTeamButton.isSelected());
     }
 
+    /**
+     * Handler for a toggle of the show-points-per-line-button
+     *
+     * @param event not used here
+     */
     @FXML
     void clickPointsPerRowColumnButton(ActionEvent event) {
-        if (pointsPerTeamButton.isSelected()) {
-            this.horizontalPointsGrid.setVisible(true);
-            this.verticalPointsGrid.setVisible(true);
-        } else {
-            this.horizontalPointsGrid.setVisible(false);
-            this.verticalPointsGrid.setVisible(false);
-        }
+        this.horizontalPointsGrid.setVisible(pointsPerTeamButton.isSelected());
+        this.verticalPointsGrid.setVisible(pointsPerTeamButton.isSelected());
     }
 
+    /**
+     * Handler for the change speed radio option: Fast
+     *
+     * @param event not used here
+     */
     @FXML
     void changeAnimationSpeedFast(ActionEvent event) {
         changeAnimationSpeedHandler(AnimationTime.FAST);
     }
 
+    /**
+     * Handler for the change speed radio option: Slow
+     *
+     * @param event not used here
+     */
     @FXML
     void changeAnimationSpeedLow(ActionEvent event) {
         changeAnimationSpeedHandler(AnimationTime.SLOW);
     }
 
+    /**
+     * Handler for the change speed radio option: Middle
+     *
+     * @param event not used here
+     */
     @FXML
     void changeAnimationSpeedMedium(ActionEvent event) {
         changeAnimationSpeedHandler(AnimationTime.MIDDLE);
     }
 
     /**
-     * Changes the current animation speed of the AI and checks the given raioMenuItem
+     * Changes the current animation speed of the AI and checks the given radioMenuItem
      *
-     * @param animationTime the new animation Time given by the
+     * @param animationTime the new animation Time given by the specific button pressed
      */
     private void changeAnimationSpeedHandler(AnimationTime animationTime) {
         switch (animationTime) {
@@ -303,6 +331,9 @@ public class FXMLController implements Initializable {
         }
     }
 
+    /**
+     * Assertions, that check, if every FX object was correctly created
+     */
     @FXML
     void initialize() {
         assert currentPlayerText != null : "fx:id=\"currentPlayerText\" was not injected: check your FXML file 'GameWindow.fxml'.";
@@ -325,22 +356,6 @@ public class FXMLController implements Initializable {
         assert menuPunkte != null : "fx:id=\"menuPunkte\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert moverAmountText != null : "fx:id=\"moverAmountText\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert newGameButton != null : "fx:id=\"newGameButton\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand1IconFour != null : "fx:id=\"playerHand1IconFour\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand1IconOne != null : "fx:id=\"playerHand1IconOne\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand1IconThree != null : "fx:id=\"playerHand1IconThree\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand1IconTwo != null : "fx:id=\"playerHand1IconTwo\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand2IconFour != null : "fx:id=\"playerHand2IconFour\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand2IconOne != null : "fx:id=\"playerHand2IconOne\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand2IconThree != null : "fx:id=\"playerHand2IconThree\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand2IconTwo != null : "fx:id=\"playerHand2IconTwo\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand3IconFour != null : "fx:id=\"playerHand3IconFour\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand3IconOne != null : "fx:id=\"playerHand3IconOne\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand3IconThree != null : "fx:id=\"playerHand3IconThree\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand3IconTwo != null : "fx:id=\"playerHand3IconTwo\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand4IconFour != null : "fx:id=\"playerHand4IconFour\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand4IconOne != null : "fx:id=\"playerHand4IconOne\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand4IconThree != null : "fx:id=\"playerHand4IconThree\" was not injected: check your FXML file 'GameWindow.fxml'.";
-        assert playerHand4IconTwo != null : "fx:id=\"playerHand4IconTwo\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playerHandFour != null : "fx:id=\"playerHandFour\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playerHandOne != null : "fx:id=\"playerHandOne\" was not injected: check your FXML file 'GameWindow.fxml'.";
         assert playerHandThree != null : "fx:id=\"playerHandThree\" was not injected: check your FXML file 'GameWindow.fxml'.";

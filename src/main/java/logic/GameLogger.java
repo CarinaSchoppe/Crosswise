@@ -57,8 +57,8 @@ public class GameLogger {
 
     public static void saveLogToFile(String fileName) {
         File file = new File(fileName);
-        try (var writer = new FileWriter(file)) {
-            for (var logMessage : logMessages) {
+        try (FileWriter writer = new FileWriter(file)) {
+            for (String logMessage : logMessages) {
                 writer.write(logMessage + "\n");
             }
         } catch (IOException e) {

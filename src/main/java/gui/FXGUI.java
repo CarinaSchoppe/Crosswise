@@ -164,7 +164,7 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void updateSpecialTokenIcons(TokenType type) {
-        var imageView = switch (type) {
+        ImageView imageView = switch (type) {
             case SWAPPER -> imageSwapper;
             case MOVER -> imageMover;
             case REPLACER -> imageReplacer;
@@ -321,6 +321,7 @@ public class FXGUI implements GUIConnector {
         swapperAmountText.setText("0");
         replacerAmountText.setText("0");
         removerAmountText.setText("0");
+        resetSpecialTokenImages();
     }
 
     /**
@@ -483,38 +484,78 @@ public class FXGUI implements GUIConnector {
     }
 
     /**
-     * Change Mover-Amount text
+     * Change Mover-Amount text and make it grey, once all tokens have been used
      */
     @Override
     public void moverAmountText() {
         Platform.runLater(() -> {
             moverAmountText.setText(Integer.parseInt(moverAmountText.getText()) + 1 + "");
-
             if (Objects.equals(moverAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
                 imageMover.setOpacity(0.5);
             }
         });
     }
 
+    /**
+     * Change Swapper-Amount text and make it grey, once all tokens have been used
+     */
     @Override
     public void swapperAmountText() {
-        Platform.runLater(() -> swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + ""));
+        Platform.runLater(() -> {
+            swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + "");
+            if (Objects.equals(swapperAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+                imageSwapper.setOpacity(0.5);
+            }
+        });
     }
 
+    /**
+     * Change Replacer-Amount text and make it grey, once all tokens have been used
+     */
     @Override
     public void replacerAmountText() {
-        Platform.runLater(() -> replacerAmountText.setText(Integer.parseInt(replacerAmountText.getText()) + 1 + ""));
+        Platform.runLater(() -> {
+            replacerAmountText.setText(Integer.parseInt(replacerAmountText.getText()) + 1 + "");
+            if (Objects.equals(replacerAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+                imageReplacer.setOpacity(0.5);
+            }
+        });
     }
 
+    /**
+     * Change Remover-Amount text and make it grey, once all tokens have been used
+     */
     @Override
     public void removerAmountText() {
-        Platform.runLater(() -> removerAmountText.setText(Integer.parseInt(removerAmountText.getText()) + 1 + ""));
+        Platform.runLater(() -> {
+            removerAmountText.setText(Integer.parseInt(removerAmountText.getText()) + 1 + "");
+            if (Objects.equals(removerAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+                imageRemover.setOpacity(0.5);
+            }
+        });
     }
 
+    /**
+     * Remove the grey out effect from all special token images
+     */
+    @Override
+    public void resetSpecialTokenImages() {
+        imageRemover.setOpacity(1);
+        imageReplacer.setOpacity(1);
+        imageSwapper.setOpacity(1);
+        imageMover.setOpacity(1);
+    }
+
+    /**
+     * Add Token Images for player1
+     *
+     * @param tokens List of hand tokens
+     */
     @Override
     public void addTokenImagesForPlayer1(List<Token> tokens) {
         int cellWidth = (int) playerHandOne.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandOne.getHeight() / Constants.HAND_SIZE;
+        //remove all previous images
         playerHandOne.getChildren().clear();
 
         for (int i = 0; i < tokens.size(); i++) {
@@ -525,17 +566,23 @@ public class FXGUI implements GUIConnector {
             handImages[0][i] = imageView;
             playerHandOne.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
-
+            //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandOne.widthProperty().divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandOne.heightProperty());
         }
         setDragEventsForPlayerHand(playerHandOne);
     }
 
+    /**
+     * Add Token Images for player2
+     *
+     * @param tokens List of hand tokens
+     */
     @Override
     public void addTokenImagesForPlayer2(List<Token> tokens) {
         int cellWidth = (int) playerHandTwo.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandTwo.getHeight() / Constants.HAND_SIZE;
+        //remove all previous images
         playerHandTwo.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             ImageView imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
@@ -546,17 +593,23 @@ public class FXGUI implements GUIConnector {
 
             playerHandTwo.add(imageView, 0, i);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
-
+            //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandTwo.widthProperty());
             imageView.fitHeightProperty().bind(playerHandTwo.heightProperty().divide(Constants.GAMEGRID_SIZE));
         }
         setDragEventsForPlayerHand(playerHandTwo);
     }
 
+    /**
+     * Add Token Images for player3
+     *
+     * @param tokens List of hand tokens
+     */
     @Override
     public void addTokenImagesForPlayer3(List<Token> tokens) {
         int cellWidth = (int) playerHandThree.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandThree.getHeight() / Constants.HAND_SIZE;
+        //remove all previous images
         playerHandThree.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             ImageView imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
@@ -567,17 +620,23 @@ public class FXGUI implements GUIConnector {
 
             playerHandThree.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
-
+            //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandThree.widthProperty().divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandThree.heightProperty());
         }
         setDragEventsForPlayerHand(playerHandThree);
     }
 
+    /**
+     * Add Token Images for player4
+     *
+     * @param tokens List of hand tokens
+     */
     @Override
     public void addTokenImagesForPlayer4(List<Token> tokens) {
         int cellWidth = (int) playerHandFour.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandFour.getHeight() / Constants.HAND_SIZE;
+        //remove all previous images
         playerHandFour.getChildren().clear();
         for (int i = 0; i < tokens.size(); i++) {
             ImageView imageView = new ImageView(tokens.get(i).getTokenType().getImagePathNormal());
@@ -585,45 +644,62 @@ public class FXGUI implements GUIConnector {
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
             handImages[3][i] = imageView;
+
             playerHandFour.add(imageView, 0, i);
             handImagesTokens.put(imageView, tokens.get(i).getTokenType());
-
+            //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandFour.widthProperty());
             imageView.fitHeightProperty().bind(playerHandFour.heightProperty().divide(Constants.GAMEGRID_SIZE));
         }
         setDragEventsForPlayerHand(playerHandFour);
     }
 
-
+    /**
+     * Creates Game won notification
+     *
+     * @param wonType
+     * @param points
+     * @param rowComplete
+     */
     @Override
     public void gameWonNotifier(TeamType wonType, int points, boolean rowComplete) {
         gameWonNotification(wonType, points, rowComplete);
     }
 
-
+    /**
+     * Create game won notification
+     *
+     * @param wonType which team won
+     * @param points points of the winning team
+     * @param rowComplete boolean, if the game was won with a full row/column
+     */
     public void gameWonNotification(TeamType wonType, int points, boolean rowComplete) {
         String message;
         Team lost = null;
-
+        //check, which team won
         if (wonType != null) {
             lost = wonType == TeamType.VERTICAL ? Team.getHorizontalTeam() : Team.getVerticalTeam();
-
         }
+        //if a team won because of a full line
         if (rowComplete && wonType != null) {
             message = "Team: " + wonType.getTeamName() + " won, because the hit a full line!";
         } else if (lost != null && points == lost.getPoints()) {
+            //if no team won, because if equal points
             message = "Draw! Both teams got the same amount of points (" + points + ")!";
         } else if (wonType != null) {
             assert lost != null;
+            //if a specific team won, display the team and the points of both teams
             message = "Team: " + wonType.getTeamName() + " won, because they have more points (" + points + ") than the other team (" + lost.getPoints() + ")!";
         } else {
+            //error message
             message = "No players in the game";
         }
-
+        //make all hands invisible
         playerHandOne.setVisible(false);
         playerHandTwo.setVisible(false);
         playerHandThree.setVisible(false);
         playerHandFour.setVisible(false);
+        //let thread show alert message
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
             alert.setTitle("Game finished");
@@ -632,29 +708,44 @@ public class FXGUI implements GUIConnector {
         });
     }
 
+    /**
+     * Create Alert for faulty setup
+     *
+     * @param caseID type of error
+     */
     @Override
     public void faultyAlert(Integer caseID) {
         Alert alert = null;
         switch (caseID) {
+            //Game was started with 0 players
             case 0: {
                 alert = new Alert(Alert.AlertType.INFORMATION, "The game cannot be started with 0 Players!");
                 break;
             }
+            //Game was started with an unequal amount of players
             case 1: {
                 alert = new Alert(Alert.AlertType.INFORMATION, "The teams need to be of equal size!");
                 break;
             }
+            //Game was started with another faulty config
             case 2: {
                 alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
                 break;
             }
-
         }
+        //Set alert title and show the alert
         alert.setTitle("Wrong configuration");
         alert.setHeaderText("Wrong configuration!");
         alert.showAndWait();
     }
 
+    /**
+     * Shows hand of a specific player and hides all other hands, only shows hand of AI if option is selected to do so
+     *
+     * @param isAI boolean, if player is AI
+     * @param playerID Player, whose hand should be shown
+     * @param hideAll wont show any hands
+     */
     @Override
     public void showHand(boolean isAI, int playerID, boolean hideAll) {
         playerHandOne.setVisible(false);
@@ -670,31 +761,37 @@ public class FXGUI implements GUIConnector {
         }
     }
 
+    /**
+     * Creates popup for a starting game
+     */
     @Override
     public void startGamePopUp() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Game is ready");
         alert.setTitle("Start the game");
         alert.setHeaderText("Start the game");
         alert.showAndWait();
-        Game.getGame().startGame();
     }
 
+    /**
+     * Setup Drag and Drop events for image views on the grid
+     */
     public void setupDragAndDropEvent() {
+        //Setup drag and drop events for player hands
         setDragEventsForPlayerHand(playerHandOne);
         setDragEventsForPlayerHand(playerHandTwo);
         setDragEventsForPlayerHand(playerHandThree);
         setDragEventsForPlayerHand(playerHandFour);
 
-        ImageView[][] imageGrid = gridImages;
-        for (int i = 0; i < imageGrid.length; i++) {
-            for (int j = 0; j < imageGrid[i].length; j++) {
-                ImageView curr = imageGrid[i][j];
-
+        //create drag and drop events for every position on the gamegrid
+        for (int i = 0; i < gridImages.length; i++) {
+            for (int j = 0; j < gridImages[i].length; j++) {
+                ImageView curr = gridImages[i][j];
+                //x and y coordinates of the current imageview in the game grid
                 int finalI = i;
                 int finalJ = j;
+                //Set actions on a drag over action
                 curr.setOnDragOver((DragEvent event) -> {
                     String input = event.getDragboard().getString();
-
 
                     //field empty
                     if (this.gridImagesTokens.get(curr) == TokenType.NONE) {
@@ -709,7 +806,7 @@ public class FXGUI implements GUIConnector {
 
                     event.consume();
                 });
-
+                //set actions for a dropped event
                 curr.setOnDragDropped((DragEvent event) -> {
 
                     Dragboard db = event.getDragboard();
@@ -740,13 +837,13 @@ public class FXGUI implements GUIConnector {
 
                     event.consume();
                 });
-
+                //set actions for a drag entered action
                 curr.setOnDragEntered((DragEvent event) -> {
-                    //
+                    //TODO
                 });
-
+                //set actions for a drag exited action
                 curr.setOnDragExited((DragEvent event) -> {
-
+                    //TODO
                     // Welche Information kann auf diesem Target-Objekt abgelegt werden?
                     //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
                     if (!event.isDropCompleted() && event.getGestureSource() != curr && event.getDragboard().hasString()) {
@@ -755,10 +852,12 @@ public class FXGUI implements GUIConnector {
                     }
                     event.consume();
                 });
-
+                //set actions for a mouse click
                 curr.setOnMouseClicked((MouseEvent event) -> {
+                    //game needs to listen to a mouse click input
                     if (this.checkForMouse) {
                         this.clickEventSave = new ClickEventSave(finalI, finalJ);
+                        //check if the click is valid with the configuration of the game
                         if (currentClickIsValid()) {
                             specialClickAction();
                             this.checkForMouse = false;
@@ -769,11 +868,16 @@ public class FXGUI implements GUIConnector {
         }
     }
 
-
-    private synchronized void setDragEventsForPlayerHand(GridPane hand) {
+    /**
+     * Setup drag and drop events for the hand of the player
+     *
+     * @param hand Grid pane of the hand of a specific player
+     */
+    private void setDragEventsForPlayerHand(GridPane hand) {
         int counter = 0;
-
+        //setup actions for every had token
         for (Node child : hand.getChildren()) {
+            //setup drag detected event for an imageview
             child.setOnDragDetected((MouseEvent event) -> {
                 if (!this.disableGUI) {
                     /* lässt jeden Transfermode zu */
@@ -785,15 +889,16 @@ public class FXGUI implements GUIConnector {
                     ImageView view = (ImageView) child;
                     TokenType tokenType = handImagesTokens.get(view);
 
-
                     content.putString(tokenType.name());
                     db.setContent(content);
 
                     event.consume();
                 } else {
-                    System.out.println("gui disabled");
+                    if (CrossWise.DEBUG)
+                        System.out.println("gui disabled");
                 }
             });
+            //setup action on drag done event
             child.setOnDragDone((DragEvent event) -> {
                 // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt
                 if (event.getTransferMode() == TransferMode.MOVE) {
@@ -803,6 +908,7 @@ public class FXGUI implements GUIConnector {
             });
 
             final int count = counter;
+            //setup action on mouse clicked event
             child.setOnMouseClicked((MouseEvent event) -> {
 
                 if (this.checkForMouse) {
@@ -817,6 +923,9 @@ public class FXGUI implements GUIConnector {
         }
     }
 
+    /**
+     * handle click action of a used special token
+     */
     private void specialClickAction() {
         disableGUIElementes();
         if (this.clickToken.equals("MOVER")) {
@@ -828,15 +937,21 @@ public class FXGUI implements GUIConnector {
         }
     }
 
+    /**
+     * Checks if the current click was valid
+     *
+     * @return true, if it was valid, false if it wasn't
+     */
     private boolean currentClickIsValid() {
         switch (this.clickToken) {
+            //for mover action
             case "MOVER" -> {
                 //must be a token on the grid, must be an empty token
                 return this.clickEventSave.isGrid() &&
                         this.gridImagesTokens.get(this.gridImages[this.clickEventSave.getPosX()]
                                 [this.clickEventSave.getPosY()]) == TokenType.NONE;
             }
-
+            //for swapper action
             case "SWAPPER" -> {
                 //must be a token on the grid, must be a non empty field, must not be the same field as the original one
                 return this.clickEventSave.isGrid() &&
@@ -845,6 +960,7 @@ public class FXGUI implements GUIConnector {
                         !(this.clickEventSave.getPosX() == this.clickXOrigin &&
                                 this.clickEventSave.getPosY() == this.clickYOrigin);
             }
+            //for replacer action
             case "REPLACER" -> {
                 //must be a token on the hand, must be a SymbolToken
                 return !this.clickEventSave.isGrid() &&

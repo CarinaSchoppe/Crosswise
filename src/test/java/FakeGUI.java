@@ -4,6 +4,10 @@ import java.util.List;
 
 public class FakeGUI implements GUIConnector {
 
+    @Override
+    public void resetSpecialTokenImages() {
+
+    }
 
     @Override
     public void resetText() {

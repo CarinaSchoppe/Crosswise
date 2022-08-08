@@ -1,20 +1,44 @@
-package logic;
+package gui;
 
 import java.util.Arrays;
 
+/**
+ * Game Data class which stores Data to be saved or loaded from/to a file
+ *
+ * @author Jacob Klövekorn
+ */
 public final class GameData {
+    /**
+     * Players as PlayerData objects
+     */
     private PlayerData[] players;
+    /**
+     * current player as int
+     */
     private final int currentPlayer;
+    /**
+     * game field as double array int representation
+     */
     private final int[][] field;
+    /**
+     * used action tiles as int array represenatation
+     */
     private final int[] usedActionTiles;
 
+    /**
+     * Constructor
+     *
+     * @param players Array of players
+     * @param currentPlayer current player
+     * @param field game field
+     * @param usedActionTiles used action tiles
+     */
     public GameData(PlayerData[] players, int currentPlayer, int[][] field, int[] usedActionTiles) {
         this.players = players;
         this.currentPlayer = currentPlayer;
         this.field = field;
         this.usedActionTiles = usedActionTiles;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -47,26 +71,21 @@ public final class GameData {
                 '}';
     }
 
-    public PlayerData[] getPlayers() {
+    //------------------------------------------------Getter------------------------------------------------------------
+
+    PlayerData[] getPlayers() {
         return players.clone();
     }
 
-    public void setPlayers(PlayerData[] players) {
-        this.players = players;
-    }
-
-    public int getCurrentPlayer() {
+    int getCurrentPlayer() {
         return currentPlayer;
     }
 
-
-    public int[][] getField() {
+    int[][] getField() {
         return field.clone();
     }
 
-
-    public int[] getUsedActionTiles() {
+    int[] getUsedActionTiles() {
         return usedActionTiles.clone();
     }
-
 }
