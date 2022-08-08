@@ -1,4 +1,7 @@
-package logic;
+package logic.util;
+
+import logic.util.Position;
+import logic.util.TokenType;
 
 /**
  * Class for a specific move of a token in the game Crosswise

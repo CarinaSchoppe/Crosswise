@@ -1,5 +1,7 @@
-package logic;
+package logic.util;
 
+
+import logic.Token;
 
 public class Position {
     private final int x;

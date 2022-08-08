@@ -1,4 +1,4 @@
-package logic;
+package logic.util;
 
 /**
  * Record for a Calculation

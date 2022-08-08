@@ -1,4 +1,4 @@
-package logic;
+package logic.util;
 
 /**
  * Enum class for an action, used by the logger

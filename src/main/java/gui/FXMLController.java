@@ -15,7 +15,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import logic.AnimationTime;
+import logic.util.AnimationTime;
 import logic.GUIConnector;
 
 import java.io.IOException;

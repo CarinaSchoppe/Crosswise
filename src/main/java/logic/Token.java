@@ -1,5 +1,7 @@
 package logic;
 
+import logic.util.TokenType;
+
 /**
  * Class for a token for the Game Crosswise
  *

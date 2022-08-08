@@ -1,6 +1,6 @@
 import logic.Player;
 import logic.Token;
-import logic.TokenType;
+import logic.util.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
