@@ -1,0 +1,95 @@
+{
+  "players": [
+    {
+      "name": "Player1",
+      "isActive": true,
+      "isAI": true,
+      "hand": [
+        6,
+        6
+      ]
+    },
+    {
+      "name": "Player2",
+      "isActive": true,
+      "isAI": true,
+      "hand": [
+        2
+      ]
+    },
+    {
+      "name": "Player3",
+      "isActive": true,
+      "isAI": true,
+      "hand": [
+        6
+      ]
+    },
+    {
+      "name": "Player4",
+      "isActive": true,
+      "isAI": true,
+      "hand": [
+        6,
+        6
+      ]
+    }
+  ],
+  "currPlayer": 2,
+  "field": [
+    [
+      4,
+      3,
+      4,
+      4,
+      3,
+      4
+    ],
+    [
+      5,
+      5,
+      3,
+      2,
+      3,
+      3
+    ],
+    [
+      4,
+      2,
+      1,
+      2,
+      3,
+      1
+    ],
+    [
+      4,
+      5,
+      5,
+      5,
+      5,
+      1
+    ],
+    [
+      4,
+      1,
+      1,
+      2,
+      2,
+      2
+    ],
+    [
+      1,
+      5,
+      1,
+      6,
+      3,
+      6
+    ]
+  ],
+  "usedActionTiles": [
+    0,
+    0,
+    0,
+    0
+  ]
+}
