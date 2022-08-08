@@ -14,7 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import logic.*;
+import logic.GUIConnector;
+import logic.Game;
+import logic.Team;
 import logic.util.*;
 
 import java.util.HashMap;
@@ -705,12 +707,10 @@ public class FXGUI implements GUIConnector {
         playerHandThree.setVisible(false);
         playerHandFour.setVisible(false);
         //let thread show alert message
-        Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
             alert.setTitle("Game finished");
             alert.setHeaderText("Game finished");
             alert.showAndWait();
-        });
     }
 
     /**

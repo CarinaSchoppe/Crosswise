@@ -60,7 +60,7 @@ public class GameLogger {
     }
 
     public static void logMoveReplacer(Player player, Position start, Token with) {
-        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.REPLACED.getText() + ": " + start.toStringWithToken() + " with vaule: " + with.tokenType().getValue() + " new Hand: " + player.handRepresentation() +
+        String builder = "Player: \"" + player.getName() + "\" and ID: \"" + player.getPlayerID() + "\" " + Action.REPLACED.getText() + ": " + start.toStringWithToken() + " with value: " + with.tokenType().getValue() + " new Hand: " + player.handRepresentation() +
                 "\n" +
                 Game.getGame().getPlayingField().toString();
         log(builder);
