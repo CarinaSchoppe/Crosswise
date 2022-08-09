@@ -1,4 +1,4 @@
-import gui.FileInputReader;
+import gui.fileHandle.FileInputReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

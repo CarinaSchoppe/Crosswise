@@ -29,7 +29,6 @@ public class Team {
      * TeamType
      */
     private final TeamType teamType;
-
     /**
      * List of players in the team
      */
@@ -38,18 +37,12 @@ public class Team {
      * Current Points of the team
      */
     private int points;
-
     /**
      * Team won with a full row
      */
     private boolean rowWin = false;
+
     //----------------------------------------------------------------------------------------------
-
-
-    @Override
-    public String toString() {
-        return teamType.getTeamName();
-    }
 
     /**
      * Constructor
@@ -97,6 +90,8 @@ public class Team {
             }
         }
     }
+
+    //---------------------------------------------Getter + Setter------------------------------------------------------
 
     public static void setHorizontalTeam(Team horizontalTeam) {
         Team.horizontalTeam = horizontalTeam;
@@ -154,5 +149,9 @@ public class Team {
             return rowWin == team.rowWin;
         }
         return false;
+    }
+    @Override
+    public String toString() {
+        return teamType.getTeamName();
     }
 }

@@ -1,4 +1,4 @@
-package gui;
+package gui.fileHandle;
 
 import java.util.Arrays;
 
@@ -21,7 +21,7 @@ public final class GameData {
      */
     private final int[][] field;
     /**
-     * used action tiles as int array represenatation
+     * used action tiles as int array representation
      */
     private final int[] usedActionTiles;
 
@@ -65,19 +65,19 @@ public final class GameData {
 
     //------------------------------------------------Getter------------------------------------------------------------
 
-    PlayerData[] getPlayers() {
+    public PlayerData[] getPlayers() {
         return players.clone();
     }
 
-    int getCurrentPlayer() {
+    public int getCurrentPlayer() {
         return currPlayer;
     }
 
-    int[][] getField() {
+    public int[][] getField() {
         return field.clone();
     }
 
-    int[] getUsedActionTiles() {
+    public int[] getUsedActionTiles() {
         return usedActionTiles.clone();
     }
 }

@@ -96,7 +96,6 @@ public class CreateGame implements Initializable {
 
 
         //Setting up GUI elements of the game and creating drag and drop functions
-        guiConnector.showGUIElements();
         guiConnector.generateGrid();
         guiConnector.resetText();
         guiConnector.setupDragAndDropEvent();
@@ -125,8 +124,8 @@ public class CreateGame implements Initializable {
     /**
      * Initialize, not used here other than checking for assertion described in the other initialize method
      *
-     * @param url
-     * @param resourceBundle
+     * @param url not used here
+     * @param resourceBundle not used here
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

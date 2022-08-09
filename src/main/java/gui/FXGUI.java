@@ -1,5 +1,9 @@
 package gui;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -12,8 +16,10 @@ import javafx.scene.input.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Duration;
 import logic.GUIConnector;
 import logic.Game;
 import logic.Team;
@@ -27,7 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * FX-Class for Hanlding GUI changes of the current scene "GameWindow"
+ * FX-Class for Handling GUI changes of the current scene "GameWindow"
  *
  * @author Jacob Klövekorn
  */
@@ -50,7 +56,6 @@ public class FXGUI implements GUIConnector {
     private final GridPane horizontalPointsGrid;
     private final Label sumPointsVerticalTeam;
     private final Label sumPointsHorizontalTeam;
-    private final GridPane innerGrid;
     private final ImageView imageSwapper;
     private final ImageView imageMover;
     private final ImageView imageReplacer;
@@ -88,7 +93,6 @@ public class FXGUI implements GUIConnector {
      * @param verticalPointsGrid      grid points for single line for the vertical team
      * @param sumPointsVerticalTeam   label for points of vertical team
      * @param sumPointsHorizontalTeam label for points of horizontal team
-     * @param innerGrid               Inner grid, for toggling display of UI elemtns
      * @param imageSwapper            Image of the swapper special token counter
      * @param imageMover              Image of the mover special token counter
      * @param imageReplacer           Image of the replacer special token counter
@@ -98,7 +102,7 @@ public class FXGUI implements GUIConnector {
                  GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid,
                  Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText,
                  GridPane horizontalPointsGrid, GridPane verticalPointsGrid, Label sumPointsVerticalTeam,
-                 Label sumPointsHorizontalTeam, GridPane innerGrid, ImageView imageSwapper, ImageView imageMover,
+                 Label sumPointsHorizontalTeam, ImageView imageSwapper, ImageView imageMover,
                  ImageView imageReplacer, ImageView imageRemover) {
         this.playerHandOne = playerHandOne;
         this.playerHandTwo = playerHandTwo;
@@ -115,7 +119,6 @@ public class FXGUI implements GUIConnector {
         this.verticalPointsGrid = verticalPointsGrid;
         this.sumPointsVerticalTeam = sumPointsVerticalTeam;
         this.sumPointsHorizontalTeam = sumPointsHorizontalTeam;
-        this.innerGrid = innerGrid;
         this.imageSwapper = imageSwapper;
         this.imageMover = imageMover;
         this.imageReplacer = imageReplacer;
@@ -124,6 +127,20 @@ public class FXGUI implements GUIConnector {
         fieldImages = new HashMap<>();
         gridImagesTokens = new HashMap<>();
         handImagesTokens = new HashMap<>();
+    }
+
+    /**
+     * Makes current player text blink in its color
+     *
+     * @param color Color of the team
+     */
+    private void blinkMethod(Color color) {
+        KeyFrame kfP = new KeyFrame(Duration.seconds(1), new KeyValue(currentPlayerText.textFillProperty(), color));
+        Timeline TIMER = new Timeline();
+        TIMER.getKeyFrames().add(kfP);
+        TIMER.setCycleCount(Animation.INDEFINITE);
+        TIMER.setAutoReverse(true);
+        TIMER.play();
     }
 
     /**
@@ -166,7 +183,7 @@ public class FXGUI implements GUIConnector {
     }
 
     /**
-     * Remove the highlighted SpecialToken image below it's counter after the animation time
+     * Remove the highlighted SpecialToken image below the counter after the animation time
      */
     @Override
     public void updateSpecialTokenIcons(TokenType type) {
@@ -231,7 +248,7 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void notifyTurn(String playerName, int playerID) {
-        //let current thread show an alert with the name and Id of the current player
+        //let current thread show an alert with the name and ID of the current player
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player: \"" + playerName + "\" with ID: \"" + playerID + ", it's your turn!");
             alert.setTitle("Next Turn");
@@ -248,7 +265,7 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void handVisibleSwitch(int playerID) {
-        //sets visibility to true of the player whos hand will be shown
+        //sets visibility to true of the player whose hand will be shown
         switch (playerID) {
             case 0 -> playerHandOne.setVisible(true);
             case 1 -> playerHandTwo.setVisible(true);
@@ -256,10 +273,16 @@ public class FXGUI implements GUIConnector {
             case 3 -> playerHandFour.setVisible(true);
             default -> throw new IllegalArgumentException("Player ID not found");
         }
+        if (playerID % 2 == 0) {
+            blinkMethod(Color.ORANGERED);
+
+        } else {
+            blinkMethod(Color.GREEN);
+        }
     }
 
     /**
-     * Chnage the current Animation-Time for the AI move highlights
+     * Change the current Animation-Time for the AI move highlights
      *
      * @param time New animation time
      */
@@ -468,13 +491,6 @@ public class FXGUI implements GUIConnector {
         } else {
             sumPointsVerticalTeam.setText(Integer.toString(sumVertical));
         }
-    }
-
-    /**
-     * Make GUI elements visible
-     */
-    public void showGUIElements() {
-        innerGrid.setVisible(true);
     }
 
     /**
@@ -694,11 +710,9 @@ public class FXGUI implements GUIConnector {
             assert lost != null;
             //if a specific team won, display the team and the points of both teams
             message = "Team: " + wonType.getTeamName() + " won, because they have more points (" + points + ") than the other team (" + lost.getPoints() + ")!";
-        } else if (wonType == null && Team.getHorizontalTeam().getPoints() != Team.getVerticalTeam().getPoints()) {
-            message = "Draw! Both teams got the same amount of points (" + points + ")!";
         } else {
-            //error message
-            message = "No players in the game";
+            //if draw
+            message = "Draw! Both teams got the same amount of points (" + points + ")!";
         }
         //make all hands invisible
         playerHandOne.setVisible(false);
@@ -745,7 +759,7 @@ public class FXGUI implements GUIConnector {
      *
      * @param isAI     boolean, if player is AI
      * @param playerID Player, whose hand should be shown
-     * @param hideAll  wont show any hands
+     * @param hideAll  won't show any hands
      */
     @Override
     public void showHand(boolean isAI, int playerID, boolean hideAll) {
@@ -793,7 +807,7 @@ public class FXGUI implements GUIConnector {
         setDragEventsForPlayerHand(playerHandThree);
         setDragEventsForPlayerHand(playerHandFour);
 
-        //create drag and drop events for every position on the gamegrid
+        //create drag and drop events for every position on the game grid
         for (int i = 0; i < gridImages.length; i++) {
             for (int j = 0; j < gridImages[i].length; j++) {
                 ImageView curr = gridImages[i][j];
@@ -804,7 +818,7 @@ public class FXGUI implements GUIConnector {
 
                 curr.setOnDragOver((DragEvent event) -> {
                     String input = event.getDragboard().getString();
-                    var tokenType = TokenType.getTokenTypeFromString(input);
+                    TokenType tokenType = TokenType.getTokenTypeFromString(input);
                     //field empty
                     if (gridImagesTokens.get(curr) == TokenType.NONE) {
                         if (tokenType == TokenType.SUN || tokenType == TokenType.CROSS || tokenType == TokenType.TRIANGLE || tokenType == TokenType.SQUARE || tokenType == TokenType.PENTAGON || tokenType == TokenType.STAR) {
@@ -822,7 +836,7 @@ public class FXGUI implements GUIConnector {
                                 }
                             }
                         } else if (tokenType == TokenType.SWAPPER) {
-                            //check if the gamefield has less than 2 tokens (when using swapper)
+                            //check if the game field has less than 2 tokens (when using swapper)
                             for (var row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
                                 for (TokenType token : row) {
                                     if (token != TokenType.NONE) {
@@ -874,18 +888,51 @@ public class FXGUI implements GUIConnector {
                 });
                 //set actions for a drag entered action
                 curr.setOnDragEntered((DragEvent event) -> {
-                    //TODO
+                    ImageView imgView = gridImages[finalI][finalJ];
+
+                    String input = event.getDragboard().getString();
+                    TokenType tokenType = TokenType.getTokenTypeFromString(input);
+                    //field empty
+                    if (gridImagesTokens.get(curr) == TokenType.NONE) {
+                        if (tokenType == TokenType.SUN || tokenType == TokenType.CROSS || tokenType == TokenType.TRIANGLE || tokenType == TokenType.SQUARE || tokenType == TokenType.PENTAGON || tokenType == TokenType.STAR) {
+                            Image image = new Image(gridImagesTokens.get(imgView).getImagePathHighlight());
+                            imgView.setImage(image);
+                        }
+                    } else {
+                        var replacerAllowed = false;
+                        var amount = 0;
+                        if (tokenType == TokenType.REPLACER) {
+                            //go through the handTokens of the player and check if one number is between 1 and 6
+                            for (var token : Game.getGame().getCurrentPlayer().getHandTokens()) {
+                                if (token.tokenType().getValue() >= 1 && token.tokenType().getValue() <= 6) {
+                                    replacerAllowed = true;
+                                    break;
+                                }
+                            }
+                        } else if (tokenType == TokenType.SWAPPER) {
+                            //check if the game field has less than 2 tokens (when using swapper)
+                            for (var row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
+                                for (TokenType token : row) {
+                                    if (token != TokenType.NONE) {
+                                        amount += 1;
+                                        if (amount >= 2)
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        if (tokenType == TokenType.REMOVER || tokenType == TokenType.MOVER || tokenType == TokenType.SWAPPER && amount >= 2 || replacerAllowed) {
+                            Image image = new Image(gridImagesTokens.get(imgView).getImagePathHighlight());
+                            imgView.setImage(image);
+                        }
+                    }
                 });
                 //set actions for a drag exited action
                 curr.setOnDragExited((DragEvent event) -> {
-                    //TODO
-                    // Welche Information kann auf diesem Target-Objekt abgelegt werden?
-                    //  hier: eine die einen String liefert und nicht von dem Node selbst stammt
-                    if (!event.isDropCompleted() && event.getGestureSource() != curr && event.getDragboard().hasString()) {
-                        //TODO: hier @ Jacob: was ist das?
-                        // setzte das visuelles Feedback (im DragEntered Handler gesetzt) zurück
-                        //imageGrid[i][j].doSomething(...);
-                    }
+                    ImageView imgView = gridImages[finalI][finalJ];
+                    //set image back to normal
+                    Image image = new Image(gridImagesTokens.get(imgView).getImagePathNormal());
+                    imgView.setImage(image);
                     event.consume();
                 });
                 //set actions for a mouse click
@@ -915,19 +962,21 @@ public class FXGUI implements GUIConnector {
         for (Node child : hand.getChildren()) {
             //setup drag detected event for an imageview
             child.setOnDragDetected((MouseEvent event) -> {
-                /* lässt jeden Transfermode zu */
-                Dragboard db = child.startDragAndDrop(TransferMode.ANY);
+                if (!disableGUI) {
+                    /* lässt jeden Transfermode zu */
+                    Dragboard db = child.startDragAndDrop(TransferMode.ANY);
 
-                /* legt einen String im Clipboard ab*/
-                ClipboardContent content = new ClipboardContent();
+                    /* legt einen String im Clipboard ab*/
+                    ClipboardContent content = new ClipboardContent();
 
-                ImageView view = (ImageView) child;
-                TokenType tokenType = handImagesTokens.get(view);
+                    ImageView view = (ImageView) child;
+                    TokenType tokenType = handImagesTokens.get(view);
 
-                content.putString(tokenType.name());
-                db.setContent(content);
+                    content.putString(tokenType.name());
+                    db.setContent(content);
 
-                event.consume();
+                    event.consume();
+                }
 
             });
             //setup action on drag done event
@@ -986,7 +1035,7 @@ public class FXGUI implements GUIConnector {
             }
             //for swapper action
             case "SWAPPER" -> {
-                //must be a token on the grid, must be a non empty field, must not be the same field as the original one
+                //must be a token on the grid, must be a non-empty field, must not be the same field as the original one
                 return clickEventSave.isGrid() &&
                         gridImagesTokens.get(gridImages[clickEventSave.getPosX()]
                                 [clickEventSave.getPosY()]) != TokenType.NONE &&

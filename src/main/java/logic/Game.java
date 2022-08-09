@@ -58,8 +58,8 @@ public class Game {
      * Constructor, initialize parameters
      *
      * @param playingField playing field, consisting out of Positions with Tokens
-     * @param players
-     * @param guiConnector
+     * @param players list of players playing the game
+     * @param guiConnector gui connector for the GUI representation
      */
     private Game(PlayingField playingField, List<Player> players, GUIConnector guiConnector) {
         this.playingField = playingField;
@@ -68,7 +68,6 @@ public class Game {
             throw new IllegalArgumentException("gameWindowHandler must not be null");
         this.guiConnector = guiConnector;
     }
-
 
     /**
      * Remove already used tokens from new drawPile
@@ -175,7 +174,7 @@ public class Game {
         game.players.forEach(Player::create);
         setGame(game, thread);
 
-        //if the game wasnt loaded from a file, start it here
+        //if the game wasn't loaded from a file, start it here
         Game.getGame().guiConnector.resetSpecialTokenImages();
         if (!fileSetup) {
             Game.game.guiConnector.startGamePopUp();
@@ -192,7 +191,7 @@ public class Game {
      */
     public void faultyStartup(Integer caseID) {
         //makes thread hide all hands and create an alert
-        //try catch block for tests, that cant run "runlater"
+        //try catch block for tests, that cant run "run-later"
         try {
             Platform.runLater(() -> {
                 guiConnector.showHand(true, 0, true);
@@ -289,7 +288,7 @@ public class Game {
             else
                 throw new IllegalArgumentException("No players");
         }
-        //create draw pile and if it wasnt loaded from a file, let the players draw their tokens
+        //create draw pile and if it wasn't loaded from a file, let the players draw their tokens
         fillPile();
 
         if (!fileLoaded) {
@@ -346,7 +345,7 @@ public class Game {
         }
         //if the player is an AI player, let the AI make their move, otherwise notify the next player
         if (currentPlayer instanceof AI ai) {
-            //add the new move to the thread, so the player move will be finished until the ai move starts
+            //add the new move to the thread, so the player move will be finished until the AI move starts
             try {
                 Platform.runLater(ai::makeMove);
             } catch (Exception ignored) {
@@ -427,17 +426,19 @@ public class Game {
     private boolean handleOver() {
         if (stop) return true;
         Map<Boolean, Team> over = isGameOver();
+        //if there weren't any players in the game from the beginning
         if (players.isEmpty()) {
             if (CrossWise.DEBUG)
                 System.out.println("No players left!");
             return true;
         } else if (over.containsKey(true)) {
             Team team = over.get(true);
+            Team.givePoints();
+            //hande game if there was a draw
             if (team == null) {
                 if (CrossWise.DEBUG)
                     System.out.println("Game is over, but no team has won!");
-                //handle game won with a draw
-                guiConnector.gameWonNotifier(null, 0, false);
+                guiConnector.gameWonNotifier(null, Team.getHorizontalTeam().getPoints(), false);
             } else {
                 //handle game won with a specific team won
                 guiConnector.gameWonNotifier(team.getTeamType(), team.getPoints(), team.isRowWin());
@@ -469,6 +470,11 @@ public class Game {
         thread.interrupt();
     }
 
+    /**
+     * Used for tests to simulate a started game
+     *
+     * @param fileLoaded boolean, if the game was loaded from a file
+     */
     public void testStart(boolean fileLoaded) {
         setup(fileLoaded);
         start();
@@ -481,10 +487,11 @@ public class Game {
         if (handleOver())
             return;
         GameLogger.logGameSetupLog();
-        //check for faulty setup of the players
+        //check for faulty setup of the players where both teams are empty
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
             return;
         }
+        //check, if both teams have an equal amount of players, if not create an already and return
         if (Team.getHorizontalTeam().getPlayers().size() != Team.getVerticalTeam().getPlayers().size()) {
             faultyStartup(1);
             if (CrossWise.UI)
@@ -492,7 +499,7 @@ public class Game {
             else
                 throw new IllegalArgumentException("Number of players in horizontal team is not equal to number of players in vertical team!");
         }
-
+        //check, if the config has the right amount of active players in it and the required minimum
         if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0) {
             faultyStartup(2);
             if (CrossWise.UI)
@@ -501,12 +508,14 @@ public class Game {
                 throw new IllegalArgumentException("Not enough players or not even number of players!");
 
         }
+        //shows hand of the current player
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
         if (currentPlayer instanceof AI ai) {
-            //add the new move to the thread, so the player move will be finished until the ai move starts
+            //add the new move to the thread, so the current move will be finished until the AI move starts
             try {
                 Platform.runLater(ai::makeMove);
             } catch (Exception e) {
+                //for test purposes that cant handle run-later
                 ai.makeMove();
             }
         } else {
@@ -544,30 +553,41 @@ public class Game {
         nextPlayer();
     }
 
-
+    /**
+     * Start the game thread
+     */
     public void startGame() {
         synchronized (this) {
             thread.start();
         }
     }
 
+    /**
+     * Creates an array representation of the current points for each line
+     *
+     * @return Integer array of points
+     */
     public Integer[] pointsArray() {
+        //get points for each line
         Map<Integer, Integer> map = AI.calculateCurrentOverallPoints();
 
         SortedSet<Integer> keys = new TreeSet<>(map.keySet());
 
         Integer[] pointsArray = new Integer[Constants.GAMEGRID_SIZE * 2];
         int counter = 0;
+
+        //Add results to new map
+
         for (Integer key : keys) {
             pointsArray[counter] = map.get(key);
             counter++;
         }
+        //Debug
         if (CrossWise.DEBUG) {
             System.out.println(map);
             System.out.println(Arrays.toString(pointsArray));
         }
         return pointsArray;
-
     }
 
     /**
@@ -584,7 +604,7 @@ public class Game {
             map.put(true, Team.getHorizontalTeam());
             return map;
         }
-        //if the vertical team won via a full collumn
+        //if the vertical team won via a full column
         if (checkColumns(playingField)) {
             Team.getVerticalTeam().setRowWin(true);
             map.put(true, Team.getVerticalTeam());
@@ -612,7 +632,14 @@ public class Game {
     }
 
 
-    private boolean checkRows(final PlayingField field) {
+    /**
+     * Check all rows for a game win
+     *
+     * @param field playing field
+     * @return true, if game was won with 6 in a row
+     */
+    @SuppressWarnings("Duplicates")
+    private boolean checkRows(PlayingField field) {
         TokenType current = null;
         for (int i = 0; i < field.getSize(); i++) { //get horizontal
             boolean equal = true;
@@ -630,9 +657,7 @@ public class Game {
                     equal = false;
                     current = null;
                     break;
-
                 }
-
             }
             if (equal)
                 return true;
@@ -640,7 +665,14 @@ public class Game {
         return false;
     }
 
-    private boolean checkColumns(final PlayingField field) {
+    /**
+     * Check all columns for a game win
+     *
+     * @param field playing field
+     * @return true, if game was won with 6 in a column
+     */
+    @SuppressWarnings("Duplicates")
+    private boolean checkColumns(PlayingField field) {
         TokenType current = null;
 
         for (int i = 0; i < field.getSize(); i++) {

@@ -1,6 +1,12 @@
 package gui;
 
-import javafx.event.ActionEvent;
+
+import gui.fileHandle.FileInputReader;
+import gui.fileHandle.FileOutputWriter;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,10 +17,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import logic.util.AnimationTime;
 import logic.GUIConnector;
 
@@ -125,6 +133,7 @@ public class FXMLController implements Initializable {
     @FXML
     private TextFlow teamPointsDisplay;
 
+
     /**
      * GuiConnector
      */
@@ -141,14 +150,13 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //hide current window until the creation of game
-        this.innerGrid.setVisible(false);
         //fit the grid into the wrapped h-box and v-box setup
         fitHVBox();
         //create new FX-GUI and give it all the needed javafx elements, it needs to interact with
         this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree,
                 playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText,
                 removerAmountText, horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
-                sumPointsHorizontalTeam, innerGrid, imageSwapper, imageMover, imageReplacer, imageRemover);
+                sumPointsHorizontalTeam, imageSwapper, imageMover, imageReplacer, imageRemover);
         //setup new createGame window when the game starts
         CreateGame createGame = new CreateGame(guiConnector);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/CreateGame.fxml"));
@@ -193,11 +201,9 @@ public class FXMLController implements Initializable {
 
     /**
      * Event handler when the endgame button gets pressed
-     *
-     * @param event not used here
      */
     @FXML
-    void clickEndGameButton(ActionEvent event) {
+    void clickEndGameButton() {
         Stage thisStage = (Stage) this.masterGrid.getScene().getWindow();
         //close the current stage
         thisStage.close();
@@ -205,11 +211,9 @@ public class FXMLController implements Initializable {
 
     /**
      * Event handler, when the load game button gets pressed
-     *
-     * @param event not used here
      */
     @FXML
-    void clickLoadGameButton(ActionEvent event) {
+    void clickLoadGameButton() {
         //get current scene from the event
         Scene scene = gameGrid.getScene();
         try {
@@ -222,11 +226,9 @@ public class FXMLController implements Initializable {
 
     /**
      * Event handler, when the new game button gets pressed
-     *
-     * @param event not used here
      */
     @FXML
-    void clickNewGameButton(ActionEvent event) {
+    void clickNewGameButton() {
         try {
             //Create a new createGame window
             CreateGame createGame = new CreateGame(guiConnector);
@@ -241,63 +243,52 @@ public class FXMLController implements Initializable {
 
     /**
      * Event handler, when the save game button gets pressed
-     *
-     * @param event not used here
      */
     @FXML
-    void clickSaveGameButton(ActionEvent event) {
+    void clickSaveGameButton() {
         Scene scene = gameGrid.getScene();
         FileOutputWriter.writeJSON(scene);
     }
 
     /**
      * Handler for a toggle of the show-points-per-team-button
-     *
-     * @param event not used here
      */
     @FXML
-    void clickPointsPerTeamButton(ActionEvent event) {
+    void clickPointsPerTeamButton() {
         teamPointsDisplay.setVisible(pointsPerTeamButton.isSelected());
     }
 
     /**
      * Handler for a toggle of the show-points-per-line-button
-     *
-     * @param event not used here
      */
     @FXML
-    void clickPointsPerRowColumnButton(ActionEvent event) {
+    void clickPointsPerRowColumnButton() {
         horizontalPointsGrid.setVisible(pointsPerRowColumnButton.isSelected());
         verticalPointsGrid.setVisible(pointsPerRowColumnButton.isSelected());
     }
 
     /**
      * Handler for the change speed radio option: Fast
-     *
-     * @param event not used here
      */
     @FXML
-    void changeAnimationSpeedFast(ActionEvent event) {
+    void changeAnimationSpeedFast() {
         changeAnimationSpeedHandler(AnimationTime.FAST);
     }
 
     /**
      * Handler for the change speed radio option: Slow
-     *
-     * @param event not used here
      */
     @FXML
-    void changeAnimationSpeedLow(ActionEvent event) {
+    void changeAnimationSpeedLow() {
         changeAnimationSpeedHandler(AnimationTime.SLOW);
     }
 
     /**
      * Handler for the change speed radio option: Middle
-     *
-     * @param event not used here
+
      */
     @FXML
-    void changeAnimationSpeedMedium(ActionEvent event) {
+    void changeAnimationSpeedMedium() {
         changeAnimationSpeedHandler(AnimationTime.MIDDLE);
     }
 

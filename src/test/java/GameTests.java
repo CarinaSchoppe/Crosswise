@@ -1,4 +1,4 @@
-import gui.FileInputReader;
+import gui.fileHandle.FileInputReader;
 import logic.CrossWise;
 import logic.Game;
 import logic.Team;
@@ -10,7 +10,13 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Test class for tests checking the game class
+ *
+ * @author Jacob Klövekorn
+ */
 class GameTests {
 
     @BeforeEach
@@ -21,25 +27,25 @@ class GameTests {
     }
 
     @Test
-    void gameTest1() {
+    void correctCompile() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswise.json"), new FakeGUI());
         Assertions.assertDoesNotThrow(() -> Game.getGame().testStart(false));
     }
 
     @Test
-    void gameTest2() {
+    void wrongConfig3Player() {
         Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(true, false, true, true), new FakeGUI(), false, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
     }
 
     @Test
-    void gameTest3() {
+    void wrongConfig1Player() {
         Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(false, false, false, true), new FakeGUI(), false, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
     }
 
     @Test
-    void gameTest4() {
+    void wrongConfig0Players() {
         Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(false, false, false, false), new FakeGUI(), false, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
     }
@@ -52,69 +58,82 @@ class GameTests {
 
 
     @Test
-    void gameTest6() {
+    void testGameNotFinishedStandard() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswise.json"), new FakeGUI());
         Game.getGame().setup(true);
-        var map = new HashMap<Boolean, Team>();
+        Map<Boolean, Team> map = new HashMap<>();
         map.put(false, null);
         Assertions.assertEquals(map, Game.getGame().isGameOver());
     }
 
     @Test
-    void gameTest7() {
+    void testGameNotFinishedEmpty() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseNotFinishedGameFinished.json"), new FakeGUI());
         Game.getGame().setup(true);
-        var map = new HashMap<Boolean, Team>();
+        Map<Boolean, Team> map = new HashMap<>();
         map.put(false, null);
         Assertions.assertEquals(map, Game.getGame().isGameOver());
     }
 
 
     @Test
-    void gameTest8() {
+    void testGameNotFinished1() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseNotFinishedGame2.json"), new FakeGUI());
         Game.getGame().setup(true);
-        var map = new HashMap<Boolean, Team>();
+        Map<Boolean, Team> map = new HashMap<>();
         map.put(false, null);
         Assertions.assertEquals(map, Game.getGame().isGameOver());
     }
 
     @Test
-    void gameTest9() {
+    void testGameNotFinished2() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseFinished1.json"), new FakeGUI());
         Game.getGame().setup(true);
-        var map = new HashMap<Boolean, Team>();
+        Map<Boolean, Team> map = new HashMap<>();
         map.put(true, Team.getVerticalTeam());
         Assertions.assertEquals(map, Game.getGame().isGameOver());
     }
 
-
     @Test
-    void gameTest10() {
-        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseFinished2.json"), new FakeGUI());
-        Game.getGame().setup(true);
-        var map = new HashMap<Boolean, Team>();
-        map.put(true, null);
-        Assertions.assertEquals(map, Game.getGame().isGameOver());
-    }
-
-    @Test
-    void gameTest11() {
+    void testGameNotFinished3() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseNotFinishedGame1.json"), new FakeGUI());
         Game.getGame().setup(true);
-        var map = new HashMap<Boolean, Team>();
+        Map<Boolean, Team> map = new HashMap<>();
         map.put(false, null);
         Assertions.assertEquals(map, Game.getGame().isGameOver());
     }
 
+
     @Test
-    void gameTest12() {
+    void testGameFinished1() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/crosswiseFinished2.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        Map<Boolean, Team> map = new HashMap<>();
+        Team team = new Team(TeamType.HORIZONTAL);
+        map.put(true, team);
+        Assertions.assertEquals(map, Game.getGame().isGameOver());
+    }
+
+
+
+    @Test
+    void testForVertical6ColumnWin() {
         FileInputReader.readFile(new File("src/test/resources/configs/good/verticalSixRow.json"), new FakeGUI());
         Game.getGame().setup(true);
-        var team = new Team(TeamType.VERTICAL);
+        Team team = new Team(TeamType.VERTICAL);
         team.getPlayers().addAll(Team.getVerticalTeam().getPlayers());
         team.setRowWin(true);
         Assertions.assertTrue(teamsEqual(team, Game.getGame().isGameOver().get(true)));
+    }
+
+    @Test
+    void testForDraw() {
+        FileInputReader.readFile(new File("src/test/resources/configs/good/drawGameFinished.json"), new FakeGUI());
+        Game.getGame().setup(true);
+        Team team = new Team(TeamType.VERTICAL);
+        team.getPlayers().addAll(Team.getVerticalTeam().getPlayers());
+        team.setRowWin(false);
+        Assertions.assertEquals(Game.getGame().isGameOver().get(true), null);
     }
 
 

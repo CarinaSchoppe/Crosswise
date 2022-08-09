@@ -15,7 +15,7 @@ public class ClickEventSave {
      */
     private Integer posY;
     /**
-     * Boolean, whether the clicked location is on the grid, if false its a hand position
+     * Boolean, whether the clicked location is on the grid, if false it's a hand position
      */
     private final boolean isGrid;
     /**

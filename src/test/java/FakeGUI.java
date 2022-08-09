@@ -134,9 +134,4 @@ public class FakeGUI implements GUIConnector {
     public void showError(String message) {
 
     }
-
-    @Override
-    public void showGUIElements() {
-
-    }
 }

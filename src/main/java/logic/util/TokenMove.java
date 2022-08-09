@@ -8,12 +8,12 @@ import logic.util.TokenType;
  *
  * @author Jacob Klövekorn
  */
-@SuppressWarnings("ALL")
+
 public class TokenMove {
 
     /**
      * Position, an den der Stein platziert werden soll. Falls es sich um einen Aktionsstein,
-     * handelt, gelten die Folgenden Regeln:
+     * handelt, gelten die folgenden Regeln:
      * Remover - Position von dem der Stein entfernt wird,
      * Mover - Position, an den der Stein platziert wird
      * Swapper - Position, die gewechselt wird
@@ -38,7 +38,7 @@ public class TokenMove {
     private final boolean isPreventingLoss;
     /**
      * Position für Aktionssteine mit folgenden Regeln:
-     * Mover - Position, an den der Stein plaziert werden soll
+     * Mover - Position, an den der Stein platziert werden soll
      * Swapper - Position, die gewechselt wird
      * Replacer - Position, des auszutauschenden Tokens auf der Hand
      */
@@ -78,8 +78,9 @@ public class TokenMove {
                      TokenType token, boolean gameWinning, boolean isPreventingLoss) {
         this(primaryMovePosition, relativeChange, token, gameWinning, isPreventingLoss);
         this.secondaryMovePosition = secondaryMovePosition;
-
     }
+
+    //---------------------------------------------------Getter---------------------------------------------------------
 
     public Position getPrimaryMovePosition() {
         return primaryMovePosition;
@@ -105,9 +106,12 @@ public class TokenMove {
         return isPreventingLoss;
     }
 
+    //---------------------------------------------------Overrides------------------------------------------------------
+
     @Override
     public boolean equals(Object other) {
         if (other instanceof TokenMove move) {
+
             return primaryMovePosition.equals(move.primaryMovePosition) &&
                     secondaryMovePosition == null ? move.secondaryMovePosition == null : secondaryMovePosition.equals(move.secondaryMovePosition) &&
                     relativeChange.equals(move.relativeChange) &&
@@ -116,7 +120,6 @@ public class TokenMove {
                     isPreventingLoss == move.isPreventingLoss;
         } else
             return false;
-
     }
 
     @Override

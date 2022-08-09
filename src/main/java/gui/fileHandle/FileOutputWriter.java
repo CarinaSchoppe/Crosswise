@@ -1,12 +1,14 @@
-package gui;
+package gui.fileHandle;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.scene.Scene;
-import logic.*;
+import logic.AI;
+import logic.Game;
+import logic.Player;
+import logic.Token;
 import logic.util.Constants;
 import logic.util.Position;
-
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;

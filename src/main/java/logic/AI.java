@@ -10,6 +10,7 @@ import java.util.*;
  *
  * @author Jacob Klövekorn
  */
+@SuppressWarnings("Duplicates")
 public class AI extends Player {
 
     /**
@@ -91,9 +92,9 @@ public class AI extends Player {
         }
 
         //check, if the move will prevent a loss
-        if (newMove.isPreventingLoss()) {
+        if (newMove.isPreventingLoss() && !currentBestMove.isPreventingLoss()) {
             return true;
-        } else if (currentBestMove.isPreventingLoss()) {
+        } else if (!newMove.isPreventingLoss() && currentBestMove.isPreventingLoss()) {
             return false;
         }
 
@@ -252,7 +253,7 @@ public class AI extends Player {
             throw new NoMovePossibleException();
         } else {
             for (TokenMove tokenMove : tokenMovesPerToken) {
-                //check, if its the first move that is getting compared
+                //check, if it's the first move that is getting compared
                 if (bestMove == null) {
                     bestMove = tokenMove;
                 } else {
@@ -282,7 +283,6 @@ public class AI extends Player {
             default -> null;
         };
     }
-
 
     //##############################################################################################
     //################################## Symbol Move Calculation ###################################
@@ -408,7 +408,7 @@ public class AI extends Player {
     public TokenMove calculateAIMove() {
         ArrayList<TokenMove> bestMovePerToken = new ArrayList<>();
         TokenType[] playerHand = this.convertHandToTokenTypeArray();
-        //calcualte best move for each hand token
+        //calculate best move for each hand token
         for (TokenType token : playerHand) {
             if (token != null) {
                 bestMovePerToken.add(calculateBestTokenMove(token));
@@ -581,7 +581,7 @@ public class AI extends Player {
     public Set<Position> occupiedFields() {
         HashSet<Position> positions = new HashSet<>();
         Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
-        //iterate through all fields of the game field and add it to the new HashSet of positions, if its not empty
+        //iterate through all fields of the game field and add it to the new HashSet of positions, if it's not empty
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 if (grid[i][j].tokenType().getValue() != 0) {

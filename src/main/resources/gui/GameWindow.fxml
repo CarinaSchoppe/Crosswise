@@ -190,26 +190,26 @@
                         </GridPane>
                         <GridPane fx:id="playersStuffGrid" prefHeight="110.0" prefWidth="385.0">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.0" minWidth="10.0" prefWidth="152.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="233.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="303.0" minWidth="10.0" prefWidth="167.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" prefWidth="213.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                        <TextFlow prefHeight="200.0" prefWidth="200.0">
+                        <TextFlow prefHeight="150.0" prefWidth="98.0">
                            <children>
-                                      <Label fx:id="playersTurnLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" prefWidth="150.0" text="Current player:" wrapText="true">
+                                      <Label fx:id="playersTurnLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" prefWidth="167.0" text="Current player:" wrapText="true">
                                           <font>
-                                              <Font size="16.0" />
+                                              <Font size="22.0" />
                                           </font>
                                           <padding>
                                               <Insets left="20.0" />
                                           </padding>
                                       </Label>
-                                      <Label fx:id="currentPlayerText" alignment="CENTER" prefHeight="68.0" prefWidth="148.0" text="PlayerName" wrapText="true">
+                                      <Label fx:id="currentPlayerText" alignment="CENTER" prefHeight="68.0" prefWidth="164.0" wrapText="true">
                                           <font>
-                                              <Font size="16.0" />
+                                              <Font size="22.0" />
                                           </font>
                                           <opaqueInsets>
                                               <Insets left="20.0" />
@@ -219,15 +219,7 @@
                         </TextFlow>
                         <TextFlow fx:id="teamPointsDisplay" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
-                              <Label prefHeight="60.0" prefWidth="161.0" text="Vertical Team: ">
-                                 <padding>
-                                    <Insets left="7.0" />
-                                 </padding>
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="sumPointsVerticalTeam" prefHeight="69.0" prefWidth="60.0" text="0">
+                              <Label prefHeight="60.0" prefWidth="161.0" text="Vertical Team: " textFill="FORESTGREEN">
                                  <padding>
                                     <Insets left="7.0" />
                                  </padding>
@@ -235,15 +227,23 @@
                                     <Font size="20.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="54.0" prefWidth="161.0" text="Horizontal Team:">
+                              <Label fx:id="sumPointsVerticalTeam" prefHeight="60.0" prefWidth="43.0" text="0">
                                  <padding>
                                     <Insets left="7.0" />
                                  </padding>
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font size="20.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="sumPointsHorizontalTeam" prefHeight="61.0" prefWidth="60.0" text="0">
+                              <Label prefHeight="66.0" prefWidth="159.0" text="Horizontal Team:" textFill="ORANGE">
+                                 <padding>
+                                    <Insets left="7.0" />
+                                 </padding>
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sumPointsHorizontalTeam" prefHeight="70.0" prefWidth="51.0" text="0">
                                  <padding>
                                     <Insets left="7.0" />
                                  </padding>

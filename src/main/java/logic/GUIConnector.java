@@ -4,6 +4,11 @@ import logic.util.AnimationTime;
 import logic.util.TeamType;
 import logic.util.TokenType;
 
+/**
+ * Interface for the gui Connector, implemented by the FXGUI class and the FakeGUI class
+ *
+ * @author Jacob Klövekorn
+ */
 public interface GUIConnector {
     void resetSpecialTokenImages();
 
@@ -20,7 +25,6 @@ public interface GUIConnector {
     void showHand(boolean isAI, int playerID, boolean hideAll);
 
     void resetText();
-
 
     void notifyTurn(String playerName, int playerID);
 
@@ -57,6 +61,4 @@ public interface GUIConnector {
     void removerAnimationFrame(int x, int y);
 
     void showError(String message);
-
-    void showGUIElements();
 }

@@ -1,4 +1,4 @@
-package gui;
+package gui.fileHandle;
 
 import com.google.gson.Gson;
 import javafx.scene.Scene;
@@ -6,7 +6,6 @@ import javafx.stage.FileChooser;
 import logic.*;
 import logic.util.Constants;
 import logic.util.TokenType;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -83,7 +82,7 @@ public class FileInputReader {
         Game.createNewGame(playerNames, isAI, isActive, guiConnector, true, new PlayingField(gameData.getField().length));
         players.forEach(Player::create);
 
-        //add tokens to playerhands
+        //add tokens to player hands
         for (var playerItem : players) {
             for (var player : Game.getGame().getPlayers()) {
                 if (player.getPlayerID() == playerItem.getPlayerID()) {
@@ -125,7 +124,6 @@ public class FileInputReader {
             }
         }
 
-        guiConnector.showGUIElements();
         guiConnector.generateGrid();
         guiConnector.resetText();
         guiConnector.setupDragAndDropEvent();
@@ -137,8 +135,8 @@ public class FileInputReader {
     /**
      * Checks for an invalid config in the loaded GameData class
      *
-     * @param gameData
-     * @return
+     * @param gameData GameData instance, to be checked on their validity
+     * @return returns true, if the current config is invalid, false, if everything is okay
      */
     private static boolean checkInvalidConfig(final GameData gameData) {
         //invalid player config, cant be 0 and needs to load 4 players

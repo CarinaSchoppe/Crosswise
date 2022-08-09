@@ -1,4 +1,4 @@
-package gui;
+package gui.fileHandle;
 
 import java.util.Arrays;
 import java.util.Objects;
