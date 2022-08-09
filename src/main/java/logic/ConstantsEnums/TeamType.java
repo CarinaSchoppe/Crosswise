@@ -1,4 +1,4 @@
-package logic.util;
+package logic.ConstantsEnums;
 
 /**
  * Enum for a TeamType

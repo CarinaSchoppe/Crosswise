@@ -1,4 +1,6 @@
-package logic;
+package gui;
+
+import gui.CrossWise;
 
 /**
  * Main class which starts the programm

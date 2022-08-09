@@ -1,6 +1,13 @@
-package logic;
+package logic.Game;
 
-import javafx.application.Platform;
+import logic.ConstantsEnums.Calculation;
+import logic.ConstantsEnums.Constants;
+import logic.ConstantsEnums.TeamType;
+import logic.ConstantsEnums.TokenType;
+import gui.CrossWise;
+import logic.ConstantsEnums.Token;
+import logic.Exceptions.MoveNotPerformedException;
+import logic.Exceptions.NoMovePossibleException;
 import logic.util.*;
 
 import java.util.*;
@@ -163,6 +170,7 @@ public class AI extends Player {
         if (differenceVerticalPosition > 0) {
             return false;
         }
+
         //compare horizontal position of the token
         int differenceHorizontalPosition = newMove.getPrimaryMovePosition().getY() - currentBestMove.getPrimaryMovePosition().getY();
         if (differenceHorizontalPosition < 0) {
@@ -177,7 +185,7 @@ public class AI extends Player {
 
             //if replacer, the new turn will be the better one
             if (newMove.getToken().getValue() == Constants.UNIQUE_ACTION_TOKENS + Constants.UNIQUE_SYMBOL_TOKENS) {
-                return true;
+                return false;
             }
             //compare the x-position of the secondary position
             int differenceVerticalPosition2 = newMove.getSecondaryMovePosition().getX() - currentBestMove.getSecondaryMovePosition().getX();
@@ -295,8 +303,8 @@ public class AI extends Player {
      * @return returns HashSet with all possible Moves for the given Symbol Token
      */
     public Set<TokenMove> createPossibleSymbolTokenMoves(TokenType token) {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
-        HashSet<Position> emptyFields = emptyFields();
+        Set<TokenMove> tokenMoves = new HashSet<>();
+        Set<Position> emptyFields = emptyFields();
         for (Position position : emptyFields) {
             TokenType[][] changedTokenGrid = getGridCopyWithAddedToken(position, token);
             Calculation currentCalculation = calculateChangeWithMove(changedTokenGrid);
@@ -356,20 +364,7 @@ public class AI extends Player {
      */
     public void makeMove() {
         TokenMove move = calculateAIMove();
-        //Debug sleep timer
 
-
-        try {
-            Platform.runLater(() -> {
-                try {
-                    Thread.sleep(Constants.AI_TURN_TIME * 2);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            });
-        } catch (Exception ignored) {
-
-        }
 
         //perform different turn actions for each tokenType
         switch (move.getToken().getValue()) {
@@ -460,7 +455,7 @@ public class AI extends Player {
      * @return HashSet of all possible Moves
      */
     public Set<TokenMove> createPossibleRemoverTokenMoves() {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        Set<TokenMove> tokenMoves = new HashSet<>();
         //get all occupied fields
         Set<Position> occupiedFields = occupiedFields();
         for (Position position : occupiedFields) {
@@ -482,9 +477,9 @@ public class AI extends Player {
      * @return HashSet of all possible Moves
      */
     public Set<TokenMove> createPossibleMoverTokenMoves() {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        Set<TokenMove> tokenMoves = new HashSet<>();
         //all empty fields
-        HashSet<Position> emptyFields = emptyFields();
+        Set<Position> emptyFields = emptyFields();
         //all occupied fields
         Set<Position> occupiedFields = occupiedFields();
         for (Position occupiedPosition : occupiedFields) {
@@ -509,7 +504,7 @@ public class AI extends Player {
      * @return HashSet of possible Moves
      */
     public Set<TokenMove> createPossibleSwapperTokenMoves() {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        Set<TokenMove> tokenMoves = new HashSet<>();
         Set<Position> occupiedFields = occupiedFields();
         //iterate through all positions and again through all to create all possible combinations of two non 0 tokens
         for (Position pos1 : occupiedFields) {
@@ -559,8 +554,8 @@ public class AI extends Player {
      *
      * @return HashSet of positions of empty fields
      */
-    private HashSet<Position> emptyFields() {
-        HashSet<Position> positions = new HashSet<>();
+    private Set<Position> emptyFields() {
+        Set<Position> positions = new HashSet<>();
         Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
         //iterate through all fields of the game field and add it to the new HashSet of positions, if its empty
         for (int i = 0; i < grid.length; i++) {
@@ -579,7 +574,7 @@ public class AI extends Player {
      * @return HashSet of positions of occupied fields
      */
     public Set<Position> occupiedFields() {
-        HashSet<Position> positions = new HashSet<>();
+        Set<Position> positions = new HashSet<>();
         Token[][] grid = Game.getGame().getPlayingField().convertToTokenArray();
         //iterate through all fields of the game field and add it to the new HashSet of positions, if it's not empty
         for (int i = 0; i < grid.length; i++) {
@@ -655,7 +650,7 @@ public class AI extends Player {
      * @return HashSet of possible TokenMoves
      */
     public Set<TokenMove> createPossibleReplacerTokenMoves() {
-        HashSet<TokenMove> tokenMoves = new HashSet<>();
+        Set<TokenMove> tokenMoves = new HashSet<>();
         //convert player.getTokens() to Array of Tokens
         Token[] playerHand = this.getHandTokens().toArray(new Token[0]);
         Set<Integer> handSymbolTokenSet = this.getHandSymbolTokenPositions();

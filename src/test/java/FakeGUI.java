@@ -1,7 +1,7 @@
-import logic.util.AnimationTime;
-import logic.GUIConnector;
-import logic.util.TeamType;
-import logic.util.TokenType;
+import logic.ConstantsEnums.AnimationTime;
+import logic.Game.GUIConnector;
+import logic.ConstantsEnums.TeamType;
+import logic.ConstantsEnums.TokenType;
 
 public class FakeGUI implements GUIConnector {
 

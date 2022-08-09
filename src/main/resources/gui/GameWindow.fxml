@@ -227,7 +227,7 @@
                                     <Font size="20.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="sumPointsVerticalTeam" prefHeight="60.0" prefWidth="43.0" text="0">
+                              <Label fx:id="sumPointsVerticalTeam" prefHeight="60.0" prefWidth="49.0" text="0">
                                  <padding>
                                     <Insets left="7.0" />
                                  </padding>

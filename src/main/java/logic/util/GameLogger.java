@@ -1,8 +1,11 @@
-package logic;
+package logic.util;
 
-import logic.util.Action;
-import logic.util.Constants;
-import logic.util.Position;
+import logic.ConstantsEnums.Token;
+import gui.CrossWise;
+import logic.Game.Game;
+import logic.Game.Player;
+import logic.ConstantsEnums.Action;
+import logic.ConstantsEnums.Constants;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -126,9 +129,9 @@ public class GameLogger {
      * Logger entry for the setup at the beginning of a game
      */
     public static void logGameSetupLog() {
-        var builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         builder.append("Game Setup: \n");
-        for (var player : Game.getGame().getPlayers())
+        for (Player player : Game.getGame().getPlayers())
             builder.append(player.toString()).append("\n");
         log(builder.toString());
     }

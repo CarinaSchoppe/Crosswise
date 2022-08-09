@@ -3,10 +3,6 @@ package gui;
 
 import gui.fileHandle.FileInputReader;
 import gui.fileHandle.FileOutputWriter;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,15 +13,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
-import logic.util.AnimationTime;
-import logic.GUIConnector;
-
+import logic.ConstantsEnums.AnimationTime;
+import logic.Game.GUIConnector;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

@@ -1,7 +1,7 @@
 package logic.util;
 
 
-import logic.Token;
+import logic.ConstantsEnums.Token;
 
 /**
  * Class to store a specific position on the game grid of the hand of a player
@@ -101,6 +101,7 @@ public class Position {
         return "Position{" +
                 "y=" + x +
                 ", x=" + y +
+                "hand=" +
                 '}';
     }
 

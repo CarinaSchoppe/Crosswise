@@ -1,6 +1,6 @@
-import logic.Player;
-import logic.Token;
-import logic.util.TokenType;
+import logic.Game.Player;
+import logic.ConstantsEnums.Token;
+import logic.ConstantsEnums.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

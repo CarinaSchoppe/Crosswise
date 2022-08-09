@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -20,10 +21,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
-import logic.GUIConnector;
-import logic.Game;
-import logic.Team;
-import logic.util.*;
+import logic.ConstantsEnums.AnimationTime;
+import logic.ConstantsEnums.Constants;
+import logic.ConstantsEnums.TeamType;
+import logic.ConstantsEnums.TokenType;
+import logic.Exceptions.NoTokenException;
+import logic.Game.GUIConnector;
+import logic.Game.Game;
+import logic.Game.Team;
+import logic.ConstantsEnums.Token;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -300,7 +306,7 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void performMoveUIUpdate(int[] players, TokenType[][] tokens, TokenType[][] gameField, Integer[] pointsMap) {
-        for (var player : players) {
+        for (int player : players) {
             updatePlayerHandIcons(player, tokens[player]);
         }
         //replace each frame with the corresponding image of the new game field
@@ -770,14 +776,7 @@ public class FXGUI implements GUIConnector {
         if (!hideAll) {
             if (isAI) {
                 if (showComputerHandButton.isSelected()) {
-                    Platform.runLater((() -> {
                         handVisibleSwitch(playerID);
-                        try {
-                            Thread.sleep(Constants.AI_TURN_TIME * 2);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }));
                 }
             } else {
                 handVisibleSwitch(playerID);
@@ -800,6 +799,7 @@ public class FXGUI implements GUIConnector {
     /**
      * Setup Drag and Drop events for image views on the grid
      */
+    @SuppressWarnings("Duplicates")
     public void setupDragAndDropEvent() {
         //Setup drag and drop events for player hands
         setDragEventsForPlayerHand(playerHandOne);
@@ -825,29 +825,13 @@ public class FXGUI implements GUIConnector {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
                     } else {
-                        var replacerAllowed = false;
-                        var amount = 0;
-                        if (tokenType == TokenType.REPLACER) {
-                            //go through the handTokens of the player and check if one number is between 1 and 6
-                            for (var token : Game.getGame().getCurrentPlayer().getHandTokens()) {
-                                if (token.tokenType().getValue() >= 1 && token.tokenType().getValue() <= 6) {
-                                    replacerAllowed = true;
-                                    break;
-                                }
-                            }
-                        } else if (tokenType == TokenType.SWAPPER) {
-                            //check if the game field has less than 2 tokens (when using swapper)
-                            for (var row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
-                                for (TokenType token : row) {
-                                    if (token != TokenType.NONE) {
-                                        amount += 1;
-                                        if (amount >= 2)
-                                            break;
-                                    }
-                                }
-                            }
+                        Map<Boolean, Integer> map = checkSpecial(tokenType);
+                        boolean replacerAllowed = false;
+                        int amount = 0;
+                        for (Map.Entry<Boolean, Integer> entry : map.entrySet()) {
+                            replacerAllowed = entry.getKey();
+                            amount = entry.getValue();
                         }
-
                         if (tokenType == TokenType.REMOVER || tokenType == TokenType.MOVER || tokenType == TokenType.SWAPPER && amount >= 2 || replacerAllowed) {
                             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                         }
@@ -860,7 +844,7 @@ public class FXGUI implements GUIConnector {
                     Dragboard db = event.getDragboard();
                     boolean success = false;
                     String input = db.getString();
-                    var tokenType = TokenType.getTokenTypeFromString(input);
+                    TokenType tokenType = TokenType.getTokenTypeFromString(input);
 
                     switch (tokenType) {
                         case SUN, CROSS, TRIANGLE, SQUARE, PENTAGON, STAR -> {
@@ -871,7 +855,6 @@ public class FXGUI implements GUIConnector {
                             Game.getGame().playerRemoverTokenMove(finalI, finalJ);
                             disableGUIElementes();
                         }
-
                         case MOVER, SWAPPER, REPLACER -> {
                             checkForMouse = true;
                             clickToken = input;
@@ -899,27 +882,12 @@ public class FXGUI implements GUIConnector {
                             imgView.setImage(image);
                         }
                     } else {
-                        var replacerAllowed = false;
-                        var amount = 0;
-                        if (tokenType == TokenType.REPLACER) {
-                            //go through the handTokens of the player and check if one number is between 1 and 6
-                            for (var token : Game.getGame().getCurrentPlayer().getHandTokens()) {
-                                if (token.tokenType().getValue() >= 1 && token.tokenType().getValue() <= 6) {
-                                    replacerAllowed = true;
-                                    break;
-                                }
-                            }
-                        } else if (tokenType == TokenType.SWAPPER) {
-                            //check if the game field has less than 2 tokens (when using swapper)
-                            for (var row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
-                                for (TokenType token : row) {
-                                    if (token != TokenType.NONE) {
-                                        amount += 1;
-                                        if (amount >= 2)
-                                            break;
-                                    }
-                                }
-                            }
+                        Map<Boolean, Integer> map = checkSpecial(tokenType);
+                        boolean replacerAllowed = false;
+                        int amount = 0;
+                        for (Map.Entry<Boolean, Integer> entry : map.entrySet()) {
+                            replacerAllowed = entry.getKey();
+                            amount = entry.getValue();
                         }
                         if (tokenType == TokenType.REMOVER || tokenType == TokenType.MOVER || tokenType == TokenType.SWAPPER && amount >= 2 || replacerAllowed) {
                             Image image = new Image(gridImagesTokens.get(imgView).getImagePathHighlight());
@@ -952,6 +920,40 @@ public class FXGUI implements GUIConnector {
     }
 
     /**
+     * Small method for preventing code duplication
+     *
+     * @param tokenType TokenType
+     * @return Map with a boolean connected to an int
+     */
+    private Map<Boolean, Integer> checkSpecial(TokenType tokenType) {
+        Map<Boolean, Integer> map = new HashMap<>();
+        boolean replacerAllowed = false;
+        int amount = 0;
+        if (tokenType == TokenType.REPLACER) {
+            //go through the handTokens of the player and check if one number is between 1 and 6
+            for (Token token : Game.getGame().getCurrentPlayer().getHandTokens()) {
+                if (token.tokenType().getValue() >= 1 && token.tokenType().getValue() <= 6) {
+                    replacerAllowed = true;
+                    break;
+                }
+            }
+        } else if (tokenType == TokenType.SWAPPER) {
+            //check if the game field has less than 2 tokens (when using swapper)
+            for (TokenType[] row : Game.getGame().getPlayingField().convertToTokenTypeArray()) {
+                for (TokenType token : row) {
+                    if (token != TokenType.NONE) {
+                        amount += 1;
+                        if (amount >= 2)
+                            break;
+                    }
+                }
+            }
+        }
+        map.put(replacerAllowed, amount);
+        return map;
+    }
+
+    /**
      * Setup drag and drop events for the hand of the player
      *
      * @param hand Grid pane of the hand of a specific player
@@ -980,14 +982,7 @@ public class FXGUI implements GUIConnector {
 
             });
             //setup action on drag done event
-            child.setOnDragDone((DragEvent event) -> {
-                // wenn die Informationen wegbewegt wurden entferne sie aus dem Source-Objekt
-                if (event.getTransferMode() == TransferMode.MOVE) {
-                    //TODO: hier @ Jacob: was ist das?
-                    //TODO:  //source.setText("");
-                }
-                event.consume();
-            });
+            child.setOnDragDone(Event::consume);
 
             final int count = counter;
             //setup action on mouse clicked event

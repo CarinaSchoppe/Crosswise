@@ -1,10 +1,13 @@
-package logic;
+package logic.Game;
 
+import gui.CrossWise;
 import javafx.application.Platform;
-import logic.util.Constants;
+import logic.ConstantsEnums.Constants;
+import logic.ConstantsEnums.Token;
+import logic.util.GameLogger;
 import logic.util.Position;
-import logic.util.TeamType;
-import logic.util.TokenType;
+import logic.ConstantsEnums.TeamType;
+import logic.ConstantsEnums.TokenType;
 
 import java.util.*;
 
@@ -134,16 +137,16 @@ public class Game {
     public static void createNewGame(List<String> playerNames, List<Boolean> isAis, List<Boolean> isActives, GUIConnector connector, boolean fileSetup, PlayingField field) {
         if (field == null)
             field = new PlayingField(Constants.GAMEGRID_SIZE);
-        var players = new ArrayList<Player>();
+        List<Player> players = new ArrayList<>();
         for (int i = 0; i < playerNames.size(); i++) {
-            var name = playerNames.get(i);
-            var isAI = isAis.get(i);
-            var isActive = isActives.get(i);
+            String name = playerNames.get(i);
+            Boolean isAI = isAis.get(i);
+            Boolean isActive = isActives.get(i);
             if (Boolean.TRUE.equals(isAI)) {
-                var ai = new AI(i, isActive, name);
+                AI ai = new AI(i, isActive, name);
                 players.add(ai);
             } else {
-                var player = new Player(i, isActive, name);
+                Player player = new Player(i, isActive, name);
                 players.add(player);
             }
         }
@@ -330,10 +333,17 @@ public class Game {
 
         //shows the hand of the next player
         try {
-            Platform.runLater((() -> {
-                guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
-                guiConnector.changeCurrentPlayerText(currentPlayer.getName());
-            }));
+            guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
+            guiConnector.changeCurrentPlayerText(currentPlayer.getName());
+                if (currentPlayer instanceof AI) {
+                    Platform.runLater((() -> {
+                        try {
+                            Thread.sleep(Constants.AI_TURN_TIME);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }));
+                }
         } catch (Exception ignored) {
             guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
             guiConnector.changeCurrentPlayerText(currentPlayer.getName());

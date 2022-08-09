@@ -1,4 +1,4 @@
-package logic.util;
+package logic.Exceptions;
 /**
  * Exception for situation, where the move didn't get performed
  *

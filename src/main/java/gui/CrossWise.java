@@ -1,4 +1,4 @@
-package logic;
+package gui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -40,9 +40,8 @@ public class CrossWise extends Application {
     }
 
     /*
-     * TODO: drag and drop having image in it (optional)
-     * TODO: drag and drop highlight
-     * TODO: colors of background and create game background
+     * TODO: Tests, lines, more special tokens
+     * TODO checkstyle
      * */
 
     @Override

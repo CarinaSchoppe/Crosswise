@@ -1,8 +1,8 @@
 import gui.fileHandle.FileInputReader;
-import logic.CrossWise;
-import logic.Game;
-import logic.Team;
-import logic.util.TeamType;
+import gui.CrossWise;
+import logic.Game.Game;
+import logic.Game.Team;
+import logic.ConstantsEnums.TeamType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ class GameTests {
     }
 
     @Test
-    void gameTest5() {
+    void wrongConfig2PlayersSameTeam() {
         Game.createNewGame(List.of("test1", "test2", "test3", "test4"), List.of(true, true, true, true), List.of(false, true, false, true), new FakeGUI(), false, null);
         Assertions.assertThrows(IllegalArgumentException.class, () -> Game.getGame().testStart(false));
     }

@@ -1,4 +1,4 @@
-package logic.util;
+package logic.Exceptions;
 
 /**
  * Exception for situation, where there are no more moves possible

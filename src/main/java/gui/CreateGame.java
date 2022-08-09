@@ -7,11 +7,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import logic.GUIConnector;
-import logic.Game;
+import logic.Game.GUIConnector;
+import logic.Game.Game;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -71,9 +72,9 @@ public class CreateGame implements Initializable {
     @FXML
     void createGame(ActionEvent event) {
 
-        var playerNames = new ArrayList<String>();
-        var isActive = new ArrayList<Boolean>();
-        var isAI = new ArrayList<Boolean>();
+        List<String> playerNames = new ArrayList<String>();
+        List<Boolean> isActive = new ArrayList<Boolean>();
+        List<Boolean> isAI = new ArrayList<Boolean>();
 
         playerNames.add(playerOneField.getText());
         playerNames.add(playerTwoField.getText());

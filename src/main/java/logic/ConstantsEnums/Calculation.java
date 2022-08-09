@@ -1,4 +1,4 @@
-package logic.util;
+package logic.ConstantsEnums;
 
 /**
  * Record for a Calculation

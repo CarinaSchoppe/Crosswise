@@ -3,14 +3,16 @@ package gui.fileHandle;
 import com.google.gson.Gson;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
-import logic.*;
-import logic.util.Constants;
-import logic.util.TokenType;
+import logic.ConstantsEnums.Token;
+import logic.Game.*;
+import logic.ConstantsEnums.Constants;
+import logic.ConstantsEnums.TokenType;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class for reading a json file and creating a game out of it
@@ -67,10 +69,10 @@ public class FileInputReader {
         }
 
         //create objects needed for the game
-        ArrayList<Player> players = getPlayersFromFile(gameData);
-        var playerNames = new ArrayList<String>();
-        var isAI = new ArrayList<Boolean>();
-        var isActive = new ArrayList<Boolean>();
+        List<Player> players = getPlayersFromFile(gameData);
+        List<String> playerNames = new ArrayList<>();
+        List<Boolean> isAI = new ArrayList<>();
+        List<Boolean> isActive = new ArrayList<>();
 
         for (Player value : players) {
             playerNames.add(value.getName());
@@ -83,10 +85,10 @@ public class FileInputReader {
         players.forEach(Player::create);
 
         //add tokens to player hands
-        for (var playerItem : players) {
-            for (var player : Game.getGame().getPlayers()) {
+        for (Player playerItem : players) {
+            for (Player player : Game.getGame().getPlayers()) {
                 if (player.getPlayerID() == playerItem.getPlayerID()) {
-                    for (var token : playerItem.getHandTokens()) {
+                    for (Token token : playerItem.getHandTokens()) {
                         player.addTokenToHand(token);
                     }
                     break;
@@ -113,11 +115,11 @@ public class FileInputReader {
         Game.removeUsedTokensFromPile();
         //start the game
         //convert the player ids into an array of int
-        var playerIDs = new int[Constants.PLAYER_COUNT];
+        int[] playerIDs = new int[Constants.PLAYER_COUNT];
         for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
             playerIDs[i] = players.get(i).getPlayerID();
         }
-        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        TokenType[][] playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
         for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
             for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
                 playerHands[i][j] = players.get(i).getHandTokens().get(j).tokenType();
@@ -159,7 +161,7 @@ public class FileInputReader {
         //check the minimum size of a game
         if (gameData.getField().length < 2) return true;
         //check rows and column size equal
-        for (var row : gameData.getField()) {
+        for (int[] row : gameData.getField()) {
             if (row.length != gameData.getField()[0].length || row.length != gameData.getField().length) return true;
         }
 

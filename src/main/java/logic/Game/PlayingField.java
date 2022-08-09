@@ -1,9 +1,10 @@
-package logic;
+package logic.Game;
 
 
-import logic.util.Constants;
+import logic.ConstantsEnums.Token;
+import logic.ConstantsEnums.Constants;
 import logic.util.Position;
-import logic.util.TokenType;
+import logic.ConstantsEnums.TokenType;
 
 /**
  * Class of the playing field of the game Crosswise

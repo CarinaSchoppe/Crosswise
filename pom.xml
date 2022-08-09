@@ -115,7 +115,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>logic.Main</mainClass>
+                            <mainClass>gui.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

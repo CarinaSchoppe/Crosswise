@@ -1,4 +1,4 @@
-package logic.util;
+package logic.ConstantsEnums;
 
 /**
  * Enum for the time of the animation of an AI turn

@@ -1,4 +1,4 @@
-package logic.util;
+package logic.ConstantsEnums;
 
 /**
  * Enum class for an action, used by the logger

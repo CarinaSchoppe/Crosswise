@@ -1,6 +1,6 @@
-package logic;
+package logic.Game;
 
-import logic.util.TeamType;
+import logic.ConstantsEnums.TeamType;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,8 @@
-package logic;
+package logic.Game;
 
-import logic.util.AnimationTime;
-import logic.util.TeamType;
-import logic.util.TokenType;
+import logic.ConstantsEnums.AnimationTime;
+import logic.ConstantsEnums.TeamType;
+import logic.ConstantsEnums.TokenType;
 
 /**
  * Interface for the gui Connector, implemented by the FXGUI class and the FakeGUI class

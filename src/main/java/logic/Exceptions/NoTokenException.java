@@ -1,4 +1,4 @@
-package logic.util;
+package logic.Exceptions;
 /**
  * Exception for situation, where is no token available
  *

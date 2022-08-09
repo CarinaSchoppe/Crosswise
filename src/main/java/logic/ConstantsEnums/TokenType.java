@@ -1,4 +1,4 @@
-package logic.util;
+package logic.ConstantsEnums;
 
 /**
  * Enum for all different Types of tokens including a value, boolean, if they are special, an image path and a border

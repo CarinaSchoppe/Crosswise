@@ -1,4 +1,4 @@
-package logic.util;
+package logic.ConstantsEnums;
 
 /**
  * Abstract class for constants used in the game Crosswise
@@ -20,7 +20,7 @@ public abstract class Constants {
     /**
      * Time for the AI to wait during their turn
      */
-    public static final int AI_TURN_TIME = 10;
+    public static final int AI_TURN_TIME = 1000;
     /**
      * Size of the gamegrid
      */

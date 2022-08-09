@@ -1,5 +1,5 @@
-import logic.PlayingField;
-import logic.util.Constants;
+import logic.Game.PlayingField;
+import logic.ConstantsEnums.Constants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

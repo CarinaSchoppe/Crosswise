@@ -1,10 +1,12 @@
-package logic;
+package logic.Game;
 
-import javafx.application.Platform;
-import logic.util.Constants;
-import logic.util.NoTokenException;
+import gui.CrossWise;
+import logic.ConstantsEnums.Constants;
+import logic.ConstantsEnums.Token;
+import logic.Exceptions.NoTokenException;
+import logic.util.GameLogger;
 import logic.util.Position;
-import logic.util.TokenType;
+import logic.ConstantsEnums.TokenType;
 
 import java.util.*;
 
@@ -77,11 +79,11 @@ public class Player {
      * Update the GUI with the new grid and hands
      */
     private void uiUpdate() {
-        var playerIDs = new int[Constants.PLAYER_COUNT];
+        int[] playerIDs = new int[Constants.PLAYER_COUNT];
         for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
             playerIDs[i] = Game.getGame().getPlayers().get(i).getPlayerID();
         }
-        var playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+        TokenType[][] playerHands = new TokenType[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
         for (int i = 0; i < Constants.PLAYER_COUNT; i++) {
             for (int j = 0; j < Game.getGame().getPlayers().get(i).getHandTokens().size(); j++) {
                 playerHands[i][j] = Game.getGame().getPlayers().get(i).getHandTokens().get(j).tokenType();
@@ -133,18 +135,7 @@ public class Player {
         //Let the program sleep, if the AI did a move
         if (this instanceof AI) {
             Game.getGame().getGUIConnector().placerAnimationFrame(field.getX(), field.getY(), field.getToken().tokenType());
-            try {
-                Platform.runLater(() -> {
-                    try {
-                        Thread.sleep(Constants.AI_TURN_TIME);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                });
-            } catch (Exception ignored) {
-            }
         }
-
         return true;
     }
 
@@ -341,7 +332,7 @@ public class Player {
 
             if (CrossWise.DEBUG)
                 System.out.println("Draw-Token pile is empty!");
-            var handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
+            TokenType[] handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
             for (int i = 0; i < Constants.HAND_SIZE; i++) {
                 if (handTokens.size() > i)
                     handTokenTypeArray[i] = handTokens.get(i).tokenType();
@@ -378,7 +369,7 @@ public class Player {
         }
 
         GameLogger.logDraw(this, token);
-        var handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
+        TokenType[] handTokenTypeArray = new TokenType[Constants.HAND_SIZE];
         for (int i = 0; i < Constants.HAND_SIZE; i++) {
             handTokenTypeArray[i] = handTokens.get(i).tokenType();
         }

@@ -1,6 +1,4 @@
-package logic;
-
-import logic.util.TokenType;
+package logic.ConstantsEnums;
 
 /**
  * Class for a token for the Game Crosswise

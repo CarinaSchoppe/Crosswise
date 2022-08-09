@@ -1,6 +1,6 @@
-import logic.Player;
-import logic.Team;
-import logic.util.TeamType;
+import logic.Game.Player;
+import logic.Game.Team;
+import logic.ConstantsEnums.TeamType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
