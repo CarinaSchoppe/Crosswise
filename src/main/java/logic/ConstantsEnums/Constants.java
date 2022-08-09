@@ -7,11 +7,7 @@ package logic.ConstantsEnums;
  */
 public abstract class Constants {
 
-    /**
-     * Constructor
-     */
-    private Constants() {
-    }
+
 
     /**
      * Minimum size for a game grid
@@ -61,4 +57,41 @@ public abstract class Constants {
      * Minimum count of players required for a game
      */
     public static final int MIN_PLAYER_SIZE = 2;
+
+    public static final int NUMBER_0 = 0;
+
+    public static final int NUMBER_1 = 1;
+
+    public static final int NUMBER_2 = 2;
+
+    public static final int NUMBER_3 = 3;
+
+    public static final int NUMBER_4 = 4;
+
+    public static final int NUMBER_5 = 5;
+
+    public static final int NUMBER_6 = 6;
+
+    public static final int NUMBER_7 = 7;
+
+    public static final int NUMBER_8 = 8;
+
+    public static final int NUMBER_9 = 9;
+
+    public static final int NUMBER_10 = 10;
+
+    public static final int PLACE_NUMBER = -1000;
+
+    public static final int PLACE_NUMBER_POS = 1000;
+
+    public static final int POINTS_FOR_UNIQUE_LINE = 6;
+
+    public static final int OUT_OF_REACH = -100;
+
+    /**
+     * Constructor
+     */
+    private Constants() {
+    }
+
 }

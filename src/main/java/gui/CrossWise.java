@@ -29,7 +29,14 @@ public class CrossWise extends Application {
      * Delay between turns
      */
     public static final int DELAY = 10;
-
+    /**
+     * GameSize of window
+     */
+    public static double v = 1280;
+    /**
+     * GameSize of window
+     */
+    public static double v1 = 1024;
     /**
      * Main method, with is called by the Main class
      *
@@ -51,7 +58,7 @@ public class CrossWise extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/GameWindow.fxml"));
         Parent root = fxmlLoader.load();
 
-        Scene scene = new Scene(root, 1280, 1024);
+        Scene scene = new Scene(root, v, v1);
         primaryStage.setTitle("Crosswise");
         primaryStage.setResizable(true);
         primaryStage.setScene(scene);

@@ -133,7 +133,7 @@ class GameTests {
         Team team = new Team(TeamType.VERTICAL);
         team.getPlayers().addAll(Team.getVerticalTeam().getPlayers());
         team.setRowWin(false);
-        Assertions.assertEquals(Game.getGame().isGameOver().get(true), null);
+        Assertions.assertNull(Game.getGame().isGameOver().get(true));
     }
 
 

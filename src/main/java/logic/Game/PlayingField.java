@@ -27,7 +27,8 @@ public class PlayingField {
      * @param size Size of the playing field
      */
     public PlayingField(final int size) {
-        //check, if the size of the new playing field is at least 2 or bigger, otherwise throw an exception
+        //check, if the size of the new playing field is at least 2 or bigger,
+        // otherwise throw an exception
         if (size < Constants.MIN_GAMEGRID_SIZE) {
             throw new IllegalArgumentException("Size of playing field must be at least 2");
         }

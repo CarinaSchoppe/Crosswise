@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import logic.ConstantsEnums.Token;
-import logic.Game.*;
+
 import logic.ConstantsEnums.Constants;
 import logic.ConstantsEnums.TokenType;
+import logic.Game.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,7 +21,7 @@ import java.util.List;
  *
  * @author Jacob Klövekorn
  */
-public class FileInputReader {
+public final class FileInputReader {
 
     /**
      * Constructor
@@ -44,13 +46,16 @@ public class FileInputReader {
     }
 
     /**
-     * Static method for reading the contents of a file and creating a new game out of it, if possible
+     * Static method for reading the contents of a file and creating a new game out of it,
+     * if possible
      *
      * @param file         File, which contains the game data
      * @param guiConnector gui connector for the new game
      */
     public static void readFile(File file, GUIConnector guiConnector) {
-        if (file == null) return;
+        if (file == null) {
+            return;
+        }
         //read in the lines from file
         FileReader reader;
         try {
@@ -81,7 +86,8 @@ public class FileInputReader {
         }
 
 
-        Game.createNewGame(playerNames, isAI, isActive, guiConnector, true, new PlayingField(gameData.getField().length));
+        Game.createNewGame(playerNames, isAI, isActive, guiConnector, true,
+                new PlayingField(gameData.getField().length));
         players.forEach(Player::create);
 
         //add tokens to player hands
@@ -99,12 +105,13 @@ public class FileInputReader {
         Game.getGame().setCurrentPlayer(currentPlayer);
         Game.getGame().getPlayingField().addDataFromJSON(gameData.getField());
         //add special tokens to game
-        for (int actionTileID = 0; actionTileID < gameData.getUsedActionTiles().length; actionTileID++) {
+        for (int actionTileID = 0; actionTileID < gameData.getUsedActionTiles().length;
+                actionTileID++) {
             TokenType token = switch (actionTileID) {
-                case 0 -> TokenType.REMOVER;
-                case 1 -> TokenType.MOVER;
-                case 2 -> TokenType.SWAPPER;
-                case 3 -> TokenType.REPLACER;
+                case Constants.NUMBER_0 -> TokenType.REMOVER;
+                case Constants.NUMBER_1 -> TokenType.MOVER;
+                case Constants.NUMBER_2 -> TokenType.SWAPPER;
+                case Constants.NUMBER_3 -> TokenType.REPLACER;
                 default -> throw new IllegalArgumentException("Invalid action tile ID");
             };
 
@@ -130,7 +137,9 @@ public class FileInputReader {
         guiConnector.resetText();
         guiConnector.setupDragAndDropEvent();
 
-        guiConnector.performMoveUIUpdate(playerIDs, playerHands, Game.getGame().getPlayingField().convertToTokenTypeArray(), Game.getGame().pointsArray());
+        guiConnector.performMoveUIUpdate(playerIDs, playerHands,
+                Game.getGame().getPlayingField().convertToTokenTypeArray(),
+                Game.getGame().pointsArray());
         guiConnector.startGamePopUp();
     }
 
@@ -142,9 +151,12 @@ public class FileInputReader {
      */
     private static boolean checkInvalidConfig(final GameData gameData) {
         //invalid player config, cant be 0 and needs to load 4 players
-        if (gameData.getPlayers().length != 4) return true;
-        if (gameData.getCurrentPlayer() > 3 || gameData.getCurrentPlayer() < 0)
+        if (gameData.getPlayers().length != Constants.NUMBER_4) {
             return true;
+        }
+        if (gameData.getCurrentPlayer() > Constants.NUMBER_3 || gameData.getCurrentPlayer() < 0) {
+            return true;
+        }
 
         //turned off number of active players
         int ids = 0;
@@ -156,29 +168,56 @@ public class FileInputReader {
             }
         }
         //invalid if no players are active
-        if (active == 0 || ids % 2 == 0 && active != 4) return true;
+        if (active == 0 || ids % 2 == 0 && active != Constants.NUMBER_4) {
+            return true;
+        }
 
         //check the minimum size of a game
-        if (gameData.getField().length < 2) return true;
+        if (gameData.getField().length < 2) {
+            return true;
+        }
         //check rows and column size equal
         for (int[] row : gameData.getField()) {
-            if (row.length != gameData.getField()[0].length || row.length != gameData.getField().length) return true;
+            if (row.length != gameData.getField()[0].length || row.length
+                    != gameData.getField().length) {
+                return true;
+            }
         }
 
         //current player must be active
-        if (!gameData.getPlayers()[gameData.getCurrentPlayer()].isActive()) return true;
+        if (!gameData.getPlayers()[gameData.getCurrentPlayer()].isActive()) {
+            return true;
+        }
 
 
-        //invalid if hands of players are 0 or above 4 (interpreted, that it should be possible to load players with less hand tokens and fill them up
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive() && player.getHand().length == 0 || !player.isActive() && player.getHand().length > 0)) return true;
-        //Invalid if the IDs of the tokens are below 0 or above 10 (would need to be changed if the game should be started with less or more unique tokens)
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.getHand()).anyMatch(token -> token < 0 || token > 10))) return true;
+        //invalid if hands of players are 0 or above 4 (interpreted, that it should be possible to
+        // load players with less hand tokens and fill them up
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.isActive()
+                && player.getHand().length == 0 || !player.isActive()
+                && player.getHand().length > 0)) {
+            return true;
+        }
+        //Invalid if the IDs of the tokens are below 0 or above 10
+        // (would need to be changed if the game should be started with less or more unique tokens)
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> Arrays.stream(player.getHand()).
+                anyMatch(token -> token < 0 || token > Constants.NUMBER_10))) {
+            return true;
+        }
         //same as above for the game field tokens
-        if (Arrays.stream(gameData.getField()).anyMatch(fieldRow -> Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token > 10))) return true;
+        if (Arrays.stream(gameData.getField()).anyMatch(fieldRow ->
+                Arrays.stream(fieldRow).anyMatch(token -> token < 0 || token
+                        > Constants.NUMBER_10))) {
+            return true;
+        }
         //hand must contain 4 tokens
-        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length > Constants.HAND_SIZE)) return true;
+        if (Arrays.stream(gameData.getPlayers()).anyMatch(player -> player.getHand().length
+                > Constants.HAND_SIZE)) {
+            return true;
+        }
         //special tokens need to fit the game rules
-        return Arrays.stream(gameData.getUsedActionTiles()).anyMatch(special -> special > Constants.AMOUNT_ACTION_TOKENS) || gameData.getUsedActionTiles().length > Constants.UNIQUE_ACTION_TOKENS;
+        return Arrays.stream(gameData.getUsedActionTiles()).anyMatch(special -> special
+                > Constants.AMOUNT_ACTION_TOKENS) || gameData.getUsedActionTiles().length
+                > Constants.UNIQUE_ACTION_TOKENS;
     }
 
     /**
@@ -194,11 +233,13 @@ public class FileInputReader {
             //checks if the player is an AI player or a normal player
             if (!playerData.isAI()) {
                 Player player = new Player(i, playerData.isActive(), playerData.getName());
-                Arrays.stream(playerData.getHand()).forEach(token -> player.addTokenToHand(new Token(TokenType.getTokenType(token))));
+                Arrays.stream(playerData.getHand()).forEach(token ->
+                        player.addTokenToHand(new Token(TokenType.getTokenType(token))));
                 players.add(player);
             } else {
                 AI ai = new AI(i, playerData.isActive(), playerData.getName());
-                Arrays.stream(playerData.getHand()).forEach(token -> ai.addTokenToHand(new Token(TokenType.getTokenType(token))));
+                Arrays.stream(playerData.getHand()).forEach(token ->
+                        ai.addTokenToHand(new Token(TokenType.getTokenType(token))));
                 players.add(ai);
             }
         }

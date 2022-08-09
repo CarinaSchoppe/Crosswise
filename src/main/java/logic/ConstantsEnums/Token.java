@@ -19,8 +19,12 @@ public record Token(TokenType tokenType) {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Token token)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Token token)) {
+            return false;
+        }
 
         return tokenType() == token.tokenType();
     }

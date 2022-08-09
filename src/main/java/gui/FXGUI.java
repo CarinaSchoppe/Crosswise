@@ -72,7 +72,8 @@ public class FXGUI implements GUIConnector {
     private ClickEventSave clickEventSave = null;
     private AnimationTime animationTime = AnimationTime.MIDDLE;
     private ImageView[][] gridImages;
-    private final ImageView[][] handImages = new ImageView[Constants.PLAYER_COUNT][Constants.HAND_SIZE];
+    private final ImageView[][] handImages = new ImageView[Constants.PLAYER_COUNT]
+            [Constants.HAND_SIZE];
     private final Map<ImageView, TokenType> gridImagesTokens;
     private final Map<ImageView, TokenType> handImagesTokens;
     private boolean checkForMouse = false;
@@ -104,11 +105,13 @@ public class FXGUI implements GUIConnector {
      * @param imageReplacer           Image of the replacer special token counter
      * @param imageRemover            Image of the remover special token counter
      */
-    public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne, GridPane playerHandTwo,
-                 GridPane playerHandThree, GridPane playerHandFour, Label currentPlayerText, GridPane gameGrid,
-                 Label moverAmountText, Label swapperAmountText, Label replacerAmountText, Label removerAmountText,
-                 GridPane horizontalPointsGrid, GridPane verticalPointsGrid, Label sumPointsVerticalTeam,
-                 Label sumPointsHorizontalTeam, ImageView imageSwapper, ImageView imageMover,
+    public FXGUI(CheckMenuItem showComputerHandButton, GridPane playerHandOne,
+                 GridPane playerHandTwo, GridPane playerHandThree, GridPane playerHandFour,
+                 Label currentPlayerText, GridPane gameGrid, Label moverAmountText,
+                 Label swapperAmountText, Label replacerAmountText, Label removerAmountText,
+                 GridPane horizontalPointsGrid, GridPane verticalPointsGrid,
+                 Label sumPointsVerticalTeam, Label sumPointsHorizontalTeam,
+                 ImageView imageSwapper, ImageView imageMover,
                  ImageView imageReplacer, ImageView imageRemover) {
         this.playerHandOne = playerHandOne;
         this.playerHandTwo = playerHandTwo;
@@ -141,12 +144,13 @@ public class FXGUI implements GUIConnector {
      * @param color Color of the team
      */
     private void blinkMethod(Color color) {
-        KeyFrame kfP = new KeyFrame(Duration.seconds(1), new KeyValue(currentPlayerText.textFillProperty(), color));
-        Timeline TIMER = new Timeline();
-        TIMER.getKeyFrames().add(kfP);
-        TIMER.setCycleCount(Animation.INDEFINITE);
-        TIMER.setAutoReverse(true);
-        TIMER.play();
+        KeyFrame kfP = new KeyFrame(Duration.seconds(1),
+                new KeyValue(currentPlayerText.textFillProperty(), color));
+        Timeline timer = new Timeline();
+        timer.getKeyFrames().add(kfP);
+        timer.setCycleCount(Animation.INDEFINITE);
+        timer.setAutoReverse(true);
+        timer.play();
     }
 
     /**
@@ -201,10 +205,11 @@ public class FXGUI implements GUIConnector {
             default -> throw new NoTokenException("Unknown token type!");
         };
         imageView.setImage(new Image(type.getImagePathGolden()));
-        //create, start and end scheduler which will replace the image with the normal image after the animation time
+        //create, start and end scheduler which will replace the image with the normal image after
+        // the animation time
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.schedule(() -> imageView.setImage(new Image(type.getImagePathNormal())), animationTime.getTime()
-                * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
+        scheduler.schedule(() -> imageView.setImage(new Image(type.getImagePathNormal())),
+                animationTime.getTime() * Constants.ANIMATION_TIME, TimeUnit.SECONDS);
         scheduler.shutdown();
     }
 
@@ -256,7 +261,8 @@ public class FXGUI implements GUIConnector {
     public void notifyTurn(String playerName, int playerID) {
         //let current thread show an alert with the name and ID of the current player
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player: \"" + playerName + "\" with ID: \"" + playerID + ", it's your turn!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player: \""
+                    + playerName + "\" with ID: \"" + playerID + ", it's your turn!");
             alert.setTitle("Next Turn");
             alert.setHeaderText("Next Players Turn");
             alert.show();
@@ -305,7 +311,8 @@ public class FXGUI implements GUIConnector {
      * @param pointsMap new points for each line
      */
     @Override
-    public void performMoveUIUpdate(int[] players, TokenType[][] tokens, TokenType[][] gameField, Integer[] pointsMap) {
+    public void performMoveUIUpdate(int[] players, TokenType[][] tokens, TokenType[][] gameField,
+                                    Integer[] pointsMap) {
         for (int player : players) {
             updatePlayerHandIcons(player, tokens[player]);
         }
@@ -398,8 +405,10 @@ public class FXGUI implements GUIConnector {
                 gameGrid.add(imgNew, columns, rows);
 
                 //the image shall resize when the cell resizes
-                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().divide(Constants.GAMEGRID_SIZE).subtract(12 / Constants.GAMEGRID_SIZE));
-                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().divide(Constants.GAMEGRID_SIZE).subtract(12 / Constants.GAMEGRID_SIZE));
+                imgNew.fitWidthProperty().bind(gameGrid.widthProperty().
+                        divide(Constants.GAMEGRID_SIZE).subtract(12 / Constants.GAMEGRID_SIZE));
+                imgNew.fitHeightProperty().bind(gameGrid.heightProperty().
+                        divide(Constants.GAMEGRID_SIZE).subtract(12 / Constants.GAMEGRID_SIZE));
             }
         }
         //generate points grids
@@ -434,9 +443,11 @@ public class FXGUI implements GUIConnector {
             vertLabel.setText("0");
             vertLabel.setFont(new Font("Arial", 30));
 
-            vertLabel.prefWidthProperty().bind(verticalPointsGrid.widthProperty().divide(Constants.GAMEGRID_SIZE).add(20));
+            vertLabel.prefWidthProperty().bind(verticalPointsGrid.widthProperty().
+                    divide(Constants.GAMEGRID_SIZE).add(20));
             vertLabel.prefHeightProperty().bind(verticalPointsGrid.heightProperty());
-            horiLabel.prefHeightProperty().bind(horizontalPointsGrid.heightProperty().divide(Constants.GAMEGRID_SIZE));
+            horiLabel.prefHeightProperty().bind(horizontalPointsGrid.heightProperty().
+                    divide(Constants.GAMEGRID_SIZE));
             horiLabel.prefWidthProperty().bind(horizontalPointsGrid.widthProperty());
 
             vertLabel.setAlignment(Pos.CENTER);
@@ -465,7 +476,7 @@ public class FXGUI implements GUIConnector {
         int sumHorizontal = 0;
         for (Node child : horizontalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
-            if (pointsMap[counterH] < -100) {
+            if (pointsMap[counterH] < Constants.OUT_OF_REACH) {
                 currLabel.setText("Win");
             } else {
                 currLabel.setText(pointsMap[counterH].toString());
@@ -473,7 +484,7 @@ public class FXGUI implements GUIConnector {
             sumHorizontal = sumHorizontal + pointsMap[counterH];
             counterH--;
         }
-        if (sumHorizontal < -100) {
+        if (sumHorizontal < Constants.OUT_OF_REACH) {
             sumPointsHorizontalTeam.setText("Win");
         } else {
             sumPointsHorizontalTeam.setText(Integer.toString(sumHorizontal));
@@ -484,7 +495,7 @@ public class FXGUI implements GUIConnector {
         int counterV = Constants.GAMEGRID_SIZE;
         for (Node child : verticalPointsGrid.getChildren()) {
             Label currLabel = (Label) child;
-            if (pointsMap[counterV] < -100) {
+            if (pointsMap[counterV] < Constants.OUT_OF_REACH) {
                 currLabel.setText("Win");
             } else {
                 currLabel.setText(pointsMap[counterV].toString());
@@ -492,7 +503,7 @@ public class FXGUI implements GUIConnector {
             sumVertical = sumVertical + pointsMap[counterV];
             counterV++;
         }
-        if (sumVertical < -100) {
+        if (sumVertical < Constants.OUT_OF_REACH) {
             sumPointsVerticalTeam.setText("Win");
         } else {
             sumPointsVerticalTeam.setText(Integer.toString(sumVertical));
@@ -520,7 +531,8 @@ public class FXGUI implements GUIConnector {
     public void moverAmountText() {
         Platform.runLater(() -> {
             moverAmountText.setText(Integer.parseInt(moverAmountText.getText()) + 1 + "");
-            if (Objects.equals(moverAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+            if (Objects.equals(moverAmountText.getText(),
+                    Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
                 imageMover.setOpacity(0.5);
             }
         });
@@ -533,7 +545,8 @@ public class FXGUI implements GUIConnector {
     public void swapperAmountText() {
         Platform.runLater(() -> {
             swapperAmountText.setText(Integer.parseInt(swapperAmountText.getText()) + 1 + "");
-            if (Objects.equals(swapperAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+            if (Objects.equals(swapperAmountText.getText(),
+                    Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
                 imageSwapper.setOpacity(0.5);
             }
         });
@@ -546,7 +559,8 @@ public class FXGUI implements GUIConnector {
     public void replacerAmountText() {
         Platform.runLater(() -> {
             replacerAmountText.setText(Integer.parseInt(replacerAmountText.getText()) + 1 + "");
-            if (Objects.equals(replacerAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+            if (Objects.equals(replacerAmountText.getText(),
+                    Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
                 imageReplacer.setOpacity(0.5);
             }
         });
@@ -559,7 +573,8 @@ public class FXGUI implements GUIConnector {
     public void removerAmountText() {
         Platform.runLater(() -> {
             removerAmountText.setText(Integer.parseInt(removerAmountText.getText()) + 1 + "");
-            if (Objects.equals(removerAmountText.getText(), Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
+            if (Objects.equals(removerAmountText.getText(),
+                    Integer.toString(Constants.AMOUNT_ACTION_TOKENS))) {
                 imageRemover.setOpacity(0.5);
             }
         });
@@ -583,7 +598,9 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void addTokenImagesForPlayer1(TokenType[] tokens) {
-        if (tokens == null) return;
+        if (tokens == null) {
+            return;
+        }
 
         int cellWidth = (int) playerHandOne.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandOne.getHeight() / Constants.HAND_SIZE;
@@ -591,7 +608,9 @@ public class FXGUI implements GUIConnector {
         playerHandOne.getChildren().clear();
 
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) break;
+            if (tokens[i] == null) {
+                break;
+            }
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setFitHeight(cellHeight);
             imageView.setFitWidth(cellWidth);
@@ -600,7 +619,8 @@ public class FXGUI implements GUIConnector {
             playerHandOne.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
-            imageView.fitWidthProperty().bind(playerHandOne.widthProperty().divide(Constants.GAMEGRID_SIZE));
+            imageView.fitWidthProperty().bind(playerHandOne.widthProperty().
+                    divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandOne.heightProperty());
         }
         setDragEventsForPlayerHand(playerHandOne);
@@ -613,14 +633,18 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void addTokenImagesForPlayer2(TokenType[] tokens) {
-        if (tokens == null) return;
+        if (tokens == null) {
+            return;
+        }
 
         int cellWidth = (int) playerHandTwo.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandTwo.getHeight() / Constants.HAND_SIZE;
         //remove all previous images
         playerHandTwo.getChildren().clear();
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) break;
+            if (tokens[i] == null) {
+                break;
+            }
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token2:" + i);
             imageView.setFitHeight(cellHeight);
@@ -631,7 +655,8 @@ public class FXGUI implements GUIConnector {
             handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
             imageView.fitWidthProperty().bind(playerHandTwo.widthProperty());
-            imageView.fitHeightProperty().bind(playerHandTwo.heightProperty().divide(Constants.GAMEGRID_SIZE));
+            imageView.fitHeightProperty().bind(playerHandTwo.heightProperty().
+                    divide(Constants.GAMEGRID_SIZE));
         }
         setDragEventsForPlayerHand(playerHandTwo);
     }
@@ -643,14 +668,18 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void addTokenImagesForPlayer3(TokenType[] tokens) {
-        if (tokens == null) return;
+        if (tokens == null) {
+            return;
+        }
 
         int cellWidth = (int) playerHandThree.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandThree.getHeight() / Constants.HAND_SIZE;
         //remove all previous images
         playerHandThree.getChildren().clear();
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) break;
+            if (tokens[i] == null) {
+                break;
+            }
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token3:" + i);
             imageView.setFitHeight(cellHeight);
@@ -659,7 +688,8 @@ public class FXGUI implements GUIConnector {
             playerHandThree.add(imageView, i, 0);
             handImagesTokens.put(imageView, tokens[i]);
             //make the tokens resizable and fit the game grid
-            imageView.fitWidthProperty().bind(playerHandThree.widthProperty().divide(Constants.GAMEGRID_SIZE));
+            imageView.fitWidthProperty().bind(playerHandThree.widthProperty().
+                    divide(Constants.GAMEGRID_SIZE));
             imageView.fitHeightProperty().bind(playerHandThree.heightProperty());
         }
         setDragEventsForPlayerHand(playerHandThree);
@@ -672,13 +702,17 @@ public class FXGUI implements GUIConnector {
      */
     @Override
     public void addTokenImagesForPlayer4(TokenType[] tokens) {
-        if (tokens == null) return;
+        if (tokens == null) {
+            return;
+        }
         int cellWidth = (int) playerHandFour.getWidth() / Constants.HAND_SIZE;
         int cellHeight = (int) playerHandFour.getHeight() / Constants.HAND_SIZE;
         //remove all previous images
         playerHandFour.getChildren().clear();
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i] == null) break;
+            if (tokens[i] == null) {
+                break;
+            }
             ImageView imageView = new ImageView(tokens[i].getImagePathNormal());
             imageView.setId("token4:" + i);
             imageView.setFitHeight(cellHeight);
@@ -715,7 +749,8 @@ public class FXGUI implements GUIConnector {
         } else if (wonType != null) {
             assert lost != null;
             //if a specific team won, display the team and the points of both teams
-            message = "Team: " + wonType.getTeamName() + " won, because they have more points (" + points + ") than the other team (" + lost.getPoints() + ")!";
+            message = "Team: " + wonType.getTeamName() + " won, because they have more points "
+                    + "(" + points + ") than the other team (" + lost.getPoints() + ")!";
         } else {
             //if draw
             message = "Draw! Both teams got the same amount of points (" + points + ")!";
@@ -752,9 +787,9 @@ public class FXGUI implements GUIConnector {
 
             //Game was started with another faulty config
             case 2 -> alert = new Alert(Alert.AlertType.INFORMATION, "The game that should be loaded is not allowed to be loaded!");
+            default -> throw new IllegalArgumentException();
         }
         //Set alert title and show the alert
-        assert alert != null;
         alert.setTitle("Wrong configuration");
         alert.setHeaderText("Wrong configuration!");
         alert.showAndWait();
@@ -776,7 +811,7 @@ public class FXGUI implements GUIConnector {
         if (!hideAll) {
             if (isAI) {
                 if (showComputerHandButton.isSelected()) {
-                        handVisibleSwitch(playerID);
+                    handVisibleSwitch(playerID);
                 }
             } else {
                 handVisibleSwitch(playerID);
@@ -943,8 +978,9 @@ public class FXGUI implements GUIConnector {
                 for (TokenType token : row) {
                     if (token != TokenType.NONE) {
                         amount += 1;
-                        if (amount >= 2)
+                        if (amount >= 2) {
                             break;
+                        }
                     }
                 }
             }
@@ -1006,11 +1042,14 @@ public class FXGUI implements GUIConnector {
     private void specialClickAction() {
         disableGUIElementes();
         if (clickToken.equals("MOVER")) {
-            Game.getGame().playerMoverTokenMove(clickXOrigin, clickYOrigin, clickEventSave.getPosX(), clickEventSave.getPosY());
+            Game.getGame().playerMoverTokenMove(clickXOrigin, clickYOrigin,
+                    clickEventSave.getPosX(), clickEventSave.getPosY());
         } else if (clickToken.equals("SWAPPER")) {
-            Game.getGame().playerSwapperTokenMove(clickXOrigin, clickYOrigin, clickEventSave.getPosX(), clickEventSave.getPosY());
+            Game.getGame().playerSwapperTokenMove(clickXOrigin, clickYOrigin,
+                    clickEventSave.getPosX(), clickEventSave.getPosY());
         } else {
-            Game.getGame().playerReplacerTokenMove(clickXOrigin, clickYOrigin, clickEventSave.getHandPosition());
+            Game.getGame().playerReplacerTokenMove(clickXOrigin, clickYOrigin,
+                    clickEventSave.getHandPosition());
         }
     }
 
@@ -1024,25 +1063,26 @@ public class FXGUI implements GUIConnector {
             //for mover action
             case "MOVER" -> {
                 //must be a token on the grid, must be an empty token
-                return clickEventSave.isGrid() &&
-                        gridImagesTokens.get(gridImages[clickEventSave.getPosX()]
+                return clickEventSave.isGrid()
+                        && gridImagesTokens.get(gridImages[clickEventSave.getPosX()]
                                 [clickEventSave.getPosY()]) == TokenType.NONE;
             }
             //for swapper action
             case "SWAPPER" -> {
-                //must be a token on the grid, must be a non-empty field, must not be the same field as the original one
-                return clickEventSave.isGrid() &&
-                        gridImagesTokens.get(gridImages[clickEventSave.getPosX()]
-                                [clickEventSave.getPosY()]) != TokenType.NONE &&
-                        !(clickEventSave.getPosX().equals(clickXOrigin) &&
-                                clickEventSave.getPosY().equals(clickYOrigin));
+                //must be a token on the grid, must be a non-empty field, must not be the same
+                // field as the original one
+                return clickEventSave.isGrid()
+                        && gridImagesTokens.get(gridImages[clickEventSave.getPosX()]
+                                [clickEventSave.getPosY()]) != TokenType.NONE
+                        && !(clickEventSave.getPosX().equals(clickXOrigin)
+                        && clickEventSave.getPosY().equals(clickYOrigin));
             }
             //for replacer action
             case "REPLACER" -> {
                 //must be a token on the hand, must be a SymbolToken
-                return !clickEventSave.isGrid() &&
-                        !handImagesTokens.get(handImages[Game.getGame().getCurrentPlayer().getPlayerID()]
-                                [clickEventSave.getHandPosition()]).isSpecial();
+                return !clickEventSave.isGrid()
+                        && !handImagesTokens.get(handImages[Game.getGame().getCurrentPlayer().
+                                getPlayerID()][clickEventSave.getHandPosition()]).isSpecial();
             }
             default -> throw new RuntimeException("Invalid token type");
         }

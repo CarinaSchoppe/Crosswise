@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Jacob Klövekorn
  */
-public class FileOutputWriter {
+public final class FileOutputWriter {
     /**
      * Constructor
      */
@@ -33,11 +33,15 @@ public class FileOutputWriter {
     public static void writeJSON(Scene scene) {
         File file = FileInputReader.selectFile(scene);
 
-        if (file == null) return;
+        if (file == null) {
+            return;
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(generateGameData(Game.getGame().getPlayers(),
-                Game.getGame().getCurrentPlayer().getPlayerID(), Game.getGame().getPlayingField().getSize(),
-                Game.getGame().getPlayingField().getFieldMap(), Game.getGame().getUsedActionTokens()));
+                Game.getGame().getCurrentPlayer().getPlayerID(),
+                Game.getGame().getPlayingField().getSize(),
+                Game.getGame().getPlayingField().getFieldMap(),
+                Game.getGame().getUsedActionTokens()));
         //write the json to a file
         try (PrintWriter writer = new java.io.PrintWriter(file)) {
             writer.write(json);
@@ -56,13 +60,19 @@ public class FileOutputWriter {
      * @param usedActionTokens List of used action tokens
      * @return GameData instance with all the saved data from the current running game
      */
-    private static GameData generateGameData(List<Player> gamePlayers, int currentPlayerID, int playingFieldSize, Position[][] playingFieldMap, List<Token> usedActionTokens) {
+    private static GameData generateGameData(List<Player> gamePlayers, int currentPlayerID,
+                                             int playingFieldSize, Position[][] playingFieldMap,
+                                             List<Token> usedActionTokens) {
 
         PlayerData[] players = new PlayerData[gamePlayers.size()];
         for (int i = 0; i < gamePlayers.size(); i++) {
-            players[i] = generatePlayerData(gamePlayers.get(i).getHandTokens(), gamePlayers.get(i).getName(), gamePlayers.get(i) instanceof AI, gamePlayers.get(i).isActive());
+            players[i] = generatePlayerData(gamePlayers.get(i).getHandTokens(),
+                    gamePlayers.get(i).getName(), gamePlayers.get(i) instanceof AI,
+                    gamePlayers.get(i).isActive());
         }
-        return new GameData(players, currentPlayerID, generateCorrespondingPlayingField(playingFieldSize, playingFieldMap), generateUsedActionTilesArray(usedActionTokens));
+        return new GameData(players, currentPlayerID,
+                generateCorrespondingPlayingField(playingFieldSize, playingFieldMap),
+                generateUsedActionTilesArray(usedActionTokens));
 
     }
 
@@ -75,7 +85,8 @@ public class FileOutputWriter {
      * @param isActive boolean, if the player is active
      * @return PlayerData instance for a single player
      */
-    private static PlayerData generatePlayerData(List<Token> tokens, String playerName, boolean isAI, boolean isActive) {
+    private static PlayerData generatePlayerData(List<Token> tokens, String playerName,
+                                                 boolean isAI, boolean isActive) {
         int[] hand = new int[tokens.size()];
         for (int i = 0; i < tokens.size(); i++) {
             hand[i] = tokens.get(i).tokenType().getValue();
@@ -90,7 +101,8 @@ public class FileOutputWriter {
      * @param fieldMap Game field of positions
      * @return int array translation out of the current game
      */
-    private static int[][] generateCorrespondingPlayingField(int playingFieldSize, Position[][] fieldMap) {
+    private static int[][] generateCorrespondingPlayingField(int playingFieldSize,
+                                                             Position[][] fieldMap) {
         int[][] field = new int[playingFieldSize][playingFieldSize];
         for (int i = 0; i < playingFieldSize; i++) {
             for (int j = 0; j < playingFieldSize; j++) {
@@ -105,7 +117,8 @@ public class FileOutputWriter {
      * Generate the used action tokens from a list into an array
      *
      * @param usedActionTokens List of used actionTokens
-     * @return int array, where the number for each array field is the amount of used tokens for the specific token
+     * @return int array, where the number for each array field is the amount of used tokens for the
+     * specific token
      */
     private static int[] generateUsedActionTilesArray(List<Token> usedActionTokens) {
         int[] usedActionTiles = new int[Constants.UNIQUE_ACTION_TOKENS];

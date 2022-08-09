@@ -146,9 +146,10 @@ public class FXMLController implements Initializable {
         //fit the grid into the wrapped h-box and v-box setup
         fitHVBox();
         //create new FX-GUI and give it all the needed javafx elements, it needs to interact with
-        this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne, playerHandTwo, playerHandThree,
-                playerHandFour, currentPlayerText, gameGrid, moverAmountText, swapperAmountText, replacerAmountText,
-                removerAmountText, horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
+        this.guiConnector = new FXGUI(showComputerHandButton, playerHandOne,
+                playerHandTwo, playerHandThree, playerHandFour, currentPlayerText, gameGrid,
+                moverAmountText, swapperAmountText, replacerAmountText, removerAmountText,
+                horizontalPointsGrid, verticalPointsGrid, sumPointsVerticalTeam,
                 sumPointsHorizontalTeam, imageSwapper, imageMover, imageReplacer, imageRemover);
         //setup new createGame window when the game starts
         CreateGame createGame = new CreateGame(guiConnector);
@@ -311,6 +312,7 @@ public class FXMLController implements Initializable {
                 this.fastAnimationSpeedButton.setSelected(false);
                 guiConnector.changeCurrentAnimationTime(AnimationTime.SLOW);
             }
+            default -> throw new IllegalArgumentException();
         }
     }
 

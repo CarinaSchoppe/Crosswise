@@ -351,11 +351,14 @@ public class Game {
 
 
         if (CrossWise.DEBUG) {
-            System.out.println("Current player is: " + currentPlayer.getName() + " with ID: " + currentPlayer.getPlayerID());
+            System.out.println("Current player is: " + currentPlayer.getName()
+                    + " with ID: " + currentPlayer.getPlayerID());
         }
-        //if the player is an AI player, let the AI make their move, otherwise notify the next player
+        //if the player is an AI player, let the AI make their move, otherwise notify
+        // the next player
         if (currentPlayer instanceof AI ai) {
-            //add the new move to the thread, so the player move will be finished until the AI move starts
+            //add the new move to the thread, so the player move will be finished until the AI
+            // move starts
             try {
                 Platform.runLater(ai::makeMove);
             } catch (Exception ignored) {
@@ -386,7 +389,8 @@ public class Game {
      * @param y y coordinate of the position on the board
      */
     public void playerRemoverTokenMove(Integer x, Integer y) {
-        currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken(TokenType.REMOVER), new Position(x, y));
+        currentPlayer.removerTokenTurn(currentPlayer.getCorrespondingToken(TokenType.REMOVER),
+                new Position(x, y));
         turnDone();
     }
 
@@ -399,7 +403,8 @@ public class Game {
      * @param toY   y coordinate of the end position on the board
      */
     public void playerMoverTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
-        currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken(TokenType.MOVER), new Position(fromX, fromY), new Position(toX, toY));
+        currentPlayer.moverTokenTurn(currentPlayer.getCorrespondingToken(TokenType.MOVER),
+                new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 
@@ -412,7 +417,8 @@ public class Game {
      * @param toY   y coordinate of the end position on the board
      */
     public void playerSwapperTokenMove(Integer fromX, Integer fromY, Integer toX, Integer toY) {
-        currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken(TokenType.SWAPPER), new Position(fromX, fromY), new Position(toX, toY));
+        currentPlayer.swapperTokenTurn(currentPlayer.getCorrespondingToken(TokenType.SWAPPER),
+                new Position(fromX, fromY), new Position(toX, toY));
         turnDone();
     }
 
@@ -434,7 +440,9 @@ public class Game {
      * @return true, if the game is over
      */
     private boolean handleOver() {
-        if (stop) return true;
+        if (stop) {
+            return true;
+        }
         Map<Boolean, Team> over = isGameOver();
         //if there weren't any players in the game from the beginning
         if (players.isEmpty()) {
@@ -446,19 +454,23 @@ public class Game {
             Team.givePoints();
             //hande game if there was a draw
             if (team == null) {
-                if (CrossWise.DEBUG)
+                if (CrossWise.DEBUG) {
                     System.out.println("Game is over, but no team has won!");
+                }
                 guiConnector.gameWonNotifier(null, Team.getHorizontalTeam().getPoints(), false);
             } else {
                 //handle game won with a specific team won
                 guiConnector.gameWonNotifier(team.getTeamType(), team.getPoints(), team.isRowWin());
                 if (CrossWise.DEBUG) {
-                    System.out.println(Team.getVerticalTeam().getPoints() + " " + Team.getHorizontalTeam().getPoints());
-                    System.out.println("Game is over, team " + team.getTeamType().getTeamName() + " has won!");
+                    System.out.println(Team.getVerticalTeam().getPoints() + " "
+                            + Team.getHorizontalTeam().getPoints());
+                    System.out.println("Game is over, team " + team.getTeamType().getTeamName()
+                            + " has won!");
                 }
             }
-            if (CrossWise.DEBUG)
+            if (CrossWise.DEBUG) {
                 System.out.println(System.currentTimeMillis() - CrossWise.time);
+            }
             return true;
         }
         return false;
@@ -474,8 +486,9 @@ public class Game {
         Team.setHorizontalTeam(new Team(TeamType.HORIZONTAL));
         Team.setDeactiveTeam(new Team(TeamType.DEACTIVE));
         handleOver();
-        if (CrossWise.DEBUG)
+        if (CrossWise.DEBUG) {
             System.out.println("Game canceled!");
+        }
         //kill the this.thread
         thread.interrupt();
     }
@@ -494,8 +507,9 @@ public class Game {
      * Starts the Game
      */
     private void start() {
-        if (handleOver())
+        if (handleOver()) {
             return;
+        }
         GameLogger.logGameSetupLog();
         //check for faulty setup of the players where both teams are empty
         if (Team.getHorizontalTeam().getPlayers().isEmpty() && Team.getVerticalTeam().getPlayers().isEmpty()) {
@@ -504,19 +518,20 @@ public class Game {
         //check, if both teams have an equal amount of players, if not create an already and return
         if (Team.getHorizontalTeam().getPlayers().size() != Team.getVerticalTeam().getPlayers().size()) {
             faultyStartup(1);
-            if (CrossWise.UI)
+            if (CrossWise.UI) {
                 return;
-            else
+            } else {
                 throw new IllegalArgumentException("Number of players in horizontal team is not equal to number of players in vertical team!");
+            }
         }
         //check, if the config has the right amount of active players in it and the required minimum
         if (players.stream().filter(Player::isActive).toList().size() < Constants.MIN_PLAYER_SIZE || players.stream().filter(Player::isActive).toList().size() % 2 != 0) {
             faultyStartup(2);
-            if (CrossWise.UI)
+            if (CrossWise.UI) {
                 return;
-            else
+            } else {
                 throw new IllegalArgumentException("Not enough players or not even number of players!");
-
+            }
         }
         //shows hand of the current player
         guiConnector.showHand(currentPlayer instanceof AI, currentPlayer.getPlayerID(), false);
@@ -543,8 +558,9 @@ public class Game {
             return;
         }
         Team.givePoints();
-        if (currentPlayer == null)
+        if (currentPlayer == null) {
             game.cancel();
+        }
 
         //if the turn is over, do nothing
         if (handleOver()) {
@@ -553,8 +569,9 @@ public class Game {
         //otherwise try to draw a token
         currentPlayer.drawToken();
         try {
-            if (CrossWise.UI)
+            if (CrossWise.UI) {
                 Thread.sleep(CrossWise.DELAY);
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -662,8 +679,10 @@ public class Game {
                         break;
                     }
                 } else {
-                    if (!(field.getFieldMap()[i][j].getToken().tokenType() == TokenType.NONE || field.getFieldMap()[i][j].getToken().tokenType() != current))
+                    if (!(field.getFieldMap()[i][j].getToken().tokenType() == TokenType.NONE
+                            || field.getFieldMap()[i][j].getToken().tokenType() != current)) {
                         continue;
+                    }
                     equal = false;
                     current = null;
                     break;
@@ -696,7 +715,8 @@ public class Game {
                         break;
                     }
                 } else {
-                    if (!(field.getFieldMap()[j][i].getToken().tokenType() == TokenType.NONE || field.getFieldMap()[j][i].getToken().tokenType() != current))
+                    if (!(field.getFieldMap()[j][i].getToken().tokenType() == TokenType.NONE
+                            || field.getFieldMap()[j][i].getToken().tokenType() != current))
                         continue;
                     equal = false;
                     current = null;

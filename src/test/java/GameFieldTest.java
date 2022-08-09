@@ -53,7 +53,7 @@ class GameFieldTest {
 
 
     private boolean allRowsEqual(PlayingField field) {
-        //check if all rows have the same length than the columns
+        //check if all rows have the same length as the columns
         for (int i = 0; i < field.getSize(); i++) {
             if (field.getFieldMap()[i].length != field.getFieldMap().length) {
                 return false;

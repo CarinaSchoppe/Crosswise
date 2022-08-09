@@ -3,6 +3,8 @@ package logic.util;
 
 import logic.ConstantsEnums.Token;
 
+import java.util.Objects;
+
 /**
  * Class to store a specific position on the game grid of the hand of a player
  *
@@ -57,14 +59,20 @@ public class Position {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Position position)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Position position)) {
+            return false;
+        }
 
-        if (getX() != position.getX()) return false;
+        if (!Objects.equals(getX(), position.getX())) {
+            return false;
+        }
         if (getY() == null && position.getY() == null) {
             return true;
         } else {
-            return getY() == position.getY();
+            return Objects.equals(getY(), position.getY());
         }
     }
 
@@ -98,11 +106,7 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position{" +
-                "y=" + x +
-                ", x=" + y +
-                "hand=" +
-                '}';
+        return "Position{" + "y=" + x + ", x=" + y + "hand=" + '}';
     }
 
     /**
@@ -111,9 +115,7 @@ public class Position {
      * @return toString string
      */
     public String toStringWithToken() {
-        return "Position{" +
-                "y=" + x +
-                ", x=" + y + ", token=" + token.tokenType().getValue() +
-                '}';
+        return "Position{" + "y=" + x + ", x=" + y + ", token=" + token.tokenType().getValue()
+                + '}';
     }
 }

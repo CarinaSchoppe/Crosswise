@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Jacob Klövekorn
  */
-@SuppressWarnings({"unchecked", "MethodDoesntCallSuperMethod"})
+@SuppressWarnings({"MethodDoesntCallSuperMethod"})
 public class Team {
     /**
      * Static instance of a horizontal team
@@ -144,8 +144,9 @@ public class Team {
     @Override
     public boolean equals(Object other) {
         if (other instanceof Team team) {
-            if (teamType != team.teamType)
+            if (teamType != team.teamType) {
                 return false;
+            }
             return rowWin == team.rowWin;
         }
         return false;

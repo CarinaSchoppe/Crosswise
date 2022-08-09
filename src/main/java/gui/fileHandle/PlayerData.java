@@ -20,24 +20,33 @@ public class PlayerData {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PlayerData that)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PlayerData that)) {
+            return false;
+        }
 
-        if (isActive() != that.isActive()) return false;
-        if (isAI() != that.isAI()) return false;
-        if (!Objects.equals(name, that.name)) return false;
+        if (isActive() != that.isActive()) {
+            return false;
+        }
+        if (isAI() != that.isAI()) {
+            return false;
+        }
+        if (!Objects.equals(name, that.name)) {
+            return false;
+        }
         return Arrays.equals(hand, that.hand);
     }
 
-
     @Override
     public String toString() {
-        return "PlayerData{" +
-                "name='" + name + '\'' +
-                ", isActive=" + isActive +
-                ", isAI=" + isAI +
-                ", hand=" + Arrays.toString(hand) +
-                '}';
+        return "PlayerData{"
+                + "name='" + name + '\''
+                + ", isActive=" + isActive
+                + ", isAI=" + isAI
+                + ", hand=" + Arrays.toString(hand)
+                + '}';
     }
 
 

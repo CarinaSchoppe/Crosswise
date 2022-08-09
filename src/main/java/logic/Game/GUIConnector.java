@@ -32,7 +32,8 @@ public interface GUIConnector {
 
     void gameWonNotifier(TeamType wonType, int points, boolean rowComplete);
 
-    void performMoveUIUpdate(int[] players, TokenType[][] tokens, TokenType[][] gameField, Integer[] pointsMap);
+    void performMoveUIUpdate(int[] players, TokenType[][] tokens,
+                             TokenType[][] gameField, Integer[] pointsMap);
 
     void addTokenImagesForPlayer4(TokenType[] tokens);
 

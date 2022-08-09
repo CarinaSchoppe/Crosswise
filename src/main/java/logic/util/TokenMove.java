@@ -73,8 +73,9 @@ public class TokenMove {
      * @param gameWinning           Is the move game winning
      * @param isPreventingLoss      Is the move preventing a loss
      */
-    public TokenMove(Position primaryMovePosition, Position secondaryMovePosition, Integer relativeChange,
-                     TokenType token, boolean gameWinning, boolean isPreventingLoss) {
+    public TokenMove(Position primaryMovePosition, Position secondaryMovePosition,
+                     Integer relativeChange, TokenType token, boolean gameWinning,
+                     boolean isPreventingLoss) {
         this(primaryMovePosition, relativeChange, token, gameWinning, isPreventingLoss);
         this.secondaryMovePosition = secondaryMovePosition;
     }
@@ -111,25 +112,21 @@ public class TokenMove {
     public boolean equals(Object other) {
         if (other instanceof TokenMove move) {
 
-            return primaryMovePosition.equals(move.primaryMovePosition) &&
-                    secondaryMovePosition == null ? move.secondaryMovePosition == null : secondaryMovePosition.equals(move.secondaryMovePosition) &&
-                    relativeChange.equals(move.relativeChange) &&
-                    token.equals(move.token) &&
-                    gameWinning == move.gameWinning &&
-                    isPreventingLoss == move.isPreventingLoss;
-        } else
+            return primaryMovePosition.equals(move.primaryMovePosition)
+                    && secondaryMovePosition == null ? move.secondaryMovePosition == null
+                    : secondaryMovePosition.equals(move.secondaryMovePosition)
+                    && relativeChange.equals(move.relativeChange) && token.equals(move.token)
+                    && gameWinning == move.gameWinning && isPreventingLoss == move.isPreventingLoss;
+        } else {
             return false;
+        }
     }
 
     @Override
     public String toString() {
-        return "TokenMove{" +
-                "primaryMovePosition=" + primaryMovePosition +
-                ", relativeChange=" + relativeChange +
-                ", token=" + token +
-                ", gameWinning=" + gameWinning +
-                ", isPreventingLoss=" + isPreventingLoss +
-                ", secondaryMovePosition=" + secondaryMovePosition +
-                '}';
+        return "TokenMove{" +  "primaryMovePosition=" + primaryMovePosition + ", relativeChange="
+                + relativeChange + ", token=" + token + ", gameWinning=" + gameWinning
+                + ", isPreventingLoss=" + isPreventingLoss + ", secondaryMovePosition="
+                + secondaryMovePosition + '}';
     }
 }

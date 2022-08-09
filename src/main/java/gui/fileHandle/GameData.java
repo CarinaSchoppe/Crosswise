@@ -33,7 +33,8 @@ public final class GameData {
      * @param field           game field
      * @param usedActionTiles used action tiles
      */
-    public GameData(PlayerData[] players, Integer currPlayer, int[][] field, int[] usedActionTiles) {
+    public GameData(PlayerData[] players, Integer currPlayer, int[][] field,
+                    int[] usedActionTiles) {
         this.players = players;
         this.currPlayer = currPlayer;
         this.field = field;
@@ -42,25 +43,32 @@ public final class GameData {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof GameData gameData)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof GameData gameData)) {
+            return false;
+        }
 
-        if (!currPlayer.equals(gameData.currPlayer)) return false;
+        if (!currPlayer.equals(gameData.currPlayer)) {
+            return false;
+        }
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(players, gameData.players)) return false;
-        if (!Arrays.deepEquals(field, gameData.field)) return false;
+        if (!Arrays.equals(players, gameData.players)) {
+            return false;
+        }
+        if (!Arrays.deepEquals(field, gameData.field)) {
+            return false;
+        }
         return Arrays.equals(usedActionTiles, gameData.usedActionTiles);
     }
 
 
     @Override
     public String toString() {
-        return "GameData{" +
-                "players=" + Arrays.toString(players) +
-                ", currentPlayer=" + currPlayer +
-                ", field=" + Arrays.toString(field) +
-                ", usedActionTiles=" + Arrays.toString(usedActionTiles) +
-                '}';
+        return "GameData{" + "players=" + Arrays.toString(players) + ", currentPlayer="
+                + currPlayer + ", field=" + Arrays.toString(field) + ", usedActionTiles="
+                + Arrays.toString(usedActionTiles) + '}';
     }
 
     //------------------------------------------------Getter------------------------------------------------------------
