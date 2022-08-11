@@ -1,9 +1,20 @@
-import gui.fileHandle.FileInputReader;
-import logic.Game.AI;
-import logic.Game.Game;
-import logic.util.Position;
-import logic.util.TokenMove;
-import logic.ConstantsEnums.TokenType;
+/*
+ * Copyright Notice for CrossWise
+ * Copyright (c) at Carina Sophie Schoppe 2022
+ * File created on 8/11/22, 2:29 PM by Carina The Latest changes made by Carina on 8/9/22, 12:51 PM All contents of "AITests" are protected by copyright.
+ * The copyright law, unless expressly indicated otherwise, is
+ * at Carina Sophie Schoppe. All rights reserved
+ * Any type of duplication, distribution, rental, sale, award,
+ * Public accessibility or other use
+ * requires the express written consent of Carina Sophie Schoppe.
+ */
+
+import me.carinasophie.crosswise.game.AI;
+import me.carinasophie.crosswise.game.Game;
+import me.carinasophie.crosswise.util.Position;
+import me.carinasophie.crosswise.util.TokenMove;
+import me.carinasophie.crosswise.util.constants.TokenType;
+import me.carinasophie.crosswise.util.filehandle.FileInputReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

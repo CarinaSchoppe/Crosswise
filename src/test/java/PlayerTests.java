@@ -1,6 +1,17 @@
-import logic.Game.Player;
-import logic.ConstantsEnums.Token;
-import logic.ConstantsEnums.TokenType;
+/*
+ * Copyright Notice for CrossWise
+ * Copyright (c) at Carina Sophie Schoppe 2022
+ * File created on 8/11/22, 2:29 PM by Carina The Latest changes made by Carina on 8/9/22, 12:51 PM All contents of "PlayerTests" are protected by copyright.
+ * The copyright law, unless expressly indicated otherwise, is
+ * at Carina Sophie Schoppe. All rights reserved
+ * Any type of duplication, distribution, rental, sale, award,
+ * Public accessibility or other use
+ * requires the express written consent of Carina Sophie Schoppe.
+ */
+
+import me.carinasophie.crosswise.game.Player;
+import me.carinasophie.crosswise.util.constants.Token;
+import me.carinasophie.crosswise.util.constants.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,10 +44,10 @@ class PlayerTests {
         var player = new Player(0, true, "test");
         player.create();
 
-        player.addTokenToHand(new Token(TokenType.REMOVER));
-        player.addTokenToHand(new Token(TokenType.SUN));
-        player.addTokenToHand(new Token(TokenType.PENTAGON));
-        player.addTokenToHand(new Token(TokenType.CROSS));
+        player.getHandTokens().add(new Token(TokenType.REMOVER));
+        player.getHandTokens().add(new Token(TokenType.SUN));
+        player.getHandTokens().add(new Token(TokenType.PENTAGON));
+        player.getHandTokens().add(new Token(TokenType.CROSS));
 
         assertFalse(player.hasNotToken(new Token(TokenType.REMOVER)));
         assertFalse(player.hasNotToken(new Token(TokenType.SUN)));
@@ -56,17 +67,17 @@ class PlayerTests {
         var player = new Player(0, true, "test");
         player.create();
 
-        player.addTokenToHand(new Token(TokenType.SUN));
-        player.addTokenToHand(new Token(TokenType.SUN));
-        player.addTokenToHand(new Token(TokenType.SUN));
-        player.addTokenToHand(new Token(TokenType.SUN));
+        player.getHandTokens().add(new Token(TokenType.SUN));
+        player.getHandTokens().add(new Token(TokenType.SUN));
+        player.getHandTokens().add(new Token(TokenType.SUN));
+        player.getHandTokens().add(new Token(TokenType.SUN));
 
         var player1 = new Player(0, true, "test");
         player1.create();
 
-        player1.addTokenToHand(new Token(TokenType.SUN));
-        player1.addTokenToHand(new Token(TokenType.SUN));
-        player1.addTokenToHand(new Token(TokenType.SUN));
+        player1.getHandTokens().add(new Token(TokenType.SUN));
+        player1.getHandTokens().add(new Token(TokenType.SUN));
+        player1.getHandTokens().add(new Token(TokenType.SUN));
 
         var player2 = new Player(0, true, "test");
         player2.create();

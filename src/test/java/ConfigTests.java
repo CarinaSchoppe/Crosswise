@@ -1,4 +1,15 @@
-import gui.fileHandle.FileInputReader;
+/*
+ * Copyright Notice for CrossWise
+ * Copyright (c) at Carina Sophie Schoppe 2022
+ * File created on 8/11/22, 2:29 PM by Carina The Latest changes made by Carina on 8/9/22, 12:51 PM All contents of "ConfigTests" are protected by copyright.
+ * The copyright law, unless expressly indicated otherwise, is
+ * at Carina Sophie Schoppe. All rights reserved
+ * Any type of duplication, distribution, rental, sale, award,
+ * Public accessibility or other use
+ * requires the express written consent of Carina Sophie Schoppe.
+ */
+
+import me.carinasophie.crosswise.util.filehandle.FileInputReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
