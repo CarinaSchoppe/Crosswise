@@ -21,6 +21,7 @@ import me.carinasophie.crosswise.util.constants.TokenType;
 /**
  * Class of the playing field of the game Crosswise
  */
+
 @Getter
 public class PlayingField {
     /**
@@ -31,6 +32,9 @@ public class PlayingField {
      * double array of positions
      */
     private final Position[][] fieldMap;
+
+    private String item;
+
 
     /**
      * Constructor
@@ -43,6 +47,8 @@ public class PlayingField {
         if (size < Constants.MIN_GAMEGRID_SIZE) {
             throw new IllegalArgumentException("Size of playing field must be at least 2");
         }
+
+
         this.size = size;
         this.fieldMap = new Position[size][size];
         //Puts empty token on each field of the fieldMap

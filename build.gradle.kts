@@ -5,7 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * Copyright (c) at Carina Sophie Schoppe 2022
  * File created on 8/11/22, 2:31 PM by Carina The Latest changes made by Carina on 8/11/22, 2:31 PM All contents of "build.gradle.kts" are protected by copyright.
  * The copyright law, unless expressly indicated otherwise, is
- * at Carina Sophie Schoppe. All rights reserved
+ * at Carina Sophie Schoppe. You are not allowed to copy,
+ * All rights reserved
  * Any type of duplication, distribution, rental, sale, award,
  * Public accessibility or other use
  * requires the express written consent of Carina Sophie Schoppe.
